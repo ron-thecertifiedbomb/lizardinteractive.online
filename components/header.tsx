@@ -3,7 +3,7 @@ import Container from "../components/container";
 
 export default function Header() {
   return (
-    <header className="py-6">
+    <header className="py-6 bg-dark-bg text-white">
       <Container>
         <nav className="flex space-x-4">
           <Link href="/">About</Link>

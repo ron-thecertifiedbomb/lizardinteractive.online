@@ -7,6 +7,7 @@ import distanceToNow from "../../lib/dateRelative";
 import { getAllPosts, getPostBySlug } from "../../lib/getPost";
 import markdownToHtml from "../../lib/markdownToHtml";
 import Head from "next/head";
+import Image from "next/image";
 
 export default function PostPage({
   post,
@@ -28,10 +29,24 @@ export default function PostPage({
       ) : (
         <div>
           <article>
+            {/* ✅ COVER IMAGE */}
+            {post.coverImage && (
+              <div className="mb-8">
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  width={1200}
+                  height={630}
+                  className="rounded-2xl w-full h-auto object-cover"
+                  priority
+                />
+              </div>
+            )}
+
             <header>
-              <h1 className="text-4xl font-bold">{post.title}</h1>
+              <h1 className="text-4xl font-bold text-white">{post.title}</h1>
               {post.excerpt ? (
-                <p className="mt-2 text-xl">{post.excerpt}</p>
+                <p className="mt-2 text-xl text-white font-light">{post.excerpt}</p>
               ) : null}
               <time className="flex mt-2 text-gray-400">
                 {distanceToNow(new Date(post.date))}
@@ -39,7 +54,7 @@ export default function PostPage({
             </header>
 
             <div
-              className="prose mt-10"
+              className="prose mt-10 text-white"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </article>
@@ -64,6 +79,7 @@ export async function getStaticProps({ params }: Params) {
     "excerpt",
     "date",
     "content",
+    "coverImage", // ✅ Include cover image in props
   ]);
   const content = await markdownToHtml(post.content || "");
 
@@ -81,13 +97,9 @@ export async function getStaticPaths() {
   const posts = getAllPosts(["slug"]);
 
   return {
-    paths: posts.map(({ slug }) => {
-      return {
-        params: {
-          slug,
-        },
-      };
-    }),
+    paths: posts.map(({ slug }) => ({
+      params: { slug },
+    })),
     fallback: false,
   };
 }

@@ -11,16 +11,16 @@ export default function NotePage({
     <Container>
       {allPosts.length ? (
         allPosts.map((post) => (
-          <article key={post.slug} className="mb-10">
+          <article key={post.slug} className="mb-6 text-white">
             <Link
               as={`/posts/${post.slug}`}
               href="/posts/[slug]"
-              className="text-lg leading-6 font-bold"
+              className=" text-lg lg:text-3xl leading-6 font-bold  text-white"
             >
               {post.title}
             </Link>
-            <p>{post.excerpt}</p>
-            <div className="text-gray-400">
+            <p className="mt-2 text-sm lg:text-lg font-extralight">{post.excerpt}</p>
+            <div className="text-xs lg:text-sm text-gray-400 font-extralight mt-2">
               <time>{distanceToNow(new Date(post.date))}</time>
             </div>
           </article>

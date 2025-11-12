@@ -5,27 +5,37 @@ function HomePage() {
   return (
     <>
       <Container>
-        <div className="space-y-6">
-          <h1 className="text-2xl font-bold">
-            Hey, I'm a Senior Software Engineer at Company. I enjoy working with
-            Next.js and crafting beautiful front-end experiences.
+        <div className="space-y-8">
+          <h1 className="text-lg lg:text-3xl font-bold">
+            Yo Wazzup! I’m Ronan a Software Developer, Creator & Problem Solver.
           </h1>
-          <p>
-            This portfolio is built with Next.js and a library called next-mdx.
-            It allows you to write Markdown and focus on the content of your
-            portfolio.
+
+          <p className="text-lg font-light">
+            Welcome to <strong>Lizard Interactive Online</strong>, my playground
+            for sharing dev tips, tutorials, and projects. I enjoy working with
+            <strong> Next.js</strong> and crafting smooth, beautiful web
+            experiences.
           </p>
 
-          <p>Deploy your own in a few minutes.</p>
+          <p className="text-lg font-light">
+            Here you’ll find blogs, code snippets, latest tech news, and
+            behind-the-scenes of my creative coding journey. Dive in, get
+            inspired, or just explore the lizard’s den.
+          </p>
+
+          <p className="text-lg font-light">
+            Wanna build your own dev playground? Stick around — I’ll show you
+            how!
+          </p>
         </div>
       </Container>
-
-      <div className="container max-w-4xl m-auto px-4 mt-20">
+      <div className="container max-w-3xl m-auto px-4 mt-6">
         <Image
-          src="/desk.jpg"
-          alt="my desk"
+          src="/js.jpg"
+          alt="Javascript"
           width={1920 / 2}
-          height={1280 / 2}
+          height={1080 / 2}
+          className="rounded-lg shadow-lg"
         />
       </div>
     </>
