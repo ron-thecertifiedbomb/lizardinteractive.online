@@ -20,5 +20,7 @@ export type Post = {
   date?: Date;
   content?: string;
   excerpt?: string;
-  [key: string]: any;
+  coverImage?: string; // ✅ main cover image (frontmatter)
+  contentImages?: string[]; // ✅ optional: inline markdown images (if you want to extract them)
+  [key: string]: any; // keep it flexible for future frontmatter fields
 };
