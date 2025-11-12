@@ -16,7 +16,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="Clone and deploy your own Next.js portfolio in minutes."
         />
-        <title>My awesome blog</title>
+        <title>Lizard Interactive Online</title>
       </Head>
 
       <Header />

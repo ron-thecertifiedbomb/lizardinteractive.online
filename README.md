@@ -1,65 +1,223 @@
-# Blog with Comment
+Lizard Interactive – All-in-One Marketing & Dev Hub
 
-This project adds commenting functionality to [Next.js blog application](https://github.com/vercel/next.js/tree/canary/examples/blog) using Upstash and Auth0.
+📌 Table of Contents
+<details> <summary>Click to expand</summary>
 
-The comment box requires Auth0 authentication for users to add new comments. A user can delete their own comment. Also admin user can delete any comment.
+Project Overview / Vision
 
-Comments are stored in Serverless Redis ([Upstash](http://upstash.com/)).
+Purpose / Goals
 
-### Demo
+Architecture
 
-[https://blog-with-comment.vercel.app/](https://blog-with-comment.vercel.app/)
+Tech Stack
 
-## `1` Project set up
+Features
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
-with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the
-example:
+Project Structure
 
-```bash
-npx create-next-app --example blog-with-comment blog-with-comment-app
-```
+Setup & Run Locally
 
-## `2` Set up environment variables
+Adding Content / Blog Posts
 
-Copy the `.env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
+Deployment
 
-```bash
-cp .env.local.example .env.local
-```
+Notes for Developers
 
-## `3` Configuring Upstash
+Links
 
-Go to the [Upstash Console](https://console.upstash.com/) and create a new database
+</details>
+Project Overview / Vision
 
-#### Upstash environment
+Lizard Interactive is a modern, modular web platform designed to:
 
-- `REDIS_URL`: Find the URL in the database details page in Upstash Console clicking on **Redis Connect** button.
+Showcase services from RonDevSolutions
 
-## `4` Configuring Auth0
+Share developer tips, tutorials, and tech news
 
-1. Go to the [Auth0 dashboard](https://manage.auth0.com/) and create a new application of type **Single Page Web
-   Applications**.
-2. Go to the settings page of the application
-3. Configure the following settings:
-   - **Allowed Callback URLs**: Should be set to `http://localhost:3000/` when testing locally or typically
-     to `https://myapp.com/` when deploying your application.
-   - **Allowed Logout URLs**: Should be set to `http://localhost:3000/` when testing locally or typically
-     to `https://myapp.com/` when deploying your application.
-   - **Allowed Web Origins**: Should be set to `http://localhost:3000` when testing locally or typically
-     to `https://myapp.com/` when deploying your application.
-4. Save the settings.
+Engage clients with dynamic content and social media sharing
 
-#### Auth0 environment
+Provide a single hub for marketing, education, and client pitching
 
-- `NEXT_PUBLIC_AUTH0_DOMAIN`: Can be found in the Auth0 dashboard under `settings`.
-- `NEXT_PUBLIC_AUTH0_CLIENT_ID`: Can be found in the Auth0 dashboard under `settings`.
-- `NEXT_PUBLIC_AUTH0_ADMIN_EMAIL`: This is the email of the admin user which you use while signing in Auth0. Admin is able to delete any comment.
+It leverages dynamic API-driven content, Cloudinary for media, and Upstash Redis for comments, while the RonDevServer handles backend logic, analytics, and integrations.
 
-## Deploy Your Local Project
+Purpose / Goals
 
-To deploy your local project to Vercel, push it to GitHub/GitLab/Bitbucket
-and [import to Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=upstash-roadmap).
+Dynamic Blog Content: API-driven text, images, and tips
 
-**Important**: When you import your project on Vercel, make sure to click on **Environment Variables** and set them to
-match your `.env.local` file.
+Tech News & Tutorials: Keep developers and clients updated
+
+Service Showcase: Highlight offerings with engaging content
+
+Social Media Ready: Shareable posts for organic marketing
+
+Scalable Architecture: Frontend and backend are decoupled for flexibility
+
+Architecture
+          ┌─────────────────────────────┐
+          │      Frontend (Next.js)      │
+          │-----------------------------│
+          │ - Blog Pages                │
+          │ - Tips / Tutorials          │
+          │ - Tech News Feed            │
+          │ - Service Showcase          │
+          └───────────┬─────────────────┘
+                      │ API Requests (REST / GraphQL)
+                      │
+          ┌───────────▼───────────┐
+          │      RonDevServer      │
+          │-----------------------│
+          │ - Blog API             │
+          │ - Tips / Snippets API  │
+          │ - News Aggregation API │
+          │ - Service Forms API    │
+          │ - Analytics & Logs     │
+          └───────┬───────────────┘
+                  │
+   ┌──────────────┴───────────────┐
+   │       External Services       │
+   │-------------------------------│
+   │ - Cloudinary (images, media) │
+   │ - Upstash Redis (comments)   │
+   │ - Optional Supabase (auth,   │
+   │   analytics, dashboards)     │
+   └──────────────────────────────┘
+
+
+Flow:
+
+Next.js frontend fetches content via APIs from RonDevServer.
+
+RonDevServer aggregates content from Cloudinary, Upstash Redis, Supabase and MongoDB.
+
+Frontend renders dynamic content, images, and comments.
+
+Tech Stack
+Layer	Technology
+Frontend	Next.js
+Styling	TailwindCSS
+Blog / Content	Markdown / MDX / API-driven
+Comments	Upstash Redis (serverless)
+Media	Cloudinary (CDN + optimizations)
+Auth / Optional	Auth0 / Supabase
+Wab Content / MongoDB
+Backend / API	RonDevServer (Node.js / NestJS)
+Deployment	Vercel
+Features
+<details> <summary>Click to expand</summary>
+Feature	Description
+Dynamic Blog / Articles	API-driven text and images
+Comment System	Serverless Upstash Redis; optional Auth0 moderation
+Cloudinary Media	Optimized delivery and transformations
+Tech Tips / JS Snippets	API-powered dynamic content
+Curated News Feed	Aggregated via external APIs
+Service Showcase	Highlight offerings with dynamic content
+Social Share	LinkedIn, Twitter, etc.
+Analytics	Engagement tracking via RonDevServer or Supabase
+</details>
+Project Structure
+lizardinteractiveonline/
+├── components/              # Reusable UI components
+├── hooks/                   # Custom React hooks for API fetching
+├── interfaces/              # TypeScript types/interfaces
+├── lib/                     # Helpers (API clients, Redis utils, Cloudinary)
+├── pages/                   # Next.js pages (blog, tips, services)
+├── public/                  # Static assets fallback
+├── _posts/                  # Optional Markdown fallback posts
+├── .env.development.local   # Local env variables
+├── .env.production.local    # Production env variables
+├── package.json
+├── tsconfig.json
+├── tailwind.config.js
+└── README.md
+
+Setup & Run Locally
+
+Clone Repo:
+
+git clone https://github.com/ron-thecertifiedbomb/lizardinteractiveonline.git
+cd lizardinteractiveonline
+
+
+Install Dependencies:
+
+npm install
+# or
+yarn install
+
+
+Configure Environment Variables:
+
+cp .env.local.example .env.development.local
+
+
+Upstash Redis
+
+REDIS_URL=your_upstash_redis_url
+
+
+Cloudinary
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+
+Optional: Auth0
+
+NEXT_PUBLIC_AUTH0_DOMAIN=your-domain.auth0.com
+NEXT_PUBLIC_AUTH0_CLIENT_ID=your_auth0_client_id
+NEXT_PUBLIC_AUTH0_ADMIN_EMAIL=admin@domain.com
+
+
+Run Dev Server:
+
+npm run dev
+
+
+Open http://localhost:3000
+
+Adding Content / Blog Posts
+
+Create .md or API-driven posts:
+
+---
+title: "Tailwind Color Guide 2025"
+date: "2025-11-12"
+author: "Ronan Sibunga"
+excerpt: "A quick guide to Tailwind utilities and palettes."
+coverImage: "https://res.cloudinary.com/your_cloud_name/image/upload/tailwind-colors.png"
+---
+
+TailwindCSS offers a flexible color system. Here’s how to use it effectively...
+
+
+Dynamic API content will override static Markdown automatically.
+
+Deployment
+
+Push to GitHub.
+
+Import to Vercel
+.
+
+Add environment variables in Vercel matching .env.production.local.
+
+Deploy — live at https://www.lizardinteractive.online
+
+Notes for Developers
+
+Dynamic content ensures instant updates without redeploying.
+
+Cloudinary optimizes all media for performance.
+
+Upstash Redis is serverless, fast, and low-maintenance for comments.
+
+RonDevServer provides full backend control for APIs, analytics, and integrations.
+
+Modular and headless architecture ensures scalable, future-proof growth.
+
+Links
+
+Live Site: https://www.lizardinteractive.online
+
+Portfolio : https://ronansibunga.vercel.app
