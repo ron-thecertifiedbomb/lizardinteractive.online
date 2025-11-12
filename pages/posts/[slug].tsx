@@ -48,13 +48,13 @@ export default function PostPage({
               {post.excerpt ? (
                 <p className="mt-2 text-xl text-white font-light">{post.excerpt}</p>
               ) : null}
-              <time className="flex mt-2 text-gray-400">
+                <time className="flex mt-2 text-white">
                 {distanceToNow(new Date(post.date))}
               </time>
             </header>
 
             <div
-              className="prose mt-10 text-white"
+                className="prose mt-10 text-white"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </article>

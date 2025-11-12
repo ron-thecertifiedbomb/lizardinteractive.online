@@ -8,3 +8,39 @@
 body {
   @apply bg-dark-bg text-white font-sans;
 }
+
+/* Optional: make bold text inherit surrounding color */
+.prose strong {
+  @apply  text-white;
+}
+/* Italic text */
+.prose em,
+.prose i,
+.prose italic {
+  @apply text-white; /* Italic text on dark background */
+}
+
+/* Inline code */
+.prose code {
+  @apply text-white bg-gray-800 px-1 rounded;
+}
+.prose h3 {
+  @apply  text-white;
+}
+.prose h2 {
+  @apply  text-white;
+}
+.prose blockquote {
+  @apply text-white; /* Makes all blockquote text white */
+}
+
+/* Bold inside blockquotes */
+.prose blockquote strong {
+  @apply text-white; /* Ensures bold text inside blockquote is white */
+}
+
+/* Italic inside blockquotes (optional) */
+.prose blockquote em,
+.prose blockquote i {
+  @apply text-white;
+}
