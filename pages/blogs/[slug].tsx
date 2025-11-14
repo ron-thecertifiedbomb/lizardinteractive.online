@@ -1,105 +1,75 @@
-import type { InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
-import Comment from "../../components/comment";
 import Container from "../../components/container";
 import distanceToNow from "../../lib/dateRelative";
-import { getAllPosts, getPostBySlug } from "../../lib/getPost";
-import markdownToHtml from "../../lib/markdownToHtml";
-import Head from "next/head";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import createDOMPurify from "dompurify";
 
-export default function BlogPage({
-  post,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+type BlogPost = {
+  _id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+};
+
+export default function PostPage({ blog }: { blog: BlogPost }) {
   const router = useRouter();
 
-  if (!router.isFallback && !post?.slug) {
+  if (!router.isFallback && !blog) {
     return <ErrorPage statusCode={404} />;
   }
 
+  // Sanitization handled only on client
+  const [safeHTML, setSafeHTML] = useState(blog.content);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const DOMPurify = createDOMPurify(window);
+      setSafeHTML(DOMPurify.sanitize(blog.content));
+    }
+  }, [blog.content]);
+
   return (
     <Container>
-      <Head>
-        <title>{post.title} | My awesome blog</title>
-      </Head>
+      <article className="mb-6 text-white pb-4">
+        <h2 className="text-xl lg:text-3xl font-bold">{blog.title}</h2>
 
-      {router.isFallback ? (
-        <div>Loading…</div>
-      ) : (
-        <div>
-          <article>
-            {/* ✅ COVER IMAGE */}
-            {post.coverImage && (
-              <div className="mb-8">
-                <Image
-                  src={post.coverImage}
-                  alt={post.title}
-                  width={1200}
-                  height={630}
-                  className="rounded-2xl w-full h-auto object-cover"
-                  priority
-                />
-              </div>
-            )}
-
-            <header>
-              <h1 className="text-4xl font-bold text-white">{post.title}</h1>
-              {post.excerpt ? (
-                <p className="mt-2 text-xl text-white font-light">{post.excerpt}</p>
-              ) : null}
-                <time className="flex mt-2 text-white">
-                {distanceToNow(new Date(post.date))}
-              </time>
-            </header>
-
-            <div
-                className="prose mt-10 text-white"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
-
-          <Comment />
-        </div>
-      )}
+        <div
+          className="mt-2 text-sm lg:text-base font-light"
+          dangerouslySetInnerHTML={{ __html: safeHTML }}
+        />
+      </article>
     </Container>
   );
 }
 
-type Params = {
-  params: {
-    slug: string;
-  };
-};
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const url = process.env.GET_ALL_BLOGS_URL;
 
-export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, [
-    "slug",
-    "title",
-    "excerpt",
-    "date",
-    "content",
-    "coverImage", // ✅ Include cover image in props
-  ]);
-  const content = await markdownToHtml(post.content || "");
+  try {
+    const res = await fetch(`${url}/${params.slug}`);
 
-  return {
-    props: {
-      post: {
-        ...post,
-        content,
-      },
-    },
-  };
+    if (!res.ok) return { notFound: true };
+
+    const blog: BlogPost = await res.json();
+
+    return {
+      props: { blog },
+      revalidate: 10,
+    };
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    return { notFound: true };
+  }
 }
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
+  const url = process.env.GET_ALL_BLOGS_URL;
+  const res = await fetch(url);
+  const blogs: BlogPost[] = await res.json();
 
   return {
-    paths: posts.map(({ slug }) => ({
-      params: { slug },
-    })),
-    fallback: false,
+    paths: blogs.map((b) => ({ params: { slug: b._id } })),
+    fallback: true,
   };
 }

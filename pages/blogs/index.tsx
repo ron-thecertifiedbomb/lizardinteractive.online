@@ -1,6 +1,8 @@
 import type { InferGetStaticPropsType } from "next";
 import Container from "../../components/container";
 import distanceToNow from "../../lib/dateRelative";
+import { BlogPost } from "../../interfaces";
+import Link from "next/link";
 
 let DOMPurify: any;
 
@@ -14,30 +16,45 @@ if (typeof window !== "undefined") {
     DOMPurify = require("dompurify")(window);
 }
 
-type BlogPost = {
-    _id: string;
-    title: string;
-    content: string; // HTML string
-    createdAt: string;
-};
 
 export default function BlogPage({ allBlogs }: InferGetStaticPropsType<typeof getStaticProps>) {
+
+
+    console.log('Blogs', allBlogs)
+
+    function extractFirstImage(html: string): string | null {
+        const match = html.match(/<img[^>]+src="([^">]+)"/i);
+        return match ? match[1] : null;
+    }
+
+
+
     return (
         <Container>
             {allBlogs.length ? (
-                allBlogs.map((post) => (
-                    <article key={post._id} className="mb-6 text-white pb-4">
-                        <h2 className="text-xl lg:text-3xl font-bold">{post.title}</h2>
-
-                        <div
-                            className="mt-2 text-sm lg:text-base font-light"
-                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-                        />
-
-                        <div className="text-xs lg:text-sm text-gray-400 font-extralight mt-2">
-                            <time>{distanceToNow(new Date(post.createdAt))}</time>
-                        </div>
+                allBlogs.map((blog) => (
+                        <Link
+                            href={`/blogs/${blog._id}`}
+                            className="text-xl lg:text-3xl font-bold text-white"
+                        >
+                        <article key={blog._id} className="mb-6 text-white pb-4">
+                            <div className=" flex flex-row gap-5 justify-center items-start">
+                                <div>    <h2 className="text-xl lg:text-3xl font-bold">{blog.title}</h2>
+                                    <div className="text-xs lg:text-sm text-gray-200 font-extralight mt-2">
+                                        <time>{distanceToNow(new Date(blog.createdAt))}</time>
+                                    </div></div>
+                            
+                        {blog.content && (
+                            <img
+                            src={extractFirstImage(blog.content)}
+                            alt={blog.title}
+                            className="max-w-xs max-h-14 rounded-xl mb-6"
+                            />
+                        )}
+                            </div>
+                 
                     </article>
+                        </Link>
                 ))
             ) : (
                 <p>No blog posted yet :/</p>
