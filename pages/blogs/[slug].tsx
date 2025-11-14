@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Container from "../../components/container";
-import distanceToNow from "../../lib/dateRelative";
 import { useEffect, useState } from "react";
 import createDOMPurify from "dompurify";
 import Head from "next/head";  // ✅ FIXED IMPORT
