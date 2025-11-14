@@ -46,7 +46,7 @@ export default function PostPage({ blog }: { blog?: BlogPost }) {
       </Head>
 
       <article className="mb-6 text-white pb-4">
-        <h2 className="text-xl lg:text-3xl font-bold">{blog.title}</h2>
+        <h2 className="text-xl lg:text-2xl font-bold ">{blog.title}</h2>
 
         <div
           className="mt-2 text-sm lg:text-base font-light"

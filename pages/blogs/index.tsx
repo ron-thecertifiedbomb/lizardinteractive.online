@@ -39,10 +39,10 @@ export default function BlogPage({
                             href={`/blogs/${blog._id}`}
                             className="text-xl lg:text-3xl font-bold text-white"
                         >
-                            <article className="mb-6 text-white pb-4">
-                                <div className="flex flex-row gap-5 justify-center items-start">
+                            <article className="mb-4 text-white pb-4">
+                                <div className="flex flex-row gap-3 justify-between items-start">
                                     <div>
-                                        <h2 className="text-xl lg:text-3xl font-bold">
+                                        <h2 className="text-xl lg:text-2xl font-bold">
                                             {blog.title}
                                         </h2>
 
@@ -55,7 +55,7 @@ export default function BlogPage({
                                         <img
                                             src={imgSrc}
                                             alt={blog.title}
-                                            className="max-w-xs max-h-14 rounded-xl mb-6"
+                                            className="max-w-sm max-h-14 rounded-xl mb-6"
                                         />
                                     )}
                                 </div>
