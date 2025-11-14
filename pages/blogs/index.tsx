@@ -8,8 +8,6 @@ export default function BlogPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
     return (
         <Container>
-            {/* <h1 className="text-3xl font-bold text-white mb-6">All Blogs</h1> */}
-
             {allBlogs.length ? (
                 allBlogs.map((post) => (
                     <article key={post._id} className="mb-6 text-white pb-4">
@@ -28,6 +26,15 @@ export default function BlogPage({
                                         <p key={i} className="mt-2 text-sm lg:text-base font-light">
                                             {block.text}
                                         </p>
+                                    );
+                                case "image":
+                                    return (
+                                        <img
+                                            key={i}
+                                            src={block.props?.src}
+                                            alt={block.props?.alt || "Blog image"}
+                                            className="mt-4 w-full max-w-4xl rounded-md mb-5"
+                                        />
                                     );
                                 default:
                                     return null;

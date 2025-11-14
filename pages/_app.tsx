@@ -15,7 +15,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Clone and deploy your own Next.js portfolio in minutes."
+          content="Lizard Interactive is a modern, modular web platform designed to: Showcase services from RonDevSolutions Share developer tips, tutorials, and tech newsEngage clients with dynamic content and social media sharing Provide a single hub for marketing, education, and client pitching It leverages dynamic API-driven content, Cloudinary for media, and Upstash Redis for comments, while the RonDevServer handles backend logic, analytics, and integrations."
         />
         <title>Lizard Interactive Online</title>
       </Head>
