@@ -4,6 +4,7 @@ import Container from "../../components/container";
 import distanceToNow from "../../lib/dateRelative";
 import { useEffect, useState } from "react";
 import createDOMPurify from "dompurify";
+import Head from "next/head";  // ✅ FIXED IMPORT
 
 type BlogPost = {
   _id: string;
@@ -19,7 +20,6 @@ export default function PostPage({ blog }: { blog: BlogPost }) {
     return <ErrorPage statusCode={404} />;
   }
 
-  // Sanitization handled only on client
   const [safeHTML, setSafeHTML] = useState(blog.content);
 
   useEffect(() => {
@@ -31,6 +31,10 @@ export default function PostPage({ blog }: { blog: BlogPost }) {
 
   return (
     <Container>
+      <Head>
+        <title>{blog.title}</title> {/* ✅ Correct Head usage */}
+      </Head>
+
       <article className="mb-6 text-white pb-4">
         <h2 className="text-xl lg:text-3xl font-bold">{blog.title}</h2>
 
