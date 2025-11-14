@@ -3,7 +3,7 @@ import ErrorPage from "next/error";
 import Container from "../../components/container";
 import { useEffect, useState } from "react";
 import createDOMPurify from "dompurify";
-import Head from "next/head";  // ✅ FIXED IMPORT
+import Head from "next/head";
 
 type BlogPost = {
   _id: string;
@@ -12,26 +12,37 @@ type BlogPost = {
   createdAt: string;
 };
 
-export default function PostPage({ blog }: { blog: BlogPost }) {
+export default function PostPage({ blog }: { blog?: BlogPost }) {
   const router = useRouter();
 
-  if (!router.isFallback && !blog) {
+  // Show fallback loading state
+  if (router.isFallback) {
+    return (
+      <Container>
+        <p className="text-white">Loading...</p>
+      </Container>
+    );
+  }
+
+  // If blog not found
+  if (!blog) {
     return <ErrorPage statusCode={404} />;
   }
 
-  const [safeHTML, setSafeHTML] = useState(blog.content);
+  // Safe HTML sanitization
+  const [safeHTML, setSafeHTML] = useState(blog.content || "");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && blog?.content) {
       const DOMPurify = createDOMPurify(window);
       setSafeHTML(DOMPurify.sanitize(blog.content));
     }
-  }, [blog.content]);
+  }, [blog?.content]);
 
   return (
     <Container>
       <Head>
-        <title>{blog.title}</title> {/* ✅ Correct Head usage */}
+        <title>{blog.title}</title>
       </Head>
 
       <article className="mb-6 text-white pb-4">
@@ -68,11 +79,17 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
 export async function getStaticPaths() {
   const url = process.env.GET_ALL_BLOGS_URL;
-  const res = await fetch(url);
-  const blogs: BlogPost[] = await res.json();
 
-  return {
-    paths: blogs.map((b) => ({ params: { slug: b._id } })),
-    fallback: true,
-  };
+  try {
+    const res = await fetch(url);
+    const blogs: BlogPost[] = await res.json();
+
+    return {
+      paths: blogs.map((b) => ({ params: { slug: b._id } })),
+      fallback: true, // will show fallback page for new blogs
+    };
+  } catch (error) {
+    console.error("Error fetching blogs for paths:", error);
+    return { paths: [], fallback: true };
+  }
 }
