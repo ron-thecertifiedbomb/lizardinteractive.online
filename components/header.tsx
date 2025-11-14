@@ -8,6 +8,7 @@ export default function Header() {
         <nav className="flex space-x-4">
           <Link href="/">About</Link>
           <Link href="/posts">Posts</Link>
+          <Link href="/blogs">Blog</Link>
         </nav>
       </Container>
     </header>
