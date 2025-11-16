@@ -11,7 +11,7 @@ body {
 
 /* Optional: make bold text inherit surrounding color */
 .prose strong {
-  @apply  text-white;
+  @apply text-white;
 }
 /* Italic text */
 .prose em,
@@ -25,10 +25,10 @@ body {
   @apply text-white bg-gray-800 px-1 rounded;
 }
 .prose h3 {
-  @apply  text-white;
+  @apply text-white;
 }
 .prose h2 {
-  @apply  text-white;
+  @apply text-white;
 }
 .prose blockquote {
   @apply text-white; /* Makes all blockquote text white */
@@ -43,14 +43,4 @@ body {
 .prose blockquote em,
 .prose blockquote i {
   @apply text-white;
-}
-/* global.css */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  @apply bg-dark-bg text-white font-sans;
 }
