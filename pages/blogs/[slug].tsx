@@ -8,6 +8,7 @@ import Head from "next/head";
 type BlogPost = {
   _id: string;
   title: string;
+  image?: string; 
   content: string;
   createdAt: string;
 };
@@ -43,6 +44,12 @@ export default function PostPage({ blog }: { blog?: BlogPost }) {
     <Container>
       <Head>
         <title>{blog.title}</title>
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.content.slice(0, 150)} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={blog.image || "/default-image.jpg"} />
+        <meta property="og:url" content={`https://yourdomain.com/blog/${blog._id}`} />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <article className="mb-6 text-white pb-4">

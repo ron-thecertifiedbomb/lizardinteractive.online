@@ -9,7 +9,7 @@ export default function PdfToWordConverterPage() {
                 <title>PDF to Word Converter | RonDevSolutions</title>
             </Head>
 
-            <div className="p-6 max-w-2xl mx-auto bg-gray-900 text-white rounded-lg shadow-lg">
+            <div className="p-6 max-w-2xl mx-auto bg-blue-800 text-white rounded-lg shadow-lg">
               
                 <PDFToWordConverter />
             </div>

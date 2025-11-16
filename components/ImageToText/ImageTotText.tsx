@@ -62,7 +62,7 @@ export default function ImageToTextConverter() {
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onClick={() => fileInputRef.current?.click()}
-                className="mb-4 p-6 border-2 border-dashed border-gray-700 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
+                className="mb-4 p-6 border-2 border-dashed bg-blue-600 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
             >
                 {!image && <p>Drag & drop an image here, or click to select</p>}
                 <input

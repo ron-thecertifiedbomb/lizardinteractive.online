@@ -4,7 +4,7 @@ import Container from "../../components/container";
 import distanceToNow from "../../lib/dateRelative";
 import { getAllPosts } from "../../lib/getPost";
 
-export default function NotePage({
+export default function UtilitiesPage({
   allPosts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
@@ -13,8 +13,8 @@ export default function NotePage({
         allPosts.map((post) => (
           <article key={post.slug} className="mb-6 text-white">
             <Link
-              as={`/posts/${post.slug}`}
-              href="/posts/[slug]"
+              as={`/utilities/${post.slug}`}
+              href="/utilities/[slug]"
               className=" text-lg lg:text-3xl leading-6 font-bold  text-white"
             >
               {post.title}
