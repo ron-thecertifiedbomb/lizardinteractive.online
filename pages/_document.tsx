@@ -7,8 +7,9 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta name="robots" content="follow, index" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        {/* Favicon */}<link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
       </Head>
-      <body className="bg-dark-bg text-gray-700 antialiased">
+      <body className="bg-dark-bg antialiased">
         <Main />
         <NextScript />
       </body>

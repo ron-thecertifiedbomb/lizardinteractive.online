@@ -24,3 +24,13 @@ export type Post = {
   contentImages?: string[]; // ✅ optional: inline markdown images (if you want to extract them)
   [key: string]: any; // keep it flexible for future frontmatter fields
 };
+
+
+
+export type BlogPost = {
+  slug?: string;
+  _id: string;
+  title: string;
+  content: string; // HTML string
+  createdAt: string;
+};
