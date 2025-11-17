@@ -7,7 +7,7 @@ export default function YoutubeToMp3() {
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [title, setTitle] = useState<string>("audio");
-
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const handleDownload = async () => {
         if (!url) return alert("Enter YouTube URL");
         setLoading(true);
@@ -16,10 +16,7 @@ export default function YoutubeToMp3() {
 
         try {
             // SSE listener for progress + title
-            const es = new EventSource(
-                `http://localhost:8080/api/youtube-to-mp3/progress`
-            );
-
+            const es = new EventSource(`${API_BASE_URL}/api/youtube-to-mp3/progress`);
             es.onmessage = (e) => {
                 const data = JSON.parse(e.data);
                 setProgress(data.progress);
@@ -29,9 +26,7 @@ export default function YoutubeToMp3() {
 
             // Fetch the MP3
             const response = await fetch(
-                `http://localhost:8080/api/youtube-to-mp3/audio?url=${encodeURIComponent(
-                    url
-                )}`
+                `${API_BASE_URL}/api/youtube-to-mp3/audio?url=${encodeURIComponent(url)}`
             );
             if (!response.ok) throw new Error("Failed to convert video");
 
