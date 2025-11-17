@@ -6,7 +6,7 @@ module.exports = withMDX({
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
-    domains: [
+    remotePatterns: [
       "dev.to",
       "news.ycombinator.com",
       "github.blog",
