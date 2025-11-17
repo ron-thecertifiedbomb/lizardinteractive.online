@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Parser from "rss-parser";
 
-// Define feeds per category
 const FEEDS: Record<string, { id: string; url: string }[]> = {
   programming: [
     { id: "hn", url: "https://news.ycombinator.com/rss" },
@@ -23,13 +22,28 @@ const FEEDS: Record<string, { id: string; url: string }[]> = {
   ],
 };
 
+// Map feed IDs to site images/favicons
+const SITE_IMAGES: Record<string, string> = {
+  hn: "https://news.ycombinator.com/favicon.ico",
+  devto: "https://dev.to/favicon.ico",
+  github: "https://github.blog/favicon.ico",
+  rprogramming:
+    "https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png",
+  techcrunch:
+    "https://techcrunch.com/wp-content/uploads/2018/06/cropped-tc-favicon-192x192.png",
+  theverge: "https://www.theverge.com/apple-touch-icon.png",
+  wired: "https://www.wired.com/apple-touch-icon.png",
+  bbc: "https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif",
+  cnn: "https://cdn.cnn.com/cnn/.e1mo/img/4.0/logos/cnn_logo_32x32.png",
+};
+
 type NormalizedItem = {
   title: string;
   link: string;
   source: string;
   date: string | null;
-  image: string | null;
   summary: string;
+  image: string;
 };
 
 async function fetchFeeds(
@@ -41,29 +55,17 @@ async function fetchFeeds(
     try {
       const feed = await parser.parseURL(f.url);
       return (feed.items || []).map((it: any) => {
-        let image =
-          (it.enclosure && it.enclosure.url) ||
-          (it["media:content"] && it["media:content"].url) ||
-          (it["media:thumbnail"] && it["media:thumbnail"].url) ||
-          null;
-
-        if (!image && it.content) {
-          const match = it.content.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if (match && match[1]) image = match[1];
-        }
-
         const date = it.isoDate || it.pubDate || null;
-
         return {
           title: it.title || "Untitled",
           link: it.link || it.guid || "#",
           source: feed.title || f.id,
           date,
-          image,
           summary:
-            (it.contentSnippet && it.contentSnippet.substring(0, 220)) ||
-            (it.summary && it.summary.substring(0, 220)) ||
+            it.contentSnippet?.substring(0, 220) ||
+            it.summary?.substring(0, 220) ||
             "",
+          image: SITE_IMAGES[f.id] || "/lizardinteractive.png", // site favicon
         };
       });
     } catch {
@@ -72,6 +74,7 @@ async function fetchFeeds(
   });
 
   const results = (await Promise.all(feedPromises)).flat();
+
   return results
     .sort((a, b) =>
       a.date && b.date
@@ -90,7 +93,6 @@ export default async function handler(
     typeof category === "string" ? category.toLowerCase() : "";
 
   const feeds = FEEDS[categoryStr] || [];
-
   if (!feeds.length) {
     return res.status(404).json({ error: "Category not found" });
   }

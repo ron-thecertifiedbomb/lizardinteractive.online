@@ -1,41 +1,35 @@
-import type { InferGetStaticPropsType } from "next";
-import Link from "next/link";
 import Container from "../../components/container";
-import distanceToNow from "../../lib/dateRelative";
-import { getAllPosts } from "../../lib/getPost";
 
-export default function UtilitiesPage({
-  allPosts,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function UtilitiesHub() {
+  const utilities = [
+    { name: "Tailwind Color Guide", url: "/palette" },
+    { name: "Image to Text Converter", url: "/imagetotext" },
+    { name: "PDF to Word Converter", url: "/pdftowordconverter" },
+    { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
+  ];
+
   return (
-    <Container>
-      {allPosts.length ? (
-        allPosts.map((post) => (
-          <article key={post.slug} className="mb-6 text-white">
-            <Link
-              as={`/utilities/${post.slug}`}
-              href="/utilities/[slug]"
-              className=" text-lg lg:text-3xl leading-6 font-bold  text-white"
-            >
-              {post.title}
-            </Link>
-            <p className="mt-2 text-sm lg:text-lg font-extralight">{post.excerpt}</p>
-            <div className="text-xs lg:text-sm text-gray-400 font-extralight mt-2">
-              <time>{distanceToNow(new Date(post.date))}</time>
-            </div>
-          </article>
-        ))
-      ) : (
-        <p>No blog posted yet :/</p>
-      )}
-    </Container>
+  <Container>
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold text-white">Useful Utilities</h1>
+        <p className="text-gray-300 mt-2 text-lg">
+          Quickly access our most popular web tools to simplify your workflow.
+        </p>
+      </div>
+
+      {/* Utilities List */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {utilities.map((util, idx) => (
+          <a
+            key={idx}
+            href={util.url}
+            className="block p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white text-center text-lg font-semibold shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-1"
+          >
+            {util.name}
+          </a>
+        ))}
+      </div>
+    </Container >
   );
 }
 
-export async function getStaticProps() {
-  const allPosts = getAllPosts(["slug", "title", "excerpt", "date"]);
-
-  return {
-    props: { allPosts },
-  };
-}

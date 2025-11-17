@@ -7,13 +7,15 @@ module.exports = withMDX({
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
     domains: [
-      "media2.dev.to",
-      "cdn.hashnode.com",
-      "hacker-news.com",
-      "pbs.twimg.com",
+      "dev.to",
+      "news.ycombinator.com",
       "github.blog",
-      "i.redd.it",
-      "external-preview.redd.it",
+      "www.redditstatic.com",
+      "techcrunch.com",
+      "www.theverge.com",
+      "www.wired.com",
+      "news.bbcimg.co.uk",
+      "cdn.cnn.com",
     ],
   },
 });

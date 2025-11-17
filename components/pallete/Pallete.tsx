@@ -9,7 +9,7 @@ export function Palette() {
 
     return (
         <div className="p-4 overflow-auto">
-            <div className="flex flex-wrap gap-6 justify-start justify-center">
+            <div className="flex flex-wrap gap-6  justify-center">
                 {Object.entries(TAILWIND_COLORS).map(([colorName, shades]) => (
                     <div
                         key={colorName}
