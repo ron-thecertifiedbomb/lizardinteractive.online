@@ -7,7 +7,7 @@ export default function ImageToTextPage() {
     return (
         <>
             <Head>
-                <title>Image to Text Converter | RonDevSolutions</title>
+                <title>Image to Text Converter | Lizard Interactive Online</title>
             </Head>
 
             <SectionHeader
@@ -15,8 +15,8 @@ export default function ImageToTextPage() {
                 subtitle="Quickly extract text from images with our easy-to-use online tool."
             />
 
-        
-                <ImageToTextConverter />
+
+            <ImageToTextConverter />
 
         </>
     );

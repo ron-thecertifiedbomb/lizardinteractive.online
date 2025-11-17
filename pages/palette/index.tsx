@@ -6,18 +6,11 @@ function PalettePage() {
   return (
     <Container>
 
-     <SectionHeader
+      <SectionHeader
         title="Tailwind Color Guide"
         subtitle="  Explore Tailwind CSS colors and find the perfect palette for your projects."
-                 />
-
-      
-
-
-      {/* Palette Component */}
-      <div className="flex justify-center">
-        <Palette />
-      </div>
+      />
+      <Palette />
     </Container>
   );
 }

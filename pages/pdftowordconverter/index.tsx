@@ -7,7 +7,7 @@ export default function PdfToWordConverterPage() {
     return (
         <>
             <Head>
-                <title>PDF to Word Converter | RonDevSolutions</title>
+                <title>PDF to Word Converter | Lizard Interactive Online</title>
             </Head>
 
 

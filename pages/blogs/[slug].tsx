@@ -48,7 +48,7 @@ export default function PostPage({ blog }: { blog?: BlogPost }) {
         <meta property="og:description" content={blog.content.slice(0, 150)} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={blog.image || "/default-image.jpg"} />
-        <meta property="og:url" content={`https://yourdomain.com/blog/${blog._id}`} />
+        <meta property="og:url" content={`https://https://www.lizardinteractive.online//blog/${blog._id}`} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
