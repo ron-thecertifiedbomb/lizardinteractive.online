@@ -6,6 +6,7 @@ export default function UtilitiesHub() {
     { name: "Tailwind Color Guide", url: "/palette" },
     { name: "Image to Text Converter", url: "/imagetotext" },
     { name: "PDF to Word Converter", url: "/pdftowordconverter" },
+    { name: "Resume Builder", url: "/resumebuilder" },
     { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
   ];
 
