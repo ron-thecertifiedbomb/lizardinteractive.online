@@ -47,11 +47,19 @@ export default function PostPage({ blog }: { blog?: BlogPost }) {
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.content.slice(0, 150)} />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content={blog.image || "/default-image.jpg"} />
-        <meta property="og:url" content={`https://https://www.lizardinteractive.online//blog/${blog._id}`} />
+        <meta
+          property="og:image"
+          content={blog.image ? `https://www.lizardinteractive.online${blog.image}` : "https://www.lizardinteractive.online/default-image.jpg"}
+        />
+        <meta property="og:url" content={`https://www.lizardinteractive.online/blog/${blog._id}`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content={blog.image ? `https://www.lizardinteractive.online${blog.image}` : "https://www.lizardinteractive.online/default-image.jpg"}
+        />
       </Head>
-
       <article className="mb-6 text-white pb-4">
         <h2 className="text-xl lg:text-2xl font-bold ">{blog.title}</h2>
 
