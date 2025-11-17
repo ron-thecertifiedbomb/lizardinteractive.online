@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { saveAs } from "file-saver";
 import * as docx from "docx";
 import * as pdfjs from 'pdfjs-dist/build/pdf.min.mjs'
+import Button from "../shared/Button/Button";
 export default function PDFToWordConverter() {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
@@ -60,23 +61,22 @@ export default function PDFToWordConverter() {
 
     return (
         <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-center">PDF to Word Converter</h2>
-
+        
             <input
                 ref={fileInputRef}
                 type="file"
                 accept="application/pdf"
                 onChange={handleFileChange}
-                className="mb-4 w-full text-gray-900"
+                className="mb-4 w-full text-white-200"
             />
 
-            <button
+            <Button
                 onClick={convertPDFtoWord}
                 disabled={!file || !pdfjsLib || loading}
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors"
+                className="w-full px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors"
             >
-                {loading ? "Converting..." : "Convert PDF to Word"}
-            </button>
+                Convert PDF to Word
+            </Button>
 
             {file && (
                 <p className="mt-2 text-sm text-gray-300">Selected: {file.name}</p>

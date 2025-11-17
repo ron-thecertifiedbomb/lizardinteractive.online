@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "tailwind.config.js",
-    "postcss.config.js"
-, "components/pallete"  ],
+    "postcss.config.js",
+    "components/Palette"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,4 +1,5 @@
 import Container from "../../components/container";
+import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 export default function LatestTrendingNews() {
     const categories = [
@@ -10,15 +11,10 @@ export default function LatestTrendingNews() {
 
     return (
   <Container>
-            {/* Main Title */}
-            <div className="mb-8 text-center">
-                <h1 className="text-4xl font-bold text-white">Latest Trending News</h1>
-                <p className="text-gray-300 mt-2 text-lg">
-                    Stay up-to-date with the most recent articles and updates across your favorite categories.
-                </p>
-            </div>
-
-            {/* Categories List */}
+             <SectionHeader
+                title="Latest Trending News"
+                subtitle=" Stay up-to-date with the most recent articles and updates across your favorite categories."
+                 />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {categories.map((cat, idx) => (
                     <a

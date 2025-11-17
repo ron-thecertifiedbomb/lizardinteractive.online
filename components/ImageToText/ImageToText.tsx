@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Tesseract from "tesseract.js";
 import { toast } from "react-hot-toast";
+import Button from "../shared/Button/Button";
 
 export default function ImageToTextConverter() {
     const [image, setImage] = useState<File | null>(null);
@@ -56,7 +57,7 @@ export default function ImageToTextConverter() {
     };
 
     return (
-        <div>
+        <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-xl mx-auto">
             {/* Drag & Drop Area */}
             <div
                 onDrop={handleDrop}
@@ -96,13 +97,13 @@ export default function ImageToTextConverter() {
             )}
 
             {/* Convert Button */}
-            <button
+            <Button
                 onClick={handleConvert}
                 disabled={loading || !image}
                 className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors w-full"
             >
                 {loading ? `Converting... ${progress}%` : "Convert Image to Text"}
-            </button>
+            </Button>
 
             {/* Progress Bar */}
             {loading && (
@@ -122,15 +123,15 @@ export default function ImageToTextConverter() {
                         value={text}
                         readOnly
                     />
-                    <button
+                    <Button
                         onClick={() => {
                             navigator.clipboard.writeText(text);
                             toast.success("Copied to clipboard!");
                         }}
-                        className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded transition-colors"
+                        className="w-full px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors"
                     >
                         Copy Text
-                    </button>
+                    </Button>
                 </div>
             )}
         </div>

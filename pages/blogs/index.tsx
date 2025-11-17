@@ -3,6 +3,7 @@ import Container from "../../components/container";
 import distanceToNow from "../../lib/dateRelative";
 import { BlogPost } from "../../interfaces";
 import Link from "next/link";
+import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 let DOMPurify: any;
 
@@ -29,12 +30,11 @@ export default function BlogPage({
 
     return (
         <Container>
-            <div className="mb-8 text-center">
-                <h1 className="text-4xl font-bold text-white">Daily Blogs</h1>
-                <p className="text-gray-300 mt-2 text-lg">
-                    Checkout our daily blogs for tutorials and programming tips.
-                </p>
-            </div>
+
+            <SectionHeader
+                title="Daily Blogs"
+                subtitle="Checkout our daily blogs for tutorials and programming tips."
+            />
             {allBlogs.length ? (
                 allBlogs.map((blog) => {
                     const imgSrc = extractFirstImage(blog.content);

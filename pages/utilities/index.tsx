@@ -1,4 +1,5 @@
 import Container from "../../components/container";
+import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 export default function UtilitiesHub() {
   const utilities = [
@@ -9,15 +10,11 @@ export default function UtilitiesHub() {
   ];
 
   return (
-  <Container>
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-white">Useful Utilities</h1>
-        <p className="text-gray-300 mt-2 text-lg">
-          Quickly access our most popular web tools to simplify your workflow.
-        </p>
-      </div>
-
-      {/* Utilities List */}
+    <Container>
+   <SectionHeader
+        title="Useful Utilities"
+        subtitle=" Quickly access our most popular web tools to simplify your workflow."
+                 />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {utilities.map((util, idx) => (
           <a

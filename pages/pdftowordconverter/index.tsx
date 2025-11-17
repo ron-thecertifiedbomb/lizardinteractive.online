@@ -1,5 +1,6 @@
 import Head from "next/head";
 import PDFToWordConverter from "../../components/PDFToWordConverter/PDFToWordConverter";
+import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 
 export default function PdfToWordConverterPage() {
@@ -9,10 +10,17 @@ export default function PdfToWordConverterPage() {
                 <title>PDF to Word Converter | RonDevSolutions</title>
             </Head>
 
-            <div className="p-6 max-w-2xl mx-auto bg-blue-800 text-white rounded-lg shadow-lg">
+
+            <SectionHeader
+                title="PDF to Word Converter"
+                subtitle="Quickly convert your PDF files to Word documents with ease."
+            />
+
+
+       
               
                 <PDFToWordConverter />
-            </div>
+    
         </>
     );
 }
