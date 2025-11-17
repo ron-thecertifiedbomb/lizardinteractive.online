@@ -17,6 +17,7 @@ export default function Header() {
             <Link href="/">About</Link>
            
             <Link href="/blogs">Blog</Link>
+            <Link href="/latest">Latest</Link>
             <Link href="/utilities">Utilities</Link>
             {/* <Link href="/posts">Posts</Link>*/}
             </div> 

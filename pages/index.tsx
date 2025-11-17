@@ -5,6 +5,7 @@ function HomePage() {
   return (
     <>
       <Container>
+     
         <div className="space-y-8">
           <h1 className="text-lg lg:text-3xl font-bold">
             Yo Wazzup! I’m Ronan a Software Developer, Creator & Problem Solver.
