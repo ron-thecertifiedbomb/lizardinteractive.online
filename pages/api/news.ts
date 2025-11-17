@@ -1,12 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Parser from "rss-parser";
 
-const FEEDS = [
-  { id: "hn", url: "https://news.ycombinator.com/rss" },
-  { id: "devto", url: "https://dev.to/feed" },
-  { id: "github", url: "https://github.blog/feed/" },
-  { id: "rprogramming", url: "https://www.reddit.com/r/programming/.rss" },
-];
+// Define feeds per category
+const FEEDS: Record<string, { id: string; url: string }[]> = {
+  programming: [
+    { id: "hn", url: "https://news.ycombinator.com/rss" },
+    { id: "devto", url: "https://dev.to/feed" },
+    { id: "github", url: "https://github.blog/feed/" },
+    { id: "rprogramming", url: "https://www.reddit.com/r/programming/.rss" },
+  ],
+  technology: [
+    { id: "techcrunch", url: "https://techcrunch.com/feed/" },
+    { id: "theverge", url: "https://www.theverge.com/rss/index.xml" },
+    { id: "wired", url: "https://www.wired.com/feed/rss" },
+  ],
+  world: [
+    { id: "bbc", url: "http://feeds.bbci.co.uk/news/world/rss.xml" },
+    { id: "cnn", url: "http://rss.cnn.com/rss/edition_world.rss" },
+  ],
+  startups: [
+    { id: "techcrunch-startups", url: "https://techcrunch.com/startups/feed/" },
+  ],
+};
 
 type NormalizedItem = {
   title: string;
@@ -17,21 +32,21 @@ type NormalizedItem = {
   summary: string;
 };
 
-async function fetchFeeds(): Promise<NormalizedItem[]> {
+async function fetchFeeds(
+  feeds: { id: string; url: string }[]
+): Promise<NormalizedItem[]> {
   const parser = new Parser({ defaultRSS: 2.0 });
 
-  const feedPromises = FEEDS.map(async (f) => {
+  const feedPromises = feeds.map(async (f) => {
     try {
       const feed = await parser.parseURL(f.url);
       return (feed.items || []).map((it: any) => {
-        // Try RSS enclosure/media fields first
         let image =
           (it.enclosure && it.enclosure.url) ||
           (it["media:content"] && it["media:content"].url) ||
           (it["media:thumbnail"] && it["media:thumbnail"].url) ||
           null;
 
-        // Fallback: extract first <img> from content HTML
         if (!image && it.content) {
           const match = it.content.match(/<img[^>]+src=["']([^"']+)["']/i);
           if (match && match[1]) image = match[1];
@@ -70,6 +85,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const items = await fetchFeeds();
+  const { category } = req.query;
+  const categoryStr =
+    typeof category === "string" ? category.toLowerCase() : "";
+
+  const feeds = FEEDS[categoryStr] || [];
+
+  if (!feeds.length) {
+    return res.status(404).json({ error: "Category not found" });
+  }
+
+  const items = await fetchFeeds(feeds);
   res.status(200).json(items);
 }
