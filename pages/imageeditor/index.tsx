@@ -5,21 +5,34 @@ import ImageEditor from "../../components/ImageEditor/ImageEditor";
 import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 export default function ImageToTextPage() {
+    const staticPreviewImage = "/imageeditor.jpg"; 
+
     return (
         <>
             <Head>
                 <title>Image Editor | Lizard Interactive Online</title>
+
+                {/* Open Graph / Facebook */}
+                <meta property="og:title" content="Image Editor | Lizard Interactive Online" />
+                <meta property="og:description" content="Edit and enhance your images with our powerful online image editor." />
+                <meta property="og:image" content={`${staticPreviewImage}?v=2`} />
+             
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://www.lizardinteractive.online/imageeditor" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Image Editor | Lizard Interactive Online" />
+                <meta name="twitter:description" content="Edit and enhance your images with our powerful online image editor." />
+                <meta name="twitter:image" content={`${staticPreviewImage}?v=2`} />
             </Head>
 
-                <SectionHeader
-                    title="Image Editor"
-                    subtitle="Edit and enhance your images with our powerful online image editor."
-                />
+            <SectionHeader
+                title="Image Editor"
+                subtitle="Edit and enhance your images with our powerful online image editor."
+            />
 
-           
-                    <ImageEditor />
-         
-      
+            <ImageEditor />
         </>
     );
 }
