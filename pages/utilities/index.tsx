@@ -15,6 +15,7 @@ export default function UtilitiesHub() {
     { name: "Metronome", url: "/metronome" },
     { name: "Tuner", url: "/tuner" },
     { name: "Planner", url: "/planner" },
+    { name: "Todo List", url: "/todo" },
   ];
 
   return (
