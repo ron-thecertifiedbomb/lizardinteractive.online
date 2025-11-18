@@ -10,6 +10,7 @@ export default function UtilitiesHub() {
     { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
     { name: "Screen Recorder", url: "/screenrecorder" },
     { name: "Image Editor", url: "/imageeditor" },
+    { name: "Logo Maker", url: "/logomaker" },
   ];
 
   return (
