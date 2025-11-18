@@ -459,8 +459,31 @@ export default function LogoMaker() {
                                     Show Border
                                 </label>
                             </div>
+
+                            {/* Border Width */}
+                            {selected.strokeWidth > 0 && (
+                                <div className="space-y-1">
+                                    <label className="font-medium text-sm">Border Width</label>
+                                    <input
+                                        type="number"
+                                        className="input w-full text-gray-700"
+                                        value={selected.strokeWidth}
+                                        min={0}
+                                        onChange={(e) =>
+                                            setElements((prev) =>
+                                                prev.map((el) =>
+                                                    el.id === selectedId
+                                                        ? { ...el, strokeWidth: Number(e.target.value) }
+                                                        : el
+                                                )
+                                            )
+                                        }
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
+
 
                     {/* Color */}
                     {"fill" in selected && (
