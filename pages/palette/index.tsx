@@ -34,14 +34,6 @@ export default function PalettePage() {
           subtitle="Explore Tailwind CSS colors and find the perfect palette for your projects."
         />
 
-        {/* Static preview image */}
-        <div className="my-6 text-center">
-          <img
-            src={staticPreviewImage}
-            alt="Tailwind Color Guide Preview"
-            className="w-full max-w-3xl rounded-lg shadow-lg mx-auto"
-          />
-        </div>
 
         <Palette />
       </Container>
