@@ -11,6 +11,7 @@ import { modernMinimalistPDF } from "../../lib/printPdf.ts/modernMinimalistPDF";
 import { TableLayout } from "docx";
 import { TwoLayoutPreview } from "./preview/TwoLayoutPreview";
 import { ModernMinimalistPreview } from "./preview/ModernMinimalistPreview";
+import Container from "../container";
 
 
 export default function ResumeBuilder() {
@@ -24,37 +25,26 @@ export default function ResumeBuilder() {
     const [references, setReferences] = useState([]);
     const previewRef = useRef<HTMLDivElement | null>(null);
 
-    // Load from localStorage only on client
+    // Load data from localStorage only on client
     useEffect(() => {
-        const loadFromStorage = () => {
-            try {
-                const raw = localStorage.getItem("resumeBuilder:v1");
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    setPersonal(parsed.personal || { fullName: "", title: "", email: "", phone: "", location: "", summary: "" });
-                    setExperience(parsed.experience || []);
-                    setEducation(parsed.education || []);
-                    setSkills(parsed.skills || []);
-                    setReferences(parsed.references || []);
-                } else {
-                    // Set empty states if no storage data
-                    setExperience([{ id: Date.now(), company: "", role: "", start: "", end: "", details: "" }]);
-                    setEducation([{ id: Date.now() + 1, school: "", degree: "", start: "", end: "", details: "" }]);
-                    setReferences([{ id: Date.now() + 2, name: "", contact: "", relation: "" }]);
-                }
-            } catch (e) {
-                // Fallback to empty states
-                setExperience([{ id: Date.now(), company: "", role: "", start: "", end: "", details: "" }]);
-                setEducation([{ id: Date.now() + 1, school: "", degree: "", start: "", end: "", details: "" }]);
-                setReferences([{ id: Date.now() + 2, name: "", contact: "", relation: "" }]);
-            }
-            setHasLoaded(true);
-        };
-
-        loadFromStorage();
+        const raw = localStorage.getItem("resumeBuilder:v1");
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            setPersonal(parsed.personal || personal);
+            setExperience(parsed.experience || []);
+            setEducation(parsed.education || []);
+            setSkills(parsed.skills || []);
+            setReferences(parsed.references || []);
+        } else {
+            // initialize empty arrays with IDs on client
+            setExperience([{ id: Date.now(), company: "", role: "", start: "", end: "", details: "" }]);
+            setEducation([{ id: Date.now() + 1, school: "", degree: "", start: "", end: "", details: "" }]);
+            setReferences([{ id: Date.now() + 2, name: "", contact: "", relation: "" }]);
+        }
+        setHasLoaded(true);
     }, []);
 
-    // Save to localStorage
+    // Persist data to localStorage
     useEffect(() => {
         if (hasLoaded) {
             const payload = { personal, experience, education, skills, references };
@@ -62,14 +52,6 @@ export default function ResumeBuilder() {
         }
     }, [personal, experience, education, skills, references, hasLoaded]);
 
-    // Don't render until client-side data is loaded
-    if (!hasLoaded) {
-        return (
-            <div className="min-h-screen bg-gray-50 p-6">
-                <div className="max-w-4xl mx-auto">Loading...</div>
-            </div>
-        );
-    }
 
     // Personal info handlers
     function updatePersonal<K extends keyof typeof personal>(key: K, value: string) {
@@ -145,7 +127,7 @@ export default function ResumeBuilder() {
 
     return (
 
-        <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-4xl mx-auto">
             {/* Personal Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -310,8 +292,8 @@ export default function ResumeBuilder() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {skills.map((skill, i) => (
-                        <span key={i} className="btn " onClick={() => removeSkill(i)} suppressHydrationWarning>
-                            {skill}
+                        <span key={i} className="btn" onClick={() => removeSkill(i)} suppressHydrationWarning>
+                            {skill}{i < skills.length - 1 ? "," : ""}
                         </span>
                     ))}
                 </div>
