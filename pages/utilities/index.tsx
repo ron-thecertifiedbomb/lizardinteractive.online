@@ -8,6 +8,7 @@ export default function UtilitiesHub() {
     { name: "PDF to Word Converter", url: "/pdftowordconverter" },
     { name: "Resume Builder", url: "/resumebuilder" },
     { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
+    { name: "Screen Recorder", url: "/screenrecorder" },
   ];
 
   return (
