@@ -2,6 +2,10 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
+import Input from "../shared/Input/Input";
+import Textarea from "../shared/TextArea/TextArea";
+import Button from "../shared/Button/Button";
+import SectionTitle from "../shared/SectionTitle/SectionTitle";
 
 
 export default function ResumeBuilder() {
@@ -162,174 +166,169 @@ export default function ResumeBuilder() {
     }
 
     return (
-        <div className="min-h-screen  p-6">
-            <div className="max-w-4xl mx-auto">
-            
-
+    
+            <div className="max-w-4xl mx-auto px-4">
                 {/* Personal Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">Personal Info</h2>
+                <div>
+                    <SectionTitle >Personal Information</SectionTitle>
+                  
                         {Object.entries(personal).filter(([k]) => k !== "summary").map(([key, value]) => (
-                            <input
+                            <Input
                                 key={key}
-                                className="input mb-2"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
                                 value={value}
-                                onChange={(e) => updatePersonal(key as keyof typeof personal, e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updatePersonal(key as keyof typeof personal, val)}
                             />
                         ))}
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold mb-2">Summary</h2>
-                        <textarea
-                            className="input h-32"
+                    <SectionTitle >Summary</SectionTitle>
+                        <Textarea
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                             placeholder="Summary"
                             value={personal.summary}
-                            onChange={(e) => updatePersonal("summary", e.target.value)}
-                            suppressHydrationWarning
+                            onChange={(val) => updatePersonal("summary", val)}
+                 
                         />
                     </div>
                 </div>
 
                 {/* Experience */}
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-2">Experience</h2>
+                <SectionTitle >Experience</SectionTitle>
                     {experience.map((exp) => (
-                        <div key={exp.id} className="mb-4  p-3 rounded">
-                            <input
-                                className="input mb-2"
+                        <div key={exp.id} className="rounded mb-6">
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Company"
                                 value={exp.company}
-                                onChange={(e) => updateExperience(exp.id, "company", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateExperience(exp.id, "company", val)}
+    
                             />
-                            <input
-                                className="input mb-2"
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Role"
                                 value={exp.role}
-                                onChange={(e) => updateExperience(exp.id, "role", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateExperience(exp.id, "role", val)}
+                       
                             />
                             <div className="flex gap-2 mb-2">
                                 <DateRangePicker
-                                    className="input"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                     placeholder="Start"
                                     value={exp.start}
                                     onChange={(value) => updateExperience(exp.id, "start", value)}
                                 />
                                 <DateRangePicker
-                                    className="input"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                     placeholder="End"
                                     value={exp.end}
                                     onChange={(value) => updateExperience(exp.id, "end", value)}
                                 />
                             </div>
-                            <textarea
-                                className="input mb-2"
+                            <Textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Details"
                                 value={exp.details}
-                                onChange={(e) => updateExperience(exp.id, "details", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateExperience(exp.id, "details", val)}
                             />
-                            <button className="btn  bg-slate-600" onClick={() => removeExperience(exp.id)}>Remove</button>
+                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeExperience(exp.id)}>Remove</Button>
                         </div>
                     ))}
-                    <button className="btn primary  bg-slate-600" onClick={addExperience}>Add Experience</button>
+                <Button className=" rounded-md max-w-48" onClick={addExperience}>Add Experience</Button>
                 </div>
 
                 {/* Education */}
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-2">Education</h2>
+                <SectionTitle >Education</SectionTitle>
                     {education.map((edu) => (
-                        <div key={edu.id} className="mb-4  p-3 rounded">
-                            <input
-                                className="input mb-2"
+                        <div key={edu.id} className="mb-2 rounded mb-6">
+                            <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="School"
                                 value={edu.school}
-                                onChange={(e) => updateEducation(edu.id, "school", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateEducation(edu.id, "school", val)}
+                               
                             />
-                            <input
-                                className="input mb-2"
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2"
                                 placeholder="Degree"
                                 value={edu.degree}
-                                onChange={(e) => updateEducation(edu.id, "degree", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateEducation(edu.id, "degree", val)}
+                               
                             />
                             <div className="flex gap-2 mb-2">
                                 <DateRangePicker
-                                    className="input"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                     placeholder="Start"
                                     value={edu.start}
                                     onChange={(value) => updateEducation(edu.id, "start", value)}
                                 />
                                 <DateRangePicker
-                                    className="input"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                     placeholder="End"
                                     value={edu.end}
                                     onChange={(value) => updateEducation(edu.id, "end", value)}
                                 />
                               
                             </div>
-                            <textarea
-                                className="input mb-2"
+                            <Textarea
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Details"
                                 value={edu.details}
-                                onChange={(e) => updateEducation(edu.id, "details", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateEducation(edu.id, "details", val)}
+                           
                             />
-                            <button className="btn " onClick={() => removeEducation(edu.id)}>Remove</button>
+                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeEducation(edu.id)}>Remove</Button>
                         </div>
                     ))}
-                    <button className="btn primary" onClick={addEducation}>Add Education</button>
+                <Button className=" rounded-md max-w-48" onClick={addEducation}>Add Education</Button>
                 </div>
 
                 {/* References */}
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-2">References</h2>
+                <SectionTitle >References</SectionTitle>
                     {references.map((ref) => (
-                        <div key={ref.id} className="mb-4  p-3 rounded">
-                            <input
-                                className="input mb-2"
+                        <div key={ref.id} className=" rounded mb-6">
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Name"
                                 value={ref.name}
-                                onChange={(e) => updateReference(ref.id, "name", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateReference(ref.id, "name", val)}
+                               
                             />
-                            <input
-                                className="input mb-2"
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Contact"
                                 value={ref.contact}
-                                onChange={(e) => updateReference(ref.id, "contact", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateReference(ref.id, "contact", val)}
+                               
                             />
-                            <input
-                                className="input mb-2"
+                            <Input
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
                                 placeholder="Relation"
                                 value={ref.relation}
-                                onChange={(e) => updateReference(ref.id, "relation", e.target.value)}
-                                suppressHydrationWarning
+                                onChange={(val) => updateReference(ref.id, "relation", val)}
+                               
                             />
-                            <button className="btn " onClick={() => removeReference(ref.id)}>Remove</button>
+                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeReference(ref.id)}>Remove</Button>
                         </div>
                     ))}
-                    <button className="btn primary" onClick={addReference}>Add Reference</button>
+                <Button className=" rounded-md max-w-48 " onClick={addReference}>Add Reference</Button>
                 </div>
 
                 {/* Skills */}
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-2">Skills</h2>
-                    <div className="flex gap-2 mb-2">
-                        <input
-                            className="input"
+                <SectionTitle >Skills</SectionTitle>
+                    <div className="flex gap-2 mb-4items-center justify-center place-items-center">
+                    <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900  focus:border-blue-950 focus:outline-none"
                             placeholder="Add Skill"
                             value={skillInput}
-                            onChange={(e) => setSkillInput(e.target.value)}
-                            suppressHydrationWarning
+                            onChange={(val) => setSkillInput(val)}
+                    
                         />
-                        <button className="btn primary" onClick={addSkill}>Add</button>
+                    <Button className=" rounded-md max-w-28 " onClick={addSkill}>Add</Button>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {skills.map((skill, i) => (
@@ -342,7 +341,7 @@ export default function ResumeBuilder() {
 
                 {/* Preview */}
                 <div className="mt-6">
-                    <h2 className="text-lg font-semibold mb-2">Preview</h2>
+                <SectionTitle >Preview</SectionTitle>
                     <div
                         ref={previewRef}
                         className="preview p-4 bg-white border rounded shadow"
@@ -384,20 +383,12 @@ export default function ResumeBuilder() {
 
                 {/* Actions */}
                 <div className="mt-6 flex gap-4">
-                    <button className="btn primary" onClick={downloadJSON}>Download JSON</button>
-                    <button className="btn primary" onClick={printPDF}>Print PDF</button>
-                    <button className="btn " onClick={resetAll}>Reset</button>
+                    <Button className="rounded-md"  onClick={downloadJSON}>Download JSON</Button>
+                <Button className="rounded-md" onClick={printPDF}>Print PDF</Button>
+                <Button className="rounded-md" onClick={resetAll}>Reset</Button>
                 </div>
-            </div>
+   
 
-            <style>{`
-        .input{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px;color:#1a1a1a}
-        .btn{background:#f3f4f6;padding:8px 12px;border-radius:8px;border:1px solid #e5e7eb;color:#1a1a1a;cursor:pointer}
-        .btn.primary{background:#0ea5a0;color:white}
-        .btn.ghost{background:transparent;border:1px dashed #e5e7eb;color:#1a1a1a}
-        .muted{color:#1a1a1a}
-        .preview{font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#1a1a1a}
-      `}</style>
         </div>
     );
 }
