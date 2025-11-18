@@ -9,6 +9,7 @@ export default function UtilitiesHub() {
     { name: "Resume Builder", url: "/resumebuilder" },
     { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
     { name: "Screen Recorder", url: "/screenrecorder" },
+    { name: "Image Editor", url: "/imageeditor" },
   ];
 
   return (

@@ -44,3 +44,33 @@ body {
 .prose blockquote i {
   @apply text-white;
 }
+/* Override dropdown text color inside react-image-picker-editor */
+/* Dropdown text color */
+.rie-container select,
+.rie-container option {
+    color: #4b5563 !important; /* gray-600 */
+}
+
+/* Max Width / Height Input text color */
+.rie-container input[type="number"],
+.rie-container input[type="text"] {
+    color: #4b5563 !important; /* gray-600 */
+}
+
+/* Optional: border + focus styling so it matches Tailwind look */
+.rie-container input[type="number"],
+.rie-container input[type="text"],
+.rie-container select {
+    border: 1px solid #d1d5db !important; /* gray-300 */
+    border-radius: 6px !important;
+    padding: 4px 6px !important;
+}
+
+.rie-container input:focus,
+.rie-container select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important; /* blue-500 */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+}
+
+
