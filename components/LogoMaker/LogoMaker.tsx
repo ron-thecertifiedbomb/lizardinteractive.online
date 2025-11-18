@@ -182,16 +182,10 @@ export default function LogoMaker() {
             {/* Canvas */}
             <div className="md:col-span-3">
                 <div className="flex gap-2 mb-2">
-                    <Button onClick={addText}>
-                        Add Text
-                    </Button>
-                    <Button  onClick={() => addShape("rect")}>
-                        Rect
-                    </Button>
-                    <Button  onClick={() => addShape("circle")}>
-                        Circle
-                    </Button>
-                    <label className="bg-blue-950 p-4 rounded-sm">
+                    <Button onClick={addText}>Add Text</Button>
+                    <Button onClick={() => addShape("rect")}>Rect</Button>
+                    <Button onClick={() => addShape("circle")}>Circle</Button>
+                    <label className="bg-blue-950 p-4 rounded-sm cursor-pointer">
                         Upload
                         <input type="file" accept="image/*" onChange={onUpload} className="hidden" />
                     </label>
@@ -281,15 +275,9 @@ export default function LogoMaker() {
                         >
                             <span>{el.type.toUpperCase()}</span>
                             <div className="flex gap-1">
-                                <Button className=" max-w-1 flex items-center justify-center"  onClick={() => reorder(el.id, "up")}>
-                                    ↑
-                                </Button>
-                                <Button className=" max-w-1 flex items-center justify-center" onClick={() => reorder(el.id, "down")}>
-                                    ↓
-                                </Button>
-                                <Button className=" max-w-1 flex items-center justify-center"  onClick={() => removeLayer(el.id)}>
-                                    ✕
-                                </Button>
+                                <Button onClick={() => reorder(el.id, "up")}>↑</Button>
+                                <Button onClick={() => reorder(el.id, "down")}>↓</Button>
+                                <Button onClick={() => removeLayer(el.id)}>✕</Button>
                             </div>
                         </div>
                     ))}
@@ -311,7 +299,9 @@ export default function LogoMaker() {
                                 value={selected.x}
                                 onChange={(e) =>
                                     setElements((prev) =>
-                                        prev.map((el) => (el.id === selectedId ? { ...el, x: Number(e.target.value) } : el))
+                                        prev.map((el) =>
+                                            el.id === selectedId ? { ...el, x: Number(e.target.value) } : el
+                                        )
                                     )
                                 }
                             />
@@ -321,7 +311,9 @@ export default function LogoMaker() {
                                 value={selected.y}
                                 onChange={(e) =>
                                     setElements((prev) =>
-                                        prev.map((el) => (el.id === selectedId ? { ...el, y: Number(e.target.value) } : el))
+                                        prev.map((el) =>
+                                            el.id === selectedId ? { ...el, y: Number(e.target.value) } : el
+                                        )
                                     )
                                 }
                             />
@@ -359,8 +351,68 @@ export default function LogoMaker() {
                                     }
                                 />
                             </div>
+                        </>
+                    )}
+
+                    {/* Shape controls */}
+                    {(selected.type === "rect" || selected.type === "circle") && (
+                        <>
+                            {/* Size */}
+                            {selected.type === "rect" && (
+                                <>
+                                    <div className="space-y-1">
+                                        <label className="font-medium text-sm">Width</label>
+                                        <input
+                                            type="number"
+                                            className="input w-full text-gray-700"
+                                            value={selected.width}
+                                            onChange={(e) =>
+                                                setElements((prev) =>
+                                                    prev.map((el) =>
+                                                        el.id === selectedId ? { ...el, width: Number(e.target.value) } : el
+                                                    )
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="font-medium text-sm">Height</label>
+                                        <input
+                                            type="number"
+                                            className="input w-full text-gray-700"
+                                            value={selected.height}
+                                            onChange={(e) =>
+                                                setElements((prev) =>
+                                                    prev.map((el) =>
+                                                        el.id === selectedId ? { ...el, height: Number(e.target.value) } : el
+                                                    )
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                </>
+                            )}
+                            {selected.type === "circle" && (
+                                <div className="space-y-1">
+                                    <label className="font-medium text-sm">Radius</label>
+                                    <input
+                                        type="number"
+                                        className="input w-full text-gray-700"
+                                        value={selected.radius}
+                                        onChange={(e) =>
+                                            setElements((prev) =>
+                                                prev.map((el) =>
+                                                    el.id === selectedId ? { ...el, radius: Number(e.target.value) } : el
+                                                )
+                                            )
+                                        }
+                                    />
+                                </div>
+                            )}
+
+                            {/* Fill color */}
                             <div className="space-y-1">
-                                <label className="font-medium text-sm">Color</label>
+                                <label className="font-medium text-sm">Fill Color</label>
                                 <input
                                     type="color"
                                     className="input h-10 w-full"
@@ -372,20 +424,67 @@ export default function LogoMaker() {
                                     }
                                 />
                             </div>
+
+                            {/* Stroke color */}
+                            <div className="space-y-1">
+                                <label className="font-medium text-sm">Border Color</label>
+                                <input
+                                    type="color"
+                                    className="input h-10 w-full"
+                                    value={selected.stroke}
+                                    onChange={(e) =>
+                                        setElements((prev) =>
+                                            prev.map((el) => (el.id === selectedId ? { ...el, stroke: e.target.value } : el))
+                                        )
+                                    }
+                                />
+                            </div>
+
+                            {/* Toggle border */}
+                            <div className="space-y-1">
+                                <label className="font-medium text-sm flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={selected.strokeWidth > 0}
+                                        onChange={(e) =>
+                                            setElements((prev) =>
+                                                prev.map((el) =>
+                                                    el.id === selectedId
+                                                        ? { ...el, strokeWidth: e.target.checked ? 3 : 0 }
+                                                        : el
+                                                )
+                                            )
+                                        }
+                                    />
+                                    Show Border
+                                </label>
+                            </div>
                         </>
                     )}
 
+                    {/* Color */}
+                    {"fill" in selected && (
+                        <div className="space-y-1">
+                            <label className="font-medium text-sm">Color</label>
+                            <input
+                                type="color"
+                                className="input h-10 w-full"
+                                value={selected.fill}
+                                onChange={(e) =>
+                                    setElements((prev) =>
+                                        prev.map((el) => (el.id === selectedId ? { ...el, fill: e.target.value } : el))
+                                    )
+                                }
+                            />
+                        </div>
+                    )}
+
                     {/* Delete */}
-                    <Button
-                        className="w-full bg-red-500 text-white p-2 rounded"
-                        onClick={() => removeLayer(selectedId)}
-                    >
+                    <Button className="w-full bg-red-500 text-white p-2 rounded" onClick={() => removeLayer(selectedId)}>
                         Delete Element
                     </Button>
                 </aside>
             )}
-
- 
         </div>
     );
 }
