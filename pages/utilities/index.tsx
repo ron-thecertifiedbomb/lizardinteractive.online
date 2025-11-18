@@ -4,6 +4,7 @@ import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 export default function UtilitiesHub() {
   const utilities = [
     { name: "Tailwind Color Guide", url: "/palette" },
+    { name: "JavaScript Playground", url: "/javascriptplayground" },
     { name: "Image to Text Converter", url: "/imagetotext" },
     { name: "PDF to Word Converter", url: "/pdftowordconverter" },
     { name: "Resume Builder", url: "/resumebuilder" },
