@@ -18,10 +18,10 @@ export default function DateRangePicker({
 
     function formatToMonthDayYear(date: Date) {
         return date.toLocaleDateString("en-US", {
-            month: "long",
+            month: "short", // Nov
             day: "numeric",
             year: "numeric",
-        });
+        }).replace(/,/g, ""); // remove comma
     }
 
     return (
@@ -32,7 +32,7 @@ export default function DateRangePicker({
             }}
             placeholderText={placeholder}
             className={className}
-            dateFormat="MMMM d, yyyy"
+            dateFormat="MMM d yyyy"
             showYearDropdown
             scrollableYearDropdown
         />

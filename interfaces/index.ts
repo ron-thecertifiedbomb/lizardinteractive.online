@@ -34,3 +34,39 @@ export type BlogPost = {
   content: string; // HTML string
   createdAt: string;
 };
+
+
+// pdfPrinter.ts
+export type Personal = {
+  fullName?: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  summary?: string;
+};
+
+export type Experience = {
+  id: string | number;
+  role?: string;
+  company?: string;
+  start?: string;
+  end?: string;
+  details?: string;
+};
+
+export type Education = {
+  id: string | number;
+  degree?: string;
+  school?: string;
+  start?: string;
+  end?: string;
+  details?: string;
+};
+
+export type Reference = {
+  id: string | number;
+  name?: string;
+  relation?: string;
+  contact?: string;
+};

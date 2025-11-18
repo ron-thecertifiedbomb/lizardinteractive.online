@@ -6,10 +6,15 @@ import Input from "../shared/Input/Input";
 import Textarea from "../shared/TextArea/TextArea";
 import Button from "../shared/Button/Button";
 import SectionTitle from "../shared/SectionTitle/SectionTitle";
+import { twolayoutPDF } from "../../lib/printPdf.ts/twolayoutPDF";
+import { modernMinimalistPDF } from "../../lib/printPdf.ts/modernMinimalistPDF";
+import { TableLayout } from "docx";
+import { TwoLayoutPreview } from "./preview/TwoLayoutPreview";
+import { ModernMinimalistPreview } from "./preview/ModernMinimalistPreview";
 
 
 export default function ResumeBuilder() {
-    
+
     const [hasLoaded, setHasLoaded] = useState(false);
     const [personal, setPersonal] = useState({ fullName: "", title: "", email: "", phone: "", location: "", summary: "" });
     const [experience, setExperience] = useState([]);
@@ -127,33 +132,6 @@ export default function ResumeBuilder() {
         URL.revokeObjectURL(url);
     }
 
-    function printPDF() {
-        if (!previewRef.current) return;
-        const printWindow = window.open("", "PRINT", "height=800,width=1000");
-        if (!printWindow) return;
-        printWindow.document.write(`
-      <html>
-        <head>
-          <title>${personal.fullName || "Resume"}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <style>
-            body{font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding:24px; color:#1a1a1a;}
-            .container{max-width:900px;margin:0 auto}
-            h1{font-size:24px;margin-bottom:4px}
-            h2{font-size:16px;margin-top:18px;margin-bottom:8px}
-            .muted{color:#1a1a1a}
-            .section{margin-bottom:12px}
-          </style>
-        </head>
-        <body>
-           <div class="container">${previewRef.current.innerHTML}<time datetime="2016-10-25" suppressHydrationWarning /></div>
-        </body>
-      </html>
-    `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => printWindow.print(), 250);
-    }
 
     function resetAll() {
         if (!confirm("Reset all fields?")) return;
@@ -166,228 +144,189 @@ export default function ResumeBuilder() {
     }
 
     return (
-    
-            <div className="max-w-4xl mx-auto px-4">
-                {/* Personal Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div className="max-w-4xl mx-auto px-4 py-4">
+            {/* Personal Info */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <SectionTitle >Personal Information</SectionTitle>
-                  
-                        {Object.entries(personal).filter(([k]) => k !== "summary").map(([key, value]) => (
-                            <Input
-                                key={key}
+
+                    {Object.entries(personal).filter(([k]) => k !== "summary").map(([key, value]) => (
+                        <Input
+                            key={key}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
-                                value={value}
-                                onChange={(val) => updatePersonal(key as keyof typeof personal, val)}
-                            />
-                        ))}
-                    </div>
-                    <div>
+                            placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+                            value={value}
+                            onChange={(val) => updatePersonal(key as keyof typeof personal, val)}
+                        />
+                    ))}
+                </div>
+                <div>
                     <SectionTitle >Summary</SectionTitle>
-                        <Textarea
+                    <Textarea
                         className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                            placeholder="Summary"
-                            value={personal.summary}
-                            onChange={(val) => updatePersonal("summary", val)}
-                 
-                        />
-                    </div>
-                </div>
+                        placeholder="Summary"
+                        value={personal.summary}
+                        onChange={(val) => updatePersonal("summary", val)}
 
-                {/* Experience */}
-                <div className="mt-6">
+                    />
+                </div>
+            </div>
+
+            {/* Experience */}
+            <div className="mt-6">
                 <SectionTitle >Experience</SectionTitle>
-                    {experience.map((exp) => (
-                        <div key={exp.id} className="rounded mb-6">
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Company"
-                                value={exp.company}
-                                onChange={(val) => updateExperience(exp.id, "company", val)}
-    
-                            />
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Role"
-                                value={exp.role}
-                                onChange={(val) => updateExperience(exp.id, "role", val)}
-                       
-                            />
-                            <div className="flex gap-2 mb-2">
-                                <DateRangePicker
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                    placeholder="Start"
-                                    value={exp.start}
-                                    onChange={(value) => updateExperience(exp.id, "start", value)}
-                                />
-                                <DateRangePicker
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                    placeholder="End"
-                                    value={exp.end}
-                                    onChange={(value) => updateExperience(exp.id, "end", value)}
-                                />
-                            </div>
-                            <Textarea
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Details"
-                                value={exp.details}
-                                onChange={(val) => updateExperience(exp.id, "details", val)}
-                            />
-                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeExperience(exp.id)}>Remove</Button>
-                        </div>
-                    ))}
-                <Button className=" rounded-md max-w-48" onClick={addExperience}>Add Experience</Button>
-                </div>
+                {experience.map((exp) => (
+                    <div key={exp.id} className="rounded mb-6">
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Company"
+                            value={exp.company}
+                            onChange={(val) => updateExperience(exp.id, "company", val)}
 
-                {/* Education */}
-                <div className="mt-6">
-                <SectionTitle >Education</SectionTitle>
-                    {education.map((edu) => (
-                        <div key={edu.id} className="mb-2 rounded mb-6">
-                            <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="School"
-                                value={edu.school}
-                                onChange={(val) => updateEducation(edu.id, "school", val)}
-                               
-                            />
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2"
-                                placeholder="Degree"
-                                value={edu.degree}
-                                onChange={(val) => updateEducation(edu.id, "degree", val)}
-                               
-                            />
-                            <div className="flex gap-2 mb-2">
-                                <DateRangePicker
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                    placeholder="Start"
-                                    value={edu.start}
-                                    onChange={(value) => updateEducation(edu.id, "start", value)}
-                                />
-                                <DateRangePicker
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                    placeholder="End"
-                                    value={edu.end}
-                                    onChange={(value) => updateEducation(edu.id, "end", value)}
-                                />
-                              
-                            </div>
-                            <Textarea
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Details"
-                                value={edu.details}
-                                onChange={(val) => updateEducation(edu.id, "details", val)}
-                           
-                            />
-                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeEducation(edu.id)}>Remove</Button>
-                        </div>
-                    ))}
-                <Button className=" rounded-md max-w-48" onClick={addEducation}>Add Education</Button>
-                </div>
-
-                {/* References */}
-                <div className="mt-6">
-                <SectionTitle >References</SectionTitle>
-                    {references.map((ref) => (
-                        <div key={ref.id} className=" rounded mb-6">
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Name"
-                                value={ref.name}
-                                onChange={(val) => updateReference(ref.id, "name", val)}
-                               
-                            />
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Contact"
-                                value={ref.contact}
-                                onChange={(val) => updateReference(ref.id, "contact", val)}
-                               
-                            />
-                            <Input
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
-                                placeholder="Relation"
-                                value={ref.relation}
-                                onChange={(val) => updateReference(ref.id, "relation", val)}
-                               
-                            />
-                            <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeReference(ref.id)}>Remove</Button>
-                        </div>
-                    ))}
-                <Button className=" rounded-md max-w-48 " onClick={addReference}>Add Reference</Button>
-                </div>
-
-                {/* Skills */}
-                <div className="mt-6">
-                <SectionTitle >Skills</SectionTitle>
-                    <div className="flex gap-2 mb-4items-center justify-center place-items-center">
-                    <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900  focus:border-blue-950 focus:outline-none"
-                            placeholder="Add Skill"
-                            value={skillInput}
-                            onChange={(val) => setSkillInput(val)}
-                    
                         />
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Role"
+                            value={exp.role}
+                            onChange={(val) => updateExperience(exp.id, "role", val)}
+
+                        />
+                        <div className="flex gap-2 mb-2">
+                            <DateRangePicker
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                                placeholder="Start"
+                                value={exp.start}
+                                onChange={(value) => updateExperience(exp.id, "start", value)}
+                            />
+                            <DateRangePicker
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                                placeholder="End"
+                                value={exp.end}
+                                onChange={(value) => updateExperience(exp.id, "end", value)}
+                            />
+                        </div>
+                        <Textarea
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Details"
+                            value={exp.details}
+                            onChange={(val) => updateExperience(exp.id, "details", val)}
+                        />
+                        <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeExperience(exp.id)}>Remove</Button>
+                    </div>
+                ))}
+                <Button className=" rounded-md max-w-48" onClick={addExperience}>Add Experience</Button>
+            </div>
+
+            {/* Education */}
+            <div className="mt-6">
+                <SectionTitle >Education</SectionTitle>
+                {education.map((edu) => (
+                    <div key={edu.id} className="mb-2 rounded mb-6">
+                        <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="School"
+                            value={edu.school}
+                            onChange={(val) => updateEducation(edu.id, "school", val)}
+
+                        />
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2"
+                            placeholder="Degree"
+                            value={edu.degree}
+                            onChange={(val) => updateEducation(edu.id, "degree", val)}
+
+                        />
+                        <div className="flex gap-2 mb-2">
+                            <DateRangePicker
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                                placeholder="Start"
+                                value={edu.start}
+                                onChange={(value) => updateEducation(edu.id, "start", value)}
+                            />
+                            <DateRangePicker
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                                placeholder="End"
+                                value={edu.end}
+                                onChange={(value) => updateEducation(edu.id, "end", value)}
+                            />
+
+                        </div>
+                        <Textarea
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Details"
+                            value={edu.details}
+                            onChange={(val) => updateEducation(edu.id, "details", val)}
+
+                        />
+                        <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeEducation(edu.id)}>Remove</Button>
+                    </div>
+                ))}
+                <Button className=" rounded-md max-w-48" onClick={addEducation}>Add Education</Button>
+            </div>
+
+            {/* References */}
+            <div className="mt-6">
+                <SectionTitle >References</SectionTitle>
+                {references.map((ref) => (
+                    <div key={ref.id} className=" rounded mb-6">
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Name"
+                            value={ref.name}
+                            onChange={(val) => updateReference(ref.id, "name", val)}
+
+                        />
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Contact"
+                            value={ref.contact}
+                            onChange={(val) => updateReference(ref.id, "contact", val)}
+
+                        />
+                        <Input
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 mb-2 focus:border-blue-950 focus:outline-none"
+                            placeholder="Relation"
+                            value={ref.relation}
+                            onChange={(val) => updateReference(ref.id, "relation", val)}
+
+                        />
+                        <Button className=" rounded-md max-w-28 mt-2  bg-red-700 hover:bg-red-800" onClick={() => removeReference(ref.id)}>Remove</Button>
+                    </div>
+                ))}
+                <Button className=" rounded-md max-w-48 " onClick={addReference}>Add Reference</Button>
+            </div>
+
+            {/* Skills */}
+            <div className="mt-6 mb-4">
+                <SectionTitle >Skills</SectionTitle>
+                <div className="flex gap-2 mb-2 items-center justify-center place-items-center">
+                    <Input className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900  focus:border-blue-950 focus:outline-none"
+                        placeholder="Add Skill"
+                        value={skillInput}
+                        onChange={(val) => setSkillInput(val)}
+
+                    />
                     <Button className=" rounded-md max-w-28 " onClick={addSkill}>Add</Button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {skills.map((skill, i) => (
-                            <span key={i} className="btn ghost" onClick={() => removeSkill(i)} suppressHydrationWarning>
-                                {skill}
-                            </span>
-                        ))}
-                    </div>
                 </div>
-
-                {/* Preview */}
-                <div className="mt-6">
-                <SectionTitle >Preview</SectionTitle>
-                    <div
-                        ref={previewRef}
-                        className="preview p-4 bg-white border rounded shadow"
-                        suppressHydrationWarning
-                    >
-                        <h1 suppressHydrationWarning>{personal.fullName}</h1>
-                        <h2 className="muted" suppressHydrationWarning>{personal.title}</h2>
-                        <p suppressHydrationWarning>{personal.summary}</p>
-                        <div suppressHydrationWarning><strong>Skills:</strong> {skills.join(", ")}</div>
-                        <div suppressHydrationWarning>
-                            <strong>Experience:</strong>
-                            {experience.map(exp => (
-                                <div key={exp.id} className="mb-2" suppressHydrationWarning>
-                                    <div suppressHydrationWarning>{exp.role} at {exp.company} ({exp.start} - {exp.end})</div>
-                                    <div suppressHydrationWarning>{exp.details}</div>
-                                </div>
-                            ))}
-                        </div>
-                        <div suppressHydrationWarning>
-                            <strong>Education:</strong>
-                            {education.map(edu => (
-                                <div key={edu.id} className="mb-2" suppressHydrationWarning>
-                                    <div suppressHydrationWarning>{edu.degree} at {edu.school} ({edu.start} - {edu.end})</div>
-                                    <div suppressHydrationWarning>{edu.details}</div>
-                                </div>
-                            ))}
-                        </div>
-                        <div suppressHydrationWarning>
-                            <strong>References:</strong>
-                            {references.map(ref => (
-                                <div key={ref.id} className="mb-2" suppressHydrationWarning>
-                                    <div suppressHydrationWarning>{ref.name} ({ref.relation})</div>
-                                    <div suppressHydrationWarning>Contact: {ref.contact}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                <div className="flex flex-wrap gap-2">
+                    {skills.map((skill, i) => (
+                        <span key={i} className="btn " onClick={() => removeSkill(i)} suppressHydrationWarning>
+                            {skill}
+                        </span>
+                    ))}
                 </div>
+            </div>
 
-                {/* Actions */}
-                <div className="mt-6 flex gap-4">
-                    <Button className="rounded-md"  onClick={downloadJSON}>Download JSON</Button>
-                <Button className="rounded-md" onClick={printPDF}>Print PDF</Button>
+            {/* Preview */}
+            <ModernMinimalistPreview personal={personal} experience={experience} education={education} references={references} skills={skills} />
+
+            {/* Actions */}
+            <div className="mt-6 flex gap-4">
+                <Button className="rounded-md" onClick={downloadJSON}>Download JSON</Button>
+                <Button className="rounded-md" onClick={() => twolayoutPDF(personal, experience, education, references, skills)}>Print PDF</Button>
                 <Button className="rounded-md" onClick={resetAll}>Reset</Button>
-                </div>
-   
+            </div>
+
 
         </div>
     );
