@@ -10,23 +10,21 @@ export default function ImageToTextPage() {
     return (
         <>
             <Head>
-                <title>Image Editor | Lizard Interactive Online</title>
+                <title>Tailwind Color Guide | Lizard Interactive Online</title>
 
-                {/* Open Graph / Facebook */}
-                <meta property="og:title" content="Image Editor | Lizard Interactive Online" />
-                <meta property="og:description" content="Edit and enhance your images with our powerful online image editor." />
-                <meta property="og:image" content={`${staticPreviewImage}?v=2`} />
-             
+                {/* Open Graph */}
+                <meta property="og:title" content="Tailwind Color Guide | Lizard Interactive Online" />
+                <meta property="og:description" content="Explore Tailwind CSS colors and find the perfect palette for your projects." />
+                <meta property="og:image" content="https://www.lizardinteractive.online/imageeditor.jpg" />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://www.lizardinteractive.online/imageeditor" />
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Image Editor | Lizard Interactive Online" />
-                <meta name="twitter:description" content="Edit and enhance your images with our powerful online image editor." />
-                <meta name="twitter:image" content={`${staticPreviewImage}?v=2`} />
+                <meta name="twitter:title" content="Tailwind Color Guide | Lizard Interactive Online" />
+                <meta name="twitter:description" content="Explore Tailwind CSS colors and find the perfect palette for your projects." />
+                <meta name="twitter:image" content="https://www.lizardinteractive.online/imageeditor.jpg" />
             </Head>
-
             <SectionHeader
                 title="Image Editor"
                 subtitle="Edit and enhance your images with our powerful online image editor."
