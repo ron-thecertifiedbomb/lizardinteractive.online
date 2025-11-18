@@ -14,6 +14,7 @@ export default function UtilitiesHub() {
     { name: "Logo Maker", url: "/logomaker" },
     { name: "Metronome", url: "/metronome" },
     { name: "Tuner", url: "/tuner" },
+    { name: "Planner", url: "/planner" },
   ];
 
   return (
