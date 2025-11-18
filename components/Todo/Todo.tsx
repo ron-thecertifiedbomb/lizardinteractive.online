@@ -2,19 +2,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Check, 
-  Trash2, 
-  Edit3, 
-  Filter, 
+import {
+  Plus,
+  Check,
+  Trash2,
+  Edit3,
+  Filter,
   Calendar,
   Clock,
   Star,
   Search,
   MoreVertical,
   CheckCircle2,
-  Circle
+  Circle,
+  ChevronDown
 } from 'lucide-react';
 
 interface Todo {
@@ -30,6 +31,7 @@ interface Todo {
 const Todo: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Personal');
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [editText, setEditText] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'important'>('all');
@@ -38,17 +40,22 @@ const Todo: React.FC = () => {
   const [categories, setCategories] = useState<string[]>(['Personal', 'Work', 'Shopping', 'Health', 'Learning']);
   const [newCategory, setNewCategory] = useState('');
   const [showCategoryInput, setShowCategoryInput] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
   // Load from localStorage
   useEffect(() => {
     const savedTodos = localStorage.getItem('todos');
     const savedCategories = localStorage.getItem('todo-categories');
-    
+
     if (savedTodos) {
       setTodos(JSON.parse(savedTodos));
     }
     if (savedCategories) {
-      setCategories(JSON.parse(savedCategories));
+      const savedCats = JSON.parse(savedCategories);
+      setCategories(savedCats);
+      if (savedCats.length > 0) {
+        setSelectedCategory(savedCats[0]);
+      }
     }
   }, []);
 
@@ -69,12 +76,13 @@ const Todo: React.FC = () => {
       text: newTodo.trim(),
       completed: false,
       important: false,
-      category: 'Personal',
+      category: selectedCategory,
       createdAt: new Date().toISOString()
     };
 
     setTodos([todo, ...todos]);
     setNewTodo('');
+    setSelectedCategory(categories[0]);
   };
 
   const deleteTodo = (id: string) => {
@@ -127,7 +135,8 @@ const Todo: React.FC = () => {
 
   const addCategory = () => {
     if (newCategory.trim() && !categories.includes(newCategory.trim())) {
-      setCategories([...categories, newCategory.trim()]);
+      const updatedCategories = [...categories, newCategory.trim()];
+      setCategories(updatedCategories);
       setNewCategory('');
       setShowCategoryInput(false);
     }
@@ -181,16 +190,8 @@ const Todo: React.FC = () => {
   const filteredTodos = getFilteredTodos();
 
   return (
-    <div className="min-h-screen ">
-      <div className="max-w-7xl mx-auto p-10  bg-slate-800 rounded-xl">
-        {/* Header */}
-        {/* <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Todo App
-          </h1>
-          <p className="text-gray-600 text-lg">Stay organized and get things done</p>
-        </div> */}
-
+    <div className="min-h-screen">
+      <div className="max-w-7xl mx-auto p-10 bg-slate-800 rounded-xl">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
@@ -208,14 +209,47 @@ const Todo: React.FC = () => {
                     onChange={(e) => setNewTodo(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTodo()}
                     placeholder="What needs to be done?"
-                    className=" w-full max-w-30 p-3 border text-gray-800 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-3 border text-gray-800 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <button
                     onClick={addTodo}
-                    className="bg-blue-600 text-gray-400 p-3 rounded-xl hover:bg-blue-700 transition-colors"
+                    className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors"
                   >
                     <Plus className="w-5 h-5" />
                   </button>
+                </div>
+
+                {/* Category Selection */}
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                    className="w-full p-3 border border-gray-300 rounded-xl text-left flex justify-between items-center bg-white text-gray-800 hover:bg-gray-50"
+                  >
+                    <span>{selectedCategory}</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showCategoryDropdown && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-auto">
+                      {categories.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => {
+                            setSelectedCategory(cat);
+                            setShowCategoryDropdown(false);
+                          }}
+                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl ${selectedCategory === cat ? 'bg-blue-50 text-blue-700' : 'text-gray-800'
+                            }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -257,11 +291,10 @@ const Todo: React.FC = () => {
               <div className="space-y-2">
                 <button
                   onClick={() => setCategory('all')}
-                  className={`w-full text-left p-3 rounded-xl transition-all ${
-                    category === 'all' 
-                      ? 'bg-blue-50 border border-blue-200 text-blue-700' 
+                  className={`w-full text-left p-3 rounded-xl transition-all ${category === 'all'
+                      ? 'bg-blue-50 border border-blue-200 text-blue-700'
                       : 'hover:bg-gray-50 text-gray-700'
-                  }`}
+                    }`}
                 >
                   📁 All Tasks
                 </button>
@@ -269,11 +302,10 @@ const Todo: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setCategory(cat)}
-                    className={`w-full text-left p-3 rounded-xl transition-all flex justify-between items-center ${
-                      category === cat 
-                        ? 'bg-blue-50 border border-blue-200 text-blue-700' 
+                    className={`w-full text-left p-3 rounded-xl transition-all flex justify-between items-center ${category === cat
+                        ? 'bg-blue-50 border border-blue-200 text-blue-700'
                         : 'hover:bg-gray-50 text-gray-700'
-                    }`}
+                      }`}
                   >
                     <span>📋 {cat}</span>
                     <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">
@@ -289,7 +321,7 @@ const Todo: React.FC = () => {
                       onChange={(e) => setNewCategory(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && addCategory()}
                       placeholder="New category"
-                      className="flex-1 p-2 border border-gray-300 rounded-lg text-sm  text-gray-800"
+                      className="flex-1 p-2 border border-gray-300 rounded-lg text-sm text-gray-800"
                       autoFocus
                     />
                     <button
@@ -344,7 +376,7 @@ const Todo: React.FC = () => {
                     placeholder="Search todos..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border  text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -352,41 +384,37 @@ const Todo: React.FC = () => {
                 <div className="flex gap-2 flex-wrap">
                   <button
                     onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-xl transition-all ${
-                      filter === 'all' 
-                        ? 'bg-blue-600 text-white' 
+                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'all'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     All
                   </button>
                   <button
                     onClick={() => setFilter('active')}
-                    className={`px-4 py-2 rounded-xl transition-all ${
-                      filter === 'active' 
-                        ? 'bg-green-600 text-white' 
+                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'active'
+                        ? 'bg-green-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     Active
                   </button>
                   <button
                     onClick={() => setFilter('completed')}
-                    className={`px-4 py-2 rounded-xl transition-all ${
-                      filter === 'completed' 
-                        ? 'bg-gray-600 text-white' 
+                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'completed'
+                        ? 'bg-gray-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     Completed
                   </button>
                   <button
                     onClick={() => setFilter('important')}
-                    className={`px-4 py-2 rounded-xl transition-all ${
-                      filter === 'important' 
-                        ? 'bg-purple-600 text-white' 
+                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'important'
+                        ? 'bg-purple-600 text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     Important
                   </button>
@@ -403,8 +431,8 @@ const Todo: React.FC = () => {
                     {todos.length === 0 ? 'No todos yet!' : 'No todos found'}
                   </h3>
                   <p className="text-gray-600">
-                    {todos.length === 0 
-                      ? "Get started by adding your first todo above!" 
+                    {todos.length === 0
+                      ? "Get started by adding your first todo above!"
                       : "Try changing your filters or search term."}
                   </p>
                 </div>
@@ -412,18 +440,16 @@ const Todo: React.FC = () => {
                 filteredTodos.map(todo => (
                   <div
                     key={todo.id}
-                    className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-4 transition-all hover:shadow-md ${
-                      todo.completed ? 'opacity-75' : ''
-                    } ${todo.important && !todo.completed ? 'border-l-4 border-l-purple-500' : ''}`}
+                    className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-4 transition-all hover:shadow-md ${todo.completed ? 'opacity-75' : ''
+                      } ${todo.important && !todo.completed ? 'border-l-4 border-l-purple-500' : ''}`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-3 flex-1">
                         {/* Complete Checkbox */}
                         <button
                           onClick={() => toggleComplete(todo.id)}
-                          className={`mt-1 transition-all ${
-                            todo.completed ? 'text-green-500' : 'text-gray-400 hover:text-green-500'
-                          }`}
+                          className={`mt-1 transition-all ${todo.completed ? 'text-green-500' : 'text-gray-400 hover:text-green-500'
+                            }`}
                         >
                           {todo.completed ? (
                             <CheckCircle2 className="w-6 h-6" />
@@ -463,7 +489,7 @@ const Todo: React.FC = () => {
                               <p className={`text-gray-900 ${todo.completed ? 'line-through' : ''}`}>
                                 {todo.text}
                               </p>
-                              
+
                               {/* Meta Information */}
                               <div className="flex items-center space-x-4 mt-2">
                                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
@@ -491,11 +517,10 @@ const Todo: React.FC = () => {
                           {/* Important Toggle */}
                           <button
                             onClick={() => toggleImportant(todo.id)}
-                            className={`p-2 rounded-lg transition-all ${
-                              todo.important 
-                                ? 'text-purple-600 bg-purple-50' 
+                            className={`p-2 rounded-lg transition-all ${todo.important
+                                ? 'text-purple-600 bg-purple-50'
                                 : 'text-gray-400 hover:text-purple-600 hover:bg-purple-50'
-                            }`}
+                              }`}
                           >
                             <Star className={`w-4 h-4 ${todo.important ? 'fill-current' : ''}`} />
                           </button>
@@ -521,7 +546,7 @@ const Todo: React.FC = () => {
                             <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all">
                               <MoreVertical className="w-4 h-4" />
                             </button>
-                            
+
                             {/* Dropdown Menu */}
                             <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
                               <div className="p-2">
