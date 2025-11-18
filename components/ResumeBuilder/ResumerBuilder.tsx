@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import DateRangePicker from "../DateRangePicker/DateRangePicker";
+
 
 export default function ResumeBuilder() {
+    
     const [hasLoaded, setHasLoaded] = useState(false);
     const [personal, setPersonal] = useState({ fullName: "", title: "", email: "", phone: "", location: "", summary: "" });
     const [experience, setExperience] = useState([]);
@@ -210,19 +213,17 @@ export default function ResumeBuilder() {
                                 suppressHydrationWarning
                             />
                             <div className="flex gap-2 mb-2">
-                                <input
+                                <DateRangePicker
                                     className="input"
                                     placeholder="Start"
                                     value={exp.start}
-                                    onChange={(e) => updateExperience(exp.id, "start", e.target.value)}
-                                    suppressHydrationWarning
+                                    onChange={(value) => updateExperience(exp.id, "start", value)}
                                 />
-                                <input
+                                <DateRangePicker
                                     className="input"
                                     placeholder="End"
                                     value={exp.end}
-                                    onChange={(e) => updateExperience(exp.id, "end", e.target.value)}
-                                    suppressHydrationWarning
+                                    onChange={(value) => updateExperience(exp.id, "end", value)}
                                 />
                             </div>
                             <textarea
@@ -258,20 +259,19 @@ export default function ResumeBuilder() {
                                 suppressHydrationWarning
                             />
                             <div className="flex gap-2 mb-2">
-                                <input
+                                <DateRangePicker
                                     className="input"
                                     placeholder="Start"
                                     value={edu.start}
-                                    onChange={(e) => updateEducation(edu.id, "start", e.target.value)}
-                                    suppressHydrationWarning
+                                    onChange={(value) => updateEducation(edu.id, "start", value)}
                                 />
-                                <input
+                                <DateRangePicker
                                     className="input"
                                     placeholder="End"
                                     value={edu.end}
-                                    onChange={(e) => updateEducation(edu.id, "end", e.target.value)}
-                                    suppressHydrationWarning
+                                    onChange={(value) => updateEducation(edu.id, "end", value)}
                                 />
+                              
                             </div>
                             <textarea
                                 className="input mb-2"
