@@ -275,9 +275,9 @@ export default function LogoMaker() {
                         >
                             <span>{el.type.toUpperCase()}</span>
                             <div className="flex gap-1">
-                                <Button onClick={() => reorder(el.id, "up")}>↑</Button>
-                                <Button onClick={() => reorder(el.id, "down")}>↓</Button>
-                                <Button onClick={() => removeLayer(el.id)}>✕</Button>
+                                <Button className="flex rounded-lg max-w-1 justify-center items-center" onClick={() => reorder(el.id, "up")}>↑</Button>
+                                <Button className="flex rounded-lg max-w-1 justify-center items-center" onClick={() => reorder(el.id, "down")}>↓</Button>
+                                <Button className="flex rounded-lg max-w-1 justify-center items-center" onClick={() => removeLayer(el.id)}>✕</Button>
                             </div>
                         </div>
                     ))}
@@ -483,7 +483,31 @@ export default function LogoMaker() {
                             )}
                         </>
                     )}
-
+                    {/* Font Family (Text only) */}
+                    {selected.type === "text" && (
+                        <div className="space-y-1">
+                            <label className="font-medium text-sm">Font Family</label>
+                            <select
+                                className="input w-full text-gray-700"
+                                value={selected.fontFamily}
+                                onChange={(e) =>
+                                    setElements((prev) =>
+                                        prev.map((el) =>
+                                            el.id === selectedId ? { ...el, fontFamily: e.target.value } : el
+                                        )
+                                    )
+                                }
+                            >
+                                <option value="Inter, sans-serif">Inter</option>
+                                <option value="Arial, sans-serif">Arial</option>
+                                <option value="Verdana, sans-serif">Verdana</option>
+                                <option value="Times New Roman, serif">Times New Roman</option>
+                                <option value="Courier New, monospace">Courier New</option>
+                                <option value="Roboto, sans-serif">Roboto</option>
+                                <option value="Georgia, serif">Georgia</option>
+                            </select>
+                        </div>
+                    )}
 
                     {/* Color */}
                     {"fill" in selected && (

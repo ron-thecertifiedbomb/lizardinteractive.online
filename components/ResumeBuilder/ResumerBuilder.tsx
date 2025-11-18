@@ -127,7 +127,7 @@ export default function ResumeBuilder() {
 
     return (
 
-        <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-4xl mx-auto">
+        <div className="p-6 bg-slate-800 text-white rounded-lg shadow-lg max-w-4xl mx-auto">
             {/* Personal Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

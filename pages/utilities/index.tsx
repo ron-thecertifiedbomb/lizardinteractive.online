@@ -11,6 +11,7 @@ export default function UtilitiesHub() {
     { name: "Screen Recorder", url: "/screenrecorder" },
     { name: "Image Editor", url: "/imageeditor" },
     { name: "Logo Maker", url: "/logomaker" },
+    { name: "Metronome", url: "/metronome" },
   ];
 
   return (
