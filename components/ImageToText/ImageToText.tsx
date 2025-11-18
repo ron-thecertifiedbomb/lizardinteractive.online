@@ -57,7 +57,7 @@ export default function ImageToTextConverter() {
     };
 
     return (
-        <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-xl mx-auto">
+        <div className="p-4 bg-slate-800  text-white rounded-lg shadow-lg max-w-xl mx-auto">
             {/* Drag & Drop Area */}
             <div
                 onDrop={handleDrop}

@@ -25,25 +25,25 @@ export default function ImageEditorModal() {
         compressInitial: null,
         darkMode: true,
         hideDeleteBtn: false,
-  
-    
+
+
     };
 
     return (
         <Container>
-            <div className=" w-full flex items-center rie-container ">
-                <div className=" rounded-2xl shadow-2xl w-full max-w-2xl p-6 space-y-6">
+            <div className="bg-slate-800  w-full flex justify-center items-center rie-container rounded-lg ">
+                <div className="  w-full max-w-2xl p-6 space-y-6  ">
 
-         
+
 
                     {/* Preview */}
                     <div className="w-full  mt-4">
-                        {imageSrc &&  <p className="text-sm text-gray-200 mb-2">Preview:</p>}
+                        {imageSrc && <p className="text-sm text-gray-200 mb-2">Preview:</p>}
                         {imageSrc ? (
                             <img
                                 src={imageSrc}
                                 alt="Edited"
-                                className="max-h-[500px] mx-auto w-full object-contain rounded-md bg-black"
+                                className="max-h-[500px] mx-auto w-full object-contain "
                             />
                         ) : (
                             <h3 className="text-gray-200 text-lg text-center font-medium">
@@ -53,16 +53,16 @@ export default function ImageEditorModal() {
                     </div>
 
                     {/* Editor */}
-                    {imageSrc && <p className="text-sm text-gray-200 ">Source Image:</p>}   
-                    <div className=" rounded-md overflow-hidden  ">
+                    {imageSrc && <p className="text-sm text-gray-200 ">Source Image:</p>}
+            
                         <ReactImagePickerEditor
                             config={config}
                             // ❌ Remove imageSrcProp
                             imageChanged={(newDataUri: string) => setImageSrc(newDataUri)}
                         />
-                    </div>
+          
 
-                
+
 
                 </div>
             </div>

@@ -12,7 +12,7 @@ export default function ImageToTextPage() {
 
             <SectionHeader
                 title="Resume Builder"
-
+subtitle="Create professional resumes quickly and easily with our Resume Builder tool."
             />
 
 

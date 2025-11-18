@@ -60,7 +60,7 @@ export default function PDFToWordConverter() {
     };
 
     return (
-        <div className="p-4 bg-blue-700 text-white rounded-lg shadow-lg max-w-xl mx-auto">
+        <div className="p-4 bg-slate-800 text-white rounded-lg shadow-lg max-w-xl mx-auto">
         
             <input
                 ref={fileInputRef}
@@ -73,13 +73,13 @@ export default function PDFToWordConverter() {
             <Button
                 onClick={convertPDFtoWord}
                 disabled={!file || !pdfjsLib || loading}
-                className="w-full px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors"
+                className="w-full text-gray-200 px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded-xl disabled:opacity-50 transition-colors"
             >
                 Convert PDF to Word
             </Button>
 
             {file && (
-                <p className="mt-2 text-sm text-gray-300">Selected: {file.name}</p>
+                <p className="mt-2 text-sm text-gray-200">Selected: {file.name}</p>
             )}
         </div>
     );
