@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import Header from "../components/header";
 import { Auth0Provider } from "@auth0/auth0-react";
-
+import { Analytics } from "@vercel/analytics/next"
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Auth0Provider
@@ -24,6 +24,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
       <main className="pt-4">
         <Component {...pageProps} />
+        <Analytics />
       </main>
     </Auth0Provider>
   );

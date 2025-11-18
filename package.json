@@ -13,6 +13,7 @@
     "@next/mdx": "^16.0.1",
     "@tailwindcss/typography": "^0.5.7",
     "@types/mdx": "^2.0.13",
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
     "date-fns": "^2.29.3",
