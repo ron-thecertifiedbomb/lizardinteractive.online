@@ -285,7 +285,7 @@ export default function Metronome() {
             </div>
 
             {/* BPM Presets */}
-            <div className="flex gap-2 mb-4 flex-wrap">
+            {/* <div className="flex gap-2 mb-4 flex-wrap">
                 {[60, 80, 100, 120, 140, 160].map((presetBpm) => (
                     <button
                         key={presetBpm}
@@ -298,7 +298,7 @@ export default function Metronome() {
                         {presetBpm}
                     </button>
                 ))}
-            </div>
+            </div> */}
 
             <div className="flex gap-3 mb-4">
                 <button
