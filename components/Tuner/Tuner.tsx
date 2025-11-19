@@ -28,6 +28,7 @@ const Tuner: React.FC = () => {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const microphoneRef = useRef<MediaStreamAudioSourceNode | null>(null);
     const animationRef = useRef<number>();
+    const simulationIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         return () => {
@@ -40,6 +41,10 @@ const Tuner: React.FC = () => {
 
     const startListening = async () => {
         try {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error('Media devices not supported');
+            }
+
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             audioContextRef.current = new AudioContext();
             analyserRef.current = audioContextRef.current.createAnalyser();
@@ -64,6 +69,12 @@ const Tuner: React.FC = () => {
         if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
             audioContextRef.current.close();
         }
+
+        if (simulationIntervalRef.current) {
+            clearInterval(simulationIntervalRef.current);
+            simulationIntervalRef.current = null;
+        }
+
         setIsListening(false);
         if (animationRef.current) {
             cancelAnimationFrame(animationRef.current);
@@ -71,20 +82,27 @@ const Tuner: React.FC = () => {
     };
 
     const simulateTuning = () => {
+        console.log('Starting simulation...');
         setIsListening(true);
         let simFrequency = 300;
-        const interval = setInterval(() => {
+
+        // Clear any existing interval
+        if (simulationIntervalRef.current) {
+            clearInterval(simulationIntervalRef.current);
+        }
+
+        simulationIntervalRef.current = setInterval(() => {
             simFrequency += (selectedString.frequency - simFrequency) * 0.1;
             setCurrentFrequency(simFrequency);
             calculateNoteAndCents(simFrequency);
             setVolume(Math.random() * 100);
 
             if (Math.abs(simFrequency - selectedString.frequency) < 0.1) {
-                clearInterval(interval);
+                if (simulationIntervalRef.current) {
+                    clearInterval(simulationIntervalRef.current);
+                }
             }
         }, 100);
-
-        return () => clearInterval(interval);
     };
 
     const analyzePitch = () => {
@@ -127,8 +145,11 @@ const Tuner: React.FC = () => {
         setDetectedNote(closestNote.note);
 
         // Calculate cents difference
-        const centsDiff = 1200 * Math.log2(frequency / selectedString.frequency);
-        setCents(Math.max(-50, Math.min(50, centsDiff)));
+        // Formula: 1200 * log2(f1 / f2)
+        if (frequency > 0 && selectedString.frequency > 0) {
+            const centsDiff = 1200 * Math.log2(frequency / selectedString.frequency);
+            setCents(Math.max(-50, Math.min(50, centsDiff)));
+        }
     };
 
     const getMeterPosition = () => {
@@ -158,31 +179,23 @@ const Tuner: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen  text-white p-4">
-            <div className="max-w-md mx-auto">
-                {/* Header */}
-                {/* <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-                        Guitar Tuner
-                    </h1>
-                    <p className="text-gray-400 mt-2">Professional Chromatic Tuner</p>
-                </div> */}
-
+        <div className="min-h-screen text-white p-4">
+            <div className="max-w-sm mx-auto">
                 {/* Main Tuner Display */}
-                <div className="bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700">
+                <div className="bg-gray-800 rounded-2xl p-4 shadow-2xl border border-gray-700">
                     {/* Note Display */}
-                    <div className="text-center mb-6">
-                        <div className="text-6xl font-bold text-white mb-2">
+                    <div className="text-center mb-4">
+                        <div className="text-5xl font-bold text-white mb-1">
                             {detectedNote}
                         </div>
-                        <div className="text-gray-400 text-lg">
+                        <div className="text-gray-400 text-base">
                             {currentFrequency > 0 ? currentFrequency.toFixed(1) + ' Hz' : '-- Hz'}
                         </div>
                     </div>
 
                     {/* Tuning Meter */}
-                    <div className="mb-8">
-                        <div className="relative h-32 bg-gray-900 rounded-lg p-4 border border-gray-600">
+                    <div className="mb-6">
+                        <div className="relative h-24 bg-gray-900 rounded-lg p-4 border border-gray-600">
                             {/* Center line */}
                             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-yellow-400 transform -translate-x-1/2"></div>
 
@@ -192,7 +205,7 @@ const Tuner: React.FC = () => {
 
                             {/* Needle */}
                             <div
-                                className={`absolute top-4 bottom-4 w-1 ${getStatusColor()} rounded-full transition-all duration-100`}
+                                className={`absolute top-2 bottom-2 w-1 ${getStatusColor()} rounded-full transition-all duration-100`}
                                 style={{ left: `${getMeterPosition()}%` }}
                             ></div>
 
@@ -203,16 +216,16 @@ const Tuner: React.FC = () => {
                         </div>
 
                         {/* Tuning Status */}
-                        <div className="text-center mt-4">
-                            <div className={`inline-flex items-center px-4 py-2 rounded-full ${getTuningStatus() === 'perfect' ? 'bg-green-500' :
-                                    getTuningStatus() === 'close' ? 'bg-yellow-500' : 'bg-red-500'
+                        <div className="text-center mt-3">
+                            <div className={`inline-flex items-center px-3 py-1 rounded-full ${getTuningStatus() === 'perfect' ? 'bg-green-500' :
+                                getTuningStatus() === 'close' ? 'bg-yellow-500' : 'bg-red-500'
                                 } bg-opacity-20 border ${getTuningStatus() === 'perfect' ? 'border-green-500' :
                                     getTuningStatus() === 'close' ? 'border-yellow-500' : 'border-red-500'
                                 }`}>
                                 <div className={`w-2 h-2 rounded-full mr-2 ${getTuningStatus() === 'perfect' ? 'bg-green-500' :
-                                        getTuningStatus() === 'close' ? 'bg-yellow-500' : 'bg-red-500'
+                                    getTuningStatus() === 'close' ? 'bg-yellow-500' : 'bg-red-500'
                                     }`}></div>
-                                <span className="text-sm font-medium">
+                                <span className="text-xs font-medium">
                                     {getTuningStatus() === 'perfect' ? 'Perfect!' :
                                         getTuningStatus() === 'close' ? 'Close' : 'Keep tuning'}
                                 </span>
@@ -221,7 +234,7 @@ const Tuner: React.FC = () => {
                     </div>
 
                     {/* Volume Indicator */}
-                    <div className="mb-6">
+                    <div className="mb-4">
                         <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
                             <span>Input Level</span>
                             <span>{Math.min(volume, 100).toFixed(0)}%</span>
@@ -235,12 +248,12 @@ const Tuner: React.FC = () => {
                     </div>
 
                     {/* Control Buttons */}
-                    <div className="flex gap-3 mb-6">
+                    <div className="flex gap-2 mb-4">
                         <button
                             onClick={isListening ? stopListening : startListening}
-                            className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all ${isListening
-                                    ? 'bg-red-500 hover:bg-red-600'
-                                    : 'bg-green-500 hover:bg-green-600'
+                            className={`flex-1 py-2 px-3 rounded-xl font-semibold text-sm transition-all ${isListening
+                                ? 'bg-red-500 hover:bg-red-600'
+                                : 'bg-green-500 hover:bg-green-600'
                                 }`}
                         >
                             {isListening ? 'Stop Listening' : 'Start Listening'}
@@ -248,25 +261,25 @@ const Tuner: React.FC = () => {
 
                         <button
                             onClick={playReferenceTone}
-                            className="flex-1 py-3 px-4 bg-blue-500 hover:bg-blue-600 rounded-xl font-semibold transition-all"
+                            className="flex-1 py-2 px-3 bg-blue-500 hover:bg-blue-600 rounded-xl font-semibold text-sm transition-all"
                         >
                             Play Tone
                         </button>
                     </div>
 
                     {/* String Selection */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-2">
                         {strings.map((string, index) => (
                             <button
                                 key={index}
                                 onClick={() => setSelectedString(string)}
-                                className={`p-4 rounded-xl border-2 transition-all ${selectedString.name === string.name
-                                        ? 'border-purple-500 bg-purple-500 bg-opacity-20'
-                                        : 'border-gray-600 bg-gray-700 hover:bg-gray-600'
+                                className={`p-3 rounded-xl border-2 transition-all ${selectedString.name === string.name
+                                    ? 'border-purple-500 bg-purple-500 bg-opacity-20'
+                                    : 'border-gray-600 bg-gray-700 hover:bg-gray-600'
                                     }`}
                             >
                                 <div className="text-center">
-                                    <div className="font-bold text-lg">{string.note}</div>
+                                    <div className="font-bold text-base">{string.note}</div>
                                     <div className="text-xs text-gray-400 mt-1">{string.name}</div>
                                     <div className="text-xs text-gray-500">{string.frequency} Hz</div>
                                 </div>
@@ -276,7 +289,7 @@ const Tuner: React.FC = () => {
                 </div>
 
                 {/* Footer Info */}
-                <div className="text-center mt-6 text-gray-500 text-sm">
+                <div className="text-center mt-4 text-gray-500 text-xs">
                     <p>Play the {selectedString.name} string and tune to {selectedString.frequency} Hz</p>
                 </div>
             </div>
