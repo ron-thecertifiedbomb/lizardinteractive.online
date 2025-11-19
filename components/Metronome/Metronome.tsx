@@ -196,7 +196,10 @@ export default function Metronome() {
         return () => window.removeEventListener('keydown', handleKeyPress);
     }, [isRunning]);
 
-    const progressWidth = visualBeat >= 0 ? ((visualBeat % totalBeats) / totalBeats) * 100 : 0;
+    const progressWidth =
+        visualBeat >= 0 && totalBeats > 1
+            ? ((visualBeat % totalBeats) / (totalBeats - 1)) * 100
+            : 0;
 
     return (
         <div className="bg-slate-800 rounded-lg p-5 max-w-md mx-auto">
