@@ -16,6 +16,7 @@ export default function UtilitiesHub() {
     { name: "Tuner", url: "/tuner" },
     { name: "Planner", url: "/planner" },
     { name: "Todo List", url: "/todo" },
+    { name: "Gallery", url: "/gallery" },
   ];
 
   return (

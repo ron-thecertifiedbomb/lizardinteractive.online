@@ -16,6 +16,8 @@ module.exports = withMDX({
       { protocol: "https", hostname: "www.wired.com" },
       { protocol: "https", hostname: "news.bbcimg.co.uk" },
       { protocol: "https", hostname: "cdn.cnn.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "mcdn.wallpapersafari.com" },
     ],
   },
 });
