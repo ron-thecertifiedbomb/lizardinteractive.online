@@ -14,17 +14,20 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
     const [locationLabel, setLocationLabel] = useState("Current Location");
 
     const weatherCodeToEmoji = (code: number) => {
-        if (code === 0) return "☀️";
-        if (code === 1 || code === 2) return "🌤️";
-        if (code === 3) return "☁️";
-        if (code >= 45 && code <= 48) return "🌫️";
-        if (code >= 51 && code <= 57) return "🌦️";
-        if (code >= 61 && code <= 67) return "🌧️";
-        if (code >= 71 && code <= 77) return "🌨️";
-        if (code >= 80 && code <= 82) return "⛈️";
-        if (code >= 85 && code <= 86) return "❄️";
-        if (code >= 95 && code <= 99) return "⛈️";
-        return "🌈";
+        switch (code) {
+            case 0: return "☀️";        // Clear sky
+            case 1: return "🌤️";       // Mainly clear
+            case 2: return "⛅";        // Partly cloudy
+            case 3: return "☁️";        // Overcast
+            case 45: case 46: case 47: case 48: return "🌫️"; // Fog
+            case 51: case 53: case 55: case 56: case 57: return "🌦️"; // Drizzle
+            case 61: case 63: case 65: case 66: case 67: return "🌧️"; // Rain
+            case 71: case 73: case 75: case 77: return "🌨️"; // Snow
+            case 80: case 81: case 82: return "⛈️"; // Rain showers
+            case 85: case 86: return "❄️"; // Snow showers
+            case 95: case 96: case 99: return "⛈️"; // Thunderstorm
+            default: return "🌈"; // Unknown
+        }
     };
 
     const fetchWeather = async (lat: number, lon: number) => {
@@ -82,16 +85,16 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
 
     return (
         <div
-            className={`w-14 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm ${className}`}
+            className={`w-16 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm ${className}`}
             title={error || locationLabel}
         >
             {loading ? (
                 "⏳"
             ) : current ? (
-                <>
-                    <span className="text-2xl">{weatherCodeToEmoji(current.weathercode)}</span>
-                    <span className="text-xs">{current.temperature.toFixed(0)}°</span>
-                </>
+                <div className="flex items-center">
+                    <span className="text-4xl">{weatherCodeToEmoji(current.weathercode)}</span>
+                    <span className="text-lg">{current.temperature.toFixed(0)}°</span>
+                </div>
             ) : (
                 "—"
             )}
