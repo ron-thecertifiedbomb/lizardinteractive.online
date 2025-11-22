@@ -1,6 +1,6 @@
 import Container from "../components/container";
 import Image from "next/image";
-import { homeContent } from "./homepage/data/homeContent";
+import { homeContent } from "../lib/homeContent";
 
 export default function HomePage() {
   return (
