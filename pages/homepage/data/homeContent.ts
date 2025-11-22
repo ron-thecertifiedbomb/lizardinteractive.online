@@ -2,7 +2,7 @@ export const homeContent = [
   {
     type: "heading",
     content:
-      "Hi, I’m Ronan — builder, creator, and founder of Lizard Interactive Online.",
+      "Hi, I’m Ronan builder, creator, and founder of Lizard Interactive Online.",
     animation: "fade-down", // animate heading from top
   },
   {

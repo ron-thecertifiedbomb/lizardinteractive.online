@@ -2,7 +2,7 @@ import Container from "../components/container";
 import Image from "next/image";
 import { homeContent } from "./homepage/data/homeContent";
 
-function HomePage() {
+export function HomePage() {
   return (
 
       <Container >
