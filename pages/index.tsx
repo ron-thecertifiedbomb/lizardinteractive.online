@@ -1,45 +1,53 @@
 import Container from "../components/container";
 import Image from "next/image";
+import { homeContent } from "./homepage/data/homeContent";
 
 function HomePage() {
   return (
-    <>
-      <Container>
-     
-        <div className="space-y-8">
-          <h1 className="text-lg lg:text-3xl font-bold">
-            Yo Wazzup! I’m Ronan a Software Developer, Creator & Problem Solver.
-          </h1>
 
-          <p className="text-lg font-light">
-            Welcome to <strong>Lizard Interactive Online</strong>, my playground
-            for sharing dev tips, tutorials, and projects. I enjoy working with
-            <strong> Next.js</strong> and crafting smooth, beautiful web
-            experiences.
-          </p>
+      <Container >
+        {homeContent.map((block, index) => {
+          switch (block.type) {
+            case "heading":
+              return (
+                <div key={index} className="mb-6 animate-[fade-down]">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                    {block.content}
+                  </h1>
+                </div>
+              );
 
-          <p className="text-lg font-light">
-            Here you’ll find blogs, code snippets, latest tech news, and
-            behind-the-scenes of my creative coding journey. Dive in, get
-            inspired, or just explore the lizard’s den.
-          </p>
+            case "paragraph":
+              return (
+                <div key={index} className="mb-6 animate-[fade-up]">
+                  <p className="text-lg sm:text-xl text-blue-100 max-w-3xl leading-relaxed">
+                    {block.content}
+                  </p>
+                </div>
+              );
 
-          <p className="text-lg font-light">
-            Wanna build your own dev playground? Stick around — I’ll show you
-            how!
-          </p>
-        </div>
+            case "image":
+              return (
+                <div
+                  key={index}
+                  className="my-12 overflow-hidden rounded-2xl shadow-xl w-full max-w-4xl mx-auto animate-[zoom-in]"
+                >
+                  <Image
+                    src={block.src}
+                    alt={block.alt}
+                    width={block.width}
+                    height={block.height}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              );
+
+            default:
+              return null;
+          }
+        })}
       </Container>
-      <div className="container max-w-3xl m-auto px-4 mt-6">
-        <Image
-          src="/js.jpg"
-          alt="Javascript"
-          width={1920 / 2}
-          height={1080 / 2}
-          className="rounded-lg shadow-lg"
-        />
-      </div>
-    </>
+
   );
 }
 
