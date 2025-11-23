@@ -20,7 +20,7 @@ export default function LatestTrendingNews() {
                     <a
                         key={idx}
                         href={cat.url}
-                        className="block p-6 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white text-center text-lg font-semibold shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-1"
+                        className="block p-6 rounded-xl bg-gradient-to-r bg-gray-900 text-white text-center text-lg font-semibold shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-1"
                     >
                         {cat.name}
                     </a>

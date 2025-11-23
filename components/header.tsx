@@ -20,7 +20,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="py-4 bg-dark-bg text-white ">
+    <header className=" bg-dark-bg text-white ">
       <Container>
         <nav className="flex items-center justify-between">
 
@@ -29,8 +29,8 @@ export default function Header() {
             <Image
               src="/lizardinteractive.png"
               alt="logo"
-              width={44}
-              height={44}
+              width={40}
+              height={40}
               className="rounded-full"
               priority
             />
