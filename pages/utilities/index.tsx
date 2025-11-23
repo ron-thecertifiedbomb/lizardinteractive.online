@@ -17,6 +17,7 @@ export default function UtilitiesHub() {
     { name: "Planner", url: "/planner" },
     { name: "Todo List", url: "/todo" },
     { name: "Gallery", url: "/gallery" },
+    { name: "Box Shadow Generator", url: "/boxshadowgenerator" },
   ];
 
   return (
