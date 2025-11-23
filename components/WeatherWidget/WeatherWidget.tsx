@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { extractMunicipality, weatherCodeToLayers } from "./helpers";
 
 type CurrentWeather = {
     temperature: number;
@@ -9,43 +10,12 @@ type CurrentWeather = {
 };
 
 export function WeatherWidget({ className = "" }: { className?: string }) {
+
     const [current, setCurrent] = useState<CurrentWeather | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [locationName, setLocationName] = useState("Loading...");
-
-    const weatherCodeToLayers = (code: number, isDay: number) => {
-        const night = isDay === 0;
-
-        const sun = night ? null : "☀️";
-        const moon = night ? "🌙" : null;
-
-        switch (code) {
-            case 0: return { sun, moon, clouds: null, precip: null };
-            case 1:
-            case 2: return { sun, moon, clouds: "☁️", precip: null };
-            case 3: return { sun: null, moon: null, clouds: "☁️", precip: null };
-            case 45:
-            case 48: return { sun: null, moon: null, clouds: "🌫️", precip: null };
-            case 51:
-            case 53:
-            case 55: return { sun, moon, clouds: "☁️", precip: "🌧️" };
-            case 61:
-            case 63:
-            case 65: return { sun, moon, clouds: null, precip: "🌧️" };
-            case 71:
-            case 73:
-            case 75: return { sun: null, moon: null, clouds: "☁️", precip: "🌨️" };
-            case 80:
-            case 81:
-            case 82: return { sun, moon, clouds: "☁️", precip: "🌧️" };
-            case 95:
-            case 96:
-            case 99: return { sun, moon, clouds: "☁️", precip: "⛈️" };
-            default: return { sun, moon, clouds: "☁️", precip: null };
-        }
-    };
-
+    
     const fetchWeather = async (lat: number, lon: number) => {
         setLoading(true);
         setError("");
@@ -78,16 +48,7 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
         try {
             const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
             const data = await res.json();
-            const extractMunicipality = (place: any) => {
-                return (
-                    place.city ||
-                    place.town ||
-                    place.municipality ||
-                    place.village ||
-                    place.locality ||
-                    "Unknown"
-                );
-            };
+
             if (data && data.results && data.results.length > 0) {
                 const place = data.results[0];
                 const muni = extractMunicipality(place);
