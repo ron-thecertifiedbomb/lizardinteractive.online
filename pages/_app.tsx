@@ -5,6 +5,8 @@ import Head from "next/head";
 import Header from "../components/header";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next"
+import Footer from "../components/Footer/Footer";
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Auth0Provider
@@ -20,12 +22,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title>Lizard Interactive Online</title>
       </Head>
 
+      {/* Header fixed up here */}
       <Header />
 
+      {/* Main page content */}
       <main className="pt-4">
         <Component {...pageProps} />
         <Analytics />
       </main>
+
+      {/* FOOTER placed correctly here */}
+      <Footer />
+
     </Auth0Provider>
   );
 }
