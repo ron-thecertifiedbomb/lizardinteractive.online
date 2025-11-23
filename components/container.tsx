@@ -9,8 +9,8 @@ export default function Container({ children }: ContainerProps) {
         container m-auto max-w-3xl
         bg-dark-bg text-white
         
-        px-4 sm:px-6     /* wider padding on small screens */
-        pt-2 sm:pt-4 md:pt-2   /* much better spacing on mobile */
+        px-4 sm:px-6
+        pt-6 sm:pt-8 md:pt-10
       "
     >
       {children}
