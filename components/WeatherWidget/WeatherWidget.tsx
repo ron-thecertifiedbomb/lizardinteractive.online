@@ -9,13 +9,23 @@ type CurrentWeather = {
     is_day: number;
 };
 
-export function WeatherWidget({ className = "" }: { className?: string }) {
-
+export function WeatherWidget({
+    className = "",
+    compact = false,
+}: {
+    className?: string;
+    compact?: boolean;
+}) {
     const [current, setCurrent] = useState<CurrentWeather | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [locationName, setLocationName] = useState("Loading...");
-    
+
+    const todayStr = new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+    });
+
     const fetchWeather = async (lat: number, lon: number) => {
         setLoading(true);
         setError("");
@@ -49,20 +59,17 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
             const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
             const data = await res.json();
 
-            if (data && data.results && data.results.length > 0) {
+            if (data?.results?.length > 0) {
                 const place = data.results[0];
                 const muni = extractMunicipality(place);
                 setLocationName(muni);
             } else {
                 setLocationName("Unknown");
             }
-
-        } catch (err) {
-            console.log("GEOCODE ERROR", err);
+        } catch {
             setLocationName("Unknown");
         }
     };
-
 
     useEffect(() => {
         if (!navigator?.geolocation) {
@@ -92,55 +99,99 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
 
     return (
         <div
-            className={`w-28 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm ${className}`}
+            className={`
+                rounded-full text-white
+                ${compact ? "w-full" : "w-32"}
+                ${className}
+            `}
             title={error || locationName}
         >
-            {loading ? (
-                "⏳"
-            ) : current ? (
+            {/* MOBILE: weather left / date right */}
+            <div className={`
+                flex items-center
+                ${compact ? "justify-between" : "justify-center"}
+                gap-2
+            `}>
+                {/* Weather */}
                 <div className="flex items-center gap-2">
-                    <div className="relative w-10 h-10">
-                        {(() => {
-                            const { sun, moon, clouds, precip } =
-                                weatherCodeToLayers(current.weathercode, current.is_day);
+                    {loading ? (
+                        <span>⏳</span>
+                    ) : current ? (
+                        <>
+                            {/* ICON */}
+                            <div className={`relative ${compact ? "w-6 h-6" : "w-10 h-10"}`}>
+                                {(() => {
+                                    const { sun, moon, clouds, precip } =
+                                        weatherCodeToLayers(
+                                            current.weathercode,
+                                            current.is_day
+                                        );
 
-                            return (
-                                <>
-                                    {/* SUN / MOON */}
-                                    {sun && (
-                                        <span className="absolute text-3xl left-5 top-0 z-30">
-                                            {sun}
-                                        </span>
-                                    )}
-                                    {moon && (
-                                        <span className="absolute text-3xl left-2 top-1 z-30">
-                                            {moon}
-                                        </span>
-                                    )}
+                                    return (
+                                        <>
+                                            {sun && (
+                                                <span
+                                                    className={`absolute ${compact
+                                                            ? "text-xl left-1 top-0"
+                                                            : "text-3xl left-5 top-0"
+                                                        }`}
+                                                >
+                                                    {sun}
+                                                </span>
+                                            )}
 
-                                    {/* CLOUDS */}
-                                    {clouds && (
-                                        <span className="absolute text-3xl left-0 top-4 z-20">
-                                            {clouds}
-                                        </span>
-                                    )}
+                                            {moon && (
+                                                <span
+                                                    className={`absolute ${compact
+                                                            ? "text-xl left-1 top-0"
+                                                            : "text-3xl left-2 top-1"
+                                                        }`}
+                                                >
+                                                    {moon}
+                                                </span>
+                                            )}
 
-                                    {/* RAIN / SNOW / STORM */}
-                                    {precip && (
-                                        <span className="absolute text-3xl left-2 top-7 z-10">
-                                            {precip}
-                                        </span>
-                                    )}
-                                </>
-                            );
-                        })()}
-                    </div>
+                                            {clouds && (
+                                                <span
+                                                    className={`absolute ${compact
+                                                            ? "text-xl left-0 top-2"
+                                                            : "text-3xl left-0 top-4"
+                                                        }`}
+                                                >
+                                                    {clouds}
+                                                </span>
+                                            )}
 
-                    <span className="text-lg">{current.temperature.toFixed(0)}°</span>
+                                            {precip && (
+                                                <span
+                                                    className={`absolute ${compact
+                                                            ? "text-lg left-1 top-3"
+                                                            : "text-3xl left-2 top-7"
+                                                        }`}
+                                                >
+                                                    {precip}
+                                                </span>
+                                            )}
+                                        </>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* TEMP */}
+                            <span className={compact ? "text-base" : "text-lg"}>
+                                {current.temperature.toFixed(0)}°
+                            </span>
+                        </>
+                    ) : (
+                        <span>—</span>
+                    )}
                 </div>
-            ) : (
-                "—"
-            )}
+
+                {/* DATE — only visible on compact (mobile) */}
+                {compact && (
+                    <span className="text-xs text-gray-300">{todayStr}</span>
+                )}
+            </div>
         </div>
     );
 }
