@@ -5,28 +5,44 @@ import { useEffect, useState } from "react";
 type CurrentWeather = {
     temperature: number;
     weathercode: number;
+    is_day: number;
 };
 
 export function WeatherWidget({ className = "" }: { className?: string }) {
     const [current, setCurrent] = useState<CurrentWeather | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [locationLabel, setLocationLabel] = useState("Current Location");
+    const [locationName, setLocationName] = useState("Loading...");
 
-    const weatherCodeToEmoji = (code: number) => {
+    const weatherCodeToLayers = (code: number, isDay: number) => {
+        const night = isDay === 0;
+
+        const sun = night ? null : "☀️";
+        const moon = night ? "🌙" : null;
+
         switch (code) {
-            case 0: return "☀️";        // Clear sky
-            case 1: return "🌤️";       // Mainly clear
-            case 2: return "⛅";        // Partly cloudy
-            case 3: return "☁️";        // Overcast
-            case 45: case 46: case 47: case 48: return "🌫️"; // Fog
-            case 51: case 53: case 55: case 56: case 57: return "🌦️"; // Drizzle
-            case 61: case 63: case 65: case 66: case 67: return "🌧️"; // Rain
-            case 71: case 73: case 75: case 77: return "🌨️"; // Snow
-            case 80: case 81: case 82: return "⛈️"; // Rain showers
-            case 85: case 86: return "❄️"; // Snow showers
-            case 95: case 96: case 99: return "⛈️"; // Thunderstorm
-            default: return "🌈"; // Unknown
+            case 0: return { sun, moon, clouds: null, precip: null };
+            case 1:
+            case 2: return { sun, moon, clouds: "☁️", precip: null };
+            case 3: return { sun: null, moon: null, clouds: "☁️", precip: null };
+            case 45:
+            case 48: return { sun: null, moon: null, clouds: "🌫️", precip: null };
+            case 51:
+            case 53:
+            case 55: return { sun, moon, clouds: "☁️", precip: "🌧️" };
+            case 61:
+            case 63:
+            case 65: return { sun, moon, clouds: null, precip: "🌧️" };
+            case 71:
+            case 73:
+            case 75: return { sun: null, moon: null, clouds: "☁️", precip: "🌨️" };
+            case 80:
+            case 81:
+            case 82: return { sun, moon, clouds: "☁️", precip: "🌧️" };
+            case 95:
+            case 96:
+            case 99: return { sun, moon, clouds: "☁️", precip: "⛈️" };
+            default: return { sun, moon, clouds: "☁️", precip: null };
         }
     };
 
@@ -48,18 +64,50 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
                 setCurrent({
                     temperature: data.current_weather.temperature,
                     weathercode: data.current_weather.weathercode,
+                    is_day: data.current_weather.is_day,
                 });
             }
-        } catch (err) {
-            console.error(err);
+        } catch {
             setError("Weather load failed");
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchMunicipality = async (lat: number, lon: number) => {
+        try {
+            const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+            const extractMunicipality = (place: any) => {
+                return (
+                    place.city ||
+                    place.town ||
+                    place.municipality ||
+                    place.village ||
+                    place.locality ||
+                    "Unknown"
+                );
+            };
+            if (data && data.results && data.results.length > 0) {
+                const place = data.results[0];
+                const muni = extractMunicipality(place);
+                setLocationName(muni);
+            } else {
+                setLocationName("Unknown");
+            }
+
+        } catch (err) {
+            console.log("GEOCODE ERROR", err);
+            setLocationName("Unknown");
+        }
+    };
+
+
     useEffect(() => {
-        if (!navigator?.geolocation) return;
+        if (!navigator?.geolocation) {
+            setError("Geolocation not supported");
+            return;
+        }
 
         let intervalId: NodeJS.Timeout;
 
@@ -67,10 +115,9 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
             (pos) => {
                 const { latitude, longitude } = pos.coords;
 
-                // Fetch initially
                 fetchWeather(latitude, longitude);
+                fetchMunicipality(latitude, longitude);
 
-                // Fetch every 3 minutes
                 intervalId = setInterval(() => {
                     fetchWeather(latitude, longitude);
                 }, 5 * 60 * 1000);
@@ -79,20 +126,55 @@ export function WeatherWidget({ className = "" }: { className?: string }) {
             { timeout: 8000 }
         );
 
-        // Clean up interval on unmount
         return () => clearInterval(intervalId);
-    }, []); // <- empty dependency array ensures this effect runs only once
+    }, []);
 
     return (
         <div
-            className={`w-16 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm ${className}`}
-            title={error || locationLabel}
+            className={`w-28 h-14 rounded-full flex items-center justify-center text-white font-bold text-sm ${className}`}
+            title={error || locationName}
         >
             {loading ? (
                 "⏳"
             ) : current ? (
-                <div className="flex items-center">
-                    <span className="text-4xl">{weatherCodeToEmoji(current.weathercode)}</span>
+                <div className="flex items-center gap-2">
+                    <div className="relative w-10 h-10">
+                        {(() => {
+                            const { sun, moon, clouds, precip } =
+                                weatherCodeToLayers(current.weathercode, current.is_day);
+
+                            return (
+                                <>
+                                    {/* SUN / MOON */}
+                                    {sun && (
+                                        <span className="absolute text-3xl left-5 top-0 z-30">
+                                            {sun}
+                                        </span>
+                                    )}
+                                    {moon && (
+                                        <span className="absolute text-3xl left-2 top-1 z-30">
+                                            {moon}
+                                        </span>
+                                    )}
+
+                                    {/* CLOUDS */}
+                                    {clouds && (
+                                        <span className="absolute text-3xl left-0 top-4 z-20">
+                                            {clouds}
+                                        </span>
+                                    )}
+
+                                    {/* RAIN / SNOW / STORM */}
+                                    {precip && (
+                                        <span className="absolute text-3xl left-2 top-7 z-10">
+                                            {precip}
+                                        </span>
+                                    )}
+                                </>
+                            );
+                        })()}
+                    </div>
+
                     <span className="text-lg">{current.temperature.toFixed(0)}°</span>
                 </div>
             ) : (
