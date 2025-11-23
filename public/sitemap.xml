@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://lizardinteractive.online/</loc>
-    <priority>1.0</priority>
-  </url>
+
+  <!-- Main Pages -->
+  <url><loc>https://lizardinteractive.online/</loc></url>
+  <url><loc>https://lizardinteractive.online/latest</loc></url>
+  <url><loc>https://lizardinteractive.online/blogs</loc></url>
+  <url><loc>https://lizardinteractive.online/utilities</loc></url>
+
+  <!-- Tools / Utilities -->
+  <url><loc>https://lizardinteractive.online/imageeditor</loc></url>
+  <url><loc>https://lizardinteractive.online/imagetotext</loc></url>
+  <url><loc>https://lizardinteractive.online/javascriptplayground</loc></url>
+  <url><loc>https://lizardinteractive.online/palette</loc></url>
+  <url><loc>https://lizardinteractive.online/pdftowordconverter</loc></url>
+  <url><loc>https://lizardinteractive.online/screenrecorder</loc></url>
+  <url><loc>https://lizardinteractive.online/youtubetomp3</loc></url>
+  <url><loc>https://lizardinteractive.online/todo</loc></url>
+  <url><loc>https://lizardinteractive.online/planner</loc></url>
+  <url><loc>https://lizardinteractive.online/tuner</loc></url>
+  <url><loc>https://lizardinteractive.online/metronome</loc></url>
+  <url><loc>https://lizardinteractive.online/resumebuilder</loc></url>
+  <url><loc>https://lizardinteractive.online/logomaker</loc></url>
+  <url><loc>https://lizardinteractive.online/gallery</loc></url>
+
 </urlset>
