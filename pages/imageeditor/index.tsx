@@ -3,6 +3,7 @@
 import Head from "next/head";
 import ImageEditor from "../../components/ImageEditor/ImageEditor";
 import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
+import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 
 export default function ImageEditorPage() {
     const staticPreviewImage = "/imageeditor.jpg";
@@ -26,13 +27,14 @@ export default function ImageEditorPage() {
                 <meta name="twitter:image" content={`${staticPreviewImage}?v=1`} />
                 <meta name="twitter:image" content="https://www.lizardinteractive.online/imageeditor.jpg" />
             </Head>
-
+<ScreenContainer>
             <SectionHeader
                 title="Image Editor"
                 subtitle="Edit and enhance your images with our powerful online image editor."
             />
 
-            <ImageEditor />
+                <ImageEditor />
+              </ScreenContainer>
         </>
     );
 }
