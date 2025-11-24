@@ -1,6 +1,6 @@
 import Container from "../../components/container";
 import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
-import { utilities } from "./data";
+import { utilities } from "../../lib/data";
 
 export default function UtilitiesHub() {
 
