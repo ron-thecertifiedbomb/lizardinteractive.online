@@ -1,10 +1,11 @@
 import Container from "../components/container";
 import Image from "next/image";
 import { homeContent } from "../lib/homeContent";
+import ScreenContainer from "../components/shared/ScreenContainer/ScreenContainer";
 
 export default function HomePage() {
   return (
-    <Container>
+    <ScreenContainer>
       {homeContent.map((block, index) => {
         switch (block.type) {
           case "heading":
@@ -18,7 +19,7 @@ export default function HomePage() {
 
           case "paragraph":
             return (
-              <div key={index} className="mb-6 animate-[fade-up]">
+              <div key={index} className="mb-4 animate-[fade-up]">
                 <p className="text-lg sm:text-xl text-blue-100 max-w-3xl leading-relaxed">
                   {block.content}
                 </p>
@@ -45,6 +46,6 @@ export default function HomePage() {
             return null;
         }
       })}
-    </Container>
+    </ScreenContainer>
   );
 }

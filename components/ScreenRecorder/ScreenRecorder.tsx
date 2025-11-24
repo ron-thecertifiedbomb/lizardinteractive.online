@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Button from "../shared/Button/Button";
+import { Circle, Square, Download, X } from "lucide-react";
 
 export default function ScreenRecorder() {
     const [recording, setRecording] = useState(false);
     const [videoURL, setVideoURL] = useState<string | null>(null);
+
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const recordedChunks = useRef<Blob[]>([]);
 
@@ -34,7 +35,7 @@ export default function ScreenRecorder() {
             mediaRecorderRef.current.start();
             setRecording(true);
         } catch (err) {
-            console.error("Error accessing screen capture:", err);
+            console.error(err);
             alert("Failed to start recording. Please allow screen capture permissions.");
         }
     };
@@ -54,53 +55,72 @@ export default function ScreenRecorder() {
     };
 
     return (
-        <div className="p-4 bg-slate-800 text-white rounded-lg shadow-lg max-w-xl mx-auto">
-       
+        <div className="flex w-full flex-col lg:min-h-[380px] p-8 rounded-2xl bg-slate-900/60 backdrop-blur-lg border border-white/10 shadow-xl mx-auto my-auto justify-center items-center">
 
-            <div className="flex gap-2 items-center justify-center ">
-                {!recording ? (
-                    <Button
-                        className=" max-w-60 text-white px-4 py-2 rounded-lg hover:bg-blue-700 align-center"
+            {/* Title */}
+            <h2 className="text-xl font-semibold text-white text-center mb-4">
+                Screen Recorder
+            </h2>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-center gap-4">
+
+                {/* Start Recording */}
+                {!recording && (
+                    <button
                         onClick={startRecording}
+                        className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 
+                                   text-white flex items-center gap-2 transition shadow-lg"
                     >
-                        Start Recording
-                    </Button>
-                ) : (
-                        <Button
-                            className=" max-w-xs  bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800"
+                        <Circle className="w-4 h-4" />
+                        Start
+                    </button>
+                )}
+
+                {/* Stop Recording */}
+                {recording && (
+                    <button
                         onClick={stopRecording}
+                        className="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white 
+                                   flex items-center gap-2 transition shadow-lg animate-pulse"
                     >
-                        Stop Recording
-                    </Button>
+                        <Square className="w-4 h-4" />
+                        Stop
+                    </button>
                 )}
 
+                {/* Download */}
                 {videoURL && (
-                    <Button
-                        className=" max-w-xs text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    <button
                         onClick={downloadRecording}
+                        className="px-5 py-3 rounded-xl bg-green-600 hover:bg-green-700 
+                                   text-white flex items-center gap-2 transition shadow-lg"
                     >
+                        <Download className="w-4 h-4" />
                         Download
-                    </Button>
+                    </button>
                 )}
 
+                {/* Clear */}
                 {videoURL && (
-                    <Button
-                        className="flex items-center justify-center max-w-2 max-h-8 bg-red-700 text-white px-4 py-2 rounded-full hover:bg-red-800"
-                        onClick={() => {
-                            setVideoURL(null);
-                        }}
+                    <button
+                        onClick={() => setVideoURL(null)}
+                        className="p-3 rounded-full bg-slate-700 hover:bg-slate-600 text-white transition shadow-lg"
                     >
-                     X
-                    </Button>
+                        <X className="w-4 h-4" />
+                    </button>
                 )}
             </div>
 
+            {/* Video Preview */}
             {videoURL && (
-                <video
-                    className="w-full border rounded mt-4"
-                    src={videoURL}
-                    controls
-                ></video>
+                <div className="mt-6 border border-white/10 rounded-xl overflow-hidden shadow-lg ">
+                    <video
+                        className="w-full lg:min-h-[340px]"
+                        src={videoURL}
+                        controls
+                    />
+                </div>
             )}
         </div>
     );

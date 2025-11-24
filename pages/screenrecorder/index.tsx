@@ -1,8 +1,9 @@
-import Container from "../../components/container";
+
 import ScreenRecorder from "../../components/ScreenRecorder/ScreenRecorder";
+import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
-export default function UtilitiesHub() {
+export default function ScreenRecorderPage() {
   const utilities = [
     { name: "Tailwind Color Guide", url: "/palette" },
     { name: "Image to Text Converter", url: "/imagetotext" },
@@ -12,13 +13,13 @@ export default function UtilitiesHub() {
   ];
 
   return (
-    <Container>
+    <ScreenContainer>
    <SectionHeader
         title="Screen Recorder"
         subtitle=" Easily capture your screen activity with our user-friendly screen recorder tool."
                  />
      <ScreenRecorder />
-    </Container >
+    </ScreenContainer >
   );
 }
 
