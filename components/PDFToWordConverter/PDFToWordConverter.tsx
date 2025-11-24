@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { saveAs } from "file-saver";
 import * as docx from "docx";
 import Button from "../shared/Button/Button";
+import Container from "../container";
 
 export default function PDFToWordConverter() {
     const [file, setFile] = useState<File | null>(null);
@@ -61,7 +62,8 @@ export default function PDFToWordConverter() {
     };
 
     return (
-        <div className="w-full mt-8 mx-auto p-8 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-white/10 shadow-2xl animate-fadeIn">
+        <Container>
+        <div className="w-full  mx-auto p-8 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-white/10 shadow-2xl animate-fadeIn">
 
             {/* Title */}
             <h2 className="text-center text-3xl font-bold mb-6 bg-gradient-to-r from-cyan-300 to-blue-400 text-transparent bg-clip-text drop-shadow-xl">
@@ -147,5 +149,6 @@ export default function PDFToWordConverter() {
                 }
             `}</style>
         </div>
+        </Container> 
     );
 }
