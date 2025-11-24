@@ -4,12 +4,14 @@ import { useState, useRef } from "react";
 import Tesseract from "tesseract.js";
 import { toast } from "react-hot-toast";
 import Button from "../shared/Button/Button";
+import UtilityContainer from "../shared/UtilityComponent/UtilityComponent";
 
 export default function ImageToTextConverter() {
     const [image, setImage] = useState<File | null>(null);
     const [text, setText] = useState("");
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [copied, setCopied] = useState(false); // <-- popup state
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,6 +48,7 @@ export default function ImageToTextConverter() {
                     }
                 },
             });
+
             setText(result.data.text);
             toast.success("Text extracted successfully!");
         } catch (error) {
@@ -57,83 +60,154 @@ export default function ImageToTextConverter() {
     };
 
     return (
-        <div className="p-4 bg-slate-800  text-white rounded-lg shadow-lg max-w-xl mx-auto">
-            {/* Drag & Drop Area */}
-            <div
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onClick={() => fileInputRef.current?.click()}
-                className="mb-4 p-6 border-2 border-dashed bg-blue-600 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
-            >
-                {!image && <p>Drag & drop an image here, or click to select</p>}
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                />
-            </div>
+        <UtilityContainer className="max-w-4xl mx-auto w-full mt-12">
+
+            {/* Drag & Drop */}
+            {!image && (
+                <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="
+                        mb-6 p-6
+                        border-2 border-dashed border-blue-500/40 
+                        hover:border-blue-400/80
+                        hover:bg-blue-600/10
+                        rounded-xl text-center cursor-pointer 
+                        transition-all
+                    "
+                >
+                    <p className="text-gray-300 text-xs sm:text-sm md:text-md lg:text-xl">
+                        Drag & drop an image here, or click to select
+                    </p>
+
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                    />
+                </div>
+            )}
 
             {/* Thumbnail Preview */}
             {image && (
-                <div className="relative mb-4">
+                <div className="relative mb-6">
                     <img
                         src={URL.createObjectURL(image)}
                         alt="Preview"
-                        className="w-full max-h-64 object-contain rounded-lg border border-gray-600"
+                        className="
+                            w-full max-h-svh 
+                            object-contain 
+                            rounded-xl 
+                            border border-white/10
+                            shadow-md
+                        "
                     />
-                    <button
+
+                    <Button
                         onClick={() => {
-                            setImage(null);  // remove image
-                            setText("");      // clear extracted text
-                            setProgress(0);   // optional: reset progress
+                            setImage(null);
+                            setText("");
+                            setProgress(0);
                         }}
-                        className="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 rounded-full w-6 h-6 flex items-center justify-center font-bold"
+                        className="
+                            absolute top-3 right-3 
+                            text-white bg-red-600 hover:bg-red-700 
+                            rounded-full w-7 h-8 
+                            flex items-center justify-center 
+                            font-bold shadow
+                        "
                     >
-                        ×
-                    </button>
+                        X
+                    </Button>
                 </div>
             )}
 
             {/* Convert Button */}
-            <Button
-                onClick={handleConvert}
-                disabled={loading || !image}
-                className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors w-full"
-            >
-                {loading ? `Converting... ${progress}%` : "Convert Image to Text"}
-            </Button>
+            {!text && (
+                <Button
+                    onClick={handleConvert}
+                    disabled={loading || !image}
+                    className="
+                        mb-5 
+                        bg-blue-600 hover:bg-blue-700 
+                        rounded-xl 
+                        px-5 py-3
+                        text-gray-300 text-xs sm:text-sm md:text-md lg:text-xl
+                        disabled:opacity-50 
+                        transition
+                        mx-auto 
+                        w-auto
+                    "
+                >
+                    {loading ? `Converting... ${progress}%` : "Convert Image to Text"}
+                </Button>
+            )}
 
             {/* Progress Bar */}
             {loading && (
-                <div className="w-full bg-gray-700 h-2 rounded mb-4">
+                <div className="w-full bg-gray-700 h-2 rounded-full mb-5">
                     <div
-                        className="bg-blue-500 h-2 rounded transition-all"
+                        className="bg-blue-500 h-2 rounded-full transition-all"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
             )}
 
-            {/* Output */}
+            {/* Output + Copy */}
             {text && (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3 max-w-4xl w-full relative">
+
                     <textarea
-                        className="w-full p-2 bg-gray-800 rounded h-40 resize-none"
+                        className="
+                            p-6 bg-gray-900/50 
+                            rounded-xl h-72
+                            resize-none border border-white/10 
+                            text-white
+                            text-sm sm:text-sm md:text-md lg:text-xl
+                        "
                         value={text}
                         readOnly
                     />
-                    <Button
-                        onClick={() => {
-                            navigator.clipboard.writeText(text);
-                            toast.success("Copied to clipboard!");
-                        }}
-                        className="w-full px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded disabled:opacity-50 transition-colors"
-                    >
-                        Copy Text
-                    </Button>
+
+                    {/* Copy Button Container */}
+                    <div className="relative mx-auto">
+                        <Button
+                            onClick={() => {
+                                navigator.clipboard.writeText(text);
+                                setCopied(true);
+                                setTimeout(() => setCopied(false), 1200); // hide popup
+                            }}
+                            className="
+                                max-w-xs px-4 py-3 
+                                bg-blue-700 hover:bg-blue-600 
+                                rounded-xl 
+                                transition
+                                mt-6
+                                text-gray-300 text-xs sm:text-sm md:text-md lg:text-xl
+                            "
+                        >
+                            Copy Text
+                        </Button>
+
+                        {/* Popup Animation */}
+                        {copied && (
+                            <div className="
+                                absolute left-1/2 -translate-x-1/2
+                                -top-8
+                                bg-green-600 text-white
+                                text-xs px-3 py-1
+                                rounded-lg shadow-lg
+                                animate-bounce
+                            ">
+                                Copied!
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
-        </div>
+        </UtilityContainer>
     );
 }

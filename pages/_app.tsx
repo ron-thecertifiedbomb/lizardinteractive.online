@@ -2,10 +2,10 @@ import "tailwindcss/tailwind.css";
 import '../styles/global.css'
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import Header from "../components/header";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next"
 import Footer from "../components/Footer/Footer";
+import NavBar from "../components/NavBar/NavBar";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,25 +15,23 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content="Lizard Interactive is a modern, modular web platform designed to: Showcase services from RonDevSolutions Share developer tips, tutorials, and tech newsEngage clients with dynamic content and social media sharing Provide a single hub for marketing, education, and client pitching It leverages dynamic API-driven content, Cloudinary for media, and Upstash Redis for comments, while the RonDevServer handles backend logic, analytics, and integrations."
-        />
         <title>Lizard Interactive Online</title>
       </Head>
 
-      {/* Header fixed up here */}
-      <Header />
+      {/* FULL PAGE FLEX LAYOUT */}
+      <div className="min-h-screen flex flex-col">
 
-      {/* Main page content */}
-      <main className="pt-4">
-        <Component {...pageProps} />
-        <Analytics />
-      </main>
+        <NavBar />
 
-      {/* FOOTER placed correctly here */}
-      <Footer />
+        {/* MAIN EXPANDS ONLY WHEN NEEDED */}
+        <main className="flex-1 flex flex-col">
+          <Component {...pageProps} />
+          <Analytics />
+        </main>
 
+        <Footer />
+
+      </div>
     </Auth0Provider>
   );
 }

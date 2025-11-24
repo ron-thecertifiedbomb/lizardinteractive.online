@@ -189,7 +189,7 @@ export function WeatherWidget({
 
                 {/* DATE — only visible on compact (mobile) */}
                 {compact && (
-                    <span className="text-md text-gray-300">{todayStr}</span>
+                    <span className="text-[80%] sm:text-base md:text-lg">{todayStr}</span>
                 )}
             </div>
         </div>
