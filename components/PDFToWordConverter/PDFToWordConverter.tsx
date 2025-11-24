@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { saveAs } from "file-saver";
 import * as docx from "docx";
-import * as pdfjs from 'pdfjs-dist/build/pdf.min.mjs'
 import Button from "../shared/Button/Button";
+
 export default function PDFToWordConverter() {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
@@ -15,7 +15,8 @@ export default function PDFToWordConverter() {
         if (typeof window !== "undefined") {
             (async () => {
                 const pdfjs = await import("pdfjs-dist/build/pdf.min.mjs");
-                const worker = await import('pdfjs-dist/build/pdf.worker.mjs');
+                const worker = await import("pdfjs-dist/build/pdf.worker.mjs");
+
                 pdfjs.GlobalWorkerOptions.workerSrc = worker?.default || "";
                 setPdfjsLib(pdfjs);
             })();
@@ -60,27 +61,91 @@ export default function PDFToWordConverter() {
     };
 
     return (
-        <div className="p-4 bg-slate-800 text-white rounded-lg shadow-lg max-w-xl mx-auto">
-        
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileChange}
-                className="mb-4 w-full text-white-200"
-            />
+        <div className="w-full mt-8 mx-auto p-8 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-800/50 backdrop-blur-xl border border-white/10 shadow-2xl animate-fadeIn">
 
+            {/* Title */}
+            <h2 className="text-center text-3xl font-bold mb-6 bg-gradient-to-r from-cyan-300 to-blue-400 text-transparent bg-clip-text drop-shadow-xl">
+                PDF → Word Converter
+            </h2>
+
+            {/* Upload Box */}
+            <label
+                className={`
+                    group flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition 
+                    ${file ? "border-blue-500 bg-slate-800/60" : "border-gray-500 hover:border-cyan-400 hover:bg-slate-800/50"}
+                `}
+            >
+                <input
+                    type="file"
+                    accept="application/pdf"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    className="hidden"
+                />
+
+                <svg
+                    className="w-12 h-12 text-gray-300 group-hover:text-cyan-300 transition"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 16V4m0 0L8 8m4-4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
+                    />
+                </svg>
+
+                <p className="mt-3 text-gray-300 text-sm">
+                    {file ? (
+                        <span className="text-cyan-400 font-medium">{file.name}</span>
+                    ) : (
+                        "Click to upload a PDF"
+                    )}
+                </p>
+            </label>
+
+            {/* Convert Button */}
             <Button
                 onClick={convertPDFtoWord}
                 disabled={!file || !pdfjsLib || loading}
-                className="w-full text-gray-200 px-4 py-2 bg-blue-900 hover:bg-blue-700 rounded-xl disabled:opacity-50 transition-colors"
+                className={`
+                    w-full py-3 mt-6 rounded-xl text-white font-semibold transition 
+                    ${loading
+                        ? "bg-blue-700 cursor-not-allowed animate-pulse"
+                        : "bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-90"}
+                `}
             >
-                Convert PDF to Word
+                {loading ? (
+                    <span className="flex items-center gap-2">
+                        <span className="loader w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"></span>
+                        Converting...
+                    </span>
+                ) : (
+                    "Convert PDF to Word"
+                )}
             </Button>
 
-            {file && (
-                <p className="mt-2 text-sm text-gray-200">Selected: {file.name}</p>
-            )}
+            {/* Fade-in animation */}
+            <style jsx>{`
+                .animate-fadeIn {
+                    animation: fadeIn 0.4s ease-out;
+                }
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(5px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .loader {
+                    border-right-color: transparent;
+                }
+            `}</style>
         </div>
     );
 }
