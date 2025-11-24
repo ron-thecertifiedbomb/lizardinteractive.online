@@ -110,10 +110,10 @@ export function WeatherWidget({
             <div className={`
                 flex items-center
                 ${compact ? "justify-between" : "justify-center"}
-                gap-2
+                
             `}>
                 {/* Weather */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                     {loading ? (
                         <span>⏳</span>
                     ) : current ? (
@@ -132,8 +132,8 @@ export function WeatherWidget({
                                             {sun && (
                                                 <span
                                                     className={`absolute ${compact
-                                                            ? "text-xl left-1 top-0"
-                                                            : "text-3xl left-5 top-0"
+                                                            ? "text-xl left-2 top-0"
+                                                            : "text-3xl left-3 top-0"
                                                         }`}
                                                 >
                                                     {sun}
@@ -143,8 +143,8 @@ export function WeatherWidget({
                                             {moon && (
                                                 <span
                                                     className={`absolute ${compact
-                                                            ? "text-xl left-1 top-0"
-                                                            : "text-3xl left-2 top-1"
+                                                            ? "text-xl left-1 top-1"
+                                                            : "text-3xl left-2 top-0"
                                                         }`}
                                                 >
                                                     {moon}
@@ -155,7 +155,7 @@ export function WeatherWidget({
                                                 <span
                                                     className={`absolute ${compact
                                                             ? "text-xl left-0 top-2"
-                                                            : "text-3xl left-0 top-4"
+                                                            : "text-3xl left-[-4] top-2"
                                                         }`}
                                                 >
                                                     {clouds}
@@ -178,7 +178,7 @@ export function WeatherWidget({
                             </div>
 
                             {/* TEMP */}
-                            <span className={compact ? "text-base" : "text-lg"}>
+                            <span className={compact ? "text-md" : "text-lg"}>
                                 {current.temperature.toFixed(0)}°
                             </span>
                         </>
@@ -189,7 +189,7 @@ export function WeatherWidget({
 
                 {/* DATE — only visible on compact (mobile) */}
                 {compact && (
-                    <span className="text-xs text-gray-300">{todayStr}</span>
+                    <span className="text-md text-gray-300">{todayStr}</span>
                 )}
             </div>
         </div>

@@ -1,0 +1,17 @@
+export const utilities = [
+  { name: "Tailwind Color Guide", url: "/palette" },
+  { name: "JavaScript Playground", url: "/javascriptplayground" },
+  { name: "Image to Text Converter", url: "/imagetotext" },
+  { name: "PDF to Word Converter", url: "/pdftowordconverter" },
+  { name: "Resume Builder", url: "/resumebuilder" },
+  { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
+  { name: "Screen Recorder", url: "/screenrecorder" },
+  { name: "Image Editor", url: "/imageeditor" },
+  { name: "Logo Maker", url: "/logomaker" },
+  { name: "Metronome", url: "/metronome" },
+  { name: "Tuner", url: "/tuner" },
+  { name: "Planner", url: "/planner" },
+  { name: "Todo List", url: "/todo" },
+  { name: "Gallery", url: "/gallery" },
+  { name: "Box Shadow Generator", url: "/boxshadowgenerator" },
+];
