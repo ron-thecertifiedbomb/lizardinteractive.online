@@ -3,8 +3,11 @@
 import Head from "next/head";
 import BoxShadowGenerator from "../../components/BoxShadowGenerator/BoxShadowGenerator";
 import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
+import UtilityContainer from "../../components/shared/UtilityComponent/UtilityComponent";
+import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 
-export default function BoxShadowPage() {
+
+export default function BoxShadowGeneratorPage() {
     return (
         <>
             <Head>
@@ -14,15 +17,17 @@ export default function BoxShadowPage() {
                     content="Generate CSS box-shadow values visually with live preview."
                 />
             </Head>
-
+<ScreenContainer>
             <SectionHeader
                 title="Box Shadow Generator"
                 subtitle="Create CSS box-shadow styles with live preview"
+                className="  md:mt-4 lg:mt-6"
             />
 
-            <div className="max-w-4xl mx-auto p-4">
-                <BoxShadowGenerator />
-            </div>
+            {/* ⭐ Wrapped the generator inside your global utility container */}
+
+            <BoxShadowGenerator />
+           </ScreenContainer>
         </>
     );
 }

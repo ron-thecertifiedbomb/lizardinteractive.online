@@ -69,22 +69,28 @@ export default function Header() {
 
             {/* MOBILE DROPDOWN */}
             <div
-                className={`md:hidden mt-2 flex flex-col gap-2 bg-gray-900 rounded-lg px-4 py-4 border border-gray-700 transition-all duration-200
-                    ${mobileOpen
-                        ? "opacity-100 max-h-[300px]"
-                        : "opacity-0 max-h-0 overflow-hidden"
-                    }`}
+                className={`
+        md:hidden flex flex-col gap-2 bg-gray-900 rounded-lg px-4 py-4 
+        border border-gray-700 transition-all duration-300 overflow-hidden
+        absolute left-0 right-0 mx-4
+        ${mobileOpen
+                        ? "opacity-100 max-h-[400px] translate-y-0 pointer-events-auto relative"
+                        : "opacity-0 max-h-0 -translate-y-2 pointer-events-none"
+                    }
+    `}
             >
                 {navLinks.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className={`block px-3 py-2 rounded-md font-medium transition
-                            ${pathname === link.href
+                        className={`
+                block px-3 py-2 rounded-md font-medium transition
+                ${pathname === link.href
                                 ? "bg-blue-600 text-white"
                                 : "text-gray-300 hover:text-white"
-                            }`}
+                            }
+            `}
                     >
                         {link.label}
                     </Link>

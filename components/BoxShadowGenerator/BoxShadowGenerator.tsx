@@ -5,132 +5,134 @@ import { useState } from "react";
 export default function BoxShadowGenerator() {
     const [hOffset, setHOffset] = useState(10);
     const [vOffset, setVOffset] = useState(10);
-    const [blur, setBlur] = useState(30);
+    const [blur, setBlur] = useState(20);
     const [spread, setSpread] = useState(0);
-    const [color, setColor] = useState("#000000");
-    const [opacity, setOpacity] = useState(0.3);
 
-    const shadow = `${hOffset}px ${vOffset}px ${blur}px ${spread}px ${hexToRgba(
-        color,
-        opacity
-    )}`;
+    // RGB & Alpha sliders
+    const [r, setR] = useState(0);
+    const [g, setG] = useState(0);
+    const [b, setB] = useState(0);
+    const [a, setA] = useState(0.3);
 
-    function hexToRgba(hex: string, alpha: number) {
-        const bigint = parseInt(hex.replace("#", ""), 16);
-        const r = (bigint >> 16) & 255;
-        const g = (bigint >> 8) & 255;
-        const b = bigint & 255;
+    const [copied, setCopied] = useState(false);
 
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
+    const color = `rgba(${r}, ${g}, ${b}, ${a})`;
 
-    function copyToClipboard() {
+    const shadow = `${hOffset}px ${vOffset}px ${blur}px ${spread}px ${color}`;
+
+    const copyToClipboard = () => {
         navigator.clipboard.writeText(`box-shadow: ${shadow};`);
-    }
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+    };
 
     return (
-        <div className="p-6 bg-gray-800 rounded-xl shadow-xl space-y-8 text-white">
+        <div className="space-y-8 mt-8">
 
             {/* Preview Box */}
-            <div className="flex justify-center my-12">
-                <div
-                    className="w-72 h-44 rounded-xl transition-all duration-200 border border-gray-700"
-                    style={{ boxShadow: shadow, backgroundColor: "#111" }}
-                ></div>
+            <div
+                className="w-full h-40 bg-white rounded-lg border border-gray-200 flex items-center justify-center"
+                style={{ boxShadow: shadow }}
+            >
+                <span className="text-gray-600 text-sm">Preview</span>
             </div>
 
             {/* Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
 
-                {/* Sliders */}
-                <div className="space-y-5">
-                    <label className="block">
-                        Horizontal Offset: {hOffset}px
-                        <input
-                            type="range"
-                            min="-100"
-                            max="100"
-                            value={hOffset}
-                            onChange={(e) => setHOffset(Number(e.target.value))}
-                            className="w-full accent-blue-500"
-                        />
-                    </label>
+                {/* Horizontal Offset */}
+                <Range label="Horizontal Offset" value={hOffset} min={-100} max={100} onChange={setHOffset} />
 
-                    <label className="block">
-                        Vertical Offset: {vOffset}px
-                        <input
-                            type="range"
-                            min="-100"
-                            max="100"
-                            value={vOffset}
-                            onChange={(e) => setVOffset(Number(e.target.value))}
-                            className="w-full accent-blue-500"
-                        />
-                    </label>
+                {/* Vertical Offset */}
+                <Range label="Vertical Offset" value={vOffset} min={-100} max={100} onChange={setVOffset} />
 
-                    <label className="block">
-                        Blur: {blur}px
-                        <input
-                            type="range"
-                            min="0"
-                            max="200"
-                            value={blur}
-                            onChange={(e) => setBlur(Number(e.target.value))}
-                            className="w-full accent-blue-500"
-                        />
-                    </label>
+                {/* Blur Radius */}
+                <Range label="Blur Radius" value={blur} min={0} max={200} onChange={setBlur} />
 
-                    <label className="block">
-                        Spread: {spread}px
-                        <input
-                            type="range"
-                            min="-50"
-                            max="50"
-                            value={spread}
-                            onChange={(e) => setSpread(Number(e.target.value))}
-                            className="w-full accent-blue-500"
-                        />
-                    </label>
-                </div>
-
-                {/* Color + Opacity */}
-                <div className="space-y-5">
-                    <label className="block">
-                        Shadow Color
-                        <input
-                            type="color"
-                            value={color}
-                            onChange={(e) => setColor(e.target.value)}
-                            className="w-full h-10 rounded"
-                        />
-                    </label>
-
-                    <label className="block">
-                        Opacity: {opacity}
-                        <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={opacity}
-                            onChange={(e) => setOpacity(Number(e.target.value))}
-                            className="w-full accent-blue-500"
-                        />
-                    </label>
-                </div>
+                {/* Spread Radius */}
+                <Range label="Spread Radius" value={spread} min={-50} max={100} onChange={setSpread} />
             </div>
 
-            {/* Output */}
-            <div className="bg-gray-900 p-4 rounded-lg text-sm font-mono border border-gray-700">
-                <pre className="whitespace-pre-wrap break-words">box-shadow: {shadow};</pre>
+            {/* RGB + Opacity */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+
+                <Range label="Red" value={r} min={0} max={255} onChange={setR} />
+                <Range label="Green" value={g} min={0} max={255} onChange={setG} />
+                <Range label="Blue" value={b} min={0} max={255} onChange={setB} />
+
+                <label className="text-sm text-gray-300">
+                    Opacity ({a})
+                    <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={a}
+                        onChange={(e) => setA(Number(e.target.value))}
+                        className="w-full mt-1"
+                    />
+                </label>
             </div>
 
-            <button
-                onClick={copyToClipboard}
-                className="w-full mt-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all duration-200 font-semibold"
-            >
-                Copy CSS
-            </button>
+            {/* Output Box */}
+            <div className="relative bg-gray-900 p-4 rounded-lg text-sm border border-gray-700">
+                <pre className="whitespace-pre-wrap break-words font-normal text-xs">
+                    box-shadow: {shadow};
+                </pre>
+
+                <button
+                    onClick={copyToClipboard}
+                    className="absolute top-2 right-2 px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded transition"
+                >
+                    Copy
+                </button>
+
+                {copied && (
+                    <div className="absolute bottom-2 right-2 text-green-400 text-xs animate-fade">
+                        Copied!
+                    </div>
+                )}
+            </div>
+
+            <style jsx global>{`
+                @keyframes fade {
+                    0% { opacity: 0; transform: translateY(4px); }
+                    30% { opacity: 1; transform: translateY(0); }
+                    100% { opacity: 0; transform: translateY(-4px); }
+                }
+                .animate-fade {
+                    animation: fade 1.2s ease forwards;
+                }
+            `}</style>
         </div>
+    );
+}
+
+/* Reusable Slider */
+function Range({
+    label,
+    value,
+    min,
+    max,
+    onChange,
+}: {
+    label: string;
+    value: number;
+    min: number;
+    max: number;
+    onChange: (n: number) => void;
+}) {
+    return (
+        <label className="text-sm text-gray-300">
+            {label} ({value})
+            <input
+                type="range"
+                min={min}
+                max={max}
+                value={value}
+                onChange={(e) => onChange(Number(e.target.value))}
+                className="w-full mt-1 "
+            />
+        </label>
     );
 }

@@ -8,7 +8,7 @@ export default function ScreenContainer({ children, className = "" }: ScreenCont
         <div
             className={`
                 w-full
-                max-w-6xl
+                max-w-4xl
                 mx-auto
                 flex
                 flex-col
