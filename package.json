@@ -28,7 +28,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.554.0",
     "nanoid": "^4.0.0",
-    "next": "latest",
+    "next": "15.5.8",
     "node-fetch": "^3.3.2",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^5.4.394",
