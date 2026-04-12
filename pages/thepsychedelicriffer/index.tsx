@@ -25,11 +25,11 @@ export default function ThePsychedelicRifferPage() {
                 <meta name="twitter:image" content={`${siteUrl}${staticPreviewImage}`} />
             </Head>
 
-            <ScreenContainer variant="ambient">
-                <SectionHeader
-                    title="The Psychedelic Riffer"
+            <ScreenContainer variant="dark">
+                {/* <SectionHeader
+                    title=""
                     subtitle="Remorseful 100 BPM melodic instrumentals. A journey through reflection and atmospheric textures."
-                />
+                /> */}
 
                 {/* Image Container: Added relative positioning and a fixed aspect ratio/height */}
                 <div style={{

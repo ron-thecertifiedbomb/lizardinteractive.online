@@ -1,7 +1,6 @@
 type ScreenContainerProps = {
     children: React.ReactNode;
     className?: string;
-    // Added a prop for background variety
     variant?: "default" | "dark" | "ambient";
 };
 
@@ -11,11 +10,15 @@ export default function ScreenContainer({
     variant = "default"
 }: ScreenContainerProps) {
 
-    // Define your background styles here
     const backgrounds = {
-        default: "bg-transparent",
-        dark: "bg-[#050505]",
-        ambient: "bg-black bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-black to-black"
+        // This is your original site background (adjust the hex if it was different)
+        default: "bg-[#0a192f]",
+
+        // Pure black for the Riffer vibe
+        dark: "bg-black",
+
+        // Ambient glow for special sections
+        ambient: "bg-black bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black"
     };
 
     return (
@@ -31,6 +34,7 @@ export default function ScreenContainer({
                 lg:pt-12
                 px-4 sm:px-6
                 min-h-screen
+                transition-all duration-700
                 ${backgrounds[variant]} 
                 ${className}
             `}
