@@ -35,7 +35,7 @@ export default function ThePsychedelicRifferPage() {
                 <div style={{
                     position: 'relative',
                     width: '100%',
-                    maxWidth: '800px',
+         
                     height: '400px', // Adjusted for a hero-header feel
                     margin: '2rem auto 0 auto',
                     borderRadius: '24px',
@@ -59,7 +59,10 @@ export default function ThePsychedelicRifferPage() {
                     marginTop: '3rem',
                     paddingBottom: '5rem'
                 }}>
-                        <iframe data-testid="embed-iframe" style={{ borderRadius: '12px' }} src="https://open.spotify.com/embed/album/3vzVZ2UJ9QuHJHvRxXCLki?utm_source=generator" width="100%" height="352" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe data-testid="embed-iframe" style={{
+                        borderRadius: '12px',
+                        background: "transparent",
+                    }} allowTransparency src="https://open.spotify.com/embed/album/3vzVZ2UJ9QuHJHvRxXCLki?utm_source=generator" width="100%" height="352" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
             </ScreenContainer>
         </>

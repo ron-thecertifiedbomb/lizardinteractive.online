@@ -24,27 +24,26 @@ export default function Footer() {
 
                     <Link href="/">
                         <div className={`
-        relative 
-        transition-all duration-500
-        /* Larger size as requested earlier */
-        w-2 h-2 
-        sm:w-10 sm:h-10 
-        md:w-12 md:h-12 
-        overflow-hidden 
-
-        rounded-full 
-        ${isRifferPage ? 'border border-white/20' : ''}
-    `}>
+                            relative 
+                            transition-all duration-500
+             
+                            w-6 h-6 
+                            sm:w-8 sm:h-8 
+                            md:w-10 md:h-10 
+                            overflow-hidden 
+                            rounded-full 
+                            ${isRifferPage ? 'border border-white/20' : ''}
+                        `}>
                             <Image
                                 src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
                                 alt="logo"
                                 fill
                                 className={`
-                object-cover 
-                transition-all duration-500 
-                rounded-full
-                ${isRifferPage ? 'grayscale brightness-125' : ''}
-            `}
+                                    object-cover 
+                                    transition-all duration-500 
+                                    rounded-full
+                                    ${isRifferPage ? 'grayscale brightness-125' : ''}
+                                `}
                                 priority
                             />
                         </div>

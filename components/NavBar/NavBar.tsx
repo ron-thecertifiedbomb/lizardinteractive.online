@@ -19,8 +19,10 @@ export default function Header() {
     // Dynamic brand and font logic
     const brandName = isRifferPage ? "The Psychedelic Riffer" : "Lizard Interactive Online";
 
-    // Note: Ensure your global.css has the 'font-gotham-thin' class defined
-    const fontStyle = isRifferPage ? "font-gotham-thin tracking-[0.2em] uppercase font-extralight" : "font-semibold";
+    // Gotham Thin logic for the Riffer aesthetic
+    const fontStyle = isRifferPage
+        ? "font-gotham-thin tracking-[0.2em] uppercase font-extralight"
+        : "font-semibold";
 
     return (
         <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 ${isRifferPage ? 'bg-black text-white' : 'bg-transparent'}`}>
@@ -28,7 +30,7 @@ export default function Header() {
 
                 {/* LOGO & BRAND */}
                 <Link href="/" className="flex items-center gap-4">
-                    <div className="relative w-7 h-7 sm:w-9 sm:h-9 border-transparent border-1 rounded-full overflow-hidden">
+                    <div className="relative w-7 h-7 sm:w-9 sm:h-9 overflow-hidden rounded-full">
                         <Image
                             src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
                             alt="logo"
@@ -44,10 +46,13 @@ export default function Header() {
 
                 {/* DESKTOP NAV */}
                 <div className="hidden md:flex items-center gap-8">
-                    {/* Keep weather subtle on the music page */}
-                    <div className={`w-10 h-10 flex items-center justify-center mr-4 transition-opacity duration-500 ${isRifferPage ? 'opacity-40 grayscale hover:opacity-100' : ''}`}>
-                        <WeatherWidget className="w-10 h-10" />
-                    </div>
+
+                    {/* WIDGET REMOVAL LOGIC */}
+                    {!isRifferPage && (
+                        <div className="w-10 h-10 flex items-center justify-center mr-4">
+                            <WeatherWidget className="w-10 h-10" />
+                        </div>
+                    )}
 
                     {navLinks.map((link) => (
                         <Link
