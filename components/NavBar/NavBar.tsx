@@ -25,7 +25,7 @@ export default function Header() {
         : "font-semibold";
 
     return (
-        <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 ${isRifferPage ? 'bg-black text-white' : 'bg-transparent'}`}>
+        <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 ${isRifferPage ? 'bg-black text-white' : 'bg-dark-bg'}`}>
             <nav className="flex items-center justify-between max-w-7xl mx-auto">
 
                 {/* LOGO & BRAND */}

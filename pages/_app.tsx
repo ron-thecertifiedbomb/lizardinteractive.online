@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <div className={`
         min-h-screen flex flex-col transition-colors duration-700 
         /* Match this hex to your exact original blue background */
-        ${isRifferPage ? 'bg-black' : 'bg-[#0a192f]'} 
+        ${isRifferPage ? 'bg-black' : 'bg-dark-bg'} 
     `}>
         <NavBar />
 
