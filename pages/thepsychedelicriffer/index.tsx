@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Head from "next/head"; // Added Head for SEO
 import { AnimatePresence } from "framer-motion";
-import { VoidSettings } from "./config";
+import { VoidSettings } from "../../config/config";
 import VoidEntrance from "./components/VoidEntrance";
 import Visualizer from "./components/Visualizer";
 import SpotifyController from "./components/SpotifyController";
