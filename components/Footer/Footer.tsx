@@ -11,7 +11,7 @@ export default function Footer() {
 
     // Dynamic Content & Styles
     const brandName = isRifferPage ? "The Psychedelic Riffer" : "Lizard Interactive Online";
-    const fontStyle = isRifferPage ? "font-gotham-thin tracking-[0.25em] uppercase font-light" : "font-semibold";
+    const fontStyle = isRifferPage ? "font-gotham-thin tracking-[0.20em] uppercase font-light" : "font-semibold";
     const footerBg = isRifferPage ? "bg-black" : "bg-dark-bg";
     const iconColor = isRifferPage ? "text-white/60 hover:text-white" : "text-gray-400 hover:text-white";
 

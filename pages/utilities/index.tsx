@@ -10,7 +10,7 @@ export default function UtilitiesHub() {
         title="Useful Utilities"
         subtitle=" Quickly access our most popular web tools to simplify your workflow."
                  />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
         {utilities.map((util, idx) => (
           <a
             key={idx}
