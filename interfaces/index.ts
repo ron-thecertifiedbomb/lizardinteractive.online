@@ -70,3 +70,15 @@ export type Reference = {
   relation?: string;
   contact?: string;
 };
+
+
+export interface GearItem {
+  id: string;
+  name: string;
+  brand: string;
+  category: "Hardware" | "Software" | "Accessories";
+  description: string;
+  affiliateUrl: string;
+  imageUrl?: string;
+  isFavorite?: boolean;
+}
