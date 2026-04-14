@@ -7,7 +7,9 @@ import { Instagram, Youtube } from "lucide-react";
 
 export default function Footer() {
     const pathname = usePathname();
-    const isRifferPage = pathname === "/thepsychedelicriffer";
+
+    // UPDATED LOGIC: Applies riffer theme to home AND sub-pages like /about
+    const isRifferPage = pathname?.startsWith("/thepsychedelicriffer");
 
     // Dynamic Content & Styles
     const brandName = isRifferPage ? "The Psychedelic Riffer" : "Lizard Interactive Online";
@@ -24,7 +26,7 @@ export default function Footer() {
                         {brandName}
                     </h3>
 
-                    <Link href="/">
+                    <Link href={isRifferPage ? "/thepsychedelicriffer" : "/"}>
                         <div className={`
                             relative 
                             transition-all duration-500

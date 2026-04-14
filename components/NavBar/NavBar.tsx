@@ -14,7 +14,8 @@ export default function Header() {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    const isRifferPage = pathname === "/thepsychedelicriffer";
+    // UPDATED LOGIC: Applies black theme to home AND sub-pages like /about
+    const isRifferPage = pathname?.startsWith("/thepsychedelicriffer");
 
     // Dynamic brand and font logic
     const brandName = isRifferPage ? "The Psychedelic Riffer" : "Lizard Interactive Online";
@@ -25,11 +26,11 @@ export default function Header() {
         : "font-semibold";
 
     return (
-        <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 ${isRifferPage ? 'bg-black text-white' : 'bg-dark-bg'}`}>
+        <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 ${isRifferPage ? 'bg-black text-white border-b border-white/5' : 'bg-dark-bg'}`}>
             <nav className="flex items-center justify-between max-w-7xl mx-auto">
 
                 {/* LOGO & BRAND */}
-                <Link href="/" className="flex items-center gap-4">
+                <Link href={isRifferPage ? "/thepsychedelicriffer" : "/"} className="flex items-center gap-4">
                     <div className="relative w-7 h-7 sm:w-9 sm:h-9 overflow-hidden rounded-full">
                         <Image
                             src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
