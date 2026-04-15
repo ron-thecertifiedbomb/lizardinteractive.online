@@ -1,8 +1,7 @@
 import "tailwindcss/tailwind.css";
 import '../styles/global.css'
 import type { AppProps } from "next/app";
-import Head from "next/head";
-import { useRouter } from "next/router"; // Using useRouter for Pages router
+import { useRouter } from "next/router";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next"
 import Footer from "../components/Footer/Footer";
@@ -11,8 +10,9 @@ import NavBar from "../components/NavBar/NavBar";
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  // Define the Riffer route check
-  const isRifferPage = router.pathname === "/thepsychedelicriffer";
+  // Path Checks for Theme Switching
+  const isRifferPage = router.pathname.startsWith("/thepsychedelicriffer");
+  const isDevPage = router.pathname.startsWith("/rondevsolutions");
 
   return (
     <Auth0Provider
@@ -21,15 +21,14 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <div className={`
         min-h-screen flex flex-col transition-colors duration-700 
-        /* Match this hex to your exact original blue background */
-        ${isRifferPage ? 'bg-black' : 'bg-dark-bg'} 
-    `}>
+        /* - Riffer & Dev pages use deep Black (#000000 or #0a0a0a)
+           - Main Hub uses your original dark-bg blue (#0a192f) 
+        */
+        ${(isRifferPage || isDevPage) ? 'bg-black' : 'bg-dark-bg'} 
+      `}>
         <NavBar />
 
         <main className="flex-1 flex flex-col">
-          {/* Ensure ScreenContainer inside Component uses variant="default" 
-            to match this bg-[#0a192f] 
-        */}
           <Component {...pageProps} />
           <Analytics />
         </main>
