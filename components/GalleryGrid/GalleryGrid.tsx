@@ -1,97 +1,111 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 type GalleryImage = {
     src: string;
     alt: string;
 };
 
-type GalleryGridProps = {
+interface GalleryGridProps {
     images: GalleryImage[];
-    fancybox?: boolean;
-    className?: string;
-
-    cols?: {
-        base?: number;
-        sm?: number;
-        lg?: number;
-    };
-
     rowHeight?: number;
     gap?: number;
-
-    pattern?: (index: number) => string | undefined;
-};
+}
 
 export default function GalleryGrid({
     images,
-    fancybox = true,
-    className = "",
-    cols = { base: 1, sm: 1, lg: 4 },
-    rowHeight = 320,
-    gap = 16,
-    pattern,
+    rowHeight = 280,
+    gap = 16
 }: GalleryGridProps) {
 
-    // --- CLEAN PATTERN LOGIC ---
-    const autoPattern = (index: number) => {
-        if (index % 5 === 0) {
-            // wide but normal height on desktop
-            return "lg:col-span-2 row-span-1";
-        }
-
-        if (index % 5 != 0) {
-            // big hero box
-            return "";
-        }
-
-        return 
+    /**
+     * BENTO ALGORITHM
+     * grid-flow-dense will automatically fill holes left by larger spans
+     * by pulling smaller images from later in the array.
+     */
+    const getSpan = (index: number) => {
+        // High-impact feature (Double wide, double tall)
+        if (index === 0) return "md:col-span-2 md:row-span-2";
+        // Vertical "Portrait" span
+        if (index % 5 === 0) return "md:col-span-1 md:row-span-2";
+        // Horizontal "Landscape" span
+        if (index % 3 === 0) return "md:col-span-2 md:row-span-1";
+        // Standard square
+        return "md:col-span-1 md:row-span-1";
     };
 
     return (
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ${className}`}>
-            <div
-                className={`
-                    grid
-                    grid-cols-${cols.base}
-                    sm:grid-cols-${cols.sm}
-                    lg:grid-cols-${cols.lg}
-                `}
-                style={{
-                    gap: `${gap}px`,
-                    gridAutoRows: `${rowHeight}px`,
-                }}
-            >
-                {images.map((img, index) => {
-                    const isLast = index === images.length - 1;
-
-                    // last image = hero 4x2
-                    const span = isLast
-                        ? "lg:col-span-2 row-span-1"
-                        : pattern?.(index) || autoPattern(index);
-
-                    return (
-                        <Link
-                            key={img.src}
-                            href={img.src}
-                            {...(fancybox ? { "data-fancybox": "gallery" } : {})}
-                            className={`block rounded-xl ${span}`}
+        <div className="w-full bg-black py-4">
+            <div className="max-w-[1440px] mx-auto px-4 lg:px-8">
+                <div
+                    className="grid grid-cols-2 md:grid-cols-4 grid-flow-dense"
+                    style={{
+                        gap: `${gap}px`,
+                        gridAutoRows: `${rowHeight}px`,
+                    }}
+                >
+                    {images.map((img, index) => (
+                        <motion.div
+                            key={`${img.src}-${index}`}
+                            className={`${getSpan(index)} relative group overflow-hidden border border-zinc-900 bg-zinc-950 transition-all duration-500 hover:border-emerald-500/40 shadow-2xl`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.4, delay: (index % 10) * 0.05 }}
                         >
-                            <div className="relative w-full h-full overflow-hidden rounded-xl">
-                                <Image
-                                    src={img.src}
-                                    alt={img.alt}
-                                    fill
-                                    loading={index === 0 ? "eager" : "lazy"}
-                                    priority={index === 0}
-                                    style={{ aspectRatio: "16 / 9" }}
-                                    className=" object-cover transition duration-500 hover:scale-110"
-                                />
-                            </div>
-                        </Link>
-                    );
-                })}
+                            <Link
+                                href={img.src}
+                                data-fancybox="gallery"
+                                className="relative block w-full h-full cursor-zoom-in"
+                            >
+                                {/* INDUSTRIAL OVERLAY */}
+                                <div className="absolute inset-0 z-20 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                                    <div className="space-y-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                        <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-[0.3em]">
+                                            Asset_ID: {index.toString().padStart(3, '0')}
+                                        </span>
+                                        <h4 className="text-[11px] font-black text-white uppercase tracking-widest">
+                                            {img.alt || "System_Render"}
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                {/* IMAGE ENGINE */}
+                                <div className="relative w-full h-full">
+                                    <Image
+                                        src={img.src}
+                                        alt={img.alt}
+                                        fill
+                                        className="object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700 ease-out group-hover:scale-110"
+                                        sizes="(max-w-768px) 50vw, 25vw"
+                                        priority={index < 4}
+                                    />
+
+                                    {/* SCANNER LINE ANIMATION (HOVER) */}
+                                    <div className="absolute inset-0 w-full h-[2px] bg-emerald-500/10 -translate-y-full group-hover:animate-scan z-30 pointer-events-none" />
+                                </div>
+
+                                {/* EDGE GLOW (HOVER) */}
+                                <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-[inset_0_0_20px_rgba(16,185,129,0.1)]" />
+                            </Link>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
+
+            {/* CUSTOM KEYFRAMES */}
+            <style jsx global>{`
+                @keyframes scan {
+                    0% { transform: translateY(-100%); }
+                    100% { transform: translateY(500px); }
+                }
+                .animate-scan {
+                    animation: scan 3s linear infinite;
+                }
+            `}</style>
         </div>
     );
 }

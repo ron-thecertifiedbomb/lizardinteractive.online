@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { Play, Square, Fingerprint, Activity, Clock, Settings2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-type SchedulerState = {
-    nextNoteTime: number;
-    currentBeat: number;
-};
+type SchedulerState = { nextNoteTime: number; currentBeat: number; };
 
 export default function Metronome() {
     const [bpm, setBpm] = useState(100);
@@ -14,344 +13,179 @@ export default function Metronome() {
     const [tapTimes, setTapTimes] = useState<number[]>([]);
     const [visualBeat, setVisualBeat] = useState<number>(-1);
     const [subdivision, setSubdivision] = useState(1);
-    const [audioContextError, setAudioContextError] = useState<string | null>(null);
 
     const audioCtxRef = useRef<AudioContext | null>(null);
     const schedulerStateRef = useRef<SchedulerState>({ nextNoteTime: 0, currentBeat: 0 });
     const timerIdRef = useRef<number | null>(null);
 
     const ensureAudioContext = () => {
-        try {
-            if (!audioCtxRef.current) {
-                audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-            }
-            if (audioCtxRef.current?.state === "suspended") {
-                audioCtxRef.current.resume().catch(err => {
-                    console.error("Failed to resume audio context:", err);
-                    setAudioContextError("Audio context suspended. Click to activate.");
-                });
-            }
-            setAudioContextError(null);
-        } catch (error) {
-            console.error("Audio context error:", error);
-            setAudioContextError("Audio not supported in this browser");
-            return false;
+        if (!audioCtxRef.current) {
+            audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
+        if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
         return true;
     };
 
     const scheduleClick = (time: number, isAccent: boolean) => {
-        if (!audioCtxRef.current) {
-            if (!ensureAudioContext()) return;
-        }
+        const ctx = audioCtxRef.current!;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-        try {
-            const ctx = audioCtxRef.current!;
+        // High-contrast industrial click sound
+        osc.type = isAccent ? "triangle" : "sine";
+        osc.frequency.setValueAtTime(isAccent ? 1200 : 800, time);
 
-            // Create a more pleasant metronome sound
-            const osc1 = ctx.createOscillator();
-            const osc2 = ctx.createOscillator();
-            const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.4, time);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05);
 
-            // Base tone
-            osc1.type = "sine";
-            osc1.frequency.value = isAccent ? 1000 : 800;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
-            // Overtones for click sound
-            osc2.type = "triangle";
-            osc2.frequency.value = isAccent ? 1200 : 1000;
-
-            // Sharper envelope
-            gain.gain.setValueAtTime(0.3, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
-
-            osc1.connect(gain);
-            osc2.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc1.start(time);
-            osc2.start(time);
-            osc1.stop(time + 0.1);
-            osc2.stop(time + 0.1);
-        } catch (error) {
-            console.error("Audio scheduling error:", error);
-            setAudioContextError("Audio playback failed");
-        }
+        osc.start(time);
+        osc.stop(time + 0.1);
     };
-
-    const spb = 60 / bpm / subdivision;
-    const lookaheadMs = 25;
-    const scheduleAheadTime = 0.1;
-    const totalBeats = beatsPerBar * subdivision;
 
     const schedulerTick = () => {
         if (!audioCtxRef.current) return;
+        const ctx = audioCtxRef.current;
+        const spb = 60 / bpm / subdivision;
 
-        try {
-            const ctx = audioCtxRef.current;
-            while (schedulerStateRef.current.nextNoteTime < ctx.currentTime + scheduleAheadTime) {
-                const beat = schedulerStateRef.current.currentBeat;
-                const isAccent = beat % totalBeats === 0;
-                scheduleClick(schedulerStateRef.current.nextNoteTime, isAccent);
+        while (schedulerStateRef.current.nextNoteTime < ctx.currentTime + 0.1) {
+            const beat = schedulerStateRef.current.currentBeat;
+            const totalBeats = beatsPerBar * subdivision;
+            const isAccent = beat % totalBeats === 0;
 
-                setTimeout(
-                    () => setVisualBeat(beat),
-                    Math.max(0, (schedulerStateRef.current.nextNoteTime - ctx.currentTime) * 1000)
-                );
+            scheduleClick(schedulerStateRef.current.nextNoteTime, isAccent);
 
-                schedulerStateRef.current.currentBeat += 1;
-                schedulerStateRef.current.nextNoteTime += spb;
-            }
-        } catch (error) {
-            console.error("Scheduler error:", error);
-            stop();
+            const delay = Math.max(0, (schedulerStateRef.current.nextNoteTime - ctx.currentTime) * 1000);
+            setTimeout(() => setVisualBeat(beat), delay);
+
+            schedulerStateRef.current.currentBeat += 1;
+            schedulerStateRef.current.nextNoteTime += spb;
         }
     };
 
-    const start = () => {
-        if (!ensureAudioContext()) {
-            return;
-        }
-
-        try {
+    const toggleMetronome = () => {
+        if (isRunning) {
+            setIsRunning(false);
+            if (timerIdRef.current) clearInterval(timerIdRef.current);
+            setVisualBeat(-1);
+        } else {
+            ensureAudioContext();
             const ctx = audioCtxRef.current!;
-            schedulerStateRef.current = {
-                nextNoteTime: ctx.currentTime + 0.05,
-                currentBeat: 0,
-            };
+            schedulerStateRef.current = { nextNoteTime: ctx.currentTime + 0.05, currentBeat: 0 };
             setIsRunning(true);
-            timerIdRef.current = window.setInterval(schedulerTick, lookaheadMs);
-        } catch (error) {
-            console.error("Start error:", error);
-            setAudioContextError("Failed to start metronome");
+            timerIdRef.current = window.setInterval(schedulerTick, 25);
         }
     };
-
-    const stop = () => {
-        setIsRunning(false);
-        if (timerIdRef.current) {
-            clearInterval(timerIdRef.current);
-            timerIdRef.current = null;
-        }
-        setVisualBeat(-1);
-    };
-
-    // Safe cleanup
-    useEffect(() => {
-        return () => {
-            if (timerIdRef.current) {
-                clearInterval(timerIdRef.current);
-                timerIdRef.current = null;
-            }
-            // Don't close audio context immediately as it might be reused
-        };
-    }, []);
-
-    // Reset scheduler when parameters change
-    useEffect(() => {
-        if (!isRunning || !audioCtxRef.current) return;
-
-        try {
-            const ctx = audioCtxRef.current;
-            schedulerStateRef.current.nextNoteTime = ctx.currentTime + 0.05;
-            schedulerStateRef.current.currentBeat = 0;
-        } catch (error) {
-            console.error("Parameter change error:", error);
-        }
-    }, [bpm, beatsPerBar, isRunning, subdivision]);
 
     const onTap = () => {
         const now = performance.now();
-        const updated = [...tapTimes, now].filter((t) => now - t < 3000);
+        const updated = [...tapTimes, now].filter(t => now - t < 2000);
         setTapTimes(updated);
-
         if (updated.length >= 2) {
-            const intervals: number[] = [];
-            for (let i = 1; i < updated.length; i++) intervals.push(updated[i] - updated[i - 1]);
-            const avgMs = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-            const candidateBpm = Math.max(20, Math.min(300, Math.round(60000 / avgMs)));
-            setBpm(candidateBpm);
+            const avg = (updated[updated.length - 1] - updated[0]) / (updated.length - 1);
+            setBpm(Math.max(30, Math.min(280, Math.round(60000 / avg))));
         }
     };
 
-    // Keyboard shortcuts with safe event handling
-    useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            // Only handle if not focused on input elements
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) {
-                return;
-            }
-
-            if (e.code === 'Space') {
-                e.preventDefault();
-                isRunning ? stop() : start();
-            }
-            if (e.code === 'KeyT') {
-                e.preventDefault();
-                onTap();
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyPress);
-        return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [isRunning]);
-
-    const progressWidth =
-        visualBeat >= 0 && totalBeats > 1
-            ? ((visualBeat % totalBeats) / (totalBeats - 1)) * 100
-            : 0;
-
     return (
-        <div className="bg-slate-800 rounded-lg p-5 max-w-md mx-auto">
-            {audioContextError && (
-                <div className="mb-4 p-3 bg-red-900 border border-red-700 rounded-md text-red-200 text-sm">
-                    {audioContextError}
-                    {audioContextError.includes("suspended") && (
-                        <button
-                            onClick={ensureAudioContext}
-                            className="ml-2 px-2 py-1 bg-red-700 rounded text-xs hover:bg-red-600"
-                        >
-                            Activate
-                        </button>
-                    )}
-                </div>
-            )}
-
-            <div className="flex gap-4 items-end mb-4">
-                <div className="flex-1">
-                    <label className="block text-xs uppercase tracking-wide text-slate-300 mb-2">BPM</label>
-                    <input
-                        type="range"
-                        min={30}
-                        max={240}
-                        value={bpm}
-                        onChange={(e) => setBpm(parseInt(e.target.value, 10))}
-                        className="w-full accent-sky-500"
-                    />
-                    <div className="flex gap-2 items-center mt-2">
-                        <input
-                            type="number"
-                            min="30"
-                            max="240"
-                            value={bpm}
-                            onChange={(e) => {
-                                const value = parseInt(e.target.value, 10);
-                                if (!isNaN(value) && value >= 30 && value <= 240) {
-                                    setBpm(value);
-                                }
-                            }}
-                            className="w-20 bg-slate-900 border border-slate-700 rounded-md px-2 py-1 text-center text-white focus:outline-none focus:border-sky-500"
-                        />
-                        <span className="text-sm text-slate-300">BPM</span>
+        <div className="w-full max-w-md mx-auto bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden group">
+            {/* HUD Status */}
+            <div className="flex justify-between items-start mb-10">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <Activity className={`w-3 h-3 ${isRunning ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Metronome.sys</h2>
                     </div>
+                    <p className="text-[9px] text-zinc-600 uppercase font-mono">Engine: WebAudio_V2 // {isRunning ? 'Sync_Active' : 'Idle'}</p>
                 </div>
-
-                <div className="w-28">
-                    <label className="block text-xs uppercase tracking-wide text-slate-300 mb-2">Beats</label>
-                    <select
-                        value={beatsPerBar}
-                        onChange={(e) => setBeatsPerBar(parseInt(e.target.value, 10))}
-                        className="w-full bg-slate-900 text-slate-100 border border-slate-700 rounded-md px-2 py-1 focus:outline-none focus:border-sky-500"
-                    >
-                        {[2, 3, 4, 5, 6, 7].map((n) => (
-                            <option key={n} value={n}>
-                                {n}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="w-28">
-                    <label className="block text-xs uppercase tracking-wide text-slate-300 mb-2">Subdivision</label>
-                    <select
-                        value={subdivision}
-                        onChange={(e) => setSubdivision(parseInt(e.target.value, 10))}
-                        className="w-full bg-slate-900 text-slate-100 border border-slate-700 rounded-md px-2 py-1 focus:outline-none focus:border-sky-500"
-                    >
-                        <option value={1}>¼ notes</option>
-                        <option value={2}>⅛ notes</option>
-                        <option value={3}>⅛ triplets</option>
-                        <option value={4}>⅟₁₆ notes</option>
-                    </select>
+                <div className="text-right">
+                    <div className="text-3xl font-black text-white tabular-nums tracking-tighter">{bpm}</div>
+                    <div className="text-[8px] text-zinc-700 uppercase font-mono">Beats_Per_Minute</div>
                 </div>
             </div>
 
-            {/* Progress Bar */}
-            <div className="w-full bg-slate-700 rounded-full h-1 mb-4">
-                <div
-                    className="bg-sky-500 h-1 rounded-full transition-all duration-100"
-                    style={{ width: `${progressWidth}%` }}
-                />
-            </div>
-
-            {/* BPM Presets */}
-            {/* <div className="flex gap-2 mb-4 flex-wrap">
-                {[60, 80, 100, 120, 140, 160].map((presetBpm) => (
-                    <button
-                        key={presetBpm}
-                        onClick={() => setBpm(presetBpm)}
-                        className={`px-3 py-1 text-sm rounded transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 ${bpm === presetBpm
-                            ? 'bg-sky-600 text-white'
-                            : 'bg-slate-700 text-slate-100 hover:bg-slate-600'
-                            }`}
-                    >
-                        {presetBpm}
-                    </button>
-                ))}
-            </div> */}
-
-            <div className="flex gap-3 mb-4">
-                <button
-                    onClick={isRunning ? stop : start}
-                    className={`flex-1 py-2 rounded-md text-white font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 ${isRunning
-                        ? "bg-red-500 hover:bg-red-600"
-                        : "bg-sky-500 hover:bg-sky-600"
-                        }`}
-                >
-                    {isRunning ? "Stop" : "Start"}
-                </button>
-
-                <button
-                    onClick={onTap}
-                    className="px-4 py-2 rounded-md bg-slate-700 text-slate-100 hover:bg-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
-                >
-                    Tap
-                </button>
-            </div>
-
-            {/* Visual Beat Indicator */}
-            <div className="flex gap-3 justify-between mb-4">
-                {Array.from({ length: totalBeats }).map((_, i) => {
-                    const isActive = visualBeat % totalBeats === i && isRunning;
-                    const isAccent = i % beatsPerBar === 0;
-                    const isSubdivision = i % subdivision === 0;
-
+            {/* Visual Beat Track */}
+            <div className="flex gap-2 justify-between mb-10 h-12 items-center">
+                {Array.from({ length: beatsPerBar }).map((_, i) => {
+                    const isActive = (visualBeat / subdivision) % beatsPerBar === i;
                     return (
-                        <div
-                            key={i}
-                            className={`flex-shrink-0 transition-all duration-100 ${isActive
-                                ? "scale-110 shadow-[0_0_20px_rgba(59,130,246,0.35)]"
-                                : "scale-100"
-                                } ${isAccent
-                                    ? (isActive ? "bg-sky-400" : "bg-sky-600")
-                                    : isSubdivision
-                                        ? (isActive ? "bg-emerald-400" : "bg-slate-600")
-                                        : (isActive ? "bg-amber-400" : "bg-slate-700")
-                                } ${isSubdivision ? "w-8 h-8 rounded-full" : "w-2 h-8 rounded-sm"
-                                }`}
-                        />
+                        <div key={i} className="flex-1 flex flex-col gap-1 items-center">
+                            <motion.div
+                                animate={{
+                                    backgroundColor: isActive ? (i === 0 ? "#ef4444" : "#10b981") : "#18181b",
+                                    scale: isActive ? 1.1 : 1
+                                }}
+                                className="w-full h-1.5 rounded-none"
+                            />
+                            <span className={`text-[8px] font-mono ${isActive ? 'text-white' : 'text-zinc-800'}`}>0{i + 1}</span>
+                        </div>
                     );
                 })}
             </div>
 
-            <p className="mt-4 text-sm text-slate-400 text-center">
-                Press <kbd className="px-2 py-1 bg-slate-700 rounded text-xs">Space</kbd> to start/stop •
-                Press <kbd className="px-2 py-1 bg-slate-700 rounded text-xs">T</kbd> to tap tempo
-            </p>
+            {/* Primary Controls */}
+            <div className="space-y-8">
+                <div className="relative group/slider">
+                    <input
+                        type="range" min={30} max={240} value={bpm}
+                        onChange={(e) => setBpm(parseInt(e.target.value))}
+                        className="w-full h-1 bg-zinc-900 appearance-none cursor-crosshair accent-emerald-500"
+                    />
+                </div>
 
-            <p className="mt-2 text-xs text-slate-500 text-center">
-               Lizard Interactive Online.
-            </p>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-zinc-600 flex items-center gap-2"><Settings2 className="w-3 h-3" /> Signature</label>
+                        <select
+                            value={beatsPerBar}
+                            onChange={(e) => setBeatsPerBar(parseInt(e.target.value))}
+                            className="w-full bg-black border border-zinc-900 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none focus:border-emerald-500/50"
+                        >
+                            {[2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}/4 Time</option>)}
+                        </select>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-zinc-600 flex items-center gap-2"><Clock className="w-3 h-3" /> Division</label>
+                        <select
+                            value={subdivision}
+                            onChange={(e) => setSubdivision(parseInt(e.target.value))}
+                            className="w-full bg-black border border-zinc-900 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none focus:border-emerald-500/50"
+                        >
+                            <option value={1}>1/4 Notes</option>
+                            <option value={2}>1/8 Notes</option>
+                            <option value={3}>Triplets</option>
+                            <option value={4}>1/16 Notes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="flex gap-2">
+                    <button
+                        onClick={toggleMetronome}
+                        className={`flex-1 flex items-center justify-center gap-3 py-4 text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${isRunning ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-white text-black hover:bg-emerald-500'
+                            }`}
+                    >
+                        {isRunning ? <Square className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+                        {isRunning ? 'Terminate' : 'Initialize'}
+                    </button>
+                    <button
+                        onClick={onTap}
+                        className="px-6 bg-[#0c0c0c] border border-zinc-900 text-zinc-500 hover:text-white hover:border-zinc-700 transition-all text-[10px] font-black uppercase tracking-widest"
+                    >
+                        Tap
+                    </button>
+                </div>
+            </div>
+
+            {/* Shortcuts Guide */}
+            <div className="mt-8 pt-6 border-t border-zinc-900/50 flex justify-between items-center">
+                <span className="text-[8px] text-zinc-800 uppercase font-mono tracking-tighter">Keyboard_Mapped: [SPACE] [T]</span>
+                <div className="flex gap-1">
+                    <div className={`w-1 h-1 rounded-full ${isRunning ? 'bg-emerald-500 animate-ping' : 'bg-zinc-900'}`} />
+                </div>
+            </div>
         </div>
     );
 }

@@ -1,137 +1,166 @@
-    "use client";
+"use client";
 
-    import React, { useState, useCallback } from "react";
-    import dynamic from "next/dynamic";
-    import type { ImagePickerConf } from "react-image-picker-editor";
-    import "react-image-picker-editor/dist/index.css";
+import React, { useState, useCallback } from "react";
+import dynamic from "next/dynamic";
+import type { ImagePickerConf } from "react-image-picker-editor";
+import { Upload, RotateCcw, Image as ImageIcon, Sparkles, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import "react-image-picker-editor/dist/index.css";
 
-    const ReactImagePickerEditor = dynamic(
-        () => import("react-image-picker-editor"),
-        { ssr: false }
-    );
+const ReactImagePickerEditor = dynamic(
+    () => import("react-image-picker-editor"),
+    { ssr: false }
+);
 
-    export default function ImageEditorModal() {
-        const [originalImage, setOriginalImage] = useState<string | null>(null);
-        const [editedImage, setEditedImage] = useState<string | null>(null);
-        const [isEditing, setIsEditing] = useState(false);
+export default function ImageEditorModal() {
+    const [originalImage, setOriginalImage] = useState<string | null>(null);
+    const [editedImage, setEditedImage] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
 
-        const config: ImagePickerConf = {
-            borderRadius: "8px",
-            language: "en",
-            width: "100%",
-            height: "320px",
-            objectFit: "cover",
-            compressInitial: null,
-            darkMode: true,
-            hideDownloadBtn: false,
-        };
+    const config: ImagePickerConf = {
+        borderRadius: "0px",
+        language: "en",
+        width: "100%",
+        height: "320px",
+        objectFit: "contain",
+        compressInitial: null,
+        darkMode: true,
+        hideDownloadBtn: false,
+    };
 
-        // This should only be called when a NEW image is loaded
-        const handleImageChange = useCallback((newDataUri: string) => {
-            // Only update the edited image, not the original
-            setEditedImage(newDataUri);
-            setIsEditing(true);
-        }, []);
+    const handleImageChange = useCallback((newDataUri: string) => {
+        setEditedImage(newDataUri);
+        setIsEditing(true);
+    }, []);
 
-        // Handle initial image upload separately
-        const handleInitialImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const result = e.target?.result as string;
-                    setOriginalImage(result);
-                    setEditedImage(result); // Start with the same image
-                    setIsEditing(true);
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+    const handleInitialImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const result = e.target?.result as string;
+                setOriginalImage(result);
+                setEditedImage(result);
+                setIsEditing(true);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
-        const handleReset = useCallback(() => {
-            setOriginalImage(null);
-            setEditedImage(null);
-            setIsEditing(false);
-        }, []);
+    const handleReset = useCallback(() => {
+        setOriginalImage(null);
+        setEditedImage(null);
+        setIsEditing(false);
+    }, []);
 
-        return (
-            <div className="w-full max-w-3xl p-8 space-y-10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-xl mt-8">
-                {/* HEADER */}
-                <div className="text-center space-y-2">
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-                        Image Editor
-                    </h2>
-                    <p className="text-gray-400 text-sm">
-                        {isEditing ? "Editing in real-time" : "Upload an image to start editing"}
-                    </p>
+    return (
+        /* 1. CENTERED WRAPPER: Flex justify-center and items-center */
+        <div className="w-full flex justify-center items-center py-10 selection:bg-emerald-500 selection:text-black">
+
+            {/* 2. MAIN HUB: Added shadow-2xl for depth against the Vantablack background */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-4xl bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+            >
+
+                {/* HUD HEADER */}
+                <div className="flex justify-between items-start mb-10">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 rounded-full ${originalImage ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-800'}`} />
+                            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
+                                Media.Processor_v2
+                            </h2>
+                        </div>
+                        <p className="text-[9px] text-zinc-600 uppercase font-mono tracking-tighter italic">
+                            {originalImage ? "Buffer: IMAGE_LOADED" : "Buffer: EMPTY // WAITING_FOR_INPUT"}
+                        </p>
+                    </div>
+                    {originalImage && (
+                        <button
+                            onClick={handleReset}
+                            className="group flex items-center gap-2 px-3 py-1 text-[9px] font-black uppercase tracking-widest bg-red-950/20 text-red-500 border border-red-900/30 hover:bg-red-500 hover:text-white transition-all"
+                        >
+                            <RotateCcw className="w-3 h-3 group-hover:rotate-[-90deg] transition-transform" />
+                            Reset_Canvas
+                        </button>
+                    )}
                 </div>
 
-                {/* FILE UPLOAD - Only show when no image is loaded */}
-                {!originalImage && (
-                    <div className="flex justify-center">
-                        <label className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
-                            Upload Image
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleInitialImageUpload}
-                                className="hidden text-slate-50"
-                            />
-                        </label>
-                    </div>
-                )}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                {/* PREVIEW */}
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                        <p className="text-sm text-gray-300">Edited Preview:</p>
-                        {originalImage && (
-                            <button
-                                onClick={handleReset}
-                                className="px-3 py-1 text-xs bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition-colors"
-                            >
-                                Reset All
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="
-            w-full min-h-[200px] bg-slate-900/50 border border-white/10 
-            rounded-xl flex items-center justify-center overflow-hidden
-            backdrop-blur-xl shadow-inner shadow-black/20
-            ">
-                        {editedImage ? (
-                            <img
-                                src={editedImage}
-                                alt="Edited Preview"
-                                className="max-h-[500px] w-full object-contain"
-                            />
+                    {/* LEFT: EDITOR CONTROLS */}
+                    <div className="space-y-6">
+                        {!originalImage ? (
+                            <label className="flex flex-col items-center justify-center h-80 border-2 border-dashed border-zinc-900 hover:border-emerald-500/50 hover:bg-emerald-500/[0.02] cursor-pointer transition-all group/upload">
+                                <Upload className="w-10 h-10 text-zinc-800 group-hover/upload:text-emerald-500 transition-colors mb-4" />
+                                <span className="text-[10px] tracking-[0.3em] font-black uppercase text-zinc-600 group-hover/upload:text-white">Initialize_Upload</span>
+                                <input type="file" accept="image/*" onChange={handleInitialImageUpload} className="hidden" />
+                            </label>
                         ) : (
-                            <span className="text-gray-500">No image selected</span>
+                            <div className="space-y-4">
+                                <div className="bg-black border border-zinc-900 overflow-hidden">
+                                    <ReactImagePickerEditor
+                                        config={config}
+                                        imageChanged={handleImageChange}
+                                        imageSrcProp={originalImage}
+                                    />
+                                </div>
+                                <div className="flex items-center gap-3 p-4 bg-black border border-zinc-900">
+                                    <Sparkles className="w-4 h-4 text-emerald-500" />
+                                    <span className="text-[9px] text-zinc-500 uppercase font-mono tracking-widest">
+                                        Editor tools active. Adjust crop & filters above.
+                                    </span>
+                                </div>
+                            </div>
                         )}
                     </div>
-                </div>
 
-                {/* Editor - Only show when we have an original image */}
-                {originalImage && (
-                    <div className="w-full flex justify-center">
-                        <div className="w-full max-w-3xl overflow-hidden">
-                            <ReactImagePickerEditor
-                                config={config}
-                                imageChanged={handleImageChange}
-                                imageSrcProp={originalImage} // Pass the ORIGINAL image to editor
-                            />
+                    {/* RIGHT: PREVIEW OUTPUT */}
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between px-1">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Output_Render</span>
+                            <AnimatePresence>
+                                {isEditing && editedImage !== originalImage && (
+                                    <motion.span
+                                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                        className="flex items-center gap-1.5 text-[8px] font-mono text-emerald-500 uppercase animate-pulse"
+                                    >
+                                        <CheckCircle2 className="w-3 h-3" /> Real-time_Sync
+                                    </motion.span>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+                        <div className="relative w-full aspect-square lg:aspect-auto lg:h-[370px] bg-black border border-zinc-900 flex items-center justify-center overflow-hidden shadow-inner">
+                            {editedImage ? (
+                                <img
+                                    src={editedImage}
+                                    alt="Rendered"
+                                    className="max-h-full max-w-full object-contain"
+                                />
+                            ) : (
+                                <div className="flex flex-col items-center gap-3 opacity-20">
+                                    <ImageIcon className="w-12 h-12 stroke-[1px]" />
+                                    <span className="text-[8px] tracking-[0.5em] uppercase">No_Data_Signal</span>
+                                </div>
+                            )}
+
+                            {/* Decorative HUD corners */}
+                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-zinc-800" />
+                            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-zinc-800" />
+                            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-zinc-800" />
+                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-zinc-800" />
                         </div>
                     </div>
-                )}
+                </div>
 
-                {/* Status indicator */}
-                {isEditing && editedImage !== originalImage && (
-                    <div className="flex items-center justify-center space-x-2 text-sm text-green-400">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span>Real-time edits applied</span>
-                    </div>
-                )}
-            </div>
-        );
-    }
+                {/* BACKGROUND DECOR */}
+                <div className="absolute -bottom-6 -left-4 text-8xl font-black text-white/[0.02] select-none uppercase italic pointer-events-none">
+                    IMG_EDT
+                </div>
+            </motion.div>
+        </div>
+    );
+}

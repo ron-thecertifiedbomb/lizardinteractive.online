@@ -7,7 +7,7 @@ export const utilities = [
   { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
   { name: "Screen Recorder", url: "/screenrecorder" },
   { name: "Image Editor", url: "/imageeditor" },
-  { name: "Logo Maker", url: "/logomaker" },
+  // { name: "Logo Maker", url: "/logomaker" },
   { name: "Metronome", url: "/metronome" },
   { name: "Tuner", url: "/tuner" },
   { name: "Planner", url: "/planner" },

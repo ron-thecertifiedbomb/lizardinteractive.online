@@ -2,7 +2,8 @@ const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
 });
 
-module.exports = withMDX({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
@@ -20,4 +21,12 @@ module.exports = withMDX({
       { protocol: "https", hostname: "mcdn.wallpapersafari.com" },
     ],
   },
-});
+  // FIX: This block resolves the PDF.js "Object.defineProperty" error
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    config.resolve.alias.encoding = false;
+    return config;
+  },
+};
+
+module.exports = withMDX(nextConfig);

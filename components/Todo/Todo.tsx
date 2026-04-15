@@ -1,22 +1,11 @@
-// components/TodoApp.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
-  Plus,
-  Check,
-  Trash2,
-  Edit3,
-  Filter,
-  Calendar,
-  Clock,
-  Star,
-  Search,
-  MoreVertical,
-  CheckCircle2,
-  Circle,
-  ChevronDown
+  Plus, Trash2, Edit3, Filter, Star, Search,
+  CheckCircle2, Circle, X, Save, LayoutGrid, Calendar as CalendarIcon
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Todo {
   id: string;
@@ -28,563 +17,256 @@ interface Todo {
   createdAt: string;
 }
 
-const Todo: React.FC = () => {
+const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Personal');
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [editText, setEditText] = useState('');
   const [filter, setFilter] = useState<'all' | 'active' | 'completed' | 'important'>('all');
-  const [category, setCategory] = useState<string>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [categories, setCategories] = useState<string[]>(['Personal', 'Work', 'Shopping', 'Health', 'Learning']);
   const [newCategory, setNewCategory] = useState('');
   const [showCategoryInput, setShowCategoryInput] = useState(false);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
-  // Load from localStorage
+  // Persistence Logic
   useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-    const savedCategories = localStorage.getItem('todo-categories');
-
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    }
-    if (savedCategories) {
-      const savedCats = JSON.parse(savedCategories);
-      setCategories(savedCats);
-      if (savedCats.length > 0) {
-        setSelectedCategory(savedCats[0]);
-      }
-    }
+    const savedTodos = localStorage.getItem('lizard-todos');
+    const savedCats = localStorage.getItem('lizard-cats');
+    if (savedTodos) setTodos(JSON.parse(savedTodos));
+    if (savedCats) setCategories(JSON.parse(savedCats));
   }, []);
 
-  // Save to localStorage
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
-  useEffect(() => {
-    localStorage.setItem('todo-categories', JSON.stringify(categories));
-  }, [categories]);
+    localStorage.setItem('lizard-todos', JSON.stringify(todos));
+    localStorage.setItem('lizard-cats', JSON.stringify(categories));
+  }, [todos, categories]);
 
   const addTodo = () => {
     if (!newTodo.trim()) return;
-
     const todo: Todo = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       text: newTodo.trim(),
       completed: false,
       important: false,
       category: selectedCategory,
       createdAt: new Date().toISOString()
     };
-
     setTodos([todo, ...todos]);
     setNewTodo('');
-    setSelectedCategory(categories[0]);
-  };
-
-  const deleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const toggleComplete = (id: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  const toggleImportant = (id: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, important: !todo.important } : todo
-    ));
-  };
-
-  const startEditing = (todo: Todo) => {
-    setEditingTodo(todo);
-    setEditText(todo.text);
-  };
-
-  const saveEdit = () => {
-    if (!editingTodo || !editText.trim()) return;
-
-    setTodos(todos.map(todo =>
-      todo.id === editingTodo.id ? { ...todo, text: editText.trim() } : todo
-    ));
-    setEditingTodo(null);
-    setEditText('');
-  };
-
-  const cancelEdit = () => {
-    setEditingTodo(null);
-    setEditText('');
-  };
-
-  const updateCategory = (id: string, newCategory: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, category: newCategory } : todo
-    ));
-  };
-
-  const updateDueDate = (id: string, dueDate: string) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, dueDate } : todo
-    ));
-  };
-
-  const addCategory = () => {
-    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
-      const updatedCategories = [...categories, newCategory.trim()];
-      setCategories(updatedCategories);
-      setNewCategory('');
-      setShowCategoryInput(false);
-    }
   };
 
   const getFilteredTodos = () => {
-    let filtered = todos;
-
-    // Apply status filter
-    switch (filter) {
-      case 'active':
-        filtered = filtered.filter(todo => !todo.completed);
-        break;
-      case 'completed':
-        filtered = filtered.filter(todo => todo.completed);
-        break;
-      case 'important':
-        filtered = filtered.filter(todo => todo.important);
-        break;
-    }
-
-    // Apply category filter
-    if (category !== 'all') {
-      filtered = filtered.filter(todo => todo.category === category);
-    }
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(todo =>
-        todo.text.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    return filtered;
+    return todos.filter(t => {
+      const matchesFilter = filter === 'all' ||
+        (filter === 'active' && !t.completed) ||
+        (filter === 'completed' && t.completed) ||
+        (filter === 'important' && t.important);
+      const matchesCategory = activeCategory === 'all' || t.category === activeCategory;
+      const matchesSearch = t.text.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesFilter && matchesCategory && matchesSearch;
+    });
   };
 
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
+  const stats = {
+    total: todos.length,
+    active: todos.filter(t => !t.completed).length,
+    important: todos.filter(t => t.important && !t.completed).length
   };
-
-  const getStats = () => {
-    const total = todos.length;
-    const completed = todos.filter(todo => todo.completed).length;
-    const important = todos.filter(todo => todo.important && !todo.completed).length;
-    const active = total - completed;
-
-    return { total, completed, important, active };
-  };
-
-  const stats = getStats();
-  const filteredTodos = getFilteredTodos();
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto p-10 bg-slate-800 rounded-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Add Todo Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                <Plus className="w-5 h-5 mr-2 text-blue-600" />
-                Add New Todo
-              </h3>
-              <div className="space-y-3">
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addTodo()}
-                    placeholder="What needs to be done?"
-                    className="w-full p-3 border text-gray-800 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+    <div className="w-full min-h-screen bg-black text-zinc-300 font-sans selection:bg-emerald-500 selection:text-black">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-black uppercase tracking-tighter text-white">
+              System<span className="text-emerald-500">.Task</span>
+            </h1>
+            <p className="text-[10px] tracking-[0.4em] text-zinc-600 uppercase">
+              Operational Efficiency: {todos.length > 0 ? Math.round(((todos.length - stats.active) / todos.length) * 100) : 0}%
+            </p>
+          </div>
+
+          <div className="flex items-center gap-4 bg-[#080808] border border-zinc-900 p-2">
+            <Search className="w-4 h-4 text-zinc-700 ml-2" />
+            <input
+              type="text"
+              placeholder="SEARCH_LOGS..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-transparent border-none focus:ring-0 text-xs uppercase tracking-widest w-40 md:w-64"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+          {/* LEFT COLUMN: CONTROL PANEL */}
+          <aside className="lg:col-span-4 space-y-6">
+
+            {/* ADD TASK BOX */}
+            <div className="bg-[#080808] border border-zinc-900 p-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-1 text-[8px] text-zinc-800 font-mono uppercase tracking-tighter">input_module_v3</div>
+              <h2 className="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-500 mb-6">Initialize Task</h2>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  value={newTodo}
+                  onChange={(e) => setNewTodo(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addTodo()}
+                  placeholder="TASK_DESCRIPTION..."
+                  className="w-full bg-black border border-zinc-800 p-4 text-sm focus:border-emerald-500/50 transition-all outline-none text-white placeholder:text-zinc-800"
+                />
+                <div className="flex gap-2">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="flex-1 bg-black border border-zinc-800 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none"
+                  >
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
                   <button
                     onClick={addTodo}
-                    className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors"
+                    className="bg-emerald-600 hover:bg-emerald-500 text-black px-6 transition-all"
                   >
                     <Plus className="w-5 h-5" />
                   </button>
                 </div>
-
-                {/* Category Selection */}
-                <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                    className="w-full p-3 border border-gray-300 rounded-xl text-left flex justify-between items-center bg-white text-gray-800 hover:bg-gray-50"
-                  >
-                    <span>{selectedCategory}</span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {showCategoryDropdown && (
-                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-auto">
-                      {categories.map((cat) => (
-                        <button
-                          key={cat}
-                          onClick={() => {
-                            setSelectedCategory(cat);
-                            setShowCategoryDropdown(false);
-                          }}
-                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl ${selectedCategory === cat ? 'bg-blue-50 text-blue-700' : 'text-gray-800'
-                            }`}
-                        >
-                          {cat}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
               </div>
             </div>
 
-            {/* Stats Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                <CheckCircle2 className="w-5 h-5 mr-2 text-green-600" />
-                Overview
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                  <span className="text-blue-700">Total</span>
-                  <span className="font-semibold text-blue-700">{stats.total}</span>
+            {/* QUICK STATS */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: 'ALL', val: stats.total, color: 'text-zinc-500' },
+                { label: 'ACTIVE', val: stats.active, color: 'text-emerald-500' },
+                { label: 'IMP', val: stats.important, color: 'text-purple-500' }
+              ].map(s => (
+                <div key={s.label} className="bg-[#080808] border border-zinc-900 p-4 text-center">
+                  <div className={`text-xl font-black ${s.color}`}>{s.val}</div>
+                  <div className="text-[8px] tracking-tighter text-zinc-700 uppercase font-mono">{s.label}</div>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                  <span className="text-green-700">Active</span>
-                  <span className="font-semibold text-green-700">{stats.active}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                  <span className="text-purple-700">Important</span>
-                  <span className="font-semibold text-purple-700">{stats.important}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-gray-100 rounded-lg">
-                  <span className="text-gray-700">Completed</span>
-                  <span className="font-semibold text-gray-700">{stats.completed}</span>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Categories */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900 flex items-center">
-                  <Filter className="w-5 h-5 mr-2 text-orange-600" />
-                  Categories
-                </h3>
-              </div>
-              <div className="space-y-2">
+            {/* CATEGORY FILTER */}
+            <nav className="bg-[#080808] border border-zinc-900 p-6 space-y-2">
+              <h2 className="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-500 mb-4">Directories</h2>
+              <button
+                onClick={() => setActiveCategory('all')}
+                className={`w-full text-left p-3 text-[10px] uppercase tracking-widest flex justify-between border ${activeCategory === 'all' ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600'}`}
+              >
+                <span>Root_All</span>
+                <LayoutGrid className="w-3 h-3" />
+              </button>
+              {categories.map(cat => (
                 <button
-                  onClick={() => setCategory('all')}
-                  className={`w-full text-left p-3 rounded-xl transition-all ${category === 'all'
-                      ? 'bg-blue-50 border border-blue-200 text-blue-700'
-                      : 'hover:bg-gray-50 text-gray-700'
-                    }`}
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`w-full text-left p-3 text-[10px] uppercase tracking-widest border transition-all ${activeCategory === cat ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600 hover:text-zinc-400'}`}
                 >
-                  📁 All Tasks
+                  {cat}
                 </button>
-                {categories.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setCategory(cat)}
-                    className={`w-full text-left p-3 rounded-xl transition-all flex justify-between items-center ${category === cat
-                        ? 'bg-blue-50 border border-blue-200 text-blue-700'
-                        : 'hover:bg-gray-50 text-gray-700'
-                      }`}
-                  >
-                    <span>📋 {cat}</span>
-                    <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">
-                      {todos.filter(todo => todo.category === cat).length}
-                    </span>
-                  </button>
-                ))}
-                {showCategoryInput ? (
-                  <div className="flex space-x-2 p-3">
-                    <input
-                      type="text"
-                      value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && addCategory()}
-                      placeholder="New category"
-                      className="flex-1 p-2 border border-gray-300 rounded-lg text-sm text-gray-800"
-                      autoFocus
-                    />
-                    <button
-                      onClick={addCategory}
-                      className="bg-green-500 text-white p-2 rounded-lg"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setShowCategoryInput(true)}
-                    className="w-full text-left p-3 rounded-xl text-gray-500 hover:bg-gray-50 transition-all flex items-center"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Category
-                  </button>
-                )}
-              </div>
-            </div>
+              ))}
+            </nav>
+          </aside>
 
-            {/* Quick Actions */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
-              <div className="space-y-2">
+          {/* MAIN COLUMN: TASK LIST */}
+          <main className="lg:col-span-8 space-y-4">
+
+            {/* FILTERS BAR */}
+            <div className="flex gap-1 mb-6">
+              {['all', 'active', 'completed', 'important'].map((f) => (
                 <button
-                  onClick={clearCompleted}
-                  className="w-full text-left p-3 rounded-xl text-red-600 hover:bg-red-50 transition-all"
+                  key={f}
+                  onClick={() => setFilter(f as any)}
+                  className={`px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${filter === f ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-600 border-zinc-900 hover:border-zinc-700'}`}
                 >
-                  🗑️ Clear Completed
+                  {f}
                 </button>
-                <button
-                  onClick={() => setFilter('all')}
-                  className="w-full text-left p-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-all"
-                >
-                  📋 Show All Tasks
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Filters and Search */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1 relative">
-                  <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                  <input
-                    type="text"
-                    placeholder="Search todos..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border text-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                {/* Filter Buttons */}
-                <div className="flex gap-2 flex-wrap">
-                  <button
-                    onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'all'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                  >
-                    All
-                  </button>
-                  <button
-                    onClick={() => setFilter('active')}
-                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'active'
-                        ? 'bg-green-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                  >
-                    Active
-                  </button>
-                  <button
-                    onClick={() => setFilter('completed')}
-                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'completed'
-                        ? 'bg-gray-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                  >
-                    Completed
-                  </button>
-                  <button
-                    onClick={() => setFilter('important')}
-                    className={`px-4 py-2 rounded-xl transition-all ${filter === 'important'
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                  >
-                    Important
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Todos List */}
+            {/* THE LIST */}
             <div className="space-y-3">
-              {filteredTodos.length === 0 ? (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 text-center">
-                  <div className="text-6xl mb-4">📝</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {todos.length === 0 ? 'No todos yet!' : 'No todos found'}
-                  </h3>
-                  <p className="text-gray-600">
-                    {todos.length === 0
-                      ? "Get started by adding your first todo above!"
-                      : "Try changing your filters or search term."}
-                  </p>
-                </div>
-              ) : (
-                filteredTodos.map(todo => (
-                  <div
+              <AnimatePresence mode='popLayout'>
+                {getFilteredTodos().map((todo) => (
+                  <motion.div
                     key={todo.id}
-                    className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-4 transition-all hover:shadow-md ${todo.completed ? 'opacity-75' : ''
-                      } ${todo.important && !todo.completed ? 'border-l-4 border-l-purple-500' : ''}`}
+                    layout
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className={`group bg-[#080808] border border-zinc-900 p-4 transition-all hover:border-zinc-700 ${todo.completed ? 'opacity-40' : ''}`}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3 flex-1">
-                        {/* Complete Checkbox */}
-                        <button
-                          onClick={() => toggleComplete(todo.id)}
-                          className={`mt-1 transition-all ${todo.completed ? 'text-green-500' : 'text-gray-400 hover:text-green-500'
-                            }`}
-                        >
-                          {todo.completed ? (
-                            <CheckCircle2 className="w-6 h-6" />
-                          ) : (
-                            <Circle className="w-6 h-6" />
-                          )}
-                        </button>
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => setTodos(todos.map(t => t.id === todo.id ? { ...t, completed: !t.completed } : t))}
+                        className={`transition-all ${todo.completed ? 'text-emerald-500' : 'text-zinc-800 hover:text-emerald-500'}`}
+                      >
+                        {todo.completed ? <CheckCircle2 className="w-5 h-5" /> : <Circle className="w-5 h-5" />}
+                      </button>
 
-                        {/* Todo Content */}
-                        <div className="flex-1 min-w-0">
-                          {editingTodo?.id === todo.id ? (
-                            <div className="space-y-3">
-                              <input
-                                type="text"
-                                value={editText}
-                                onChange={(e) => setEditText(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                autoFocus
-                              />
-                              <div className="flex space-x-2">
-                                <button
-                                  onClick={saveEdit}
-                                  className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm"
-                                >
-                                  Save
-                                </button>
-                                <button
-                                  onClick={cancelEdit}
-                                  className="bg-gray-500 text-white px-3 py-1 rounded-lg text-sm"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <>
-                              <p className={`text-gray-900 ${todo.completed ? 'line-through' : ''}`}>
-                                {todo.text}
-                              </p>
-
-                              {/* Meta Information */}
-                              <div className="flex items-center space-x-4 mt-2">
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                                  {todo.category}
-                                </span>
-                                {todo.dueDate && (
-                                  <span className="flex items-center text-xs text-gray-500">
-                                    <Calendar className="w-3 h-3 mr-1" />
-                                    {new Date(todo.dueDate).toLocaleDateString()}
-                                  </span>
-                                )}
-                                <span className="flex items-center text-xs text-gray-500">
-                                  <Clock className="w-3 h-3 mr-1" />
-                                  {new Date(todo.createdAt).toLocaleDateString()}
-                                </span>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      {editingTodo?.id !== todo.id && (
-                        <div className="flex items-center space-x-1">
-                          {/* Important Toggle */}
-                          <button
-                            onClick={() => toggleImportant(todo.id)}
-                            className={`p-2 rounded-lg transition-all ${todo.important
-                                ? 'text-purple-600 bg-purple-50'
-                                : 'text-gray-400 hover:text-purple-600 hover:bg-purple-50'
-                              }`}
-                          >
-                            <Star className={`w-4 h-4 ${todo.important ? 'fill-current' : ''}`} />
-                          </button>
-
-                          {/* Edit */}
-                          <button
-                            onClick={() => startEditing(todo)}
-                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-
-                          {/* Delete */}
-                          <button
-                            onClick={() => deleteTodo(todo.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-
-                          {/* More Options */}
-                          <div className="relative group">
-                            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all">
-                              <MoreVertical className="w-4 h-4" />
-                            </button>
-
-                            {/* Dropdown Menu */}
-                            <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-                              <div className="p-2">
-                                <div className="text-xs font-semibold text-gray-500 px-3 py-2">
-                                  Change Category
-                                </div>
-                                {categories.map(cat => (
-                                  <button
-                                    key={cat}
-                                    onClick={() => updateCategory(todo.id, cat)}
-                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded-lg transition-colors"
-                                  >
-                                    {cat}
-                                  </button>
-                                ))}
-                              </div>
-                              <div className="border-t border-gray-200 p-2">
-                                <input
-                                  type="date"
-                                  onChange={(e) => updateDueDate(todo.id, e.target.value)}
-                                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                  placeholder="Add due date"
-                                />
-                              </div>
+                      <div className="flex-1 overflow-hidden">
+                        {editingTodo?.id === todo.id ? (
+                          <div className="flex gap-2">
+                            <input
+                              value={editText}
+                              onChange={(e) => setEditText(e.target.value)}
+                              className="bg-black border border-emerald-500/30 p-1 text-sm text-white w-full outline-none"
+                              autoFocus
+                            />
+                            <button onClick={() => {
+                              setTodos(todos.map(t => t.id === todo.id ? { ...t, text: editText } : t));
+                              setEditingTodo(null);
+                            }}><Save className="w-4 h-4 text-emerald-500" /></button>
+                          </div>
+                        ) : (
+                          <div className="space-y-1">
+                            <p className={`text-sm uppercase tracking-tight font-medium ${todo.completed ? 'line-through text-zinc-700' : 'text-zinc-200'}`}>
+                              {todo.text}
+                            </p>
+                            <div className="flex items-center gap-3">
+                              <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-tighter bg-zinc-950 px-1 border border-zinc-900">
+                                {todo.category}
+                              </span>
+                              <span className="text-[8px] font-mono text-zinc-700 uppercase">
+                                {new Date(todo.createdAt).toLocaleDateString()}
+                              </span>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                        <button
+                          onClick={() => setTodos(todos.map(t => t.id === todo.id ? { ...t, important: !t.important } : t))}
+                          className={`${todo.important ? 'text-purple-500' : 'text-zinc-800 hover:text-purple-400'}`}
+                        >
+                          <Star className={`w-4 h-4 ${todo.important ? 'fill-current' : ''}`} />
+                        </button>
+                        <button
+                          onClick={() => { setEditingTodo(todo); setEditText(todo.text); }}
+                          className="text-zinc-800 hover:text-blue-400 p-1"
+                        ><Edit3 className="w-4 h-4" /></button>
+                        <button
+                          onClick={() => setTodos(todos.filter(t => t.id !== todo.id))}
+                          className="text-zinc-800 hover:text-red-500 p-1"
+                        ><Trash2 className="w-4 h-4" /></button>
+                      </div>
                     </div>
-                  </div>
-                ))
-              )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>
   );
 };
 
-export default Todo;
+export default TodoApp;
