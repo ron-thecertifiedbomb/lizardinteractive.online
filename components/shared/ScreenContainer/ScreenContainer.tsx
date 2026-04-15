@@ -13,11 +13,11 @@ export default function ScreenContainer({
 }: ScreenContainerProps) {
 
     const backgrounds = {
-        default: "bg-[#0a192f]",
+        // CHANGE THIS: from "bg-[#0a192f]" to "bg-black"
+        default: "bg-black",
         dark: "bg-black",
         ambient: "bg-black bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black"
     };
-
     const maxWidthClasses = {
         sm: "max-w-2xl",
         md: "max-w-4xl",
@@ -30,20 +30,18 @@ export default function ScreenContainer({
     return (
         <div
             className={`
-                w-full
-                ${maxWidthClasses[maxWidth]}
-                mx-auto
-                flex
-                flex-col
-                flex-1    
-                md:pt-8   
-                lg:pt-12
-                px-4 sm:px-6
-                min-h-screen
-                transition-all duration-700
-                ${backgrounds[variant]} 
-                ${className}
-            `}
+        w-full
+        ${maxWidthClasses[maxWidth]}
+        mx-auto
+        flex
+        flex-col
+        flex-1    
+        px-4 sm:px-6
+        min-h-screen
+        transition-all duration-700
+        ${backgrounds[variant]} 
+        ${className}
+    `}
         >
             {children}
         </div>

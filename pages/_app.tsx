@@ -10,9 +10,15 @@ import NavBar from "../components/NavBar/NavBar";
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  // Path Checks for Theme Switching
+  // 1. Identify all pages that MUST be black
   const isRifferPage = router.pathname.startsWith("/thepsychedelicriffer");
   const isDevPage = router.pathname.startsWith("/rondevsolutions");
+  const isHomePage = router.pathname === "/"; // This is the killer fix
+
+  // 2. Decide the background
+  // If it's one of your main funnels or the hub, use bg-black.
+  // Otherwise, fallback to the legacy blue for older utilities.
+
 
   return (
     <Auth0Provider
@@ -21,10 +27,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <div className={`
         min-h-screen flex flex-col transition-colors duration-700 
-        /* - Riffer & Dev pages use deep Black (#000000 or #0a0a0a)
-           - Main Hub uses your original dark-bg blue (#0a192f) 
-        */
-        ${(isRifferPage || isDevPage) ? 'bg-black' : 'bg-dark-bg'} 
+       
       `}>
         <NavBar />
 

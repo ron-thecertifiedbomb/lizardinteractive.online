@@ -17,55 +17,45 @@ export default function NavBar() {
     // Path Checks
     const isRifferPage = pathname?.startsWith("/thepsychedelicriffer");
     const isDevPage = pathname?.startsWith("/rondevsolutions");
+    const isHomePage = pathname === "/";
 
     // 1. Dynamic Navigation Selection
-    const currentLinks = isRifferPage
-        ? rifferLinks
-        : isDevPage
-            ? devLinks
-            : mainLinks;
+    const currentLinks = isRifferPage ? rifferLinks : isDevPage ? devLinks : mainLinks;
 
     // 2. Branding Logic
-    let brandName = "Lizard Interactive Online";
-    if (isRifferPage) brandName = "The Psychedelic Riffer";
-    if (isDevPage) brandName = ""; // We use the Wordmark instead
+    let brandName = "LIZARD INTERACTIVE";
+    if (isRifferPage) brandName = "THE PSYCHEDELIC RIFFER";
 
-    // 3. Dynamic Font Styles
-    const getFontStyle = () => {
-        if (isRifferPage) return "font-gotham-thin tracking-[0.2em] uppercase font-extralight";
-        return "font-semibold";
-    };
+    // 3. Dynamic Styles based on the "Motherpage" or Funnels
+    const isBlackTheme = isRifferPage || isDevPage || isHomePage;
 
     return (
-        <header className={`py-6 px-4 sticky top-0 z-50 transition-all duration-700 
-            ${(isRifferPage || isDevPage) ? 'bg-black text-white border-b border-white/5' : 'bg-dark-bg text-white'}`}>
+        <header className={`py-4 md:py-6 px-6 sticky top-0 z-[100] transition-all duration-500 
+            ${isBlackTheme ? 'bg-black/80 backdrop-blur-xl border-b border-white/5' : 'bg-[#0a192f]'} text-white`}>
 
             <nav className="flex items-center justify-between max-w-7xl mx-auto">
 
-                {/* LOGO & BRAND SECTION */}
+                {/* LOGO SECTION */}
                 <Link
                     href={isRifferPage ? "/thepsychedelicriffer" : isDevPage ? "/rondevsolutions" : "/"}
-                    className="flex items-center gap-4 group"
+                    className="flex items-center gap-3 group"
                 >
-                    {/* Switcher for Logo UI */}
                     {isDevPage ? (
-                        /* The RD|SOLUTIONS Wordmark */
-                        <div className="text-xl md:text-2xl font-bold tracking-tighter text-zinc-100 flex items-center">
-                            RD<span className="text-zinc-500 font-extralight mx-1">|</span>SOLUTIONS
+                        <div className="text-lg md:text-xl font-black tracking-[0.2em] text-white flex items-center">
+                            RD<span className="text-emerald-500 mx-[2px]">.</span>SOLUTIONS
                         </div>
                     ) : (
-                        /* Image Logos for Riffer or Hub */
                         <>
-                            <div className="relative w-7 h-7 sm:w-9 sm:h-9 overflow-hidden rounded-full">
+                            <div className={`relative w-8 h-8 overflow-hidden transition-transform duration-500 group-hover:rotate-90 ${isRifferPage ? 'rounded-none' : 'rounded-full border border-white/10'}`}>
                                 <Image
                                     src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
                                     alt="logo"
                                     fill
-                                    className={`${isRifferPage ? 'rounded-none border border-white/10' : 'rounded-full'} object-cover`}
+                                    className="object-cover"
                                     priority
                                 />
                             </div>
-                            <span className={`text-xs sm:text-sm md:text-md lg:text-lg transition-all duration-500 ${getFontStyle()}`}>
+                            <span className={`text-[10px] md:text-xs tracking-[0.4em] font-black uppercase transition-all duration-500 group-hover:text-emerald-500`}>
                                 {brandName}
                             </span>
                         </>
@@ -73,48 +63,52 @@ export default function NavBar() {
                 </Link>
 
                 {/* DESKTOP NAV */}
-                <div className="hidden md:flex items-center gap-8">
-
-                    {/* Show Widget ONLY on the main hub */}
+                <div className="hidden md:flex items-center gap-10">
+                    {/* Only show Weather on Main Hub */}
                     {!isRifferPage && !isDevPage && (
-                        <div className="w-10 h-10 flex items-center justify-center mr-4">
-                            <WeatherWidget className="w-10 h-10" />
+                        <div className="flex items-center opacity-40 hover:opacity-100 transition-opacity mr-4 border-r border-white/10 pr-8">
+                            <WeatherWidget className="w-8 h-8" />
                         </div>
                     )}
 
-                    {currentLinks.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`text-[11px] tracking-[0.15em] uppercase transition-all duration-300
-                                ${pathname === link.href
-                                    ? (isRifferPage || isDevPage ? "text-white border-b border-white pb-1" : "bg-blue-600 text-white px-3 py-1 rounded-md")
-                                    : "text-gray-400 hover:text-white"
-                                } ${isRifferPage ? 'font-gotham-thin' : 'font-medium'}`}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
+                    {currentLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`relative text-[10px] tracking-[0.3em] uppercase font-black transition-all duration-300 group
+                                    ${isActive ? "text-white" : "text-zinc-500 hover:text-white"}`}
+                            >
+                                {link.label}
+                                {/* Killer Active Underline */}
+                                <span className={`absolute -bottom-2 left-0 h-[2px] transition-all duration-500 
+                                    ${isActive ? 'w-full' : 'w-0 group-hover:w-full'} 
+                                    ${isRifferPage ? 'bg-white' : 'bg-emerald-500'}`}
+                                />
+                            </Link>
+                        );
+                    })}
                 </div>
 
-                {/* MOBILE BUTTON */}
-                <div className="flex md:hidden">
-                    <Button
-                        className="bg-transparent text-white border-none"
+                {/* MOBILE TRIGGER */}
+                <div className="flex md:hidden items-center gap-4">
+                    {!isRifferPage && !isDevPage && <WeatherWidget className="w-6 h-6 opacity-50" />}
+                    <button
+                        className="text-white p-2"
                         onClick={() => setMobileOpen(!mobileOpen)}
                     >
-                        {mobileOpen ? <X size={24} strokeWidth={1} /> : <Menu size={24} strokeWidth={1} />}
-                    </Button>
+                        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                    </button>
                 </div>
             </nav>
 
-            {/* MOBILE DROPDOWN */}
+            {/* MOBILE DROPDOWN - PURE ONYX */}
             <div
                 className={`
-                    md:hidden flex flex-col gap-6 px-6 py-10
-                    transition-all duration-500 absolute left-0 right-0 top-[80px] h-screen
-                    ${(isRifferPage || isDevPage) ? 'bg-black' : 'bg-gray-900'}
-                    ${mobileOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
+                    md:hidden fixed inset-x-0 top-[72px] h-screen bg-black flex flex-col p-10 gap-8
+                    transition-all duration-500 ease-in-out z-[90]
+                    ${mobileOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}
                 `}
             >
                 {currentLinks.map((link) => (
@@ -122,13 +116,15 @@ export default function NavBar() {
                         key={link.href}
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className={`text-sm tracking-[0.25em] uppercase 
-                            ${isRifferPage ? 'font-gotham-thin text-white' :
-                                isDevPage ? 'font-bold text-zinc-100' : 'text-gray-300'}`}
+                        className="text-2xl font-black tracking-[0.2em] uppercase text-zinc-800 hover:text-emerald-500 transition-colors"
                     >
                         {link.label}
                     </Link>
                 ))}
+
+                <div className="mt-auto pb-20">
+                    <span className="text-[10px] tracking-[0.5em] text-zinc-900 uppercase">System.Lizard_Integrated</span>
+                </div>
             </div>
         </header>
     );
