@@ -117,7 +117,7 @@ export default function PostPage({
 
               <div className="grid gap-12">
                 {laptopArticle2026.recommendations?.map((laptop) => (
-                  <GearCard key={laptop.id} item={laptop} />
+                  <GearCard key={laptop.id} item={laptop as any} />
                 ))}
               </div>
 
