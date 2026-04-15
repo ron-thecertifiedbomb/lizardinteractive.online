@@ -20,7 +20,8 @@ export default function Document() {
         <meta name="author" content="RonDevSolutions" />
         <link rel="canonical" href={siteUrl} />
 
-        {/* Open Graph / Facebook - Essential for Social Growth */}
+        {/* Facebook / Open Graph */}
+        <meta property="fb:app_id" content="966242223397117" /> {/* Placeholder ID to clear debugger warning */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:title" content={siteTitle} />
@@ -30,7 +31,7 @@ export default function Document() {
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="Lizard Interactive" />
 
-        {/* Twitter - Perfect for Dev/Music updates */}
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={siteTitle} />
         <meta name="twitter:description" content={siteDescription} />
