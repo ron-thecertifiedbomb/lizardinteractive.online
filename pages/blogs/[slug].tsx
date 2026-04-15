@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import createDOMPurify from "dompurify";
 import Head from "next/head";
 import { motion } from "framer-motion";
-import { Activity, Clock, ChevronLeft } from "lucide-react";
+import { Activity, Clock, ChevronLeft, Zap } from "lucide-react";
 import Link from "next/link";
 
 // DATA & COMPONENTS
-import { laptopArticle2026 } from "../../data/blogContent";
+import { laptopArticle2026, aiFutureArticle2026 } from "../../data/blogContent";
 import GearCard from "../../components/shared/GearCard/GearCard";
+import BioDigitalShift from "../../components/BioDigitalShift/BioDigitalShift";
+
 
 type BlogPost = {
   _id: string;
@@ -22,10 +24,12 @@ type BlogPost = {
 
 export default function PostPage({
   blog,
-  isLaptopGuide
+  isLaptopGuide,
+  isAIPhilosophy
 }: {
   blog?: BlogPost;
   isLaptopGuide?: boolean;
+  isAIPhilosophy?: boolean;
 }) {
   const router = useRouter();
   const [safeHTML, setSafeHTML] = useState("");
@@ -47,43 +51,38 @@ export default function PostPage({
     );
   }
 
-  if (!blog && !isLaptopGuide) return <ErrorPage statusCode={404} />;
+  if (!blog && !isLaptopGuide && !isAIPhilosophy) return <ErrorPage statusCode={404} />;
 
   // --- METADATA CONFIGURATION ---
   const SITE_URL = "https://www.lizardinteractive.online";
-  const title = isLaptopGuide ? laptopArticle2026.header.title : blog?.title;
+  const title = isLaptopGuide 
+    ? laptopArticle2026.header.title 
+    : isAIPhilosophy 
+    ? aiFutureArticle2026.header.title 
+    : blog?.title;
+
   const description = isLaptopGuide
     ? "Stop settling for latency. Audit the 2026 lineup for Next.js compilation and music production."
+    : isAIPhilosophy
+    ? aiFutureArticle2026.hooks.intro
     : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
-  // LOGIC FIX: Determine image path first, then make it absolute.
   const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.jpg"
+    : isAIPhilosophy
+    ? "/blog/ai-future-2026.jpg"
     : (blog?.image || "/lizardinteractive.jpg");
 
   const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
-  const pageUrl = `${SITE_URL}${router.asPath}`;
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
       <Head>
         <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:title" content={`${title} | Lizard Interactive`} />
-        <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-
-        {/* Twitter / X */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
-        <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <ScreenContainer variant="dark">
@@ -93,31 +92,34 @@ export default function PostPage({
             Back_to_Logs
           </Link>
 
-          <header className="mb-20 border-b border-zinc-900 pb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">
-                [ {isLaptopGuide ? "HARDWARE_AUDIT" : "SYSTEM_LOG"} ]
-              </span>
-              <div className="h-[1px] flex-1 bg-zinc-900" />
-            </div>
-            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
-            <div className="flex items-center gap-8 text-zinc-500 font-mono text-[10px] uppercase tracking-widest">
-              <div className="flex items-center gap-2"><Clock size={12} />{isLaptopGuide ? "2026.04.16" : "RECENT_TRANS"}</div>
-              <div className="flex items-center gap-2"><Activity size={12} className="text-emerald-500/50" />Signal: 200_OK</div>
-            </div>
-          </header>
-
-          {isLaptopGuide ? (
+          {/* Render the specialized UI for AI Philosophy */}
+          {isAIPhilosophy ? (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <BioDigitalShift />
+            </motion.div>
+          ) : isLaptopGuide ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-24">
+              <header className="mb-20 border-b border-zinc-900 pb-12">
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">[ HARDWARE_AUDIT ]</span>
+                  <div className="h-[1px] flex-1 bg-zinc-900" />
+                </div>
+                <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
+                <div className="flex items-center gap-8 text-zinc-500 font-mono text-[10px] uppercase tracking-widest">
+                  <div className="flex items-center gap-2"><Clock size={12} />2026.04.16</div>
+                  <div className="flex items-center gap-2"><Activity size={12} className="text-emerald-500/50" />Signal: 200_OK</div>
+                </div>
+              </header>
+
               <div className="prose prose-invert max-w-none">
-                <p className="text-zinc-400 text-lg md:text-xl uppercase tracking-widest leading-relaxed border-l-2 border-emerald-500 pl-8">
+                <p className="text-zinc-400 text-lg md:text-xl uppercase tracking-widest leading-relaxed border-l-2 border-emerald-500 pl-8 font-bold">
                   {laptopArticle2026.hooks.intro}
                 </p>
               </div>
 
               <div className="grid gap-12">
                 {laptopArticle2026.recommendations?.map((laptop) => (
-                  <GearCard key={laptop.id} item={laptop as any} />
+                  <GearCard key={laptop.id} item={laptop} />
                 ))}
               </div>
 
@@ -128,12 +130,19 @@ export default function PostPage({
               </footer>
             </motion.div>
           ) : (
-            <motion.article
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="prose prose-invert prose-emerald max-w-none text-zinc-300"
-              dangerouslySetInnerHTML={{ __html: safeHTML }}
-            />
+            <motion.article initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
+                <header className="mb-20 border-b border-zinc-900 pb-12">
+                    <div className="flex items-center gap-4 mb-8">
+                    <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">[ SYSTEM_LOG ]</span>
+                    <div className="h-[1px] flex-1 bg-zinc-900" />
+                    </div>
+                    <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
+                </header>
+                <div 
+                    className="prose prose-invert prose-emerald max-w-none text-zinc-300 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: safeHTML }} 
+                />
+            </motion.article>
           )}
         </div>
       </ScreenContainer>
@@ -145,6 +154,11 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   if (params.slug === "best-laptops-2026") {
     return { props: { isLaptopGuide: true }, revalidate: 60 };
   }
+  
+  if (params.slug === "bio-digital-synthesis") {
+    return { props: { isAIPhilosophy: true }, revalidate: 60 };
+  }
+
   const url = process.env.GET_ALL_BLOGS_URL;
   try {
     const res = await fetch(`${url}/${params.slug}`);
@@ -162,9 +176,19 @@ export async function getStaticPaths() {
     const res = await fetch(url!);
     const blogs: BlogPost[] = await res.json();
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
+    
+    // Add custom slugs to paths
     paths.push({ params: { slug: "best-laptops-2026" } });
+    paths.push({ params: { slug: "bio-digital-synthesis" } });
+
     return { paths, fallback: 'blocking' };
   } catch (error) {
-    return { paths: [{ params: { slug: "best-laptops-2026" } }], fallback: 'blocking' };
+    return { 
+        paths: [
+            { params: { slug: "best-laptops-2026" } },
+            { params: { slug: "bio-digital-synthesis" } }
+        ], 
+        fallback: 'blocking' 
+    };
   }
 }
