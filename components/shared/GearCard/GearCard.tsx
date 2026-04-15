@@ -37,7 +37,9 @@ export default function GearCard({ item }: GearCardProps) {
                         src={item.imageUrl || "/placeholder.jpg"}
                         alt={item.name}
                         fill
-                        className="object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                        // Removed 'grayscale' and 'opacity-40' from the base classes
+                        // Added a subtle hover scale effect to keep the technical "active" feel
+                        className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700 opacity-100"
                         sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent md:bg-gradient-to-r" />
