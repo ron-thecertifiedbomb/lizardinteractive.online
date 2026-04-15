@@ -10,14 +10,6 @@ import NavBar from "../components/NavBar/NavBar";
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  // 1. Identify all pages that MUST be black
-  const isRifferPage = router.pathname.startsWith("/thepsychedelicriffer");
-  const isDevPage = router.pathname.startsWith("/rondevsolutions");
-  const isHomePage = router.pathname === "/"; // This is the killer fix
-
-  // 2. Decide the background
-  // If it's one of your main funnels or the hub, use bg-black.
-  // Otherwise, fallback to the legacy blue for older utilities.
 
 
   return (
@@ -25,13 +17,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
     >
+      {/* Master Wrapper: 
+          - min-h-screen ensures black fills the viewport on short pages.
+          - overflow-x-hidden prevents the "horizontal wobble" on mobile/Fold 2.
+      */}
       <div className={`
         min-h-screen flex flex-col transition-colors duration-700 
-       
+     
+        overflow-x-hidden
       `}>
         <NavBar />
 
-        <main className="flex-1 flex flex-col">
+        {/* 'flex-1' pushes the footer to the bottom of the screen */}
+        <main className="flex-1 flex flex-col w-full">
           <Component {...pageProps} />
           <Analytics />
         </main>

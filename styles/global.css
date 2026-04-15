@@ -5,72 +5,97 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-dark-bg text-white font-sans;
+@layer base {
+  /* 1. UNIVERSAL THEME: Force black before JS hydration */
+  html, body, #__next {
+    background-color: #000000 !important;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    /* bg-dark-bg now pulls #000000 from your tailwind.config.js */
+    @apply bg-dark-bg text-white font-sans;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 2. CUSTOM SELECTION: Use your emerald brand color */
+  ::selection {
+    @apply bg-emerald-500 text-black;
+  }
+
+  /* 3. MOBILE FIX: Remove the blue tap highlight on links/buttons */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-/* Optional: make bold text inherit surrounding color */
-.prose strong {
-  @apply text-white;
-}
-/* Italic text */
-.prose em,
-.prose i,
-.prose italic {
-  @apply text-white; /* Italic text on dark background */
+/* 4. PROSE / CONTENT STYLING: Optimized for dark mode readability */
+.prose {
+  @apply text-zinc-400 max-w-none leading-relaxed;
 }
 
-/* Inline code */
-.prose code {
-  @apply text-white bg-gray-800 px-1 rounded;
+.prose h1, .prose h2, .prose h3, .prose h4, .prose strong {
+  @apply text-white font-black uppercase tracking-tight;
 }
-.prose h3 {
-  @apply text-white;
+
+.prose a {
+  @apply text-emerald-400 no-underline hover:text-emerald-300 transition-colors border-b border-emerald-500/20;
 }
-.prose h2 {
-  @apply text-white;
-}
+
 .prose blockquote {
-  @apply text-white; /* Makes all blockquote text white */
+  @apply border-l-2 border-emerald-500 pl-6 italic text-zinc-300 bg-zinc-950/50 py-2;
 }
 
-/* Bold inside blockquotes */
-.prose blockquote strong {
-  @apply text-white; /* Ensures bold text inside blockquote is white */
+/* Brutalist Inline Code */
+.prose code {
+  @apply text-emerald-400 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded-none font-mono text-sm;
 }
 
-/* Italic inside blockquotes (optional) */
-.prose blockquote em,
-.prose blockquote i {
-  @apply text-white;
-}
-/* Override dropdown text color inside react-image-picker-editor */
-/* Dropdown text color */
+/* 5. IMAGE PICKER & FORM UI: Ensuring visibility inside tools */
 .rie-container select,
-.rie-container option {
-    color: #4b5563 !important; /* gray-600 */
-}
-
-/* Max Width / Height Input text color */
+.rie-container option,
 .rie-container input[type="number"],
 .rie-container input[type="text"] {
-    color: #4b5563 !important; /* gray-600 */
+    color: #111827 !important; /* Keep text dark for white input backgrounds */
+    background-color: #ffffff !important;
 }
 
-/* Optional: border + focus styling so it matches Tailwind look */
 .rie-container input[type="number"],
 .rie-container input[type="text"],
 .rie-container select {
-    border: 1px solid #d1d5db !important; /* gray-300 */
-    border-radius: 6px !important;
-    padding: 4px 6px !important;
+    border: 1px solid #374151 !important; 
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
 }
 
+/* Focus states match your emerald brand accent */
 .rie-container input:focus,
 .rie-container select:focus {
     outline: none !important;
-    border-color: #3b82f6 !important; /* blue-500 */
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+    border-color: #10b981 !important; 
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
 }
 
+/* 6. MINIMALIST SCROLLBAR (Chrome/Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #18181b; /* zinc-900 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #27272a; /* zinc-800 */
+}
