@@ -33,6 +33,14 @@ export default function PostPage({
 }) {
   const router = useRouter();
   const [safeHTML, setSafeHTML] = useState("");
+  // Default to production domain to ensure SSR meta tags have a base
+  const [origin, setOrigin] = useState("https://lizardinteractive.online");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined" && blog?.content) {
@@ -53,9 +61,7 @@ export default function PostPage({
 
   if (!blog && !isLaptopGuide && !isAIPhilosophy) return <ErrorPage statusCode={404} />;
 
-  // --- HARDENED METADATA ENGINE ---
-  const SITE_URL = "https://lizardinteractive.online";
-
+  // --- DYNAMIC METADATA CONFIG ---
   const title = isLaptopGuide
     ? laptopArticle2026.header.title
     : isAIPhilosophy
@@ -68,19 +74,17 @@ export default function PostPage({
       ? aiFutureArticle2026.hooks.intro
       : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
-  // LOGIC: Ensure paths are absolute and clean
   const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.jpg"
     : isAIPhilosophy
       ? "/blog/ai-future-2026.jpg"
       : (blog?.image || "/lizardinteractive.png");
 
-  const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
+  const ogImage = imagePath.startsWith('http') ? imagePath : `${origin}${imagePath}`;
 
-  // FIX: Circular Redirect Prevention
-  // We remove the trailing slash manually to match Next.js default behavior
+  // URL NORMALIZATION: Prevents the Trailing Slash Loop
   const cleanPath = router.asPath.split('?')[0].replace(/\/$/, "");
-  const pageUrl = `${SITE_URL}${cleanPath}`;
+  const pageUrl = `${origin}${cleanPath}`;
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
@@ -88,7 +92,7 @@ export default function PostPage({
         <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
 
-        {/* Open Graph / Facebook Scraper Tags */}
+        {/* Open Graph / Facebook Scraper Protocol */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={`${title} | Lizard Interactive`} />
@@ -97,25 +101,25 @@ export default function PostPage({
         <meta property="og:image:secure_url" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:type" content="image/jpeg" />
 
-        {/* Twitter */}
+        {/* Twitter / X */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* Canonical Link */}
+        {/* Canonical Fix for Circular Redirects */}
         <link rel="canonical" href={pageUrl} />
       </Head>
 
       <ScreenContainer variant="dark">
-        <div className="max-w-5xl mx-auto pt-24 pb-40 px-6">
+        <div className="max-w-5xl mx-auto pt-24 pb-40 px-6 font-sans">
           <Link href="/blogs" className="group inline-flex items-center gap-2 text-zinc-600 hover:text-emerald-500 font-mono text-[9px] uppercase tracking-[0.3em] mb-12 transition-colors">
             <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
             Back_to_Logs
           </Link>
 
+          {/* --- CONTENT BRANCHING --- */}
           {isAIPhilosophy ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <BioDigitalShift />
@@ -123,8 +127,9 @@ export default function PostPage({
           ) : isLaptopGuide ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-24">
               <header className="mb-20 border-b border-zinc-900 pb-12">
-                <div className="flex items-center gap-4 mb-8 text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">
-                  [ HARDWARE_AUDIT ]
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">[ HARDWARE_AUDIT ]</span>
+                  <div className="h-[1px] flex-1 bg-zinc-900" />
                 </div>
                 <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
               </header>
@@ -143,11 +148,11 @@ export default function PostPage({
             </motion.div>
           ) : (
             <motion.article initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
-              <header className="mb-20 border-b border-zinc-900 pb-12">
+              <header className="mb-20 border-b border-zinc-900 pb-12 text-left">
                 <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
               </header>
               <div
-                className="prose prose-invert prose-emerald max-w-none text-zinc-300 leading-relaxed"
+                className="prose prose-invert prose-emerald max-w-none text-zinc-300 leading-relaxed font-sans font-light"
                 dangerouslySetInnerHTML={{ __html: safeHTML }}
               />
             </motion.article>
