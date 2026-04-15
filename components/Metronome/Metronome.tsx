@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Play, Square, Fingerprint, Activity, Clock, Settings2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Play, Square, Activity, Clock, Settings2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 type SchedulerState = { nextNoteTime: number; currentBeat: number; };
 
@@ -18,6 +18,23 @@ export default function Metronome() {
     const schedulerStateRef = useRef<SchedulerState>({ nextNoteTime: 0, currentBeat: 0 });
     const timerIdRef = useRef<number | null>(null);
 
+    // CRITICAL: Use a ref for BPM so the scheduler can see changes mid-stream
+    const bpmRef = useRef(bpm);
+    const subdivisionRef = useRef(subdivision);
+
+    useEffect(() => {
+        bpmRef.current = bpm;
+        subdivisionRef.current = subdivision;
+    }, [bpm, subdivision]);
+
+    // FIX: Cleanup when navigating away
+    useEffect(() => {
+        return () => {
+            if (timerIdRef.current) clearInterval(timerIdRef.current);
+            if (audioCtxRef.current) audioCtxRef.current.close();
+        };
+    }, []);
+
     const ensureAudioContext = () => {
         if (!audioCtxRef.current) {
             audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -31,7 +48,6 @@ export default function Metronome() {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
 
-        // High-contrast industrial click sound
         osc.type = isAccent ? "triangle" : "sine";
         osc.frequency.setValueAtTime(isAccent ? 1200 : 800, time);
 
@@ -48,11 +64,15 @@ export default function Metronome() {
     const schedulerTick = () => {
         if (!audioCtxRef.current) return;
         const ctx = audioCtxRef.current;
-        const spb = 60 / bpm / subdivision;
+
+        // Use Ref values to ensure the click follows the slider immediately
+        const currentBpm = bpmRef.current;
+        const currentSub = subdivisionRef.current;
+        const spb = 60 / currentBpm / currentSub;
 
         while (schedulerStateRef.current.nextNoteTime < ctx.currentTime + 0.1) {
             const beat = schedulerStateRef.current.currentBeat;
-            const totalBeats = beatsPerBar * subdivision;
+            const totalBeats = beatsPerBar * currentSub;
             const isAccent = beat % totalBeats === 0;
 
             scheduleClick(schedulerStateRef.current.nextNoteTime, isAccent);
@@ -69,6 +89,7 @@ export default function Metronome() {
         if (isRunning) {
             setIsRunning(false);
             if (timerIdRef.current) clearInterval(timerIdRef.current);
+            timerIdRef.current = null;
             setVisualBeat(-1);
         } else {
             ensureAudioContext();
@@ -85,7 +106,8 @@ export default function Metronome() {
         setTapTimes(updated);
         if (updated.length >= 2) {
             const avg = (updated[updated.length - 1] - updated[0]) / (updated.length - 1);
-            setBpm(Math.max(30, Math.min(280, Math.round(60000 / avg))));
+            const newBpm = Math.max(30, Math.min(280, Math.round(60000 / avg)));
+            setBpm(newBpm);
         }
     };
 
@@ -109,7 +131,7 @@ export default function Metronome() {
             {/* Visual Beat Track */}
             <div className="flex gap-2 justify-between mb-10 h-12 items-center">
                 {Array.from({ length: beatsPerBar }).map((_, i) => {
-                    const isActive = (visualBeat / subdivision) % beatsPerBar === i;
+                    const isActive = Math.floor(visualBeat / subdivision) % beatsPerBar === i;
                     return (
                         <div key={i} className="flex-1 flex flex-col gap-1 items-center">
                             <motion.div
@@ -164,8 +186,7 @@ export default function Metronome() {
                 <div className="flex gap-2">
                     <button
                         onClick={toggleMetronome}
-                        className={`flex-1 flex items-center justify-center gap-3 py-4 text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${isRunning ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-white text-black hover:bg-emerald-500'
-                            }`}
+                        className={`flex-1 flex items-center justify-center gap-3 py-4 text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${isRunning ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-white text-black hover:bg-emerald-500'}`}
                     >
                         {isRunning ? <Square className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
                         {isRunning ? 'Terminate' : 'Initialize'}
