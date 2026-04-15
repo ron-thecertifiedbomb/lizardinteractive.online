@@ -45,7 +45,7 @@ export default function Footer() {
                             ${(isRifferPage || isDevPage) ? 'border border-white/20' : ''}
                         `}>
                             <Image
-                                src={isRifferPage ? "/thepsychedelicriffer.jpg" : isDevPage ? "/rondevsolutions-logo.png" : "/lizardinteractive.png"}
+                                src={isRifferPage ? "/thepsychedelicriffer.jpg" : isDevPage ? "/lizardinteractive.png" : "/lizardinteractive.png"}
                                 alt="logo"
                                 fill
                                 className={`object-cover transition-all duration-500 rounded-full ${isRifferPage ? 'grayscale brightness-125' : ''}`}
