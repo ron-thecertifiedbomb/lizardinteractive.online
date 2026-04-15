@@ -56,11 +56,12 @@ export default function PostPage({
     ? "Stop settling for latency. Audit the 2026 lineup for Next.js compilation and music production."
     : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
-  // Ensure Image URL is absolute
+  // Determine the raw image path based on page type
   const rawImage = isLaptopGuide
-    ? "/gear/og-hardware-2026.png" // Changed from .jpg to .png
-    : blog?.image || "/default-og.jpg";
+    ? "/gear/og-hardware-2026.png"
+    : blog?.image || "/lizardinteractive.png";
 
+  // Ensure absolute URL for social media bots
   const ogImage = rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`;
   const pageUrl = `${SITE_URL}${router.asPath}`;
 
@@ -76,6 +77,8 @@ export default function PostPage({
         <meta property="og:title" content={`${title} | Lizard Interactive`} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
 
         {/* Twitter / X */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -163,7 +166,6 @@ export async function getStaticPaths() {
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
     paths.push({ params: { slug: "best-laptops-2026" } });
 
-    // Changed fallback to 'blocking' for better SEO/Social Scraping
     return { paths, fallback: 'blocking' };
   } catch (error) {
     return { paths: [{ params: { slug: "best-laptops-2026" } }], fallback: 'blocking' };
