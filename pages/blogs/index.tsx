@@ -4,7 +4,6 @@ import { BlogPost } from "../../interfaces";
 import Link from "next/link";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import { motion } from "framer-motion";
-
 import { Zap, ArrowRight, Activity } from "lucide-react";
 import { laptopArticle2026 } from "../../data/blogContent";
 
@@ -60,15 +59,15 @@ export default function BlogPage({
                                     </p>
                                 </div>
                                 <div className="flex lg:justify-end gap-12 font-mono">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col text-right">
                                         <span className="text-zinc-800 text-[8px] uppercase font-black tracking-widest">Latency</span>
                                         <span className="text-emerald-500/50 text-[10px]">0.00ms</span>
                                     </div>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col text-right">
                                         <span className="text-zinc-800 text-[8px] uppercase font-black tracking-widest">Frequency</span>
                                         <span className="text-emerald-500/50 text-[10px]">44.1kHz</span>
                                     </div>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col text-right">
                                         <span className="text-zinc-800 text-[8px] uppercase font-black tracking-widest">Version</span>
                                         <span className="text-emerald-500/50 text-[10px]">v3.2.6</span>
                                     </div>
@@ -79,7 +78,8 @@ export default function BlogPage({
 
                     {/* --- FEATURED AFFILIATE SECTION --- */}
                     <div className="mb-32">
-                        <Link href="/blog/best-laptops-2026" className="group block">
+                        {/* CRITICAL: Link updated to point to /blogs/ to match your dynamic route folder */}
+                        <Link href="/blogs/best-laptops-2026" className="group block">
                             <div className="relative p-8 md:p-12 border-l-2 border-emerald-500 bg-[#050505] hover:bg-emerald-500/[0.03] transition-all duration-500">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
                                     <div className="flex-1">

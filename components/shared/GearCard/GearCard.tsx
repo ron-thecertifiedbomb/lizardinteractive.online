@@ -8,15 +8,16 @@ import { GearItem } from "../../../interfaces";
 // We extend GearItem to include the local specs object
 interface GearCardProps {
     item: GearItem & {
-        specs: {
-            cpu: string;
-            gpu: string;
-            ram: string;
-            display: string;
+        // We make these optional so different gear types (Laptops vs. Cables) don't crash
+        specs?: {
+            cpu?: string;
+            gpu?: string;
+            ram?: string;
+            display?: string;
+            bestFor?: string; // Added to match your object
         };
     };
 }
-
 export default function GearCard({ item }: GearCardProps) {
     return (
         <div className="group relative bg-[#050505] border border-zinc-900 overflow-hidden hover:border-emerald-500/50 transition-all duration-500">
