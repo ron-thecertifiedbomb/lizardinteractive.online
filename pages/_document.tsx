@@ -4,7 +4,7 @@ export default function Document() {
   const siteTitle = "Lizard Interactive | RonDevSolutions & The Psychedelic Riffer";
   const siteDescription = "Official hub for RonDevSolutions (Software Engineering) and The Psychedelic Riffer (Instrumental Metal). High-performance web solutions and melodic guitar production.";
   const siteUrl = "https://lizardinteractive.online";
-  const previewImage = "/lizard-og-preview.png"; // Make sure to create this in your /public folder
+  const previewImage = "/lizardinteractive.png"; // Make sure to create this in your /public folder
 
   return (
     <Html lang="en" className="bg-black">
