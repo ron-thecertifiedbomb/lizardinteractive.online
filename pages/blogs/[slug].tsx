@@ -70,7 +70,7 @@ export default function PostPage({
   const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.jpg"
     : isAIPhilosophy
-    ? "/blog/ai-future-2026.jpg"
+    ? "/ai/ai-future-2026.jpg"
     : (blog?.image || "/lizardinteractive.jpg");
 
   const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
