@@ -41,6 +41,22 @@ export const laptopArticle2026 = {
         bestFor: "Engineering & 3D",
       },
     },
+        {
+    id: "lp-xps-14",
+    name: "Dell XPS 14 (2026)",
+    brand: "Dell",
+    category: "Hardware",
+    description: "Ultra-portable dev machine. Boasting a 21-hour battery life and the new Arc B390 graphics, it's the 200 OK choice for coding on the move.",
+    affiliateUrl: "https://amazon.com/dp/example3",
+    imageUrl: "/gear/dellxps.jpg",
+    isFavorite: false,
+    specs: {
+      cpu: "Intel Core Ultra X7 358H",
+      gpu: "Intel Arc B390",
+      ram: "32GB LPDDR5x",
+      display: "14\" 2.8K OLED Touch"
+    }
+  }
   ],
 
   hooks: {
