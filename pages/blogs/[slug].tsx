@@ -62,9 +62,9 @@ export default function PostPage({
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
       <Head>
-        <title>{title} | Lizard Interactive</title>
+        <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
+        <meta property="og:title" content={`${title} | Lizard Interactive`} />
         <meta property="og:description" content={description} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={isLaptopGuide ? "/gear/macbook-m5.jpg" : blog?.image || "/default-og.jpg"} />
