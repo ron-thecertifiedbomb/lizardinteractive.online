@@ -11,7 +11,6 @@ import Link from "next/link";
 // DATA & COMPONENTS
 import { laptopArticle2026 } from "../../data/blogContent";
 import GearCard from "../../components/shared/GearCard/GearCard";
-// import SystemSteps from "../../components/shared/SystemSteps/SystemSteps";
 
 type BlogPost = {
   _id: string;
@@ -50,23 +49,40 @@ export default function PostPage({
 
   if (!blog && !isLaptopGuide) return <ErrorPage statusCode={404} />;
 
-  // Dynamic Metadata logic
+  // --- METADATA CONFIGURATION ---
+  const SITE_URL = "https://www.lizardinteractive.online";
   const title = isLaptopGuide ? laptopArticle2026.header.title : blog?.title;
   const description = isLaptopGuide
     ? "Stop settling for latency. Audit the 2026 lineup for Next.js compilation and music production."
     : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
+  // Ensure Image URL is absolute
+  const rawImage = isLaptopGuide
+    ? "/gear/og-hardware-2026.png" // Changed from .jpg to .png
+    : blog?.image || "/default-og.jpg";
+
+  const ogImage = rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`;
+  const pageUrl = `${SITE_URL}${router.asPath}`;
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
       <Head>
-        {/* Fix: Single text node to avoid hydration warnings */}
         <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={`${title} | Lizard Interactive`} />
         <meta property="og:description" content={description} />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content={isLaptopGuide ? "https://www.lizardinteractive.online/gear/og-hardware-2026.jpg" : blog?.image || "/default-og.jpg"} />
+        <meta property="og:image" content={ogImage} />
+
+        {/* Twitter / X */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={pageUrl} />
+        <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       <ScreenContainer variant="dark">
@@ -98,22 +114,10 @@ export default function PostPage({
                 </p>
               </div>
 
-              {/* GEAR ENGINE */}
               <div className="grid gap-12">
                 {laptopArticle2026.recommendations?.map((laptop) => (
                   <GearCard key={laptop.id} item={laptop} />
                 ))}
-              </div>
-
-              {/* STEPS BROTHER: SYSTEM CALIBRATION */}
-              <div className="pt-20 border-t border-zinc-900">
-                <div className="flex items-center gap-4 mb-16">
-                  <span className="text-emerald-500 font-mono text-[10px] tracking-[0.4em] uppercase font-black">
-                    [ 02_SYSTEM_CALIBRATION ]
-                  </span>
-                  <div className="h-[1px] flex-1 bg-zinc-900" />
-                </div>
-                {/* <SystemSteps steps={laptopArticle2026.setupSteps} /> */}
               </div>
 
               <footer className="mt-32 p-10 border border-zinc-900 bg-[#030303] text-center">
@@ -158,8 +162,10 @@ export async function getStaticPaths() {
     const blogs: BlogPost[] = await res.json();
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
     paths.push({ params: { slug: "best-laptops-2026" } });
-    return { paths, fallback: true };
+
+    // Changed fallback to 'blocking' for better SEO/Social Scraping
+    return { paths, fallback: 'blocking' };
   } catch (error) {
-    return { paths: [{ params: { slug: "best-laptops-2026" } }], fallback: true };
+    return { paths: [{ params: { slug: "best-laptops-2026" } }], fallback: 'blocking' };
   }
 }
