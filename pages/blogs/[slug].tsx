@@ -58,7 +58,7 @@ export default function PostPage({
 
   // LOGIC FIX: Determine image path first, then make it absolute.
   const imagePath = isLaptopGuide
-    ? "/gear/og-hardware-2026.png"
+    ? "/gear/og-hardware-2026.jpg"
     : (blog?.image || "/lizardinteractive.jpg");
 
   const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
