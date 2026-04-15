@@ -4,7 +4,7 @@ export const utilities = [
   { name: "Image to Text Converter", url: "/imagetotext" },
   { name: "PDF to Word Converter", url: "/pdftowordconverter" },
   { name: "Resume Builder", url: "/resumebuilder" },
-  { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
+  // { name: "YouTube Video to MP3 Converter", url: "/youtubetomp3" },
   { name: "Screen Recorder", url: "/screenrecorder" },
   { name: "Image Editor", url: "/imageeditor" },
   // { name: "Logo Maker", url: "/logomaker" },
