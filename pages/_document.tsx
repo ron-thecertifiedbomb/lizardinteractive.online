@@ -1,17 +1,49 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
+  const siteTitle = "Lizard Interactive | RonDevSolutions & The Psychedelic Riffer";
+  const siteDescription = "Official hub for RonDevSolutions (Software Engineering) and The Psychedelic Riffer (Instrumental Metal). High-performance web solutions and melodic guitar production.";
+  const siteUrl = "https://lizardinteractive.online";
+  const previewImage = "/lizard-og-preview.png"; // Make sure to create this in your /public folder
+
   return (
-    <Html lang="en">
+    <Html lang="en" className="bg-black">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="robots" content="follow, index" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-        {/* Favicon */}
+        <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
+
+        {/* SEO Foundation */}
+        <meta name="description" content={siteDescription} />
+        <meta name="author" content="RonDevSolutions" />
+        <link rel="canonical" href={siteUrl} />
+
+        {/* Open Graph / Facebook (Essential for Social Growth) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:title" content={siteTitle} />
+        <meta property="og:description" content={siteDescription} />
+        <meta property="og:image" content={previewImage} />
+        <meta property="og:site_name" content="Lizard Interactive" />
+
+        {/* Twitter (Perfect for your Music/Dev updates) */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={siteTitle} />
+        <meta name="twitter:description" content={siteDescription} />
+        <meta name="twitter:image" content={previewImage} />
+
+        {/* Favicon & Branding */}
         <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
+        <link rel="apple-touch-icon" href="/lizardinteractive.png" />
+
+        {/* PWA / Mobile Theme Color */}
+        <meta name="theme-color" content="#000000" />
       </Head>
-      {/* CHANGE bg-dark-bg TO bg-black HERE */}
-      <body className="bg-black antialiased">
+
+      {/* Locked to bg-black to prevent any white/blue flashes 
+          during initial server-side rendering.
+      */}
+      <body className="bg-black antialiased selection:bg-emerald-500 selection:text-black">
         <Main />
         <NextScript />
       </body>
