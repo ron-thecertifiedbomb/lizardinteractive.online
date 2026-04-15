@@ -4,7 +4,9 @@ export default function Document() {
   const siteTitle = "Lizard Interactive | RonDevSolutions & The Psychedelic Riffer";
   const siteDescription = "Official hub for RonDevSolutions (Software Engineering) and The Psychedelic Riffer (Instrumental Metal). High-performance web solutions and melodic guitar production.";
   const siteUrl = "https://lizardinteractive.online";
-  const previewImage = "/lizardinteractive.png"; // Make sure to create this in your /public folder
+
+  // CRITICAL FIX: Social crawlers require absolute URLs (https://...)
+  const absolutePreviewImage = `${siteUrl}/lizardinteractive.png`;
 
   return (
     <Html lang="en" className="bg-black">
@@ -18,19 +20,21 @@ export default function Document() {
         <meta name="author" content="RonDevSolutions" />
         <link rel="canonical" href={siteUrl} />
 
-        {/* Open Graph / Facebook (Essential for Social Growth) */}
+        {/* Open Graph / Facebook - Essential for Social Growth */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:title" content={siteTitle} />
         <meta property="og:description" content={siteDescription} />
-        <meta property="og:image" content={previewImage} />
+        <meta property="og:image" content={absolutePreviewImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="Lizard Interactive" />
 
-        {/* Twitter (Perfect for your Music/Dev updates) */}
+        {/* Twitter - Perfect for Dev/Music updates */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={siteTitle} />
         <meta name="twitter:description" content={siteDescription} />
-        <meta name="twitter:image" content={previewImage} />
+        <meta name="twitter:image" content={absolutePreviewImage} />
 
         {/* Favicon & Branding */}
         <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
@@ -40,9 +44,6 @@ export default function Document() {
         <meta name="theme-color" content="#000000" />
       </Head>
 
-      {/* Locked to bg-black to prevent any white/blue flashes 
-          during initial server-side rendering.
-      */}
       <body className="bg-black antialiased selection:bg-emerald-500 selection:text-black">
         <Main />
         <NextScript />
