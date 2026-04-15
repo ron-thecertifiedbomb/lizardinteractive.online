@@ -37,7 +37,6 @@ export default function PostPage({
     }
   }, [blog?.content]);
 
-  // Handle Loading/Fallback State
   if (router.isFallback) {
     return (
       <ScreenContainer variant="dark">
@@ -48,7 +47,6 @@ export default function PostPage({
     );
   }
 
-  // Handle 404
   if (!blog && !isLaptopGuide) return <ErrorPage statusCode={404} />;
 
   // --- METADATA CONFIGURATION ---
@@ -58,12 +56,12 @@ export default function PostPage({
     ? "Stop settling for latency. Audit the 2026 lineup for Next.js compilation and music production."
     : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
-  // Absolute Image Logic (Fixed for PNG and Pathing)
-  const rawImage = isLaptopGuide
+  // LOGIC FIX: Determine image path first, then make it absolute.
+  const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.png"
-    : blog?.image || "/lizardinteractive.png";
+    : (blog?.image || "/lizardinteractive.jpg");
 
-  const ogImage = rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`;
+  const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
   const pageUrl = `${SITE_URL}${router.asPath}`;
 
   return (
@@ -83,7 +81,6 @@ export default function PostPage({
 
         {/* Twitter / X */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={pageUrl} />
         <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
@@ -118,7 +115,6 @@ export default function PostPage({
                 </p>
               </div>
 
-              {/* Gear Engine */}
               <div className="grid gap-12">
                 {laptopArticle2026.recommendations?.map((laptop) => (
                   <GearCard key={laptop.id} item={laptop} />
@@ -167,8 +163,6 @@ export async function getStaticPaths() {
     const blogs: BlogPost[] = await res.json();
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
     paths.push({ params: { slug: "best-laptops-2026" } });
-
-    // fallback: 'blocking' ensures scrapers wait for the data
     return { paths, fallback: 'blocking' };
   } catch (error) {
     return { paths: [{ params: { slug: "best-laptops-2026" } }], fallback: 'blocking' };
