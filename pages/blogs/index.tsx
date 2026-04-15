@@ -4,7 +4,7 @@ import { BlogPost } from "../../interfaces";
 import Link from "next/link";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import { motion } from "framer-motion";
-import { Zap, ArrowRight, Activity } from "lucide-react";
+import { Zap, Activity } from "lucide-react";
 import { laptopArticle2026 } from "../../data/blogContent";
 
 export default function BlogPage({
@@ -78,7 +78,7 @@ export default function BlogPage({
 
                     {/* --- FEATURED AFFILIATE SECTION --- */}
                     <div className="mb-32">
-                        {/* CRITICAL: Link updated to point to /blogs/ to match your dynamic route folder */}
+                        {/* TARGETING THE PLURAL /blogs/ SLUG SYSTEM */}
                         <Link href="/blogs/best-laptops-2026" className="group block">
                             <div className="relative p-8 md:p-12 border-l-2 border-emerald-500 bg-[#050505] hover:bg-emerald-500/[0.03] transition-all duration-500">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
@@ -93,6 +93,7 @@ export default function BlogPage({
                                             {laptopArticle2026.hooks.intro}
                                         </p>
                                     </div>
+                                    {/* THE KILLER BUTTON */}
                                     <div className="flex items-center gap-3 px-6 py-4 bg-zinc-900 border border-emerald-500/20 text-emerald-500 text-[9px] font-black uppercase tracking-widest group-hover:bg-emerald-500 group-hover:text-black transition-all">
                                         RUN_DIAGNOSTIC <Zap size={10} className="fill-current" />
                                     </div>
