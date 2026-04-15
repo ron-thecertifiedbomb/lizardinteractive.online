@@ -33,14 +33,6 @@ export default function PostPage({
 }) {
   const router = useRouter();
   const [safeHTML, setSafeHTML] = useState("");
-  // Default to production domain to ensure SSR meta tags have a base
-  const [origin, setOrigin] = useState("https://lizardinteractive.online");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setOrigin(window.location.origin);
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined" && blog?.content) {
@@ -61,7 +53,18 @@ export default function PostPage({
 
   if (!blog && !isLaptopGuide && !isAIPhilosophy) return <ErrorPage statusCode={404} />;
 
-  // --- DYNAMIC METADATA CONFIG ---
+  // --- HARDENED SOURCE OF TRUTH ---
+  // Using the exact production domain prevents WWW/Non-WWW and Trailing Slash loops.
+  const SITE_URL = "https://lizardinteractive.online";
+
+  const slug = isLaptopGuide
+    ? "best-laptops-2026"
+    : isAIPhilosophy
+      ? "bio-digital-synthesis"
+      : blog?._id;
+
+  const pageUrl = `${SITE_URL}/blogs/${slug}`;
+
   const title = isLaptopGuide
     ? laptopArticle2026.header.title
     : isAIPhilosophy
@@ -80,11 +83,7 @@ export default function PostPage({
       ? "/blog/ai-future-2026.jpg"
       : (blog?.image || "/lizardinteractive.png");
 
-  const ogImage = imagePath.startsWith('http') ? imagePath : `${origin}${imagePath}`;
-
-  // URL NORMALIZATION: Prevents the Trailing Slash Loop
-  const cleanPath = router.asPath.split('?')[0].replace(/\/$/, "");
-  const pageUrl = `${origin}${cleanPath}`;
+  const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
@@ -92,7 +91,7 @@ export default function PostPage({
         <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
 
-        {/* Open Graph / Facebook Scraper Protocol */}
+        {/* The Scraper Shield: Static Meta Tags */}
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={`${title} | Lizard Interactive`} />
@@ -102,13 +101,12 @@ export default function PostPage({
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        {/* Twitter / X */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* Canonical Fix for Circular Redirects */}
+        {/* This is the final loop-breaker */}
         <link rel="canonical" href={pageUrl} />
       </Head>
 
@@ -119,7 +117,6 @@ export default function PostPage({
             Back_to_Logs
           </Link>
 
-          {/* --- CONTENT BRANCHING --- */}
           {isAIPhilosophy ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <BioDigitalShift />
@@ -148,7 +145,7 @@ export default function PostPage({
             </motion.div>
           ) : (
             <motion.article initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
-              <header className="mb-20 border-b border-zinc-900 pb-12 text-left">
+              <header className="mb-20 border-b border-zinc-900 pb-12">
                 <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
               </header>
               <div
