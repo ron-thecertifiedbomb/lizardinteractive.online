@@ -41,7 +41,6 @@ export default function PostPage({
     }
   }, [blog?.content]);
 
-  // Handle fallback state for generated paths
   if (router.isFallback) {
     return (
       <ScreenContainer variant="dark">
@@ -52,10 +51,9 @@ export default function PostPage({
     );
   }
 
-  // Safety check
   if (!blog && !isLaptopGuide && !isAIPhilosophy) return <ErrorPage statusCode={404} />;
 
-  // --- METADATA ENGINE ---
+  // --- HARDENED METADATA ENGINE ---
   const SITE_URL = "https://lizardinteractive.online";
 
   const title = isLaptopGuide
@@ -70,7 +68,7 @@ export default function PostPage({
       ? aiFutureArticle2026.hooks.intro
       : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
-  // IMAGE LOGIC: Ensure paths are absolute for scrapers
+  // LOGIC: Ensure paths are absolute and clean
   const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.jpg"
     : isAIPhilosophy
@@ -78,7 +76,11 @@ export default function PostPage({
       : (blog?.image || "/lizardinteractive.png");
 
   const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
-  const pageUrl = `${SITE_URL}${router.asPath}`;
+
+  // FIX: Circular Redirect Prevention
+  // We remove the trailing slash manually to match Next.js default behavior
+  const cleanPath = router.asPath.split('?')[0].replace(/\/$/, "");
+  const pageUrl = `${SITE_URL}${cleanPath}`;
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
@@ -92,14 +94,19 @@ export default function PostPage({
         <meta property="og:title" content={`${title} | Lizard Interactive`} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:secure_url" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/jpeg" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
+
+        {/* Canonical Link */}
+        <link rel="canonical" href={pageUrl} />
       </Head>
 
       <ScreenContainer variant="dark">
@@ -109,7 +116,6 @@ export default function PostPage({
             Back_to_Logs
           </Link>
 
-          {/* --- CONTENT BRANCHING --- */}
           {isAIPhilosophy ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <BioDigitalShift />
@@ -117,9 +123,8 @@ export default function PostPage({
           ) : isLaptopGuide ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-24">
               <header className="mb-20 border-b border-zinc-900 pb-12">
-                <div className="flex items-center gap-4 mb-8">
-                  <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">[ HARDWARE_AUDIT ]</span>
-                  <div className="h-[1px] flex-1 bg-zinc-900" />
+                <div className="flex items-center gap-4 mb-8 text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">
+                  [ HARDWARE_AUDIT ]
                 </div>
                 <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
               </header>
@@ -180,7 +185,6 @@ export async function getStaticPaths() {
     const blogs: BlogPost[] = await res.json();
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
 
-    // Add custom static slugs
     paths.push({ params: { slug: "best-laptops-2026" } });
     paths.push({ params: { slug: "bio-digital-synthesis" } });
 
