@@ -24,8 +24,8 @@ type BlogPost = {
 
 export default function PostPage({
   blog,
-  isLaptopGuide,
-  isAIPhilosophy
+  isLaptopGuide = false,
+  isAIPhilosophy = false
 }: {
   blog?: BlogPost;
   isLaptopGuide?: boolean;
@@ -41,6 +41,7 @@ export default function PostPage({
     }
   }, [blog?.content]);
 
+  // Handle fallback state for generated paths
   if (router.isFallback) {
     return (
       <ScreenContainer variant="dark">
@@ -51,38 +52,54 @@ export default function PostPage({
     );
   }
 
+  // Safety check
   if (!blog && !isLaptopGuide && !isAIPhilosophy) return <ErrorPage statusCode={404} />;
 
-  // --- METADATA CONFIGURATION ---
-  const SITE_URL = "https://www.lizardinteractive.online";
-  const title = isLaptopGuide 
-    ? laptopArticle2026.header.title 
-    : isAIPhilosophy 
-    ? aiFutureArticle2026.header.title 
-    : blog?.title;
+  // --- METADATA ENGINE ---
+  const SITE_URL = "https://lizardinteractive.online";
+
+  const title = isLaptopGuide
+    ? laptopArticle2026.header.title
+    : isAIPhilosophy
+      ? aiFutureArticle2026.header.title
+      : blog?.title;
 
   const description = isLaptopGuide
-    ? "Stop settling for latency. Audit the 2026 lineup for Next.js compilation and music production."
+    ? "Audit the 2026 hardware lineup for high-performance dev and music work."
     : isAIPhilosophy
-    ? aiFutureArticle2026.hooks.intro
-    : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
+      ? aiFutureArticle2026.hooks.intro
+      : blog?.content?.replace(/<[^>]*>?/gm, '').slice(0, 160);
 
+  // IMAGE LOGIC: Ensure paths are absolute for scrapers
   const imagePath = isLaptopGuide
     ? "/gear/og-hardware-2026.jpg"
     : isAIPhilosophy
-    ? "/ai/ai-future-2026.jpg"
-    : (blog?.image || "/lizardinteractive.jpg");
+      ? "/blog/ai-future-2026.jpg"
+      : (blog?.image || "/lizardinteractive.png");
 
   const ogImage = imagePath.startsWith('http') ? imagePath : `${SITE_URL}${imagePath}`;
+  const pageUrl = `${SITE_URL}${router.asPath}`;
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
       <Head>
         <title>{`${title} | Lizard Interactive`}</title>
         <meta name="description" content={description} />
+
+        {/* Open Graph / Facebook Scraper Tags */}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:title" content={`${title} | Lizard Interactive`} />
+        <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
-        <meta name="twitter:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${title} | Lizard Interactive`} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       <ScreenContainer variant="dark">
@@ -92,10 +109,10 @@ export default function PostPage({
             Back_to_Logs
           </Link>
 
-          {/* Render the specialized UI for AI Philosophy */}
+          {/* --- CONTENT BRANCHING --- */}
           {isAIPhilosophy ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <BioDigitalShift />
+              <BioDigitalShift />
             </motion.div>
           ) : isLaptopGuide ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-24">
@@ -105,10 +122,6 @@ export default function PostPage({
                   <div className="h-[1px] flex-1 bg-zinc-900" />
                 </div>
                 <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
-                <div className="flex items-center gap-8 text-zinc-500 font-mono text-[10px] uppercase tracking-widest">
-                  <div className="flex items-center gap-2"><Clock size={12} />2026.04.16</div>
-                  <div className="flex items-center gap-2"><Activity size={12} className="text-emerald-500/50" />Signal: 200_OK</div>
-                </div>
               </header>
 
               <div className="prose prose-invert max-w-none">
@@ -122,26 +135,16 @@ export default function PostPage({
                   <GearCard key={laptop.id} item={laptop} />
                 ))}
               </div>
-
-              <footer className="mt-32 p-10 border border-zinc-900 bg-[#030303] text-center">
-                <p className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.4em] leading-relaxed">
-                  {laptopArticle2026.hooks.conclusion}
-                </p>
-              </footer>
             </motion.div>
           ) : (
             <motion.article initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
-                <header className="mb-20 border-b border-zinc-900 pb-12">
-                    <div className="flex items-center gap-4 mb-8">
-                    <span className="text-emerald-500 font-mono text-[10px] tracking-[0.6em] uppercase font-black">[ SYSTEM_LOG ]</span>
-                    <div className="h-[1px] flex-1 bg-zinc-900" />
-                    </div>
-                    <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
-                </header>
-                <div 
-                    className="prose prose-invert prose-emerald max-w-none text-zinc-300 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: safeHTML }} 
-                />
+              <header className="mb-20 border-b border-zinc-900 pb-12">
+                <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">{title}</h1>
+              </header>
+              <div
+                className="prose prose-invert prose-emerald max-w-none text-zinc-300 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: safeHTML }}
+              />
             </motion.article>
           )}
         </div>
@@ -152,11 +155,11 @@ export default function PostPage({
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   if (params.slug === "best-laptops-2026") {
-    return { props: { isLaptopGuide: true }, revalidate: 60 };
+    return { props: { isLaptopGuide: true, isAIPhilosophy: false }, revalidate: 60 };
   }
-  
+
   if (params.slug === "bio-digital-synthesis") {
-    return { props: { isAIPhilosophy: true }, revalidate: 60 };
+    return { props: { isAIPhilosophy: true, isLaptopGuide: false }, revalidate: 60 };
   }
 
   const url = process.env.GET_ALL_BLOGS_URL;
@@ -164,7 +167,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     const res = await fetch(`${url}/${params.slug}`);
     if (!res.ok) return { notFound: true };
     const blog = await res.json();
-    return { props: { blog }, revalidate: 10 };
+    return { props: { blog, isLaptopGuide: false, isAIPhilosophy: false }, revalidate: 10 };
   } catch (error) {
     return { notFound: true };
   }
@@ -176,19 +179,19 @@ export async function getStaticPaths() {
     const res = await fetch(url!);
     const blogs: BlogPost[] = await res.json();
     const paths = blogs.map((b) => ({ params: { slug: b._id } }));
-    
-    // Add custom slugs to paths
+
+    // Add custom static slugs
     paths.push({ params: { slug: "best-laptops-2026" } });
     paths.push({ params: { slug: "bio-digital-synthesis" } });
 
     return { paths, fallback: 'blocking' };
   } catch (error) {
-    return { 
-        paths: [
-            { params: { slug: "best-laptops-2026" } },
-            { params: { slug: "bio-digital-synthesis" } }
-        ], 
-        fallback: 'blocking' 
+    return {
+      paths: [
+        { params: { slug: "best-laptops-2026" } },
+        { params: { slug: "bio-digital-synthesis" } }
+      ],
+      fallback: 'blocking'
     };
   }
 }
