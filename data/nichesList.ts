@@ -51,7 +51,7 @@ export const niches: Niche[] = [
     title: "Digital Vault",
     subtitle: "ASSET_REPOSITORY",
     desc: "Premium production assets, guitar IRs, and developer system boilerplates.",
-    href: "/utilities/vault",
+    href: "/vault",
     label: "Access Assets",
     accent: "from-orange-400 to-red-500",
     tag: "Vault",

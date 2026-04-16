@@ -52,7 +52,7 @@ export default function Footer() {
                         {/* CALL TO ACTION */}
                         <div className="pt-2">
                             <Link
-                                href={isDevPage ? "mailto:work@lizardinteractive.online?subject=Dev_Consultation" : "/utilities/vault"}
+                                href={isDevPage ? "mailto:work@lizardinteractive.online?subject=Dev_Consultation" : "/vault"}
                                 className={`inline-flex items-center gap-2 px-4 py-2 border ${accentBorder} ${accentBg} ${accentColor} text-[9px] font-black uppercase tracking-[0.3em] ${accentHover} transition-all`}
                             >
                                 <Zap size={10} />
