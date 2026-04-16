@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { VaultCard, type VaultAsset, type VaultMode } from "../VaultCard/vault-card"
+import { VaultCard, type VaultMode } from "../VaultCard/vault-card"
 import {
     Code2,
     Guitar,
@@ -12,95 +12,9 @@ import {
     Terminal
 } from "lucide-react"
 import { cn } from "../../utils/utils"
+import { assets } from "../../data/vaultAssets"
 
-const assets: VaultAsset[] = [
-    // --- THE PSYCHEDELIC RIFFER RACK (Plugins) ---
-    {
-        id: "riffer-nam",
-        serial: "PLG-AMP-NAM",
-        name: "Neural Amp Modeler",
-        category: "plugin",
-        status: "online",
-        version: "0.7.2",
-        href: "https://www.neuralampmodeler.com/"
-    },
-    {
-        id: "riffer-reverb",
-        serial: "PLG-FX-VIBE",
-        name: "Atmospheric Reverb",
-        category: "plugin",
-        status: "processing",
-        version: "1.0.4",
-        href: "https://www.pluginboutique.com"
-    },
-    {
-        id: "riffer-gear-elixir",
-        serial: "HW-STR-0942",
-        name: "Elixir Nanoweb 09-42",
-        category: "plugin", // Using plugin category for icon consistency or add 'hardware'
-        status: "online",
-        version: "STABLE",
-        href: "https://amazon.com"
-    },
 
-    // --- RD.SOLUTIONS TOOLKIT (Dev Tools) ---
-    {
-        id: "dev-v0",
-        serial: "DEV-AI-V0",
-        name: "Vercel v0",
-        category: "tool",
-        status: "online",
-        version: "2026.Q2",
-        href: "https://v0.dev" // Update with your affiliate link once approved
-    },
-    {
-        id: "dev-cursor",
-        serial: "DEV-IDE-CUR",
-        name: "Cursor AI Editor",
-        category: "tool",
-        status: "online",
-        version: "PRO",
-        href: "https://cursor.sh"
-    },
-    {
-        id: "dev-nextjs",
-        serial: "DEV-FRM-NEXT",
-        name: "Next.js Framework",
-        category: "tool",
-        status: "online",
-        version: "14.2.0",
-        href: "https://nextjs.org"
-    },
-
-    // --- LIZARD INTERACTIVE INFRA (Infrastructure) ---
-    {
-        id: "infra-vercel",
-        serial: "INF-NET-VERC",
-        name: "Vercel Edge Network",
-        category: "infra",
-        status: "online",
-        version: "GLOBAL",
-        href: "https://vercel.com"
-    },
-    {
-        id: "infra-supabase",
-        serial: "INF-DB-SUPA",
-        name: "Supabase Vector DB",
-        category: "infra",
-        status: "online",
-        version: "v2.0",
-        href: "https://supabase.com"
-    },
-    {
-        id: "infra-GSC",
-        serial: "INF-SEO-GSC",
-        name: "Search Console",
-        category: "infra",
-        status: "processing",
-        version: "VERIFIED",
-        href: "https://search.google.com/search-console"
-    },
-]
 
 export function DigitalAssetVault() {
     const [mode, setMode] = useState<VaultMode>("dev")

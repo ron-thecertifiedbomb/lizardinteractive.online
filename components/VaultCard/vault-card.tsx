@@ -3,18 +3,11 @@
 
 import { Cpu, Guitar, Server, Zap, Code, Database, Terminal, Music } from "lucide-react"
 import { cn } from "../../utils/utils"
+import { VaultAsset } from "../../interfaces"
 
 export type VaultMode = "dev" | "riffer"
 
-export interface VaultAsset {
-    id: string
-    serial: string
-    name: string
-    category: "plugin" | "tool" | "infra"
-    status: "online" | "standby" | "processing"
-    version: string
-    href?: string // Add this for your affiliate/referral links
-}
+
 
 interface VaultCardProps {
     asset: VaultAsset

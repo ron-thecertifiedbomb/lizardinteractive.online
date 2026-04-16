@@ -102,9 +102,14 @@ export interface GearItem {
  */
 export interface VaultAsset {
   id: string;
-  title: string;
-  type: "MIDI" | "PDF" | "MOGRT" | "CODE" | "IR";
-  price: number;
-  downloadUrl?: string;
-  previewUrl?: string;
+  serial: string; // Essential for the "Industrial" look
+  name: string; // Replaces 'title' for a cleaner gear feel
+  category: "plugin" | "tool" | "infra" | "asset";
+  type: "MIDI" | "PDF" | "MOGRT" | "CODE" | "IR" | "SOFTWARE"; // Added IR for your NAM captures
+  status: "online" | "standby" | "processing";
+  version: string;
+  price: number; // 0 for free assets, specific amount for paid
+  href?: string; // For external links (Vercel, Claude, etc.)
+  downloadUrl?: string; // For your hosted files (PDFs, MIDI)
+  previewUrl?: string; // For audio previews of your NAM IRs
 }
