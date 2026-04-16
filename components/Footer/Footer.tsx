@@ -3,14 +3,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Instagram, Youtube, Github, Linkedin, ArrowUpRight, Zap } from "lucide-react";
+import { ArrowUpRight, Zap } from "lucide-react";
 
 export default function Footer() {
     const pathname = usePathname();
 
-    // Logic for niche-based branding
+    // Contextual Branding Logic
     const isRifferPage = pathname?.startsWith("/thepsychedelicriffer");
     const isDevPage = pathname?.startsWith("/rondevsolutions");
+
+    // Dynamic Style Variables
+    const accentColor = isRifferPage ? "text-white" : "text-emerald-500";
+    const accentBorder = isRifferPage ? "border-white/20" : "border-emerald-500/20";
+    const accentBg = isRifferPage ? "bg-white/5" : "bg-emerald-500/5";
+    const accentHover = isRifferPage ? "hover:bg-white hover:text-black" : "hover:bg-emerald-500 hover:text-black";
+    const statusColor = isRifferPage ? "text-white/30" : "text-emerald-500/30";
 
     return (
         <footer className="w-full py-10 bg-black text-white border-t border-white/5 transition-all duration-500">
@@ -42,11 +49,11 @@ export default function Footer() {
                             </p>
                         </div>
 
-                        {/* CALL TO ACTION: Monetization Lever */}
+                        {/* CALL TO ACTION */}
                         <div className="pt-2">
                             <Link
                                 href={isDevPage ? "mailto:work@lizardinteractive.online?subject=Dev_Consultation" : "/utilities/vault"}
-                                className="inline-flex items-center gap-2 px-4 py-2 border border-emerald-500/20 bg-emerald-500/5 text-emerald-500 text-[9px] font-black uppercase tracking-[0.3em] hover:bg-emerald-500 hover:text-black transition-all"
+                                className={`inline-flex items-center gap-2 px-4 py-2 border ${accentBorder} ${accentBg} ${accentColor} text-[9px] font-black uppercase tracking-[0.3em] ${accentHover} transition-all`}
                             >
                                 <Zap size={10} />
                                 {isDevPage ? "Initialize_Audit" : "Access_Asset_Vault"}
@@ -65,7 +72,7 @@ export default function Footer() {
                                 { label: "Utilities", href: "/utilities" }
                             ].map((link) => (
                                 <li key={link.href}>
-                                    <Link href={link.href} className="text-[11px] text-zinc-500 hover:text-emerald-500 transition-colors uppercase tracking-widest flex items-center gap-1 group">
+                                    <Link href={link.href} className="text-[11px] text-zinc-500 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-1 group">
                                         {link.label}
                                         <ArrowUpRight size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
@@ -89,9 +96,9 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="https://amazon.com" target="_blank" className="text-[10px] hover:text-white transition-colors uppercase tracking-widest block font-mono">
+                                <Link href="/utilities/vault" className="text-[10px] hover:text-white transition-colors uppercase tracking-widest block font-mono">
                                     Hardware // Gear_List
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -101,10 +108,10 @@ export default function Footer() {
                 <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
                         <span className="text-[9px] tracking-[0.5em] text-zinc-800 uppercase font-black">
-                            System.Status: <span className="text-emerald-500/30">Online.v3</span>
+                            System.Status: <span className={`${statusColor}`}>Online.v3</span>
                         </span>
                         <span className="text-[9px] tracking-[0.5em] text-zinc-800 uppercase font-black hidden md:inline">
-                            Latency: <span className="text-emerald-500/30">0ms</span>
+                            Latency: <span className={`${statusColor}`}>0ms</span>
                         </span>
                     </div>
 
@@ -113,7 +120,7 @@ export default function Footer() {
                             © {new Date().getFullYear()} Lizard Interactive Online
                         </p>
                         <p className="text-[8px] tracking-[0.2em] text-zinc-900 uppercase font-bold">
-                            {isDevPage ? "RonDevSolutions // Engineering" : "The Psychedelic Riffer // Production"}
+                            {isDevPage ? "RonDevSolutions // Engineering" : isRifferPage ? "The Psychedelic Riffer // Production" : "Lizard Interactive // Hub"}
                         </p>
                     </div>
                 </div>
