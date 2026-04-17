@@ -1,4 +1,3 @@
-import { GearItem } from "../interfaces";
 
 // 1. HARDWARE DATA OBJECT
 export const laptopArticle2026 = {
