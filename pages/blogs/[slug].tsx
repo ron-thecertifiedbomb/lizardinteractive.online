@@ -4,13 +4,23 @@ import { specialLogs } from '../../data/blogContent';
 import { HardwareLayout } from "../../components/blog/HardwareLayout/HardwareLayout";
 import { ProductionLayout } from "../../components/blog/ProductionLayout/ProductionLayout";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
+import { getFullOgImage } from '../../lib/ogImageHelper';
 
 export default function BlogPostDetail({ post }: { post: any }) {
   if (!post) return <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">[ 404_NULL: transmission_lost ]</div>;
 
+
+
+
+
   const siteUrl = "https://lizardinteractive.online";
   // Siguraduhin na ang post.ogImage ay nagsisimula sa /
   const fullOgImage = `${siteUrl}${post.ogImage}`;
+  const ogFullImage = getFullOgImage(post.ogImage, siteUrl);
+
+
+console.log("OG Image URL:", ogFullImage);
+
 
   const renderLayout = () => {
     switch (post.layoutType) {
