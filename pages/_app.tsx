@@ -7,22 +7,22 @@ import Footer from "../components/Footer/Footer";
 import NavBar from "../components/NavBar/NavBar";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-
   return (
     <Auth0Provider
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
     >
-  
-      <div className={`
-        min-h-screen flex flex-col transition-colors duration-700 
-     
-        overflow-x-hidden
-      `}>
-        <NavBar />
+      {/* 1. Nilagyan natin ng base background at positioning ang root wrapper */}
+      <div className="min-h-screen flex flex-col bg-black overflow-x-hidden relative">
 
-        {/* 'flex-1' pushes the footer to the bottom of the screen */}
-        <main className="flex-1 flex flex-col w-full">
+        {/* 2. Pinaka-importante: Naka-portal style ang Navbar natin dito */}
+        <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-auto">
+          <NavBar />
+        </div>
+
+        {/* 3. Main content layer - nilagyan natin ng padding-top 
+               para hindi mabaon ang content sa ilalim ng fixed Navbar */}
+        <main className="flex-1 flex flex-col w-full relative z-[10] pt-[72px] md:pt-[88px]">
           <Component {...pageProps} />
           <Analytics />
         </main>

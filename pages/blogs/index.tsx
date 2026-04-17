@@ -1,7 +1,8 @@
+"use client";
+
 import type { InferGetStaticPropsType } from "next";
 import distanceToNow from "../../lib/dateRelative";
 import { BlogPost } from "../../interfaces";
-import Link from "next/link";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import { motion } from "framer-motion";
 import { Zap, Activity } from "lucide-react";
@@ -20,8 +21,14 @@ export default function BlogPage({
         return match ? match[1] : null;
     }
 
+    // Force hard navigation to bypass any JS event/dispatch blocks
+    const handleForceNav = (href: string) => {
+        document.body.style.overflow = 'unset';
+        window.location.href = href;
+    };
+
     return (
-        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black">
+        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
             <ScreenContainer variant="dark" maxWidth="xl">
                 <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-24 pb-40">
 
@@ -58,15 +65,15 @@ export default function BlogPage({
                         </div>
                     </motion.div>
 
-                    {/* --- DUAL FEATURED SECTION (From Local Registry) --- */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-zinc-900 border-y border-zinc-900 mb-32 overflow-hidden">
+                    {/* --- DUAL FEATURED SECTION (The Dispatch Fix) --- */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-zinc-900 border-y border-zinc-900 mb-32 overflow-hidden relative z-20">
                         {featuredLogs.map((log) => (
-                            <Link
+                            <div
                                 key={log.slug}
-                                href={`/blogs/${log.slug}`}
-                                className="group block bg-black hover:bg-emerald-500/[0.02] transition-all duration-500 p-8 md:p-12 border-l-2 border-emerald-500"
+                                onPointerDown={() => handleForceNav(`/blogs/${log.slug}`)}
+                                className="group block bg-black hover:bg-emerald-500/[0.02] active:bg-zinc-900 transition-all duration-500 p-8 md:p-12 border-l-2 border-emerald-500 cursor-pointer touch-manipulation"
                             >
-                                <div className="flex flex-col h-full justify-between">
+                                <div className="flex flex-col h-full justify-between pointer-events-none">
                                     <div>
                                         <div className="flex items-center gap-2 mb-4 text-emerald-500/50 font-mono text-[9px] uppercase tracking-widest">
                                             <Activity size={10} /> {log.layoutType}_LOG // {log.slug === 'best-laptops-2026' ? 'PRIORITY_01' : 'PRIORITY_02'}
@@ -82,12 +89,12 @@ export default function BlogPage({
                                         INITIALIZE_BUFFER <Zap size={10} className="fill-current" />
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
 
-                    {/* --- DYNAMIC FEED (From Database) --- */}
-                    <div className="space-y-1">
+                    {/* --- DYNAMIC FEED (The Dispatch Fix) --- */}
+                    <div className="space-y-1 relative z-10">
                         <div className="flex items-center gap-4 mb-10">
                             <span className="text-zinc-800 font-mono text-[10px] tracking-[0.4em] uppercase font-black">
                                 [ latest_transmissions ]
@@ -105,11 +112,11 @@ export default function BlogPage({
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.1 }}
                                     >
-                                        <Link
-                                            href={`/blogs/${blog._id}`}
-                                            className="group block border-b border-zinc-900 py-8 hover:border-emerald-500/50 transition-all duration-500"
+                                        <div
+                                            onPointerDown={() => handleForceNav(`/blogs/${blog._id}`)}
+                                            className="group block border-b border-zinc-900 py-8 hover:border-emerald-500/50 active:bg-emerald-500/[0.02] transition-all duration-500 cursor-pointer touch-manipulation"
                                         >
-                                            <article className="flex flex-row gap-6 justify-between items-center">
+                                            <article className="flex flex-row gap-6 justify-between items-center pointer-events-none">
                                                 <div className="flex-1">
                                                     <h2 className="text-xl lg:text-3xl font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tighter leading-tight">
                                                         {blog.title}
@@ -119,7 +126,7 @@ export default function BlogPage({
                                                     </div>
                                                 </div>
                                                 {imgSrc && (
-                                                    <div className="relative w-24 h-16 md:w-48 md:h-28 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-zinc-900">
+                                                    <div className="relative w-24 h-16 md:w-48 md:h-28 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-zinc-900 flex-shrink-0">
                                                         <img
                                                             src={imgSrc}
                                                             alt={blog.title}
@@ -128,7 +135,7 @@ export default function BlogPage({
                                                     </div>
                                                 )}
                                             </article>
-                                        </Link>
+                                        </div>
                                     </motion.div>
                                 );
                             })
@@ -147,10 +154,7 @@ export default function BlogPage({
 }
 
 export async function getStaticProps() {
-    // 1. Get Special Local Logs
     const featuredLogs = Object.values(specialLogs);
-
-    // 2. Get Database Logs
     const url = process.env.GET_ALL_BLOGS_URL;
     let allBlogs: BlogPost[] = [];
 

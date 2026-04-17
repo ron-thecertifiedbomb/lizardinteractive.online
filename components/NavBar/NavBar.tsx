@@ -29,17 +29,43 @@ export default function NavBar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 w-full h-[72px] md:h-[88px] z-[9999] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+            <header className="fixed top-0 left-0 right-0 w-full h-[72px] md:h-[88px] z-[100000] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white pointer-events-auto">
                 <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative z-[10001]">
-                    {/* LOGO */}
-                    <Link href="/" className="flex items-center gap-3">
+
+                    {/* 1. LOGO */}
+                    <Link href="/" className="flex items-center gap-3 group">
                         <div className="relative w-8 h-8 rounded-full border border-white/10 overflow-hidden">
-                            <Image src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"} alt="logo" fill className="object-cover" />
+                            <Image
+                                src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
+                                alt="logo"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
                         </div>
-                        <span className="text-[10px] md:text-xs tracking-[0.4em] font-black uppercase">{brandName}</span>
+                        <span className="text-[10px] md:text-xs tracking-[0.4em] font-black uppercase group-hover:text-emerald-500 transition-colors">
+                            {brandName}
+                        </span>
                     </Link>
 
-                    {/* MOBILE TRIGGER */}
+                    {/* 2. DESKTOP NAV (Ito ang nawawala kanina!) */}
+                    <div className="hidden md:flex items-center gap-10">
+                        {currentLinks.map((link) => {
+                            const isActive = pathname === link.href;
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`relative text-[10px] tracking-[0.3em] uppercase font-black transition-all ${isActive ? 'text-emerald-500' : 'text-zinc-500 hover:text-white'}`}
+                                >
+                                    {link.label}
+                                    <span className={`absolute -bottom-2 left-0 h-[1.5px] transition-all duration-500 ${isActive ? 'w-full' : 'w-0 hover:w-full'} bg-emerald-500`} />
+                                </Link>
+                            );
+                        })}
+                    </div>
+
+                    {/* 3. MOBILE TRIGGER */}
                     <button
                         className="md:hidden text-white p-4 -mr-4 relative z-[10002]"
                         onClick={() => setMobileOpen(!mobileOpen)}
@@ -50,10 +76,10 @@ export default function NavBar() {
                 </nav>
             </header>
 
-            {/* MOBILE MENU - MOVED OUTSIDE HEADER TAG */}
+            {/* 4. MOBILE MENU OVERLAY */}
             <div
                 className={`
-                    fixed inset-0 w-full h-full bg-black z-[9998] md:hidden flex flex-col p-10 pt-32 gap-10 transition-all duration-300
+                    fixed inset-0 w-full h-full bg-black z-[99999] md:hidden flex flex-col p-10 pt-32 gap-10 transition-all duration-300
                     ${mobileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-full"}
                 `}
                 style={{ pointerEvents: mobileOpen ? 'auto' : 'none' }}
@@ -61,8 +87,8 @@ export default function NavBar() {
                 {currentLinks.map((link) => (
                     <div
                         key={link.href}
-                        onPointerDown={() => handleForceNav(link.href)} // Use onPointerDown for faster mobile response
-                        className="text-4xl font-black tracking-[0.2em] uppercase text-zinc-400 active:text-emerald-500 py-4"
+                        onPointerDown={() => handleForceNav(link.href)}
+                        className="text-4xl font-black tracking-[0.2em] uppercase text-zinc-400 active:text-emerald-500 py-4 cursor-pointer"
                     >
                         {link.label}
                     </div>
