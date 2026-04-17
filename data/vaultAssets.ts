@@ -71,14 +71,14 @@ export const assets: VaultAsset[] = [
     href: "https://distrokid.com",
   },
   {
-    id: "riffer-elixir",
-    serial: "HW-STR-NANOWEB",
-    name: "Elixir Nanoweb 09-42",
+    id: "riffer-ml-roots",
+    serial: "PLG-AMP-MLSL-01",
+    name: "Amped Roots - ML Sound",
     category: "plugin",
-    type: "PDF", // Hardware recommendation
+    type: "IR", // ML Sound Lab is famous for their Cab IRs
     status: "online",
-    version: "STABLE",
-    price: 0,
-    href: "https://amazon.com",
+    version: "2.0.0",
+    price: 0, // Highlight the Free version first
+    href: "https://ml-sound-lab.com/products/amped-roots",
   },
 ];

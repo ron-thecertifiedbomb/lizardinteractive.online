@@ -5,6 +5,7 @@ const withMDX = require("@next/mdx")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: false,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
     remotePatterns: [
