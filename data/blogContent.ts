@@ -1,5 +1,15 @@
+import {
+  Zap,
+  Terminal,
+  Activity,
+  Shield,
+  Cpu,
+  Mic2,
+  MonitorPlay,
+  Layers,
+} from "lucide-react";
 
-// 1. HARDWARE DATA OBJECT
+// --- 1. HARDWARE DATA OBJECT ---
 export const laptopArticle2026 = {
   header: {
     title: "The 2026 Engine Room: Best Laptops for Creators & Engineers",
@@ -11,7 +21,7 @@ export const laptopArticle2026 = {
       id: "lp-m5-max",
       name: "MacBook Pro 14 (M5 Max)",
       brand: "Apple",
-      category: "Hardware" as const,
+      category: "Hardware",
       description:
         "The ultimate zero-latency machine for 2026. Perfect for massive Next.js builds and 8K ProRes RAW workflows.",
       affiliateUrl: "https://amazon.com/your-affiliate-link-1",
@@ -27,7 +37,7 @@ export const laptopArticle2026 = {
       id: "lp-g16-2026",
       name: "ROG Zephyrus G16 (2026)",
       brand: "ASUS",
-      category: "Hardware" as const,
+      category: "Hardware",
       description:
         "The Windows powerhouse. Features the RTX 5090 for After Effects motion design and rapid technical compilation.",
       affiliateUrl: "https://amazon.com/your-affiliate-link-2",
@@ -39,22 +49,6 @@ export const laptopArticle2026 = {
         bestFor: "Engineering & 3D",
       },
     },
-    {
-      id: "lp-xps-14",
-      name: "Dell XPS 14 (2026)",
-      brand: "Dell",
-      category: "Hardware" as const,
-      description:
-        "Ultra-portable dev machine. Boasting a 21-hour battery life and the new Arc B390 graphics, it's the 200 OK choice for coding on the move.",
-      affiliateUrl: "https://amazon.com/dp/example3",
-      imageUrl: "/gear/dellxps.jpg",
-      isFavorite: false,
-      specs: {
-        cpu: "Intel Core Ultra X7 358H",
-        ram: "32GB LPDDR5x",
-        bestFor: "Mobile Engineering",
-      },
-    },
   ],
   hooks: {
     intro:
@@ -64,7 +58,7 @@ export const laptopArticle2026 = {
   },
 };
 
-// 2. PHILOSOPHY DATA OBJECT
+// --- 2. PHILOSOPHY DATA OBJECT ---
 export const aiFutureArticle2026 = {
   header: {
     title: "The Bio-Digital Synthesis: Why the Future of AI is Human",
@@ -86,14 +80,6 @@ export const aiFutureArticle2026 = {
         "We are moving from an era of manual execution to an era of architectural intent.",
     },
     {
-      id: "02",
-      type: "standard",
-      icon: "music",
-      title: "The Artist vs. Machine Noise",
-      text: "AI is excellent at pattern recognition, but it is incapable of Remorse.",
-      subText: "The future of creative arts is Symbiosis.",
-    },
-    {
       id: "03",
       type: "protocol",
       icon: "shield",
@@ -108,7 +94,7 @@ export const aiFutureArticle2026 = {
   ],
 };
 
-// 3. NEW: PRODUCTION DATA OBJECT (The Psychedelic Riffer Mastering Guide)
+// --- 3. PRODUCTION DATA OBJECT ---
 export const rifferMasteringArticle2026 = {
   header: {
     title: "Mastering Modern Metal: The 100 BPM Industrial Workflow",
@@ -117,31 +103,24 @@ export const rifferMasteringArticle2026 = {
   },
   hooks: {
     intro:
-      "How I achieved the 'Emerald Glow' tone for Remorseful Soul using NAM, Reaper, and precise mastering techniques.",
+      "How I achieved the 'Emerald Glow' tone for Remorseful Soul using NAM and precise mastering techniques.",
     conclusion:
-      "Your signal chain is your signature. Keep your system at 200 OK and your riffs high-gain. The 1k stream goal is just the beginning.",
+      "Keep your system at 200 OK and your riffs high-gain. The 1k stream goal is just the beginning.",
   },
   contentBlocks: [
-    {
-      id: "01",
-      type: "standard",
-      icon: "activity",
-      title: "The Physics of Tone",
-      text: "Zero-latency begins at the fingers. Elixir Nanoweb 09-42 strings provide the high-end snap needed to cut through a dense industrial mix without losing clarity.",
-    },
     {
       id: "02",
       type: "standard",
       icon: "zap",
       title: "Neural Amp Modeling (NAM)",
-      text: "Moving beyond traditional VSTs. NAM captures the actual 'soul' of the vacuum tube. For Remorseful Soul, I utilized a custom capture that prioritizes mid-range bite and harmonic richness.",
+      text: "NAM captures the actual 'soul' of the vacuum tube. For Remorseful Soul, I utilized a custom capture that prioritizes harmonic richness.",
     },
     {
       id: "03",
       type: "protocol",
       icon: "shield",
       title: "The Mastering Protocol",
-      text: "Loudness is easy; clarity is the challenge. This protocol ensures Spotify-ready levels without killing the transient response of your track.",
+      text: "Loudness is easy; clarity is the challenge. Spotify-ready levels without killing the transient response.",
       protocols: [
         "Gain Staging: Maintain -18dBFS pre-processing.",
         "LUFS Target: Aim for -11 to -14 for streaming stability.",
@@ -151,30 +130,78 @@ export const rifferMasteringArticle2026 = {
   ],
 };
 
-// 4. MASTER REGISTRY (The Local-CMS)
+// --- 4. SOFTWARE OPTIMIZATION DATA OBJECT (New Service Pillar) ---
+export const softwareOptimizationArticle2026 = {
+  header: {
+    title: "The Architecture of Speed: 100/100 Lighthouse Optimization",
+    label: "Performance_Audit_v1.0",
+    priority: "CRITICAL_PATH // Optimization_Service",
+  },
+  hooks: {
+    intro:
+      "Engineering sub-second latency and elite-tier performance for Next.js systems.",
+    conclusion:
+      "Efficiency is not an accident; it's a standard. Reach out for a full system performance audit.",
+  },
+  contentBlocks: [
+    {
+      id: "01",
+      type: "standard",
+      icon: "activity",
+      title: "The Zero-Bloat Mandate",
+      text: "Every kilobyte counts. By implementing strict code-splitting and asset compression, we ensure the main thread stays clear for user interaction.",
+    },
+    {
+      id: "02",
+      type: "protocol",
+      icon: "terminal",
+      title: "Technical Execution",
+      text: "The roadmap to a 99+ performance score involves more than just minification.",
+      protocols: [
+        "Image Optimization: Multi-format WebP serving via next/image.",
+        "Font Loading: Zero-layout shift strategy using local font descriptors.",
+        "Edge Deployment: Global latency reduction via Vercel Edge Network.",
+      ],
+    },
+  ],
+};
+
+// --- 5. MASTER REGISTRY (The Local-CMS) ---
 export const specialLogs: Record<string, any> = {
+  "performance-architecture-2026": {
+    slug: "performance-architecture-2026",
+    layoutType: "TECHNICAL",
+    title: softwareOptimizationArticle2026.header.title,
+    description: softwareOptimizationArticle2026.hooks.intro,
+    ogImage: "/lighthouse-audit-2026.jpg", // Gamitin yung screenshot mo!
+    content: softwareOptimizationArticle2026,
+    createdAt: "2026-04-18T12:00:00Z",
+  },
   "mastering-modern-metal": {
     slug: "mastering-modern-metal",
     layoutType: "PRODUCTION",
     title: rifferMasteringArticle2026.header.title,
     description: rifferMasteringArticle2026.hooks.intro,
-    ogImage: "/music/og-mastering-2026.jpg",
+    ogImage: "/images/blogs/og-mastering-2026.jpg",
     content: rifferMasteringArticle2026,
+    createdAt: "2026-04-18T10:00:00Z",
   },
   "best-laptops-2026": {
     slug: "best-laptops-2026",
     layoutType: "HARDWARE",
     title: laptopArticle2026.header.title,
     description: laptopArticle2026.hooks.intro,
-    ogImage: "/gear/og-hardware-2026.jpg",
+    ogImage: "/images/blogs/og-hardware-2026.jpg",
     content: laptopArticle2026,
+    createdAt: "2026-04-17T15:30:00Z",
   },
   "bio-digital-synthesis": {
     slug: "bio-digital-synthesis",
     layoutType: "PHILOSOPHY",
     title: aiFutureArticle2026.header.title,
     description: aiFutureArticle2026.hooks.intro,
-    ogImage: "/ai/ai-future-2026.jpg",
+    ogImage: "/images/blogs/ai-future-2026.jpg",
     content: aiFutureArticle2026,
+    createdAt: "2026-04-16T09:00:00Z",
   },
 };

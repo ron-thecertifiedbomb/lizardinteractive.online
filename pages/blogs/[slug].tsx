@@ -1,51 +1,117 @@
+"use client";
+
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head'; // Eto ang kailangan natin para sa Social Preview
 import { specialLogs } from '../../data/blogContent';
-
-// ... standard imports (specialLogs, ScreenContainer, etc.)
-
 import { HardwareLayout } from "../../components/blog/HardwareLayout/HardwareLayout";
 import { ProductionLayout } from "../../components/blog/ProductionLayout/ProductionLayout";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 
 export default function BlogPostDetail({ post }: { post: any }) {
-  if (!post) return <div>404_NULL</div>;
+  if (!post) return <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">[ 404_NULL: transmission_lost ]</div>;
+
+  const siteUrl = "https://lizardinteractive.online";
+  const fullOgImage = `${siteUrl}${post.ogImage}`;
 
   const renderLayout = () => {
     switch (post.layoutType) {
-      case 'PRODUCTION': return <ProductionLayout content={post.content} />;
-      case 'HARDWARE': return <HardwareLayout content={post.content} />;
-      default: return <ProductionLayout content={post.content} />; // Fallback
+      case 'PRODUCTION':
+        return <ProductionLayout content={post.content} />;
+      case 'HARDWARE':
+        return <HardwareLayout content={post.content} />;
+      case 'TECHNICAL':
+        return (
+          <div className="space-y-20">
+            {/* SCREENSHOT SECTION */}
+            <div className="relative group overflow-hidden border border-zinc-900 bg-zinc-900/20 p-4 md:p-8">
+              <div className="flex items-center justify-between mb-4 font-mono text-[9px] text-emerald-500 uppercase tracking-widest">
+                <span>[ core_vitals_report ]</span>
+                <span className="animate-pulse">Live_Feed</span>
+              </div>
+              <img
+                src={post.ogImage}
+                alt="Performance Audit Screenshot"
+                className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-1000 border border-zinc-800"
+              />
+              <p className="mt-6 text-zinc-500 text-sm leading-relaxed font-light">
+                {post.content.contentBlocks?.[0]?.text || "System performance verified at elite-tier status."}
+              </p>
+            </div>
+
+            {/* PROTOCOLS SECTION */}
+            <div className="grid grid-cols-1 gap-8">
+              {post.content.contentBlocks?.[1]?.protocols?.map((p: string, i: number) => (
+                <div key={i} className="flex items-start gap-4 border-l border-emerald-500 pl-6 py-2">
+                  <span className="text-zinc-800 font-mono text-xs">0{i + 1}</span>
+                  <span className="text-zinc-300 uppercase tracking-widest text-xs font-bold">{p}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      default:
+        return <ProductionLayout content={post.content} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <ScreenContainer variant="dark" maxWidth="xl">
-        <div className="max-w-4xl mx-auto pt-32 pb-40 px-6">
+    <>
+      <Head>
+        {/* Dynamic Meta Tags para sa Social Previews */}
+        <title>{post.title} | Lizard Interactive</title>
+        <meta name="description" content={post.description} />
 
-          {/* Unified Header */}
-          <div className="border-b border-zinc-900 pb-12 mb-20">
-            <h1 className="text-6xl md:text-8xl font-black uppercase leading-none mb-8">
-              {post.content.header.title}
-            </h1>
-            <p className="text-zinc-500 border-l-2 border-emerald-500 pl-6 uppercase tracking-widest text-sm">
-              {post.content.hooks.intro}
-            </p>
+        {/* Open Graph / Facebook / LinkedIn */}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={`${post.title} | Lizard Interactive`} />
+        <meta property="og:description" content={post.description} />
+        <meta property="og:image" content={fullOgImage} />
+        <meta property="og:url" content={`${siteUrl}/blogs/${post.slug}`} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.description} />
+        <meta name="twitter:image" content={fullOgImage} />
+      </Head>
+
+      <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
+        <ScreenContainer variant="dark" maxWidth="xl">
+          <div className="max-w-4xl mx-auto pt-32 pb-40 px-6">
+
+            {/* Unified Header */}
+            <div className="border-b border-zinc-900 pb-12 mb-20">
+              <div className="flex items-center gap-2 mb-6 text-emerald-500 font-mono text-[10px] tracking-widest uppercase">
+                <span className="w-2 h-2 bg-emerald-500 animate-pulse" /> {post.content.header.label}
+              </div>
+              <h1 className="text-5xl md:text-8xl font-black uppercase leading-[0.9] tracking-tighter mb-8">
+                {post.content.header.title}
+              </h1>
+              <p className="text-zinc-500 border-l-2 border-emerald-500 pl-6 uppercase tracking-widest text-xs md:text-sm font-medium leading-relaxed">
+                {post.content.hooks.intro}
+              </p>
+            </div>
+
+            {/* DYNAMIC RENDERER CALL */}
+            <div className="relative z-10">
+              {renderLayout()}
+            </div>
+
+            {/* Unified Footer */}
+            <div className="mt-40 pt-20 border-t border-zinc-900 text-center">
+              <p className="font-mono text-[10px] text-zinc-700 tracking-[0.5em] uppercase mb-4">
+                {post.content.hooks.conclusion}
+              </p>
+              <div className="text-zinc-900 font-mono text-[8px] uppercase tracking-widest">
+                Verified by Lizard Interactive // Node_2026
+              </div>
+            </div>
           </div>
-
-          {/* DYNAMIC RENDERER CALL */}
-          {renderLayout()}
-
-          {/* Unified Footer */}
-          <div className="mt-40 pt-20 border-t border-zinc-900 text-center font-mono text-[10px] text-zinc-700 tracking-[0.5em]">
-            {post.content.hooks.conclusion}
-          </div>
-        </div>
-      </ScreenContainer>
-    </div>
+        </ScreenContainer>
+      </div>
+    </>
   );
 }
-// ... getStaticPaths & getStaticProps
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = Object.keys(specialLogs).map((slug) => ({
