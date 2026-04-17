@@ -9,18 +9,8 @@ import { getFullOgImage } from '../../lib/ogImageHelper';
 export default function BlogPostDetail({ post }: { post: any }) {
   if (!post) return <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">[ 404_NULL: transmission_lost ]</div>;
 
-
-
-
-
   const siteUrl = "https://lizardinteractive.online";
-  // Siguraduhin na ang post.ogImage ay nagsisimula sa /
-  const fullOgImage = `${siteUrl}${post.ogImage}`;
-  const ogFullImage = getFullOgImage(post.ogImage, siteUrl);
-
-
-console.log("OG Image URL:", ogFullImage);
-
+  const fullOgImage = getFullOgImage(post.ogImage, siteUrl);
 
   const renderLayout = () => {
     switch (post.layoutType) {
@@ -31,6 +21,7 @@ console.log("OG Image URL:", ogFullImage);
       case 'TECHNICAL':
         return (
           <div className="space-y-20">
+            {/* --- 1. PERFORMANCE SCREENSHOT (Lighthouse Proof) --- */}
             <div className="relative group overflow-hidden border border-zinc-900 bg-zinc-900/20 p-4 md:p-8">
               <div className="flex items-center justify-between mb-4 font-mono text-[9px] text-emerald-500 uppercase tracking-widest">
                 <span>[ core_vitals_report ]</span>
@@ -41,19 +32,35 @@ console.log("OG Image URL:", ogFullImage);
                 alt="Performance Audit Screenshot"
                 className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-1000 border border-zinc-800"
               />
-              <p className="mt-6 text-zinc-500 text-sm leading-relaxed font-light">
-                {post.content.contentBlocks?.[0]?.text || "System performance verified at elite-tier status."}
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-8">
-              {post.content.contentBlocks?.[1]?.protocols?.map((p: string, i: number) => (
-                <div key={i} className="flex items-start gap-4 border-l border-emerald-500 pl-6 py-2">
-                  <span className="text-zinc-800 font-mono text-xs">0{i + 1}</span>
-                  <span className="text-zinc-300 uppercase tracking-widest text-xs font-bold">{p}</span>
+            {/* --- 2. DYNAMIC CONTENT BLOCKS --- */}
+            {post.content.contentBlocks?.map((block: any) => (
+              <div key={block.id} className="space-y-8">
+                <div className="flex items-center gap-4">
+                  <div className="h-[1px] w-12 bg-emerald-500/30" />
+                  <h3 className="text-xl font-black uppercase tracking-tighter text-emerald-400">
+                    {block.title}
+                  </h3>
                 </div>
-              ))}
-            </div>
+
+                <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl font-light italic">
+                  {block.text}
+                </p>
+
+                {/* Dito papasok yung Core Vital Targets at Execution Stack (Protocols) */}
+                {block.protocols && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    {block.protocols.map((p: string, i: number) => (
+                      <div key={i} className="flex items-start gap-4 border border-zinc-900 bg-zinc-900/10 p-4 hover:border-emerald-500/50 transition-colors group/item">
+                        <span className="text-emerald-500 font-mono text-[10px]">0{i + 1}</span>
+                        <span className="text-zinc-300 uppercase tracking-widest text-[10px] font-bold leading-tight group-hover/item:text-white transition-colors">{p}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         );
       default:
@@ -66,19 +73,12 @@ console.log("OG Image URL:", ogFullImage);
       <Head>
         <title>{post.title} | Lizard Interactive</title>
         <meta name="description" content={post.description} />
-
-        {/* Facebook / LinkedIn / Slack */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | Lizard Interactive`} />
         <meta property="og:description" content={post.description} />
         <meta property="og:image" content={fullOgImage} />
         <meta property="og:url" content={`${siteUrl}/blogs/${post.slug}`} />
-        <meta property="og:site_name" content="Lizard Interactive" />
-
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.description} />
         <meta name="twitter:image" content={fullOgImage} />
       </Head>
 
@@ -92,7 +92,7 @@ console.log("OG Image URL:", ogFullImage);
               <h1 className="text-5xl md:text-8xl font-black uppercase leading-[0.9] tracking-tighter mb-8">
                 {post.content.header.title}
               </h1>
-              <p className="text-zinc-500 border-l-2 border-emerald-500 pl-6 uppercase tracking-widest text-xs md:text-sm font-medium leading-relaxed">
+              <p className="text-zinc-500 border-l-2 border-emerald-500 pl-6 uppercase tracking-widest text-xs md:text-sm font-medium leading-relaxed italic">
                 {post.content.hooks.intro}
               </p>
             </div>

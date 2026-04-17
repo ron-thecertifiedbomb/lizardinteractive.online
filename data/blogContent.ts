@@ -130,18 +130,17 @@ export const rifferMasteringArticle2026 = {
   ],
 };
 
-// --- 4. SOFTWARE OPTIMIZATION DATA OBJECT (New Service Pillar) ---
 export const softwareOptimizationArticle2026 = {
   header: {
     title: "The Architecture of Speed: 100/100 Lighthouse Optimization",
-    label: "Performance_Audit_v1.0",
-    priority: "CRITICAL_PATH // Optimization_Service",
+    label: "PERFORMANCE_AUDIT_V1.0",
+    priority: "CRITICAL_PATH // OPTIMIZATION_SERVICE",
   },
   hooks: {
     intro:
-      "Engineering sub-second latency and elite-tier performance for Next.js systems.",
+      "Engineering sub-second latency and elite-tier performance for Next.js systems. Speed is not a feature; it is infrastructure.",
     conclusion:
-      "Efficiency is not an accident; it's a standard. Reach out for a full system performance audit.",
+      "Efficiency is not an accident; it's an engineering standard. Reach out for a full system performance audit.",
   },
   contentBlocks: [
     {
@@ -152,15 +151,28 @@ export const softwareOptimizationArticle2026 = {
       text: "Every kilobyte counts. By implementing strict code-splitting and asset compression, we ensure the main thread stays clear for user interaction.",
     },
     {
-      id: "02",
+      id: "02", // Eto ang dinagdag nating "Resibo" block
+      type: "protocol",
+      icon: "zap",
+      title: "Core Vital Targets",
+      text: "We don't just aim for green scores; we aim for mathematical perfection in user experience metrics.",
+      protocols: [
+        "LCP (Largest Contentful Paint): Under 1.2s",
+        "CLS (Cumulative Layout Shift): 0.000 (Zero Movement)",
+        "TBT (Total Blocking Time): < 50ms",
+      ],
+    },
+    {
+      id: "03",
       type: "protocol",
       icon: "terminal",
-      title: "Technical Execution",
-      text: "The roadmap to a 99+ performance score involves more than just minification.",
+      title: "The Execution Stack",
+      text: "The roadmap to a 99+ performance score involves deep-level architectural decisions.",
       protocols: [
-        "Image Optimization: Multi-format WebP serving via next/image.",
-        "Font Loading: Zero-layout shift strategy using local font descriptors.",
-        "Edge Deployment: Global latency reduction via Vercel Edge Network.",
+        "Hybrid Rendering: Strategic use of SSG for instant loads and ISR for fresh data.",
+        "Image Optimization: Automated WebP/Avif delivery with precision aspect-ratio control.",
+        "Font Engineering: Localized self-hosting to eliminate third-party render-blocking.",
+        "Payload Reduction: Removing unused middleware and heavy libraries for a lean bundle.",
       ],
     },
   ],
@@ -173,7 +185,7 @@ export const specialLogs: Record<string, any> = {
     layoutType: "TECHNICAL",
     title: softwareOptimizationArticle2026.header.title,
     description: softwareOptimizationArticle2026.hooks.intro,
-    ogImage: "/lighthouse-audit-2026.jpg", 
+    ogImage: "/lighthouse-audit-2026.jpg",
     content: softwareOptimizationArticle2026,
     createdAt: "2026-04-18T12:00:00Z",
   },
