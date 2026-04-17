@@ -5,8 +5,10 @@ export default function Document() {
   const siteDescription = "Official hub for RonDevSolutions (Software Engineering) and The Psychedelic Riffer (Instrumental Metal). High-performance web solutions and melodic guitar production.";
   const siteUrl = "https://lizardinteractive.online";
 
-  // CRITICAL FIX: Social crawlers require absolute URLs (https://...)
-  const absolutePreviewImage = `${siteUrl}/og-image-rondev.jpg`;
+  // Primary OG image
+  const primaryOgImage = `${siteUrl}/og-image-homepage.jpg`;
+  // Fallback image (use your logo or a simple branded image)
+  const fallbackOgImage = `${siteUrl}/lizardinteractive.png`;
 
   return (
     <Html lang="en" className="bg-black">
@@ -21,21 +23,26 @@ export default function Document() {
         <link rel="canonical" href={siteUrl} />
 
         {/* Facebook / Open Graph */}
-        <meta property="fb:app_id" content="966242223397117" /> {/* Placeholder ID to clear debugger warning */}
+        <meta property="fb:app_id" content="966242223397117" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:title" content={siteTitle} />
         <meta property="og:description" content={siteDescription} />
-        <meta property="og:image" content={absolutePreviewImage} />
+        <meta property="og:image" content={primaryOgImage} />
+        <meta property="og:image:url" content={primaryOgImage} />
+        <meta property="og:image:secure_url" content={primaryOgImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Lizard Interactive - Code, Sound, and Vision" />
         <meta property="og:site_name" content="Lizard Interactive" />
+        <meta property="og:locale" content="en_US" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={siteTitle} />
         <meta name="twitter:description" content={siteDescription} />
-        <meta name="twitter:image" content={absolutePreviewImage} />
+        <meta name="twitter:image" content={primaryOgImage} />
+        <meta name="twitter:image:alt" content="Lizard Interactive - Code, Sound, and Vision" />
 
         {/* Favicon & Branding */}
         <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
@@ -43,6 +50,9 @@ export default function Document() {
 
         {/* PWA / Mobile Theme Color */}
         <meta name="theme-color" content="#000000" />
+
+        {/* Additional meta for better sharing */}
+        <meta name="format-detection" content="telephone=no" />
       </Head>
 
       <body className="bg-black antialiased selection:bg-emerald-500 selection:text-black">
