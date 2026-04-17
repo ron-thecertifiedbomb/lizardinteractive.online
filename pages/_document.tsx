@@ -6,7 +6,7 @@ export default function Document() {
   const siteUrl = "https://lizardinteractive.online";
 
   // CRITICAL FIX: Social crawlers require absolute URLs (https://...)
-  const absolutePreviewImage = `${siteUrl}/lizardinteractive.png`;
+  const absolutePreviewImage = `${siteUrl}/og-image-rondev.jpg`;
 
   return (
     <Html lang="en" className="bg-black">
