@@ -1,7 +1,5 @@
-"use client";
-
 import { GetStaticPaths, GetStaticProps } from 'next';
-import Head from 'next/head'; // Eto ang kailangan natin para sa Social Preview
+import Head from 'next/head';
 import { specialLogs } from '../../data/blogContent';
 import { HardwareLayout } from "../../components/blog/HardwareLayout/HardwareLayout";
 import { ProductionLayout } from "../../components/blog/ProductionLayout/ProductionLayout";
@@ -11,6 +9,7 @@ export default function BlogPostDetail({ post }: { post: any }) {
   if (!post) return <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 uppercase tracking-widest">[ 404_NULL: transmission_lost ]</div>;
 
   const siteUrl = "https://lizardinteractive.online";
+  // Siguraduhin na ang post.ogImage ay nagsisimula sa /
   const fullOgImage = `${siteUrl}${post.ogImage}`;
 
   const renderLayout = () => {
@@ -22,7 +21,6 @@ export default function BlogPostDetail({ post }: { post: any }) {
       case 'TECHNICAL':
         return (
           <div className="space-y-20">
-            {/* SCREENSHOT SECTION */}
             <div className="relative group overflow-hidden border border-zinc-900 bg-zinc-900/20 p-4 md:p-8">
               <div className="flex items-center justify-between mb-4 font-mono text-[9px] text-emerald-500 uppercase tracking-widest">
                 <span>[ core_vitals_report ]</span>
@@ -38,7 +36,6 @@ export default function BlogPostDetail({ post }: { post: any }) {
               </p>
             </div>
 
-            {/* PROTOCOLS SECTION */}
             <div className="grid grid-cols-1 gap-8">
               {post.content.contentBlocks?.[1]?.protocols?.map((p: string, i: number) => (
                 <div key={i} className="flex items-start gap-4 border-l border-emerald-500 pl-6 py-2">
@@ -57,16 +54,16 @@ export default function BlogPostDetail({ post }: { post: any }) {
   return (
     <>
       <Head>
-        {/* Dynamic Meta Tags para sa Social Previews */}
         <title>{post.title} | Lizard Interactive</title>
         <meta name="description" content={post.description} />
 
-        {/* Open Graph / Facebook / LinkedIn */}
+        {/* Facebook / LinkedIn / Slack */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | Lizard Interactive`} />
         <meta property="og:description" content={post.description} />
         <meta property="og:image" content={fullOgImage} />
         <meta property="og:url" content={`${siteUrl}/blogs/${post.slug}`} />
+        <meta property="og:site_name" content="Lizard Interactive" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -78,8 +75,6 @@ export default function BlogPostDetail({ post }: { post: any }) {
       <div className="min-h-screen bg-black text-white selection:bg-emerald-500 selection:text-black">
         <ScreenContainer variant="dark" maxWidth="xl">
           <div className="max-w-4xl mx-auto pt-32 pb-40 px-6">
-
-            {/* Unified Header */}
             <div className="border-b border-zinc-900 pb-12 mb-20">
               <div className="flex items-center gap-2 mb-6 text-emerald-500 font-mono text-[10px] tracking-widest uppercase">
                 <span className="w-2 h-2 bg-emerald-500 animate-pulse" /> {post.content.header.label}
@@ -92,12 +87,10 @@ export default function BlogPostDetail({ post }: { post: any }) {
               </p>
             </div>
 
-            {/* DYNAMIC RENDERER CALL */}
             <div className="relative z-10">
               {renderLayout()}
             </div>
 
-            {/* Unified Footer */}
             <div className="mt-40 pt-20 border-t border-zinc-900 text-center">
               <p className="font-mono text-[10px] text-zinc-700 tracking-[0.5em] uppercase mb-4">
                 {post.content.hooks.conclusion}
