@@ -141,8 +141,61 @@ export default function RonDevSolutions() {
                                 <p className="text-zinc-500 leading-relaxed text-sm md:text-base font-light pointer-events-none">
                                     {service.desc}
                                 </p>
+                                {/* Added CTA button for each service */}
+                                <a
+                                    href={service.id === 3 ? "https://cal.com/ronan-sibunga-m3zawr/quick-performance-audit" : "https://cal.com/ronan-sibunga-m3zawr/discovery-call"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block mt-6 text-emerald-500 font-mono text-xs uppercase tracking-wider hover:text-emerald-400 transition-colors"
+                                >
+                                    Learn More →
+                                </a>
                             </motion.div>
                         ))}
+                    </section>
+
+                    {/* --- WHY CHOOSE ME SECTION (NEW) --- */}
+                    <section className="mt-32 md:mt-48">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                            className="text-center mb-12 md:mb-16"
+                        >
+                            <div className="text-emerald-500 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-4">
+                                credibility_verified
+                            </div>
+                            <h2 className="text-2xl md:text-5xl font-black uppercase tracking-tighter">
+                                Why work with me?
+                            </h2>
+                            <p className="text-zinc-500 text-sm md:text-base mt-4 max-w-2xl mx-auto">
+                                Results speak louder than promises.
+                            </p>
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div className="text-center p-6 border border-zinc-900 hover:border-emerald-500/30 transition-all">
+                                <div className="text-3xl font-black text-emerald-500 mb-3">100/100</div>
+                                <p className="text-xs uppercase tracking-wider text-zinc-400">Lighthouse Score</p>
+                                <p className="text-zinc-600 text-xs mt-2">Verified performance</p>
+                            </div>
+                            <div className="text-center p-6 border border-zinc-900 hover:border-emerald-500/30 transition-all">
+                                <div className="text-3xl font-black text-emerald-500 mb-3">&lt;1s</div>
+                                <p className="text-xs uppercase tracking-wider text-zinc-400">LCP Time</p>
+                                <p className="text-zinc-600 text-xs mt-2">Sub-second loading</p>
+                            </div>
+                            <div className="text-center p-6 border border-zinc-900 hover:border-emerald-500/30 transition-all">
+                                <div className="text-3xl font-black text-emerald-500 mb-3">0</div>
+                                <p className="text-xs uppercase tracking-wider text-zinc-400">CLS</p>
+                                <p className="text-zinc-600 text-xs mt-2">Zero layout shift</p>
+                            </div>
+                            <div className="text-center p-6 border border-zinc-900 hover:border-emerald-500/30 transition-all">
+                                <div className="text-3xl font-black text-emerald-500 mb-3">24h</div>
+                                <p className="text-xs uppercase tracking-wider text-zinc-400">Turnaround</p>
+                                <p className="text-zinc-600 text-xs mt-2">Audit results fast</p>
+                            </div>
+                        </div>
                     </section>
 
                     {/* --- PRICING SECTION --- */}
@@ -174,8 +227,8 @@ export default function RonDevSolutions() {
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: pkg.id * 0.1 }}
                                     className={`relative border p-6 md:p-8 transition-all duration-300 hover:border-emerald-500/50 ${pkg.popular
-                                            ? "border-emerald-500/30 bg-emerald-500/5"
-                                            : "border-zinc-900"
+                                        ? "border-emerald-500/30 bg-emerald-500/5"
+                                        : "border-zinc-900"
                                         }`}
                                 >
                                     {pkg.popular && (
@@ -214,8 +267,8 @@ export default function RonDevSolutions() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={`block text-center py-3 text-xs md:text-sm uppercase tracking-wider transition-all duration-300 ${pkg.popular
-                                                ? "bg-emerald-500 text-black hover:bg-emerald-400 font-bold"
-                                                : "border border-zinc-800 hover:border-emerald-500"
+                                            ? "bg-emerald-500 text-black hover:bg-emerald-400 font-bold"
+                                            : "border border-zinc-800 hover:border-emerald-500"
                                             }`}
                                     >
                                         Book Consultation →
@@ -266,6 +319,34 @@ export default function RonDevSolutions() {
                                     </button>
                                 </form>
                             </div>
+                        </motion.div>
+                    </section>
+
+                    {/* --- FINAL CTA BEFORE FOOTER (NEW) --- */}
+                    <section className="mt-32 md:mt-48">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="bg-emerald-500/5 border border-emerald-500/20 p-8 md:p-12 text-center"
+                        >
+                            <div className="text-emerald-500 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-4">
+                                limited_availability
+                            </div>
+                            <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-4">
+                                Ready to fix your site?
+                            </h3>
+                            <p className="text-zinc-400 text-sm mb-8 max-w-md mx-auto">
+                                Don't let slow load times cost you customers. Get a guaranteed 100/100 Lighthouse score.
+                            </p>
+                            <a
+                                href="https://cal.com/ronan-sibunga-m3zawr/quick-performance-audit"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block px-8 py-4 bg-emerald-500 text-black font-mono text-sm font-bold uppercase tracking-wider hover:bg-emerald-400 transition-all duration-300"
+                            >
+                                Book Your Audit Now →
+                            </a>
                         </motion.div>
                     </section>
 
