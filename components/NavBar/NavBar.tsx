@@ -77,15 +77,21 @@ export default function NavBar() {
 
             {/* MOBILE MENU */}
             <div className={`
-                md:hidden fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] bg-black flex flex-col p-10 gap-8 transition-all duration-500 
-                ${mobileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-4 pointer-events-none"}
-            `}>
+    md:hidden fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] 
+    bg-black flex flex-col p-10 gap-8 transition-all duration-500 z-[1001]
+    ${mobileOpen
+                    ? "opacity-100 visible translate-y-0 pointer-events-auto"
+                    : "opacity-0 invisible -translate-y-4 pointer-events-none"}
+`}>
                 {currentLinks.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="text-3xl font-black tracking-[0.2em] uppercase text-zinc-400 active:text-white"
+                        onClick={() => {
+                            // Force close bago mag-navigate
+                            setMobileOpen(false);
+                        }}
+                        className="text-3xl font-black tracking-[0.2em] uppercase text-zinc-400 hover:text-emerald-500 active:text-white transition-colors"
                     >
                         {link.label}
                     </Link>
