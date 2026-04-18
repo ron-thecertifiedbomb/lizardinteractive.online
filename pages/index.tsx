@@ -8,16 +8,10 @@ import { niches } from "../data/nichesList";
 
 export default function HomePage() {
 
-  // Force hard navigation to bypass any JS event/dispatch blocks
-  const handleForceNav = (href: string) => {
-    document.body.style.overflow = 'unset';
-    window.location.href = href;
-  };
-
   // Newsletter state
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState(""); // ← THIS WAS MISSING
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleNewsletterSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,65 +102,75 @@ export default function HomePage() {
             >
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">100/100 Lighthouse</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">40%+ Conv. Lift</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">&lt;1s LCP</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">2x Organic Traffic</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">0 CLS</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">Core Web Vitals ✓</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">Studio Quality</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">SEO First Page</span>
               </div>
             </motion.div>
 
             {/* PORTAL SELECTOR HINT */}
             <div className="text-center lg:text-left mb-4">
               <p className="text-[8px] md:text-[9px] font-mono text-emerald-500/70 tracking-[0.3em] uppercase">
-                [ select_your_portal ]
+                [ select_your_growth_service ]
               </p>
             </div>
           </section>
 
-          {/* DOORS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-0 sm:px-0 relative z-20">
+          {/* SERVICES CARDS - COLUMN LAYOUT */}
+          <div className="flex flex-col gap-6 md:gap-8 px-0 sm:px-0 relative z-20 max-w-3xl mx-auto lg:max-w-4xl">
             {niches.map((niche, i) => (
-              <div
+              <motion.div
                 key={i}
-                onPointerDown={() => handleForceNav(niche.href)}
-                className="group relative block touch-manipulation cursor-pointer"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative block w-full"
               >
-                <div className="relative z-10 h-full p-6 md:p-8 bg-[#080808] border border-zinc-900 rounded-none hover:border-emerald-500/50 transition-all duration-700 overflow-hidden active:bg-zinc-900 hover:scale-[1.02] transform transition-transform duration-500">
+                <div className="relative z-10 w-full p-6 md:p-8 bg-[#080808] border border-zinc-900 rounded-none hover:border-emerald-500/50 transition-all duration-700 overflow-hidden active:bg-zinc-900 hover:translate-x-2 transform transition-transform duration-500">
 
                   <span className="absolute -right-2 top-0 text-6xl md:text-7xl font-black text-white/[0.01] select-none group-hover:text-emerald-500/5 transition-all uppercase pointer-events-none">
                     {niche.tag}
                   </span>
 
-                  <div className={`w-8 h-[1px] mb-5 md:mb-6 bg-gradient-to-r ${niche.accent}`} />
+                  <div className="flex items-start justify-between">
+                    <div className={`w-12 h-[1px] mb-5 md:mb-6 bg-gradient-to-r ${niche.accent}`} />
+                    <div className="text-emerald-500/30 group-hover:text-emerald-500/60 transition-colors">
+                      {niche.icon && <niche.icon className="w-5 h-5" />}
+                    </div>
+                  </div>
 
                   <div className="pointer-events-none">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4 tracking-tight group-hover:text-emerald-400 transition-colors uppercase">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3 tracking-tight group-hover:text-emerald-400 transition-colors uppercase">
                       {niche.title}
                     </h3>
-                    <p className="text-zinc-500 text-xs md:text-sm mb-6 md:mb-8 leading-relaxed">
+                    <p className="text-emerald-500/60 text-[10px] md:text-[11px] font-mono tracking-wider mb-3 md:mb-4">
+                      {niche.subtitle}
+                    </p>
+                    <p className="text-zinc-400 text-sm md:text-base mb-6 md:mb-8 leading-relaxed">
                       {niche.desc}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 md:gap-4 text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-800 group-hover:text-white transition-all pointer-events-none">
+                  <div className="flex items-center gap-3 md:gap-4 text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-700 group-hover:text-emerald-400 transition-all pointer-events-none">
                     <span className="group-hover:translate-x-2 transition-transform">{niche.label}</span>
                     <div className="h-[1px] flex-1 bg-zinc-900 group-hover:bg-emerald-500/40 transition-all" />
                   </div>
 
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 mt-4 text-[7px] text-emerald-500 font-mono tracking-[0.2em] text-center pointer-events-none">
-                    [ click_to_enter → ]
+                    [ inquire_about_service → ]
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -180,14 +184,14 @@ export default function HomePage() {
             >
               <div className="text-center mb-8 md:mb-10">
                 <div className="text-emerald-500 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-4">
-                  subscribe_to_neural_feed
+                  subscribe_to_growth_feed
                 </div>
                 <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-4">
-                  Enter the <span className="text-emerald-500">Lizard Network</span>
+                  Scale Your <span className="text-emerald-500">Digital Presence</span>
                 </h3>
                 <p className="text-zinc-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-                  Weekly insights on high-performance code, cinematic audio mastering,
-                  and strategic video production — delivered to your inbox.
+                  Weekly insights on landing page optimization, SEO strategies,
+                  and traffic growth — delivered to your inbox.
                 </p>
               </div>
 
@@ -197,7 +201,7 @@ export default function HomePage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="creator@domain.com"
+                    placeholder="your@domain.com"
                     required
                     className="flex-1 px-4 py-3 bg-black border border-zinc-800 text-white text-sm focus:border-emerald-500 outline-none transition-colors"
                     disabled={status === "loading"}
@@ -207,12 +211,12 @@ export default function HomePage() {
                     disabled={status === "loading"}
                     className="px-8 py-3 bg-emerald-500 text-black text-sm font-mono uppercase tracking-wider hover:bg-emerald-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
-                    {status === "loading" ? "Sending..." : status === "success" ? "✓ Subscribed" : "Join the Network →"}
+                    {status === "loading" ? "Sending..." : status === "success" ? "✓ Subscribed" : "Get Growth Insights →"}
                   </button>
                 </form>
                 {status === "success" && (
                   <p className="text-emerald-500 text-xs mt-4 text-center">
-                    ✓ Transmission received. Welcome to the Lizard Network.
+                    ✓ Welcome to the Growth Network.
                   </p>
                 )}
                 {status === "error" && (
@@ -221,7 +225,7 @@ export default function HomePage() {
                   </p>
                 )}
                 <p className="text-zinc-600 text-[9px] text-center mt-4 font-mono tracking-wider">
-                  No spam. Unsubscribe anytime. Just weekly transmissions.
+                  No spam. Unsubscribe anytime. Weekly growth insights.
                 </p>
               </div>
             </motion.div>
