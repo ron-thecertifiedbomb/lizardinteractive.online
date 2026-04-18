@@ -17,7 +17,7 @@ export default function HomePage() {
   // Newsletter state
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState(""); // ← THIS WAS MISSING
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleNewsletterSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ export default function HomePage() {
       <ScreenContainer variant="dark" maxWidth="xl">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-16 md:pt-20 pb-0 relative z-10">
 
-          {/* HERO SECTION */}
+          {/* HERO SECTION - KILLER PORTFOLIO VIBE */}
           <section className="mb-12 md:mb-24 flex flex-col items-center lg:items-start w-full relative">
             {homeContent.map((block, index) => {
               if (block.type === "heading") {
@@ -99,16 +99,16 @@ export default function HomePage() {
               return null;
             })}
 
-            {/* SOCIAL PROOF BADGES */}
+            {/* SOCIAL PROOF BADGES - ELITE STATUS */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
               className="flex flex-wrap justify-center lg:justify-start gap-2 mt-6 mb-8"
             >
-              <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 border border-emerald-500/30 rounded-full bg-emerald-500/5 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">100/100 Lighthouse</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-emerald-400 tracking-wide">100/100 Lighthouse</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full" />
@@ -120,19 +120,19 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 border border-zinc-800 rounded-full bg-black/50 backdrop-blur-sm">
                 <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">Studio Quality</span>
+                <span className="text-[8px] md:text-[9px] font-mono text-zinc-400 tracking-wide">Next.js + Vercel</span>
               </div>
             </motion.div>
 
             {/* PORTAL SELECTOR HINT */}
             <div className="text-center lg:text-left mb-4">
               <p className="text-[8px] md:text-[9px] font-mono text-emerald-500/70 tracking-[0.3em] uppercase">
-                [ select_your_portal ]
+                [ explore_my_work ]
               </p>
             </div>
           </section>
 
-          {/* DOORS GRID */}
+          {/* WORK GRID - KILLER PORTFOLIO SHOWCASE */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-0 sm:px-0 relative z-20">
             {niches.map((niche, i) => (
               <div
@@ -142,10 +142,12 @@ export default function HomePage() {
               >
                 <div className="relative z-10 h-full p-6 md:p-8 bg-[#080808] border border-zinc-900 rounded-none hover:border-emerald-500/50 transition-all duration-700 overflow-hidden active:bg-zinc-900 hover:scale-[1.02] transform transition-transform duration-500">
 
+                  {/* Background Tag */}
                   <span className="absolute -right-2 top-0 text-6xl md:text-7xl font-black text-white/[0.01] select-none group-hover:text-emerald-500/5 transition-all uppercase pointer-events-none">
                     {niche.tag}
                   </span>
 
+                  {/* Accent Line */}
                   <div className={`w-8 h-[1px] mb-5 md:mb-6 bg-gradient-to-r ${niche.accent}`} />
 
                   <div className="pointer-events-none">
@@ -157,20 +159,58 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 md:gap-4 text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-800 group-hover:text-white transition-all pointer-events-none">
-                    <span className="group-hover:translate-x-2 transition-transform">{niche.label}</span>
+                  {/* View Project Link - NOT "Book" or "Hire" */}
+                  <div className="flex items-center gap-3 md:gap-4 text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-800 group-hover:text-emerald-400 transition-all pointer-events-none">
+                    <span className="group-hover:translate-x-2 transition-transform">view_project</span>
                     <div className="h-[1px] flex-1 bg-zinc-900 group-hover:bg-emerald-500/40 transition-all" />
                   </div>
 
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 mt-4 text-[7px] text-emerald-500 font-mono tracking-[0.2em] text-center pointer-events-none">
-                    [ click_to_enter → ]
+                    [ case_study →
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* NEWSLETTER SECTION - UNIFIED FOR ALL SERVICES */}
+          {/* SKILLS SHOWCASE - WHAT I CAN DO */}
+          <section className="mt-24 md:mt-32">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="border-t border-zinc-900 pt-12 md:pt-16"
+            >
+              <div className="text-center mb-8 md:mb-10">
+                <div className="text-emerald-500 font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase mb-4">
+                  technical_arsenal
+                </div>
+                <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-4">
+                  What I <span className="text-emerald-500">Build With</span>
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                {[
+                  { name: "Next.js", desc: "React framework" },
+                  { name: "TypeScript", desc: "Type safety" },
+                  { name: "Tailwind CSS", desc: "Utility-first" },
+                  { name: "Vercel", desc: "Edge deployment" },
+                  { name: "Framer Motion", desc: "Animations" },
+                  { name: "Node.js", desc: "Backend API" },
+                  { name: "PostgreSQL", desc: "Database" },
+                  { name: "Git", desc: "Version control" }
+                ].map((tech, idx) => (
+                  <div key={idx} className="text-center p-3 border border-zinc-900 hover:border-emerald-500/30 transition-all">
+                    <div className="text-emerald-500 text-xs font-mono font-bold">{tech.name}</div>
+                    <div className="text-zinc-600 text-[9px] mt-1">{tech.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </section>
+
+          {/* NEWSLETTER SECTION - KEEP FOR AUTHORITY */}
           <section className="mt-24 md:mt-32">
             <motion.div
               initial={{ opacity: 0 }}
@@ -186,8 +226,8 @@ export default function HomePage() {
                   Enter the <span className="text-emerald-500">Lizard Network</span>
                 </h3>
                 <p className="text-zinc-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-                  Weekly insights on high-performance code, cinematic audio mastering,
-                  and strategic video production — delivered to your inbox.
+                  Weekly insights on high-performance code, modern web architecture,
+                  and building 100/100 Lighthouse experiences.
                 </p>
               </div>
 
@@ -197,7 +237,7 @@ export default function HomePage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="creator@domain.com"
+                    placeholder="developer@example.com"
                     required
                     className="flex-1 px-4 py-3 bg-black border border-zinc-800 text-white text-sm focus:border-emerald-500 outline-none transition-colors"
                     disabled={status === "loading"}
@@ -207,7 +247,7 @@ export default function HomePage() {
                     disabled={status === "loading"}
                     className="px-8 py-3 bg-emerald-500 text-black text-sm font-mono uppercase tracking-wider hover:bg-emerald-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                   >
-                    {status === "loading" ? "Sending..." : status === "success" ? "✓ Subscribed" : "Join the Network →"}
+                    {status === "loading" ? "Sending..." : status === "success" ? "✓ Subscribed" : "Subscribe →"}
                   </button>
                 </form>
                 {status === "success" && (
@@ -221,7 +261,7 @@ export default function HomePage() {
                   </p>
                 )}
                 <p className="text-zinc-600 text-[9px] text-center mt-4 font-mono tracking-wider">
-                  No spam. Unsubscribe anytime. Just weekly transmissions.
+                  No spam. Unsubscribe anytime. Weekly insights only.
                 </p>
               </div>
             </motion.div>
