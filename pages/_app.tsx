@@ -12,7 +12,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
     >
-      {/* Root wrapper - fixed height management */}
+
       <div className="min-h-screen flex flex-col bg-black overflow-x-hidden relative">
 
         {/* Fixed Navbar - stays on top */}
@@ -26,7 +26,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <Analytics />
         </main>
 
-        {/* Footer - will stick to bottom because main has flex-1 */}
         <Footer />
       </div>
     </Auth0Provider>
