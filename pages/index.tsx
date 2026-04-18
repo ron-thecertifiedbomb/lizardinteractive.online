@@ -17,25 +17,38 @@ export default function HomePage() {
   // Newsletter state
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState(""); // ← THIS WAS MISSING
 
   const handleNewsletterSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setStatus("loading");
+    setErrorMessage("");
 
-    // Store email in localStorage (temporary - upgrade to ConvertKit later)
-    const subscribers = JSON.parse(localStorage.getItem("newsletter_subscribers") || "[]");
-    if (!subscribers.includes(email)) {
-      subscribers.push(email);
-      localStorage.setItem("newsletter_subscribers", JSON.stringify(subscribers));
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus("success");
+        setEmail("");
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        setStatus("error");
+        setErrorMessage(data.error || "Subscription failed. Please try again.");
+        setTimeout(() => setStatus("idle"), 4000);
+      }
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage("Network error. Please try again.");
+      setTimeout(() => setStatus("idle"), 4000);
     }
-
-    setTimeout(() => {
-      setStatus("success");
-      setEmail("");
-      setTimeout(() => setStatus("idle"), 3000);
-    }, 500);
   };
 
   return (
@@ -200,6 +213,11 @@ export default function HomePage() {
                 {status === "success" && (
                   <p className="text-emerald-500 text-xs mt-4 text-center">
                     ✓ Transmission received. Welcome to the Lizard Network.
+                  </p>
+                )}
+                {status === "error" && (
+                  <p className="text-red-500 text-xs mt-4 text-center">
+                    {errorMessage}
                   </p>
                 )}
                 <p className="text-zinc-600 text-[9px] text-center mt-4 font-mono tracking-wider">
