@@ -18,7 +18,7 @@ export default function BlogPostDetail({ post }: { post: any }) {
   // Add trailing slash for canonical URL
   const currentUrl = `${siteUrl}/blogs/${post.slug}/`;
 
-  // Social Share Handlers - using the OG image for sharing
+  // Social Share Handlers
   const handleShare = (platform: string) => {
     const encodedUrl = encodeURIComponent(currentUrl);
     const encodedTitle = encodeURIComponent(`${post.title} | Lizard Interactive`);
@@ -79,7 +79,6 @@ export default function BlogPostDetail({ post }: { post: any }) {
                   {block.text}
                 </p>
 
-                {/* Dito papasok yung Core Vital Targets at Execution Stack (Protocols) */}
                 {block.protocols && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     {block.protocols.map((p: string, i: number) => (
@@ -105,7 +104,7 @@ export default function BlogPostDetail({ post }: { post: any }) {
         <title>{post.title} | Lizard Interactive</title>
         <meta name="description" content={post.description} />
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph / Facebook / Twitter (Twitter falls back to og:image) */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | Lizard Interactive`} />
         <meta property="og:description" content={post.description} />
@@ -115,11 +114,8 @@ export default function BlogPostDetail({ post }: { post: any }) {
         <meta property="og:url" content={currentUrl} />
         <meta property="og:site_name" content="Lizard Interactive" />
 
-        {/* Twitter */}
+        {/* Twitter Card - tells Twitter to use large image */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${post.title} | Lizard Interactive`} />
-        <meta name="twitter:description" content={post.description} />
-        <meta name="twitter:image" content={fullOgImage} />
 
         {/* Canonical URL with trailing slash */}
         <link rel="canonical" href={currentUrl} />
