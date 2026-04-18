@@ -166,7 +166,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 mt-4 text-[7px] text-emerald-500 font-mono tracking-[0.2em] text-center pointer-events-none">
-                    [ case_study →
+                 
                   </div>
                 </div>
               </div>
