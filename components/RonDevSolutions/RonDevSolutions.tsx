@@ -25,7 +25,7 @@ const packages = [
             "30-min live review"
         ],
         popular: false,
-        calLink: "https://cal.com/ronan-sibunga-m3zawr/quick-performance-audit"
+        calLink: "https://cal.com/lizard-interactive-online-m3zawr/quick-performance-audit"
     },
     {
         id: 2,
@@ -40,7 +40,7 @@ const packages = [
             "Priority scheduling"
         ],
         popular: true,
-        calLink: "https://cal.com/ronan-sibunga-m3zawr/deep-performance-audit"
+        calLink: "https://cal.com/lizard-interactive-online-m3zawr/deep-performance-audit"
     },
     {
         id: 3,
@@ -55,7 +55,7 @@ const packages = [
             "Technical documentation"
         ],
         popular: false,
-        calLink: "https://cal.com/ronan-sibunga-m3zawr/discovery-call"
+        calLink: "https://cal.com/lizard-interactive-online-m3zawr/discovery-call-free"
     }
 ];
 
