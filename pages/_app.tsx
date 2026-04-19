@@ -8,8 +8,8 @@ import Footer from "../components/Footer/Footer";
 import NavBar from "../components/NavBar/NavBar";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const siteTitle = "Lizard Interactive | RonDevSolutions & The Psychedelic Riffer";
-  const siteDescription = "Official hub for RonDevSolutions (Software Engineering) and The Psychedelic Riffer (Instrumental Metal).";
+  const siteTitle = "Lizard Interactive Online";
+  const siteDescription = "Official hub for the Lizard Interactive Online community.";
   const siteUrl = "https://lizardinteractive.online";
   const ogImage = `${siteUrl}/og-image-homepage.jpg`;
 
@@ -19,25 +19,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
     >
       <Head>
-        <title>{siteTitle}</title>
-        <meta name="description" content={siteDescription} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title key="title">{siteTitle}</title>
+        <meta name="description" content={siteDescription} key="description" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" key="viewport" />
 
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:title" content={siteTitle} />
-        <meta property="og:description" content={siteDescription} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="fb:app_id" content="966242223397117" />
+        {/* Open Graph */}
+        <meta property="og:title" content={siteTitle} key="og:title" />
+        <meta property="og:description" content={siteDescription} key="og:description" />
+        <meta property="og:image" content={ogImage} key="og:image" />
 
         {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={siteTitle} />
-        <meta name="twitter:description" content={siteDescription} />
-        <meta name="twitter:image" content={ogImage} />
-
-        <link rel="canonical" href={siteUrl} />
+        <meta name="twitter:title" content={siteTitle} key="twitter:title" />
+        <meta name="twitter:description" content={siteDescription} key="twitter:description" />
       </Head>
 
       <div className="min-h-screen flex flex-col bg-black overflow-x-hidden relative">
