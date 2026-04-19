@@ -1,8 +1,7 @@
 export const homeContent = [
   {
     type: "heading",
-    content:
-      "Building the future of digital experiences through Code, Sound, and Vision.",
+    content: "Lizard Interactive Online",
     animation: "fade-down",
   },
   // {
@@ -19,8 +18,7 @@ export const homeContent = [
   // },
   {
     type: "paragraph",
-    content:
-      "Lizard Interactive is the central hub for these ventures. From micro-apps and developer tools to high-fidelity audio-visual content, this is where technical precision meets creative soul. Explore the doors below to see how we can transform your digital presence.",
+    content: "Trust • Reliability • Results.",
     animation: "fade-up",
   },
   {

@@ -5,7 +5,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { mainLinks, rifferLinks, devLinks } from "./links";
+// Import lang natin ang mainLinks, wala ng rifferLinks at devLinks
+import { mainLinks } from "./links";
 
 export default function NavBar() {
     const pathname = usePathname();
@@ -22,10 +23,9 @@ export default function NavBar() {
         window.location.href = href;
     };
 
-    const isRifferPage = pathname?.startsWith("/thepsychedelicriffer");
-    const isDevPage = pathname?.startsWith("/rondevsolutions");
-    const currentLinks = isRifferPage ? rifferLinks : isDevPage ? devLinks : mainLinks;
-    const brandName = isRifferPage ? "THE PSYCHEDELIC RIFFER" : isDevPage ? "RD.SOLUTIONS" : "LIZARD INTERACTIVE";
+    // No more conditional rendering logic
+    const currentLinks = mainLinks;
+    const brandName = "LIZARD INTERACTIVE";
 
     return (
         <>
@@ -36,10 +36,11 @@ export default function NavBar() {
                     <Link href="/" className="flex items-center gap-3 group">
                         <div className="relative w-8 h-8 rounded-full border border-white/10 overflow-hidden">
                             <Image
-                                src={isRifferPage ? "/thepsychedelicriffer.jpg" : "/lizardinteractive.png"}
+                                src="/lizardinteractive.png" // Puro Lizard Interactive na lang
                                 alt="logo"
-                                fill
-                                className="object-cover"
+                                width={40}
+                                height={40}
+                                className="object-cover grayscale opacity-50 hover:opacity-100 transition-opacity" // Added styling from footer image
                                 priority
                             />
                         </div>
@@ -48,7 +49,7 @@ export default function NavBar() {
                         </span>
                     </Link>
 
-                    {/* 2. DESKTOP NAV (Ito ang nawawala kanina!) */}
+                    {/* 2. DESKTOP NAV */}
                     <div className="hidden md:flex items-center gap-10">
                         {currentLinks.map((link) => {
                             const isActive = pathname === link.href;

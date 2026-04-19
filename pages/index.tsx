@@ -136,7 +136,7 @@ export default function HomePage() {
                 transition={{ delay: i * 0.1 }}
                 className="group relative block w-full"
               >
-                <div className="relative z-10 w-full p-6 md:p-8 bg-[#080808] border border-zinc-900 rounded-none hover:border-emerald-500/50 transition-all duration-700 overflow-hidden active:bg-zinc-900 hover:translate-x-2 transform transition-transform duration-500">
+                <div className="relative z-10 w-full p-6 md:p-8 bg-[#080808] border border-zinc-900 rounded-none hover:border-emerald-500/50  overflow-hidden active:bg-zinc-900 hover:translate-x-2 transform transition-transform duration-500">
 
                   <span className="absolute -right-2 top-0 text-6xl md:text-7xl font-black text-white/[0.01] select-none group-hover:text-emerald-500/5 transition-all uppercase pointer-events-none">
                     {niche.tag}
