@@ -12,7 +12,7 @@ export default function LatestTrendingNews() {
     ];
 
     return (
-        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black">
+        
             <ScreenContainer variant="dark" maxWidth="xl">
                 <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-24 pb-40">
 
@@ -20,10 +20,15 @@ export default function LatestTrendingNews() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <SectionHeader
-                            title="Latest Trending News"
-                            subtitle="Stay up-to-date with the most recent articles and updates across your favorite categories."
-                        />
+
+                        
+                                        <SectionHeader
+                                            title="Online Gaming"
+                                            highlight="Hub"
+                                            description="Low-latency, zero-tracker, and optimized for performance."
+                                        />
+                        
+         
                     </motion.div>
 
                     {/* BRUTALIST GRID: Matches the homepage 'Doors' style */}
@@ -60,6 +65,6 @@ export default function LatestTrendingNews() {
                     </div>
                 </div>
             </ScreenContainer>
-        </div>
+   
     );
 }
