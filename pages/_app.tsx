@@ -47,18 +47,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-black overflow-x-hidden relative">
+      <>
         <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-auto">
           <NavBar />
         </div>
 
-        <main className="flex-1 flex flex-col w-full relative z-[10] pt-[72px] md:pt-[88px]">
+        <main className="flex-1 flex flex-col w-full relative z-[10] ">
           <Component {...pageProps} />
           <Analytics />
         </main>
 
         <Footer />
-      </div>
+      </>
     </Auth0Provider>
   );
 }

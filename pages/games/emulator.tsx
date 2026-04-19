@@ -11,7 +11,7 @@ const Emulator = dynamic(() => import("../../components/emulator/Emulator"), {
 });
 
 export default function EmulatorPage() {
-    
+
     const [status, setStatus] = useState<"idle" | "loading" | "running">("idle");
     const [message, setMessage] = useState("AWAITING ROM DATA");
     const emulatorRef = useRef<any>(null);
@@ -30,7 +30,7 @@ export default function EmulatorPage() {
 
     return (
         <div
-            className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 font-mono overflow-hidden flex items-center justify-center"
+
             onDragOver={stopDefaults}
             onDrop={stopDefaults}
         >
@@ -39,12 +39,7 @@ export default function EmulatorPage() {
             </Head>
 
             <ScreenContainer variant="dark" maxWidth="full">
-                {/* Floating Navigation: Absolute positioning keeps the main content centered */}
-                <nav className="fixed top-8 left-8 z-50">
-                    <Link href="/games" className="text-[10px] text-zinc-600 hover:text-emerald-500 uppercase tracking-[0.4em] transition-all duration-300">
-                        ← Exit_System
-                    </Link>
-                </nav>
+        
 
                 <main className="flex flex-col items-center justify-center w-full max-w-7xl mx-auto px-6">
 

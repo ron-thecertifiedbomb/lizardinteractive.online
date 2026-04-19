@@ -19,34 +19,40 @@ export default function ScreenContainer({
     };
 
     const maxWidthClasses = {
-        sm: "md:max-w-2xl",
-        md: "md:max-w-4xl",
-        lg: "md:max-w-6xl",
-        xl: "md:max-w-7xl",
-        "2xl": "md:max-w-[1400px]",
+        sm: "max-w-2xl",
+        md: "max-w-4xl",
+        lg: "max-w-6xl",
+        xl: "max-w-7xl",
+        "2xl": "max-w-[1400px]",
         "full": "max-w-full"
     };
 
     return (
-        <div
+        /* OUTER WRAPPER: Always full screen width and background */
+        <main
             className={`
                 w-full 
-                ${maxWidth !== "full" ? maxWidthClasses[maxWidth] : "max-w-full"}
-                mx-auto
-                flex
-                flex-col
-                /* FIX: Removed justify-center and items-center to stop overlap */
-                flex-1    
-                min-h-screen
-                transition-all duration-700
+                min-h-screen 
+                flex flex-col
                 ${backgrounds[variant]} 
-                ${className}
+                transition-all duration-700
                 overflow-x-hidden
             `}
         >
-            <div className="w-full flex flex-col">
+            {/* INNER CONTENT: Handles the max-width and horizontal centering */}
+            <div className={`
+                w-full 
+                mx-auto 
+                px-6 sm:px-10 lg:px-20 
+                pt-24 md:pt-32 /* Proper spacing from top navbar/header */
+                pb-20 
+                flex-1
+                flex flex-col
+                ${maxWidthClasses[maxWidth]}
+                ${className}
+            `}>
                 {children}
             </div>
-        </div>
+        </main>
     );
 }

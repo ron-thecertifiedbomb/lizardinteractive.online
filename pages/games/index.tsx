@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import ScreenContainer from '../../components/shared/ScreenContainer/ScreenContainer';
+import SectionHeader from '../../components/shared/SectionHeader/SectionHeader';
 
 const GAMES = [
     {
@@ -20,26 +21,16 @@ const GAMES = [
     }
 ];
 
-export default function ArcadeSection() {
+export default function GamesPage() {
     return (
-        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
+  
             <ScreenContainer variant="dark" maxWidth="xl">
 
-                {/* Header Section */}
-                <header className="py-16 border-b border-white/5 mb-12">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="h-1 w-12 bg-emerald-500" />
-                        <span className="font-mono text-xs uppercase tracking-[0.3em] text-emerald-500/60">
-                            System Protocol: Active
-                        </span>
-                    </div>
-                    <h1 className="text-6xl font-bold tracking-tighter uppercase">
-                        The Void <span className="text-emerald-500">Arcade</span>
-                    </h1>
-                    <p className="text-zinc-500 mt-4 max-w-lg font-light leading-relaxed">
-                        A curated selection of legal NES homebrew. Low-latency, zero-tracker, and optimized for performance.
-                    </p>
-                </header>
+                <SectionHeader
+                    title="Online Gaming"
+                    highlight="Hub"
+                    description="Low-latency, zero-tracker, and optimized for performance."
+                />
 
                 {/* Game Selection Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-20">
@@ -80,13 +71,13 @@ export default function ArcadeSection() {
                 </div>
 
                 {/* Simple Footer Note */}
-                <div className="border-t border-white/5 pt-8 mb-12">
+                {/* <div className="border-t border-white/5 pt-8 mb-12">
                     <p className="font-mono text-[10px] text-zinc-600 uppercase tracking-widest">
                         Terminal Status: Ready for Input // Select Module to Begin
                     </p>
-                </div>
+                </div> */}
 
             </ScreenContainer>
-        </div>
+   
     );
 }
