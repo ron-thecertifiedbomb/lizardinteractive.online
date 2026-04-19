@@ -28,11 +28,13 @@ export default function LogoMakerPage() {
             </Head>
 
             <Container>
-                <SectionHeader
-                    title="Logo Maker"
-                    subtitle="Create and customize your own logos with ease."
-                />
+        
 
+                    <SectionHeader
+                    title="Logo Maker"
+                        highlight="Hub"
+                    description="Create and customize your own logos with ease."
+                    />
 
                 {/* <LogoMaker /> */}
             </Container>

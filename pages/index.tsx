@@ -8,7 +8,8 @@ import { niches } from "../data/nichesList";
 import { HERO_TITLE, STAGGER_CONTAINER, FADE_IN } from "../helpers/motion";
 
 export default function HomePage() {
-  const [isMobile, setIsMobile] = useState(true); // Default to true for instant mobile paint
+
+  const [isMobile, setIsMobile] = useState(true); 
   const [hasMounted, setHasMounted] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
