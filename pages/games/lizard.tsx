@@ -1,94 +1,149 @@
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import ScreenContainer from '../../components/shared/ScreenContainer/ScreenContainer';
+import { useEffect, useRef, useState } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import { NES, Controller } from "jsnes";
 
-export default function LizardPage() {
-    const [iframeSrc, setIframeSrc] = useState("");
+import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 
+export default function LizardProPage() {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const nesRef = useRef<any>(null);
+    const [status, setStatus] = useState<"idle" | "loading" | "running">("idle");
+    const [message, setMessage] = useState("Insert Disk to Begin");
+
+    // 1. Initialize the NES Engine
     useEffect(() => {
-        // We add a cache-buster (?v=1) to force the browser to ignore previous 403/404 errors
-        const origin = window.location.origin;
-        const finalUrl = `https://cdn.emulatorjs.org/stable/data/index.html?game=${origin}/roms/lizard.nes?v=1&core=nes`;
-        setIframeSrc(finalUrl);
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx?.getImageData(0, 0, 256, 240);
+        const buf = new ArrayBuffer(imageData?.data.length || 0);
+        const buf8 = new Uint8ClampedArray(buf);
+        const buf32 = new Uint32Array(buf);
+
+        // Setup JSNES
+        const nes = new NES({
+            onFrame: (frameBuffer) => {
+                for (let i = 0; i < 256 * 240; i++) {
+                    buf32[i] = 0xff000000 | frameBuffer[i];
+                }
+                imageData?.data.set(buf8);
+                ctx?.putImageData(imageData!, 0, 0);
+            },
+            onAudioSample: (left, right) => {
+                // Audio logic can be added here later
+            }
+        });
+
+        nesRef.current = nes;
+
+        // Keyboard Controls
+        const keyboard = (callback: any, event: KeyboardEvent) => {
+            const player = 1;
+            switch (event.keyCode) {
+                case 38: callback(player, Controller.BUTTON_UP); break;
+                case 40: callback(player, Controller.BUTTON_DOWN); break;
+                case 37: callback(player, Controller.BUTTON_LEFT); break;
+                case 39: callback(player, Controller.BUTTON_RIGHT); break;
+                case 88: callback(player, Controller.BUTTON_A); break; // X key
+                case 90: callback(player, Controller.BUTTON_B); break; // Z key
+                case 13: callback(player, Controller.BUTTON_START); break; // Enter
+                case 17: callback(player, Controller.BUTTON_SELECT); break; // Ctrl
+            }
+        };
+
+        document.addEventListener("keydown", (e) => keyboard(nes.buttonDown, e));
+        document.addEventListener("keyup", (e) => keyboard(nes.buttonUp, e));
+
+        return () => {
+            stopGame();
+        };
     }, []);
 
-    return (
-        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
-            <Head>
-                <title>LIZARD | The Void Arcade</title>
-                <meta name="description" content="Play the Lizard NES demo on Lizard Interactive." />
-            </Head>
+    // 2. Load the ROM
+    async function loadLizard() {
+        setStatus("loading");
+        setMessage("Downloading Lizard Kernel...");
+        try {
+            const response = await fetch("/roms/lizard.nes");
+            if (!response.ok) throw new Error("ROM not found on server");
+            const arrayBuffer = await response.arrayBuffer();
+            const romData = new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), "");
 
+            nesRef.current.loadROM(romData);
+            setStatus("running");
+            setMessage("System Online: Enjoy Lizard");
+            startGame();
+        } catch (err) {
+            setMessage("Error: ROM failed to load");
+            setStatus("idle");
+        }
+    }
+
+    function startGame() {
+        const frame = () => {
+            if (nesRef.current) {
+                nesRef.current.frame();
+                requestAnimationFrame(frame);
+            }
+        };
+        requestAnimationFrame(frame);
+    }
+
+    function stopGame() {
+        nesRef.current = null;
+    }
+
+    return (
+        <div className="min-h-screen w-full bg-black text-white">
+            <Head><title>LIZARD | Native Console</title></Head>
             <ScreenContainer variant="dark" maxWidth="xl">
-                {/* Navigation */}
                 <nav className="py-8">
-                    <Link href="/games" className="font-mono text-xs text-zinc-500 hover:text-emerald-500 transition-colors tracking-widest uppercase">
+                    <Link href="/games" className="font-mono text-xs text-zinc-500 hover:text-emerald-500 uppercase tracking-widest">
                         ← Back to Arcade
                     </Link>
                 </nav>
 
-                <main className="animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                    <header className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-                        <div>
-                            <span className="font-mono text-xs text-emerald-500 mb-2 block uppercase tracking-widest">
-                                Protocol: Lizard_Exploration
-                            </span>
-                            <h1 className="text-5xl font-bold italic uppercase tracking-tighter">
-                                LIZARD <span className="text-emerald-500">DEMO</span>
-                            </h1>
-                        </div>
-                        <div className="hidden md:block text-right">
-                            <span className="font-mono text-[10px] text-zinc-600 uppercase tracking-widest">
-                                Platform: NES | Build: 4.1.9.8
-                            </span>
-                        </div>
+                <main className="max-w-4xl mx-auto">
+                    <header className="mb-6">
+                        <h1 className="text-4xl font-bold italic uppercase tracking-tighter">
+                            LIZARD <span className="text-emerald-500">PRO</span>
+                        </h1>
+                        <p className="font-mono text-[10px] text-zinc-500 uppercase">{message}</p>
                     </header>
 
-                    {/* The Emulator Player */}
-                    <div className="aspect-video w-full bg-zinc-900 border border-white/10 shadow-2xl relative overflow-hidden group">
-                        {/* CRT Effect Overlay */}
-                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.02),rgba(0,255,0,0.01),rgba(0,0,255,0.02))] bg-[length:100%_4px,3px_100%] z-20 opacity-50" />
+                    <div className="relative aspect-[256/240] w-full bg-zinc-900 border border-white/10 shadow-2xl overflow-hidden">
+                        <canvas
+                            ref={canvasRef}
+                            width="256"
+                            height="240"
+                            className="w-full h-full [image-rendering:pixelated]"
+                        />
 
-                        {/* Only render the iframe once the origin is known */}
-                        {iframeSrc ? (
-                            <iframe
-                                title="Lizard NES Emulator"
-                                src={iframeSrc}
-                                className="w-full h-full relative z-10 border-0"
-                                allowFullScreen
-                                scrolling="no"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center font-mono text-xs text-zinc-700 animate-pulse">
-                                INITIALIZING SYSTEM...
+                        {status === "idle" && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-30">
+                                <button
+                                    onClick={loadLizard}
+                                    className="bg-emerald-500 text-black px-8 py-3 font-bold uppercase hover:scale-105 transition-transform"
+                                >
+                                    Initialize Lizard_Demo
+                                </button>
                             </div>
                         )}
+
+                        {/* CRT Effect */}
+                        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] z-20 opacity-20" />
                     </div>
 
-                    {/* Technical Specs Footer */}
-                    <footer className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-white/5">
+                    <footer className="mt-8 grid grid-cols-2 gap-4 text-[10px] font-mono uppercase text-zinc-600">
                         <div>
-                            <h3 className="font-mono text-xs text-emerald-500 uppercase mb-2">Controls</h3>
-                            <div className="text-zinc-500 text-sm font-light space-y-1">
-                                <p>Arrows: Directional Control</p>
-                                <p><strong>X</strong>: A Button (Jump)</p>
-                                <p><strong>Z</strong>: B Button (Action)</p>
-                                <p><strong>S</strong>: Start | <strong>A</strong>: Select</p>
-                            </div>
+                            <p className="text-emerald-500">Controls</p>
+                            <p>Arrows: Move | X: A | Z: B | Enter: Start</p>
                         </div>
-                        <div>
-                            <h3 className="font-mono text-xs text-emerald-500 uppercase mb-2">Atmosphere</h3>
-                            <p className="text-zinc-500 text-sm font-light">
-                                Best experienced with the atmospheric textures of "Remorseful Soul" playing in the background.
-                            </p>
-                        </div>
-                        <div>
-                            <h3 className="font-mono text-xs text-emerald-500 uppercase mb-2">Integrity</h3>
-                            <p className="text-zinc-500 text-sm font-light">
-                                Official Demo by Brad Smith (2018). <br />
-                                Support the creator at lizardnes.com.
-                            </p>
+                        <div className="text-right">
+                            <p className="text-emerald-500">Engine</p>
+                            <p>Native JSNES v1.2.1</p>
                         </div>
                     </footer>
                 </main>
