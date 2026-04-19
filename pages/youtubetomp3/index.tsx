@@ -11,7 +11,7 @@ export default function YouTubeToMp3Page() {
             </Head>
       <SectionHeader
                 title="Youtube Video to MP3 Converter"
-                subtitle="Quickly convert Youtube Video to MP3 with ease."
+                description="Quickly convert Youtube Video to MP3 with ease."
             />
            
                 <YouTubeToMp3 />
