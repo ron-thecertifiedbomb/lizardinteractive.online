@@ -1,16 +1,19 @@
 import "tailwindcss/tailwind.css";
 import '../styles/global.css'
 import type { AppProps } from "next/app";
-import Head from "next/head"; // Import Head
+import Head from "next/head";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next"
 import Footer from "../components/Footer/Footer";
 import NavBar from "../components/NavBar/NavBar";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  
   const siteTitle = "Lizard Interactive Online";
   const siteDescription = "Official hub for the Lizard Interactive Online community.";
   const siteUrl = "https://lizardinteractive.online";
+
+  // Potential fix for /undefined: Ensure this image actually exists in /public
   const ogImage = `${siteUrl}/og-image-homepage.jpg`;
 
   return (
@@ -21,7 +24,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title key="title">{siteTitle}</title>
         <meta name="description" content={siteDescription} key="description" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" key="viewport" />
+
+        {/* Updated Viewport for Mobile & Lighthouse */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+          key="viewport"
+        />
 
         {/* Open Graph */}
         <meta property="og:title" content={siteTitle} key="og:title" />
@@ -31,6 +40,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         {/* Twitter */}
         <meta name="twitter:title" content={siteTitle} key="twitter:title" />
         <meta name="twitter:description" content={siteDescription} key="twitter:description" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <div className="min-h-screen flex flex-col bg-black overflow-x-hidden relative">
