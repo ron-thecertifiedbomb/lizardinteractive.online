@@ -2,98 +2,88 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-// Import lang natin ang mainLinks, wala ng rifferLinks at devLinks
 import { mainLinks } from "./links";
 
 export default function NavBar() {
     const pathname = usePathname();
+    const router = useRouter(); // Added router for safe navigation
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // FIX: Lock scroll using a class on the HTML element (more stable than body style)
     useEffect(() => {
-        document.body.style.overflow = mobileOpen ? 'hidden' : 'unset';
+        if (mobileOpen) {
+            document.documentElement.classList.add("lock-scroll");
+        } else {
+            document.documentElement.classList.remove("lock-scroll");
+        }
+        return () => document.documentElement.classList.remove("lock-scroll");
     }, [mobileOpen]);
 
-    // Force hard navigation to bypass any JS event blocks
-    const handleForceNav = (href: string) => {
+    // SAFE NAVIGATION: Closes menu and waits 10ms before routing to prevent history crash
+    const handleSafeNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
         setMobileOpen(false);
-        document.body.style.overflow = 'unset';
-        window.location.href = href;
+        document.documentElement.classList.remove("lock-scroll");
+
+        setTimeout(() => {
+            router.push(href);
+        }, 10);
     };
 
-    // No more conditional rendering logic
-    const currentLinks = mainLinks;
     const brandName = "LIZARD INTERACTIVE";
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 w-full h-[72px] md:h-[88px] z-[100000] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white pointer-events-auto">
-                <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative z-[10001]">
+            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[88px] z-[100] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+                <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative">
 
-                    {/* 1. LOGO */}
-                    <Link href="/" className="flex items-center gap-3 group">
-                        <div className="relative w-8 h-8 rounded-full border border-white/10 overflow-hidden">
-                            <Image
-                                src="/lizardinteractive.png" // Puro Lizard Interactive na lang
-                                alt="logo"
-                                width={40}
-                                height={40}
-                                className="object-cover grayscale opacity-50 hover:opacity-100 transition-opacity" // Added styling from footer image
-                                priority
-                            />
-                        </div>
-                        <span className="text-[10px] md:text-xs tracking-[0.4em] font-black uppercase group-hover:text-emerald-500 transition-colors">
-                            {brandName}
-                        </span>
+                    <Link href="/" className="flex items-center gap-3" onClick={(e) => handleSafeNav(e, "/")}>
+                        <Image src="/lizardinteractive.png" alt="Logo" width={32} height={32} className="rounded-full" />
+                        <span className="font-bold tracking-tight">{brandName}</span>
                     </Link>
 
-                    {/* 2. DESKTOP NAV */}
-                    <div className="hidden md:flex items-center gap-10">
-                        {currentLinks.map((link) => {
-                            const isActive = pathname === link.href;
-                            return (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={`relative text-[10px] tracking-[0.3em] uppercase font-black transition-all ${isActive ? 'text-emerald-500' : 'text-zinc-500 hover:text-white'}`}
-                                >
-                                    {link.label}
-                                    <span className={`absolute -bottom-2 left-0 h-[1.5px] transition-all duration-500 ${isActive ? 'w-full' : 'w-0 hover:w-full'} bg-emerald-500`} />
-                                </Link>
-                            );
-                        })}
+                    {/* Desktop View */}
+                    <div className="hidden md:flex gap-8">
+                        {mainLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`text-sm font-medium transition-colors ${pathname === link.href ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
                     </div>
 
-                    {/* 3. MOBILE TRIGGER */}
+                    {/* Toggle Button: z-101 to stay above everything */}
                     <button
-                        className="md:hidden text-white p-4 -mr-4 relative z-[10002]"
+                        className="md:hidden p-2 relative z-[101] hover:bg-white/5 rounded-full transition-colors"
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        type="button"
                     >
-                        {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+                        {mobileOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </nav>
             </header>
 
-            {/* 4. MOBILE MENU OVERLAY */}
-            <div
-                className={`
-                    fixed inset-0 w-full h-full bg-black z-[99999] md:hidden flex flex-col p-10 pt-32 gap-10 transition-all duration-300
-                    ${mobileOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-full"}
-                `}
-                style={{ pointerEvents: mobileOpen ? 'auto' : 'none' }}
-            >
-                {currentLinks.map((link) => (
-                    <div
-                        key={link.href}
-                        onPointerDown={() => handleForceNav(link.href)}
-                        className="text-4xl font-black tracking-[0.2em] uppercase text-zinc-400 active:text-emerald-500 py-4 cursor-pointer"
-                    >
-                        {link.label}
-                    </div>
-                ))}
+            {/* Mobile Overlay */}
+            <div className={`fixed inset-0 z-[90] bg-black/95 backdrop-blur-2xl md:hidden transition-all duration-300 ease-in-out ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                }`}>
+                <div className="flex flex-col items-center justify-center h-full gap-8">
+                    {mainLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={(e) => handleSafeNav(e, link.href)}
+                            className={`text-3xl font-black uppercase tracking-tighter transition-all ${pathname === link.href ? "text-emerald-500 scale-110" : "text-white/40"
+                                }`}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
             </div>
         </>
     );
