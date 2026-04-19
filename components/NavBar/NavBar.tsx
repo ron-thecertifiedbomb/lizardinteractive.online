@@ -28,15 +28,14 @@ export default function NavBar() {
 
         e.preventDefault();
 
-        // 1. Keep the overlay solid while we start the route change
+        // Start the transition sequence
         setIsTransitioning(true);
         setMobileOpen(false);
 
-        // 2. Trigger the page change
+        // Trigger the page change
         router.push(href);
 
-        // 3. THE DELAY: Keep the black overlay visible for an extra 600ms
-        // This ensures the new page has time to mount behind the black screen.
+        // Keep the overlay visible for 600ms to mask the page swap
         setTimeout(() => {
             setIsTransitioning(false);
         }, 600);
@@ -60,6 +59,21 @@ export default function NavBar() {
                         <span className="font-bold tracking-tight">{brandName}</span>
                     </Link>
 
+                    {/* --- DESKTOP LINKS (Restored) --- */}
+                    <div className="hidden md:flex gap-8">
+                        {mainLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`text-sm font-medium transition-colors ${pathname === link.href ? "text-white" : "text-white/60 hover:text-white"
+                                    }`}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Mobile Toggle Button */}
                     <button
                         className="md:hidden p-2 relative z-[101] outline-none"
                         onClick={() => setMobileOpen(!mobileOpen)}
@@ -69,9 +83,7 @@ export default function NavBar() {
                 </nav>
             </header>
 
-            {/* The Overlay: 
-               Stays at opacity-100 if the menu is open OR if we are currently transitioning pages.
-            */}
+            {/* Mobile Overlay */}
             <div
                 className={`fixed inset-0 z-[90] bg-black md:hidden transition-opacity duration-500 ease-in-out ${mobileOpen || isTransitioning
                         ? "opacity-100 pointer-events-auto"
