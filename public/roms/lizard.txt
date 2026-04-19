@@ -1,0 +1,99 @@
+Lizard Demo
+Brad Smith, 2018
+
+
+This is a demonstration version of the game Lizard.
+
+Lizard is an original game for the Nintendo Entertainment System,
+but also playable on a modern PC.
+
+The minimum requirements are one of:
+  Nintendo Entertainment System
+  Windows XP or later version
+  Mac OS X 10.6 (Snow Leopard) or later version
+  Linux recommended Ubuntu 14.04 or later version
+
+The controls are referred to in-game by their NES counterparts.
+For example, if you see a reference to START, it means the key or button
+that is assigned to START in the options (by default: S).
+
+
+For more information on the full game, please visit:
+  http://lizardnes.com
+
+
+Global controls:
+  Escape:       Open options menu.
+  Cursor Keys:  Directional control.
+  Alt+Enter:    Toggle fullscreen.
+  Double-Click: Toggle fullscreen.
+
+Default keyboard controls:
+  A button: X
+  B button: Z
+  START:    S
+  SELECT:   A
+
+In the joystick options a dedicated button may be assigned, but pressing
+A + B + SELECT + START may also be used to raise the options screen.
+
+
+==* Options * ==
+
+All versions have two options available by pressing SELECT at the title screen:
+
+Easy mode:
+  An "easy" mode with slower play. This selection will apply to the next new game started.
+  Other than the speed difference, the game is entirely the same.
+  On the PC versions, this can be changed at any time in the options menu (press Escape).
+
+Music:
+  Music can be turned off, or you may listen to the soundtrack here as well.
+
+
+==* Other Notes *==
+
+Game settings and save files are stored in the following location:
+  - Windows: %AppData%\lizardnes\lizard
+  - Mac: ~/Library/Application Support/lizardnes/lizard/
+  - Linux: ~/.local/share/lizardnes/lizard/
+  
+  On Windows, %AppData% will usually be something like: C:\Users\[username]\AppData\Roaming
+  but you can paste %AppData% directly into an explorer window address field to find it.
+
+  On Mac, your ~/Library folder may be reached by using Finder's Go menu while holding the Option key.
+
+Tool assisted speedruns:
+  The starting seed of the random number generator will not be deterministic on
+  hardware after power-on.  If you wish to record a TAS that can be played back reliably,
+  hold LEFT + RIGHT when pressing START to begin the game, which will initialize
+  the random seed to a consistent starting value. To verify this worked correctly,
+  you can check the password, which will be set to 11111.
+
+Emulator compatibility:
+  The NES ROM relies on iNES Mapper 34.
+  It is simple hardware to build or emulate, but only rarely used.
+  If your emulator does not run this game, it most likely needs support for this mapper.
+
+Command line:
+  You may specify any options from lizard.ini as a command line argument as well, with a preceding hyphen,
+  e.g. "-music=0" will turn the music off.
+
+The PC versions of this game rely on the SDL2 library:
+  https://www.libsdl.org/
+
+The NES version of this game auto-detects PAL region using code by Damian Yerrick:
+  https://wiki.nesdev.com/w/index.php/Detect_TV_system
+
+
+==* Contact *==
+
+Please direct questions to: lizard@lizardnes.com
+Please send bug reports to: bugs@lizardnes.com
+Please use the hashtag: #LizardNES
+Official twitter: @Lizard_NES
+
+http://lizardnes.com
+5/26/2018
+
+Demo Build 4.1.9.8
