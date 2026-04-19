@@ -11,6 +11,7 @@ const Emulator = dynamic(() => import("../../components/emulator/Emulator"), {
 });
 
 export default function EmulatorPage() {
+    
     const [status, setStatus] = useState<"idle" | "loading" | "running">("idle");
     const [message, setMessage] = useState("AWAITING ROM DATA");
     const emulatorRef = useRef<any>(null);
@@ -47,20 +48,6 @@ export default function EmulatorPage() {
 
                 <main className="flex flex-col items-center justify-center w-full max-w-7xl mx-auto px-6">
 
-                    {/* Header: Minimalist and centered above the unit */}
-                    {/* <header className="mb-8 text-center animate-in fade-in slide-in-from-top-4 duration-1000">
-                        <span className="text-[9px] text-emerald-500/50 mb-2 block uppercase tracking-[0.5em]">
-                            Unit_Type: Virtual_Console // Status: {status}
-                        </span>
-                        <h1 className="text-4xl md:text-6xl font-bold italic uppercase tracking-tighter leading-none">
-                            VOID <span className="text-emerald-500 shadow-emerald-500/20 drop-shadow-sm">ARCADE</span>
-                        </h1>
-                        <p className="text-[10px] text-zinc-600 tracking-[0.3em] mt-3 uppercase">
-                            {message}
-                        </p>
-                    </header> */}
-
-                    {/* The Arcade Unit: Perfectly Centered */}
                     <div className="relative aspect-[4/3] w-full max-w-[950px] bg-zinc-950 border border-white/10 shadow-[0_0_100px_rgba(16,185,129,0.05)] overflow-hidden transition-all duration-700">
                         <Emulator
                             ref={emulatorRef}
@@ -68,11 +55,9 @@ export default function EmulatorPage() {
                             onMessageChange={setMessage}
                         />
 
-                        {/* Retro CRT Overlays */}
                         <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_3px] z-20 opacity-30" />
                         <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.6)] z-20" />
 
-                        {/* Interactive Start Overlay */}
                         {status !== "running" && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-30 p-10 text-center backdrop-blur-sm pointer-events-none">
                                 <button
@@ -91,7 +76,7 @@ export default function EmulatorPage() {
                     </div>
 
                     {/* Footer: Controls and Engine Info */}
-                    <footer className="mt-10 w-full max-w-[950px] flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity duration-500">
+                    <footer className="mt-10 w-full max-w-[950px] flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-white/5  transition-opacity duration-500">
                         <div className="flex gap-8 text-[9px] text-zinc-500 uppercase tracking-widest">
                             <p><span className="text-zinc-400">Move:</span> Arrows</p>
                             <p><span className="text-zinc-400">A/B:</span> X / Z</p>
