@@ -22,6 +22,21 @@ const nextConfig = {
       { protocol: "https", hostname: "mcdn.wallpapersafari.com" },
     ],
   },
+
+  // NEW: This allows the emulator to fetch ROMs without CORS/403 errors
+  async headers() {
+    return [
+      {
+        source: "/roms/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+        ],
+      },
+    ];
+  },
+
   // FIX: This block resolves the PDF.js "Object.defineProperty" error
   webpack: (config) => {
     config.resolve.alias.canvas = false;
