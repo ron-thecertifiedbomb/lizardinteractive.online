@@ -6,7 +6,7 @@ import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 // import LogoMaker from "../../components/LogoMaker/LogoMaker";
 
 export default function LogoMakerPage() {
-    const staticPreviewImage = "/tailwind.jpg"; 
+    const staticPreviewImage = "/tailwind.jpg";
 
     return (
         <>
@@ -28,13 +28,13 @@ export default function LogoMakerPage() {
             </Head>
 
             <Container>
-        
 
-                    <SectionHeader
+
+                <SectionHeader
                     title="Logo Maker"
-                        highlight="Hub"
+                    highlight="Hub"
                     description="Create and customize your own logos with ease."
-                    />
+                />
 
                 {/* <LogoMaker /> */}
             </Container>
