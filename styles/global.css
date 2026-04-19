@@ -116,6 +116,16 @@ html {
     scroll-behavior: smooth;
 }
 
+.lock-scroll {
+    overflow: hidden;
+    /* Remove position: fixed and width: 100% */
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
 /* Focus visible outline for accessibility */
 :focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.5);
