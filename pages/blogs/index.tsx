@@ -1,19 +1,16 @@
 "use client";
 
-import type { InferGetStaticPropsType } from "next";
 import distanceToNow from "../../lib/dateRelative";
 import { BlogPost } from "../../interfaces";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import { motion } from "framer-motion";
 import { Zap, Activity } from "lucide-react";
-
-// The Registry contains our "Special" local content
 import { specialLogs } from "../../data/blogContent";
+import { useEffect, useState } from "react";
 
-export default function BlogPage({
-    allBlogs,
-    featuredLogs
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function BlogPage() {
+    const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
+    const [loading, setLoading] = useState(true);
 
     function extractFirstImage(html: string): string | null {
         if (!html) return null;
@@ -26,6 +23,32 @@ export default function BlogPage({
         document.body.style.overflow = 'unset';
         window.location.href = href;
     };
+
+    // Get featured logs from specialLogs
+    const featuredLogs = Object.values(specialLogs);
+
+    // Fetch blogs on client side
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                const url = process.env.NEXT_PUBLIC_GET_ALL_BLOGS_URL;
+                const res = await fetch(url!);
+                if (res.ok) {
+                    const data = await res.json();
+                    const sorted = data.sort((a: BlogPost, b: BlogPost) =>
+                        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                    );
+                    setAllBlogs(sorted);
+                }
+            } catch (error) {
+                console.error("Transmission failed", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogs();
+    }, []);
 
     return (
         <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
@@ -102,7 +125,13 @@ export default function BlogPage({
                             <div className="h-[1px] flex-1 bg-zinc-900" />
                         </div>
 
-                        {allBlogs.length ? (
+                        {loading ? (
+                            <div className="py-20 text-center border border-dashed border-zinc-900">
+                                <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
+                                    [ loading_transmissions... ]
+                                </p>
+                            </div>
+                        ) : allBlogs.length ? (
                             allBlogs.map((blog, index) => {
                                 const imgSrc = extractFirstImage(blog.content);
                                 return (
@@ -151,30 +180,4 @@ export default function BlogPage({
             </ScreenContainer>
         </div>
     );
-}
-
-export async function getStaticProps() {
-    const featuredLogs = Object.values(specialLogs);
-    const url = process.env.GET_ALL_BLOGS_URL;
-    let allBlogs: BlogPost[] = [];
-
-    try {
-        const res = await fetch(url!);
-        if (res.ok) {
-            const data = await res.json();
-            allBlogs = data.sort((a: BlogPost, b: BlogPost) =>
-                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-            );
-        }
-    } catch (error) {
-        console.error("Transmission failed", error);
-    }
-
-    return {
-        props: {
-            allBlogs,
-            featuredLogs
-        },
-        revalidate: 10,
-    };
 }
