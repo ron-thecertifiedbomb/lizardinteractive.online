@@ -1,6 +1,5 @@
 "use client";
 
-import distanceToNow from "../../lib/dateRelative";
 import { BlogPost } from "../../interfaces";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 import { motion } from "framer-motion";
@@ -9,46 +8,28 @@ import { specialLogs } from "../../data/blogContent";
 import { useEffect, useState } from "react";
 
 export default function BlogPage() {
-    const [allBlogs, setAllBlogs] = useState<BlogPost[]>([]);
-    const [loading, setLoading] = useState(true);
+    // 1. Default to 'true' or a guess to prevent the 'null' return glitch
+    const [isMobile, setIsMobile] = useState(true);
+    const [hasMounted, setHasMounted] = useState(false);
 
-    function extractFirstImage(html: string): string | null {
-        if (!html) return null;
-        const match = html.match(/<img[^>]+src="([^">]+)"/i);
-        return match ? match[1] : null;
-    }
+    useEffect(() => {
+        setHasMounted(true);
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
-    // Force hard navigation to bypass any JS event/dispatch blocks
     const handleForceNav = (href: string) => {
         document.body.style.overflow = 'unset';
         window.location.href = href;
     };
 
-    // Get featured logs from specialLogs
     const featuredLogs = Object.values(specialLogs);
 
-    // Fetch blogs on client side
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const url = process.env.NEXT_PUBLIC_GET_ALL_BLOGS_URL;
-                const res = await fetch(url!);
-                if (res.ok) {
-                    const data = await res.json();
-                    const sorted = data.sort((a: BlogPost, b: BlogPost) =>
-                        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                    );
-                    setAllBlogs(sorted);
-                }
-            } catch (error) {
-                console.error("Transmission failed", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBlogs();
-    }, []);
+    // 2. Only use motion if we have mounted AND we are on desktop
+    const useMotion = hasMounted && !isMobile;
+    const MotionDiv = useMotion ? motion.div : "div";
 
     return (
         <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
@@ -56,10 +37,11 @@ export default function BlogPage() {
                 <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-24 pb-40">
 
                     {/* --- KILLER LOGS HEADER --- */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    <MotionDiv
+                        // 3. Use undefined for clean DOM on mobile
+                        initial={useMotion ? { opacity: 0, y: 30 } : undefined}
+                        animate={useMotion ? { opacity: 1, y: 0 } : undefined}
+                        transition={useMotion ? { duration: 0.6, ease: "easeOut" } : undefined}
                         className="relative w-full mb-24 border-b border-zinc-900 pb-12"
                     >
                         <div className="flex justify-between items-center mb-10">
@@ -86,9 +68,9 @@ export default function BlogPage() {
                                 </p>
                             </div>
                         </div>
-                    </motion.div>
+                    </MotionDiv>
 
-                    {/* --- DUAL FEATURED SECTION (The Dispatch Fix) --- */}
+                    {/* --- DUAL FEATURED SECTION --- */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-zinc-900 border-y border-zinc-900 mb-32 overflow-hidden relative z-20">
                         {featuredLogs.map((log) => (
                             <div
@@ -114,67 +96,6 @@ export default function BlogPage() {
                                 </div>
                             </div>
                         ))}
-                    </div>
-
-                    {/* --- DYNAMIC FEED (The Dispatch Fix) --- */}
-                    <div className="space-y-1 relative z-10">
-                        <div className="flex items-center gap-4 mb-10">
-                            <span className="text-zinc-800 font-mono text-[10px] tracking-[0.4em] uppercase font-black">
-                                [ latest_transmissions ]
-                            </span>
-                            <div className="h-[1px] flex-1 bg-zinc-900" />
-                        </div>
-
-                        {loading ? (
-                            <div className="py-20 text-center border border-dashed border-zinc-900">
-                                <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
-                                    [ loading_transmissions... ]
-                                </p>
-                            </div>
-                        ) : allBlogs.length ? (
-                            allBlogs.map((blog, index) => {
-                                const imgSrc = extractFirstImage(blog.content);
-                                return (
-                                    <motion.div
-                                        key={blog._id}
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                    >
-                                        <div
-                                            onPointerDown={() => handleForceNav(`/blogs/${blog._id}`)}
-                                            className="group block border-b border-zinc-900 py-8 hover:border-emerald-500/50 active:bg-emerald-500/[0.02] transition-all duration-500 cursor-pointer touch-manipulation"
-                                        >
-                                            <article className="flex flex-row gap-6 justify-between items-center pointer-events-none">
-                                                <div className="flex-1">
-                                                    <h2 className="text-xl lg:text-3xl font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tighter leading-tight">
-                                                        {blog.title}
-                                                    </h2>
-                                                    <div className="text-xs lg:text-sm text-zinc-500 font-mono mt-4 uppercase tracking-widest flex items-center gap-2">
-                                                        <time>{distanceToNow(new Date(blog.createdAt))}</time>
-                                                    </div>
-                                                </div>
-                                                {imgSrc && (
-                                                    <div className="relative w-24 h-16 md:w-48 md:h-28 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-zinc-900 flex-shrink-0">
-                                                        <img
-                                                            src={imgSrc}
-                                                            alt={blog.title}
-                                                            className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-700 opacity-40 group-hover:opacity-100"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </article>
-                                        </div>
-                                    </motion.div>
-                                );
-                            })
-                        ) : (
-                            <div className="py-20 text-center border border-dashed border-zinc-900">
-                                <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
-                                    [ system_error: no_logs_detected ]
-                                </p>
-                            </div>
-                        )}
                     </div>
                 </div>
             </ScreenContainer>

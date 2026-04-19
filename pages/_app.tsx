@@ -8,12 +8,10 @@ import Footer from "../components/Footer/Footer";
 import NavBar from "../components/NavBar/NavBar";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  
+
   const siteTitle = "Lizard Interactive Online";
   const siteDescription = "Official hub for the Lizard Interactive Online community.";
   const siteUrl = "https://lizardinteractive.online";
-
-  // Potential fix for /undefined: Ensure this image actually exists in /public
   const ogImage = `${siteUrl}/og-image-homepage.jpg`;
 
   return (
@@ -25,12 +23,18 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <title key="title">{siteTitle}</title>
         <meta name="description" content={siteDescription} key="description" />
 
-        {/* Updated Viewport for Mobile & Lighthouse */}
+        {/* Essential for Mobile Simulator & Lighthouse */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
           key="viewport"
         />
+        <meta charSet="utf-8" />
+        <meta name="theme-color" content="#000000" />
+
+        {/* Static Assets (Moved from _document) */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
+        <link rel="apple-touch-icon" href="/lizardinteractive.png" />
 
         {/* Open Graph */}
         <meta property="og:title" content={siteTitle} key="og:title" />
