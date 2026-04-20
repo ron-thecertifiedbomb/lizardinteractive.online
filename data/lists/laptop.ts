@@ -1,4 +1,5 @@
-import { GearItem } from "../interfaces";
+import { GearItem } from "@/interfaces";
+
 
 // Extended interface for internal use if you want to keep specs separate
 export interface LaptopGear extends GearItem {
