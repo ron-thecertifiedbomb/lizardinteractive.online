@@ -4,35 +4,31 @@ import BlogGrid from "@/components/blog/BlogGrid/BlogGrid";
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import SectionHeader from "@/components/shared/SectionHeader/SectionHeader";
-import { specialLogs } from "@/data/lists/blogList";
-import { blogContent } from "@/data/page/blogContent";
+import { blogPageContent } from "@/data/page/blogPageContent";
+import { blogArticles } from "@/data/lists/blogList";
 
 export default function BlogPage() {
-    const featuredLogs = Object.values(specialLogs);
-
-    // DYNAMIC EXTRACTION: Pull the data from your uniform blogContent array
-    const headerData = blogContent.find(item => item.type === "heading");
-    const subData = blogContent.find(item => item.type === "paragraph");
+    // Dynamic extraction for the SectionHeader
+    const headerData = blogPageContent.find(item => item.type === "heading");
+    const subData = blogPageContent.find(item => item.type === "paragraph");
 
     return (
         <>
-            {/* MetaHead consumes the array directly */}
-            <MetaHead pageContent={blogContent} />
+            <MetaHead pageContent={blogPageContent} />
 
-            <ScreenContainer variant="dark" maxWidth="xl" className="overflow-x-hidden">
+            <ScreenContainer variant="dark" maxWidth="xl" className="overflow-x-hidden pt-24 pb-40">
                 <SectionHeader
-                    // Now consuming from blogContent.ts
                     title={headerData?.content || "Daily"}
                     highlight={headerData?.highlight || "Blogs"}
                     description={subData?.content || ""}
                 />
 
-     
-
-                    {/* Passing your featuredLogs to the grid */}
-                    <BlogGrid posts={featuredLogs} />
-            
-
+                <div className="mt-20">
+                    {/* Now passing the array where slugs are generated 
+                      on-the-fly inside the BlogGrid component.
+                    */}
+                    <BlogGrid posts={blogArticles} />
+                </div>
             </ScreenContainer>
         </>
     );

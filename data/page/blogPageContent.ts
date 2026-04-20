@@ -1,6 +1,6 @@
-// @/data/page/blogContent.ts
+// @/data/page/blogPageContent.ts
 
-export const blogContent = [
+export const blogPageContent = [
   {
     type: "metadata",
     title: "System Logs & Blogs",
