@@ -1,20 +1,23 @@
 "use client";
 
-import { homeContent } from "../lib/homeContent";
+import { homeContent } from "../data/homeContent";
 import ScreenContainer from "../components/shared/ScreenContainer/ScreenContainer";
 import Hero from "../components/shared/Hero/Hero";
+import MetaHead from "@/components/MetaHead/MetaHead";
 
 
 export default function HomePage() {
 
+  const seoEntry = homeContent.find((item) => item.type === "seo");
 
   return (
-    <ScreenContainer variant="dark" maxWidth="xl">
+    <>
 
-      <Hero homeContent={homeContent} />
+      <MetaHead data={seoEntry?.data} />
 
-   
-
-    </ScreenContainer>
+      <ScreenContainer variant="dark" maxWidth="xl">
+        <Hero homeContent={homeContent} />
+      </ScreenContainer>
+    </>
   );
 }

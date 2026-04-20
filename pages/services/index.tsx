@@ -11,10 +11,10 @@ import { servicesContent } from "@/data/servicesContent";
 
 export default function ServicesPage() {
 
-
+  const seoEntry = servicesContent.find((item) => item.type === "seo");
   return (
     <ScreenContainer variant="dark" maxWidth="xl">
-      <MetaHead pageContent={servicesContent} />
+      <MetaHead data={seoEntry?.data} />
       <Hero homeContent={servicesContent} />
 
       <ServicesCards

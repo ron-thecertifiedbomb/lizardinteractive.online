@@ -1,40 +1,39 @@
-"use client";
-
 import Head from "next/head";
 
-interface MetaHeadProps {
-    pageContent: any[];
+interface SEOData {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    ogImage?: string;
 }
 
-export default function MetaHead({ pageContent }: MetaHeadProps) {
-    // Find the metadata object in the array
-    const meta = pageContent.find((item) => item.type === "metadata") || {};
+export default function MetaHead({ data }: { data?: SEOData }) {
+    // Global Defaults
+    const siteTitle = "Lizard Interactive Online";
+    const siteDescription = "Official hub for the Lizard Interactive Online community.";
+    const siteUrl = "https://lizardinteractive.online";
+    const defaultOgImage = `${siteUrl}/og-image-homepage.jpg`;
 
-    // Default Fallbacks
-    const title = meta.title || "Lizard Interactive";
-    const description = meta.description || "Premium Digital Solutions";
-    const ogImage = meta.ogImage || "/lizardinteractive.png";
+    // Use page-specific data if available, otherwise fallback
+    const title = data?.title ? `${data.title} | ${siteTitle}` : siteTitle;
+    const description = data?.description || siteDescription;
+    const image = data?.ogImage || defaultOgImage;
 
     return (
         <Head>
             <title key="title">{title}</title>
             <meta name="description" content={description} key="description" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" key="viewport" />
+            {data?.keywords && <meta name="keywords" content={data.keywords} key="keywords" />}
 
-            {/* Social / Sharing */}
+            {/* Open Graph */}
             <meta property="og:title" content={title} key="og:title" />
             <meta property="og:description" content={description} key="og:description" />
-            <meta property="og:image" content={ogImage} key="og:image" />
+            <meta property="og:image" content={image} key="og:image" />
 
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
-            <meta name="twitter:image" content={ogImage} />
-
-            {/* Static Links */}
-            <link rel="icon" type="image/png" href="/lizardinteractive.png" />
-            <link rel="apple-touch-icon" href="/lizardinteractive.png" />
-            <meta name="theme-color" content="#000000" />
+            {/* Twitter */}
+            <meta name="twitter:title" content={title} key="twitter:title" />
+            <meta name="twitter:description" content={description} key="twitter:description" />
+            <meta name="twitter:image" content={image} key="twitter:image" />
         </Head>
     );
 }
