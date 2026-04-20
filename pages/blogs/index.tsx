@@ -5,7 +5,7 @@ import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import SectionHeader from "@/components/shared/SectionHeader/SectionHeader";
 import { blogPageContent } from "@/data/page/blogPageContent";
-import { blogArticles } from "@/data/lists/blogList";
+import { blogArticles } from "@/data/lists/blogArticle";
 
 export default function BlogPage() {
     // Dynamic extraction for the SectionHeader
