@@ -3,7 +3,7 @@
 
 export default function Hero({ homeContent }: { homeContent: any[] }) {
     const heading = homeContent.find(b => b.type === "heading");
-    const highlightWord = "Interactive"; // Or heading.highlight if you added it to the object
+    const highlightWord = "Interactive"; 
     const paragraph = homeContent.find((b, i) => b.type === "paragraph" && i === 1);
 
     return (

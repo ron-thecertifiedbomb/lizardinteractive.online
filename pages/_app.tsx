@@ -1,11 +1,11 @@
-import "tailwindcss/tailwind.css";
-import '../styles/global.css'
+import '../styles/global.css';
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next"
 import Footer from "../components/Footer/Footer";
 import NavBar from "../components/NavBar/NavBar";
+import { TurboToastProvider } from "@/components/gba/TurboToastProvider";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 
@@ -48,16 +48,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <>
-        <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-auto">
+        {/* <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-auto">
           <NavBar />
-        </div>
+        </div> */}
 
-        <main className="flex-1 flex flex-col w-full relative z-[10] ">
+        <TurboToastProvider>
           <Component {...pageProps} />
           <Analytics />
-        </main>
+        </TurboToastProvider>
 
-        <Footer />
+        {/* <Footer /> */}
       </>
     </Auth0Provider>
   );

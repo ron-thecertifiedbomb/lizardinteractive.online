@@ -1,134 +1,30 @@
-/* global.css */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
-  /* 1. UNIVERSAL THEME: Force black before JS hydration */
-  html, body, #__next {
-    background-color: #000000 !important;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    scroll-behavior: smooth;
-  }
-
   body {
-    /* bg-dark-bg now pulls #000000 from your tailwind.config.js */
-    @apply bg-dark-bg text-white font-sans;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-black text-white antialiased;
   }
 
-  /* 2. CUSTOM SELECTION: Use your emerald brand color */
-  ::selection {
-    @apply bg-emerald-500 text-black;
-  }
-
-  /* 3. MOBILE FIX: Remove the blue tap highlight on links/buttons */
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-/* 4. PROSE / CONTENT STYLING: Optimized for dark mode readability */
-.prose {
-  @apply text-zinc-400 max-w-none leading-relaxed;
-}
-
-.prose h1, .prose h2, .prose h3, .prose h4, .prose strong {
-  @apply text-white font-black uppercase tracking-tight;
-}
-
-.prose a {
-  @apply text-emerald-400 no-underline hover:text-emerald-300 transition-colors border-b border-emerald-500/20;
-}
-
-.prose blockquote {
-  @apply border-l-2 border-emerald-500 pl-6 italic text-zinc-300 bg-zinc-950/50 py-2;
-}
-
-/* Brutalist Inline Code */
-.prose code {
-  @apply text-emerald-400 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded-none font-mono text-sm;
-}
-
-/* 5. IMAGE PICKER & FORM UI: Ensuring visibility inside tools */
-.rie-container select,
-.rie-container option,
-.rie-container input[type="number"],
-.rie-container input[type="text"] {
-    color: #111827 !important; /* Keep text dark for white input backgrounds */
-    background-color: #ffffff !important;
-}
-
-.rie-container input[type="number"],
-.rie-container input[type="text"],
-.rie-container select {
-    border: 1px solid #374151 !important; 
-    border-radius: 4px !important;
-    padding: 6px 10px !important;
-}
-
-/* Focus states match your emerald brand accent */
-.rie-container input:focus,
-.rie-container select:focus {
-    outline: none !important;
-    border-color: #10b981 !important; 
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
-}
-
-/* 6. MINIMALIST SCROLLBAR (Chrome/Safari) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #000000;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #18181b; /* zinc-900 */
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #27272a; /* zinc-800 */
-}
-
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-
-
-.lock-scroll {
-    overflow: hidden;
-    position: fixed;
+  canvas {
+    /* FIX: Stop the blur and jittery pixels */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    
+    /* FIX: Lock the aspect ratio to hide overscan shimmer */
+    display: block;
     width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3; /* Use 3/2 for GBA */
+    
+    /* LIZARD UI: Black + Emerald Glow */
+    background-color: #000;
+    @apply mx-auto border border-zinc-900;
+    box-shadow: 0 0 40px -15px rgba(16, 185, 129, 0.3);
+  }
 }
 
-/* Smooth scroll behavior */
-html {
-    scroll-behavior: smooth;
-}
-
-.lock-scroll {
-    overflow: hidden;
-    /* Remove position: fixed and width: 100% */
-}
-
-/* Smooth scroll behavior */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Focus visible outline for accessibility */
-:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 2px;
-    border-radius: 0.25rem;
+/* This wrapper acts as a bezel to hide the vertical garbage on the left */
+.emulator-wrapper {
+  overflow: hidden;
+  position: relative;
 }

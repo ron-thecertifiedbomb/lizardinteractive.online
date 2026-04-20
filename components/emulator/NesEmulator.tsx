@@ -14,6 +14,7 @@ export interface NesEmulatorRef {
 
 const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChange, onMessageChange }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for the hidden button logic
     const nesRef = useRef<any>(null);
     const requestRef = useRef<number | null>(null);
 
@@ -25,7 +26,6 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
     useImperativeHandle(ref, () => ({
         loadFromUrl: async (url: string, name: string) => {
             onStatusChange?.("loading");
-            // Start Audio Context on user gesture
             initAudio();
             try {
                 const response = await fetch(url);
@@ -37,24 +37,21 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
         }
     }));
 
-    // Initialize Audio Context
     const initAudio = () => {
         if (audioCtxRef.current) {
             if (audioCtxRef.current.state === "suspended") audioCtxRef.current.resume();
             return;
         }
-
         const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        const ctx = new AudioContextClass();
+        if (!AudioContextClass) return;
 
-        // 4096 is a good buffer size for JSNES
+        const ctx = new AudioContextClass();
         const scriptNode = ctx.createScriptProcessor(4096, 0, 2);
 
         scriptNode.onaudioprocess = (e) => {
             const left = e.outputBuffer.getChannelData(0);
             const right = e.outputBuffer.getChannelData(1);
             const samples = audioBufferRef.current;
-
             for (let i = 0; i < 4096; i++) {
                 const sample = samples.length > 0 ? samples.shift() : 0;
                 left[i] = right[i] = sample || 0;
@@ -62,7 +59,6 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
         };
 
         scriptNode.connect(ctx.destination);
-
         audioCtxRef.current = ctx;
         scriptNodeRef.current = scriptNode;
     };
@@ -70,7 +66,11 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+
+        const ctx = canvas.getContext("2d", {
+            alpha: false,
+            desynchronized: true
+        });
         if (!ctx) return;
 
         const imageData = ctx.getImageData(0, 0, 256, 240);
@@ -86,7 +86,6 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
                 imageData.data.set(buf8);
                 ctx.putImageData(imageData, 0, 0);
             },
-            // Pipe audio samples to our ref buffer
             onAudioSample: (left, right) => {
                 if (audioBufferRef.current.length < 8192) {
                     audioBufferRef.current.push(left, right);
@@ -96,7 +95,6 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
 
         nesRef.current = nes;
 
-        // Key handlers...
         const handleKey = (isDown: boolean, event: KeyboardEvent) => {
             const player = 1;
             const callback = isDown ? nesRef.current.buttonDown : nesRef.current.buttonUp;
@@ -114,18 +112,14 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
         };
 
         const onKeyDown = (e: KeyboardEvent) => {
-            // Resume audio on first key press if suspended
             if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
             handleKey(true, e);
         }
-        const onKeyUp = (e: KeyboardEvent) => handleKey(false, e);
-
         window.addEventListener("keydown", onKeyDown);
-        window.addEventListener("keyup", onKeyUp);
+        window.addEventListener("keyup", (e) => handleKey(false, e));
 
         return () => {
             window.removeEventListener("keydown", onKeyDown);
-            window.removeEventListener("keyup", onKeyUp);
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
             audioCtxRef.current?.close();
         };
@@ -139,46 +133,60 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
         onStatusChange?.("running");
         onMessageChange?.(`NOW PLAYING: ${fileName.toUpperCase()}`);
 
-        const frame = () => {
-            nesRef.current.frame();
+        let lastTime = performance.now();
+        const frame = (now: number) => {
+            const dt = now - lastTime;
+            if (dt >= 16.66) {
+                nesRef.current.frame();
+                lastTime = now - (dt % 16.66);
+            }
             requestRef.current = requestAnimationFrame(frame);
         };
         requestRef.current = requestAnimationFrame(frame);
     };
 
-    const preventDefaults = (e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
-
-    const onDrop = (e: React.DragEvent) => {
-        preventDefaults(e);
-        initAudio(); // Initialize audio on file drop
-        const file = e.dataTransfer.files[0];
-        if (file?.name.toLowerCase().endsWith(".nes")) {
+    // Handler for the new button select
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && file.name.toLowerCase().endsWith(".nes")) {
+            initAudio();
             const reader = new FileReader();
             reader.onload = (ev) => {
-                if (ev.target?.result) bootRom(ev.target.result as ArrayBuffer, file.name);
+                if (ev.target?.result) {
+                    bootRom(ev.target.result as ArrayBuffer, file.name);
+                }
             };
             reader.readAsArrayBuffer(file);
         }
     };
 
     return (
-        <div
-            onDragEnter={preventDefaults}
-            onDragOver={preventDefaults}
-            onDrop={onDrop}
-            onClick={initAudio} // Initialize audio on click
-            className="w-full h-full relative bg-[#050505] border border-white/5 cursor-crosshair overflow-hidden"
-        >
+        <div className="group w-full h-full relative bg-black flex items-center justify-center overflow-hidden">
+            {/* Hidden Input for ROM loading */}
+            <input
+                type="file"
+                ref={fileInputRef}
+                accept=".nes"
+                onChange={handleFileChange}
+                className="hidden"
+            />
+
             <canvas
                 ref={canvasRef}
                 width="256"
                 height="240"
-                className="w-full h-full [image-rendering:pixelated] relative z-10"
+                className="w-full h-full object-contain [image-rendering:pixelated] [image-rendering:crisp-edges] relative z-10"
             />
-            <div className="absolute inset-0 pointer-events-none z-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.02),rgba(0,255,0,0.01),rgba(0,0,255,0.02))] bg-[length:100%_4px,3px_100%]" />
+
+            {/* Locate Button Overlay */}
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-6 py-2 border border-emerald-500 bg-emerald-500/10 text-emerald-500 font-mono text-[10px] tracking-[0.3em] uppercase hover:bg-emerald-500 hover:text-black transition-all"
+                >
+                    Locate_.NES_File
+                </button>
+            </div>
         </div>
     );
 });

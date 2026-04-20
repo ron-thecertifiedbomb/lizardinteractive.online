@@ -4,7 +4,7 @@ const withMDX = require("@next/mdx")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   trailingSlash: false,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
@@ -29,20 +29,19 @@ const nextConfig = {
       {
         source: "/roms/:path*",
         headers: [
-          { key: "Access-Control-Allow-Origin", value: "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Embedder-Policy", value: "require-corp" },
         ],
       },
     ];
   },
 
   // FIX: This block resolves the PDF.js "Object.defineProperty" error
-  webpack: (config) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
-    return config;
-  },
+  // webpack: (config) => {
+  //   config.resolve.alias.canvas = false;
+  //   config.resolve.alias.encoding = false;
+  //   return config;
+  // },
 };
 
 module.exports = withMDX(nextConfig);
