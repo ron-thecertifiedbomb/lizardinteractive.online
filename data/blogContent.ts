@@ -1,15 +1,4 @@
-import {
-  Zap,
-  Terminal,
-  Activity,
-  Shield,
-  Cpu,
-  Mic2,
-  MonitorPlay,
-  Layers,
-} from "lucide-react";
 
-// --- 1. HARDWARE DATA OBJECT ---
 export const laptopArticle2026 = {
   header: {
     title: "The 2026 Engine Room: Best Laptops for Creators & Engineers",

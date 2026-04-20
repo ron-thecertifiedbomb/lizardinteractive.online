@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";
 
 // Ensure this path matches: components/emulator/Emulator.tsx
-const Emulator = dynamic(() => import("../../components/emulator/Emulator"), {
+const Emulator = dynamic(() => import("../../components/emulator/NesEmulator"), {
     ssr: false,
     loading: () => <div className="p-10 font-mono text-zinc-800 text-[10px]">SYNCING_HARDWARE...</div>
 });
@@ -35,7 +35,7 @@ export default function EmulatorPage() {
             onDrop={stopDefaults}
         >
             <Head>
-                <title>ARCADE ENGINE | The Void</title>
+                <title>Super Nintendo Entertainment System</title>
             </Head>
 
             <ScreenContainer variant="dark" maxWidth="full">
