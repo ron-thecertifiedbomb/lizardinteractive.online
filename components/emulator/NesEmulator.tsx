@@ -175,7 +175,7 @@ const NesEmulator = forwardRef<NesEmulatorRef, NesEmulatorProps>(({ onStatusChan
                 ref={canvasRef}
                 width="256"
                 height="240"
-                className="w-full h-full object-contain [image-rendering:pixelated] [image-rendering:crisp-edges] relative z-10"
+                className="w-full h-full object-contain [image-rendering:pixelated]  relative z-10"
             />
 
             {/* Locate Button Overlay */}
