@@ -1,13 +1,18 @@
 export const servicesContent = [
   {
-    type: "seo",
+    type: "meta",
     data: {
-      title: "High-Converting Landing Page Design & Development Services",
+      title: "Landing Pages That Convert | Lizard Interactive",
       description:
-        "Transform your traffic into revenue. We build high-performance landing pages using strategic design and clean code to maximize your conversion rates.",
+        "We build high-performance landing pages designed to turn visitors into customers with strategic design and flawless code.",
       keywords:
-        "landing page design, conversion rate optimization, custom web development, lead generation pages, high-performance websites",
-      ogImage: "/images/services-landing-page-og.jpg", // Path to your social sharing image
+        "landing page design, conversion rate optimization, CRO, lizard interactive services",
+      // Social Media Tags (Open Graph & Twitter)
+      ogTitle: "Landing Pages That Convert | Lizard Interactive",
+      ogDescription:
+        "High-performance landing pages built for maximum conversion.",
+      ogImage: "/og-image-homepage.jpg",
+      twitterCard: "summary_large_image",
     },
   },
   {
