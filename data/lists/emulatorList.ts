@@ -16,7 +16,7 @@ export const EMULATORS: Emulator[] = [
     version: "Core v2.4.0",
     desc: "8-bit handheld legacy. High-compatibility rendering for retro exploration.",
     color: "emerald",
-    status: "Operational",
+    status: "Offline",
   },
   {
     id: "nes",
@@ -34,7 +34,7 @@ export const EMULATORS: Emulator[] = [
     version: "Core v3.1.1",
     desc: "32-bit power in the palm of your hand. Enhanced sprite processing active.",
     color: "purple",
-    status: "Testing",
+    status: "Offline",
   },
   {
     id: "snes",
@@ -52,6 +52,6 @@ export const EMULATORS: Emulator[] = [
     version: "Core v0.8.4",
     desc: "High-speed 16-bit processing. Blast processing protocols ready for deployment.",
     color: "blue",
-    status: "Testing",
+    status: "Offline",
   },
 ];
