@@ -5,7 +5,8 @@ import Hero from "@/components/shared/Hero/Hero";
 import Newsletter from "@/components/shared/NewsLetter/NewsLetter";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import ServicesCards from "@/components/shared/ServicesCards/ServicesCards";
-import { niches } from "@/data/nichesList";
+import { niches } from "@/data/lists/nichesList";
+
 import { servicesContent } from "@/data/servicesContent";
 
 

@@ -5,7 +5,9 @@ import { motion } from "framer-motion";
 
 interface Utility {
     name: string;
-    url: string;
+    slug: string;
+    description?: string;
+    category?: string;
 }
 
 interface UtilityCardsProps {
@@ -24,7 +26,7 @@ export default function UtilityCards({ items }: UtilityCardsProps) {
                     transition={{ delay: idx * 0.05 }}
                 >
                     <Link
-                        href={util.url}
+                        href={`/utilities/${util.slug}`}
                         className="group relative block p-8 md:p-10 bg-[#080808] border border-zinc-900 transition-all duration-500 hover:border-emerald-500/50 overflow-hidden h-full shadow-2xl"
                     >
                         {/* Background HUD Accent */}
@@ -34,15 +36,22 @@ export default function UtilityCards({ items }: UtilityCardsProps) {
 
                         <div className="flex flex-col h-full justify-between space-y-12">
                             <div className="space-y-4">
-                                {/* Animated accent line */}
                                 <div className="w-6 h-[1.5px] bg-emerald-500 opacity-40 group-hover:w-12 transition-all duration-500" />
 
-                                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
-                                    {util.name.replace(" ", ".")}
-                                </h3>
+                                <div className="flex flex-col gap-1">
+                                    {util.category && (
+                                        <span className="text-[8px] text-emerald-500/50 font-mono tracking-[0.3em] uppercase">
+                                            {util.category}_System
+                                        </span>
+                                    )}
+                                    {/* Simple title without dots */}
+                                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
+                                        {util.name}
+                                    </h3>
+                                </div>
 
                                 <p className="text-zinc-600 text-[10px] uppercase tracking-widest leading-relaxed font-mono">
-                                    Execute system_v2 interface for optimized {util.name.toLowerCase()} processing.
+                                    {util.description || `Initialize optimized ${util.name.toLowerCase()} interface.`}
                                 </p>
                             </div>
 

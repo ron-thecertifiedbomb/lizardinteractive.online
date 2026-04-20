@@ -3,8 +3,8 @@
 import ScreenContainer from '../../components/shared/ScreenContainer/ScreenContainer';
 import SectionHeader from '../../components/shared/SectionHeader/SectionHeader';
 import EmulatorGrid from '../../components/emulator/EmulatorGrid/EmulatorGrid';
+import { EMULATORS } from '@/data/lists/emulatorList';
 
-import { EMULATORS } from '../../data/emulatorList';
 
 export default function GamesPage() {
     return (

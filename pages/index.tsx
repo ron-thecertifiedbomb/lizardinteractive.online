@@ -3,7 +3,7 @@
 import MetaHead from "@/components/MetaHead/MetaHead";
 import Hero from "@/components/shared/Hero/Hero";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-import { homeContent } from "@/data/homeContent";
+import { homeContent } from "@/data/page/homeContent";
 
 
 export default function HomePage() {

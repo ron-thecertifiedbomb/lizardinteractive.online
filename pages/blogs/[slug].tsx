@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import { specialLogs } from '../../data/blogContent';
+import { specialLogs } from '../../data/page/blogContent';
 import { HardwareLayout } from "../../components/blog/HardwareLayout/HardwareLayout";
 import { ProductionLayout } from "../../components/blog/ProductionLayout/ProductionLayout";
 import ScreenContainer from "../../components/shared/ScreenContainer/ScreenContainer";

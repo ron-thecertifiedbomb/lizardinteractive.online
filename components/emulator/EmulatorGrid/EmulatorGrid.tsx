@@ -1,7 +1,8 @@
 "use client";
 
+import { Emulator } from "@/data/lists/emulatorList";
 import Link from "next/link";
-import { Emulator } from "../../../data/emulatorList";
+
 
 
 interface EmulatorGridProps {
