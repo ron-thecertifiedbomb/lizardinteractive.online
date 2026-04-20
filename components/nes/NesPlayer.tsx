@@ -329,8 +329,8 @@ export default function NesPlayer() {
                         <Cpu className="text-emerald-500" size={24} />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tighter text-white leading-tight">NEURAL_NES</h1>
-                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Virtual Environment // 2026_CORE</p>
+                        <h1 className="text-2xl font-black uppercase tracking-tighter text-white leading-tight">LIZARD INTERACTIVE ONLINE</h1>
+                        {/* <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Virtual Environment // 2026_CORE</p> */}
                     </div>
                 </div>
 

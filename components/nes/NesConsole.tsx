@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
+import { Activity, Lock, Cpu } from "lucide-react";
 
 export function NesConsole({
     canvasRef,
@@ -8,29 +11,73 @@ export function NesConsole({
     status: "idle" | "running" | "paused";
 }) {
     return (
-        <div className="mt-4 mx-auto max-w-3xl">
-            <div
-                className="relative w-full overflow-hidden rounded-2xl bg-(--screen) scanlines"
-                style={{
-                    boxShadow: `0 0 0 1px rgba(255,255,255,.06), 0 0 24px var(--screen-glow)`,
-                }}
-            >
-                <div className="aspect-4/3 w-full">
-                    <canvas
-                        ref={canvasRef}
-                        width={256}
-                        height={240}
-                        className="h-full w-full pixel-perfect"
-                    />
-                </div>
+        <div className="mx-auto w-full max-w-4xl animate-in fade-in zoom-in-95 duration-700">
+            {/* Main Console Chassis */}
+            <div className="relative rounded-[2.5rem] bg-zinc-900 p-2 shadow-[0_0_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
 
-                {status === "paused" && (
-                    <div className="absolute inset-0 grid place-items-center bg-black/50">
-                        <div className="rounded-2xl bg-black/70 px-4 py-2 text-sm font-semibold text-white">
-                            PAUSED
+                {/* 1. HUD moved ABOVE the screen bezel to prevent overlap */}
+                <div className="flex items-center justify-between px-8 py-3 bg-transparent">
+                    <div className="flex items-center gap-3">
+                        <div className={["h-1.5 w-1.5 rounded-full", status === "running" ? "bg-emerald-500 animate-pulse" : "bg-zinc-700"].join(" ")} />
+                        <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">
+                            SYSTEM_CORE: {status === "idle" ? "OFFLINE" : "STABLE"}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-1.5">
+                            <Activity size={12} className={status === "running" ? "text-emerald-500" : "text-zinc-800"} />
+                            <span className="text-[9px] font-mono font-bold text-zinc-600">60_FPS</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Lock size={12} className="text-zinc-700" />
+                            <span className="text-[9px] font-mono font-bold text-zinc-700 uppercase">Signal_Lock</span>
                         </div>
                     </div>
-                )}
+                </div>
+
+                {/* 2. Internal Bezel (Now strictly containing the game) */}
+                <div className="relative overflow-hidden rounded-[1.5rem] bg-black p-1 shadow-[inset_0_0_20px_rgba(0,0,0,1)] border border-zinc-800/50">
+
+                    {/* Screen Area */}
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black rounded-xl">
+                        <canvas
+                            ref={canvasRef}
+                            width={256}
+                            height={240}
+                            className={[
+                                "h-full w-full pixel-perfect transition-opacity duration-500",
+                                status === "idle" ? "opacity-0" : "opacity-100"
+                            ].join(" ")}
+                        />
+
+                        {/* 3. Scanline layer (Low opacity so it doesn't wash out the UI) */}
+                        <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.08] scanlines" />
+
+                        {/* 4. Subtle Vignette - Darkens edges slightly for CRT feel without hiding info */}
+                        <div className="pointer-events-none absolute inset-0 z-10 shadow-[inset_0_0_80px_rgba(0,0,0,0.4)]" />
+
+                        {/* Pause State Overlay */}
+                        {status === "paused" && (
+                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[1px]">
+                                <div className="border-y border-emerald-500/30 bg-black/40 w-full py-4 flex justify-center">
+                                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase animate-pulse">
+                                        &gt;&gt; PAUSED_SESSION &lt;&lt;
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Bottom Frame Detail */}
+                <div className="mt-3 flex justify-center items-center gap-8 pb-2">
+                    <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+                    <div className={[
+                        "h-1 w-12 rounded-full transition-all duration-1000",
+                        status === "running" ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" : "bg-zinc-800"
+                    ].join(" ")} />
+                    <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+                </div>
             </div>
         </div>
     );
