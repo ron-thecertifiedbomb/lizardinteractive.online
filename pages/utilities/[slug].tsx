@@ -1,105 +1,84 @@
-import type { InferGetStaticPropsType } from "next";
+"use client";
+
 import { useRouter } from "next/router";
-import ErrorPage from "next/error";
-import Comment from "../../components/comment";
-import Container from "../../components/container";
-import distanceToNow from "../../lib/dateRelative";
-import { getAllPosts, getPostBySlug } from "../../lib/getPost";
-import markdownToHtml from "../../lib/markdownToHtml";
-import Head from "next/head";
-import Image from "next/image";
 
-export default function PostPage({
-  post,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const router = useRouter();
+import MetaHead from "@/components/MetaHead/MetaHead";
+import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
+import SectionHeader from "@/components/shared/SectionHeader/SectionHeader";
 
-  if (!router.isFallback && !post?.slug) {
-    return <ErrorPage statusCode={404} />;
-  }
+// Import your tool components
 
-  return (
-    <Container>
-      <Head>
-        <title>{post.title} | My awesome blog</title>
-      </Head>
+import JsPlayground from "@/components/JsPlayground/JsPlayground";
+import ImageToText from "@/components/ImageToText/ImageToText";
+import PDFToWordConverter from "@/components/PDFToWordConverter/PDFToWordConverter";
 
-      {router.isFallback ? (
-        <div>Loading…</div>
-      ) : (
-        <div>
-          <article>
-            {/* ✅ COVER IMAGE */}
-            {post.coverImage && (
-              <div className="mb-8">
-                <Image
-                  src={post.coverImage}
-                  alt={post.title}
-                  width={1200}
-                  height={630}
-                  className="rounded-2xl w-full h-auto object-cover"
-                  priority
-                />
-              </div>
-            )}
+import MeshGenerator from "@/components/MeshGenerator/MeshGenerator";
+import ScreenRecorder from "@/components/ScreenRecorder/ScreenRecorder";
+import ImageEditor from "@/components/ImageEditor/ImageEditor";
+import ScaleMapper from "@/components/ScaleMapper/ScaleMapper";
+import Metronome from "@/components/Metronome/Metronome";
+import Tuner from "@/components/Tuner/Tuner";
+import Planner from "@/components/Planner/Planner";
+import Todo from "@/components/Todo/Todo";
+import BoxShadowGenerator from "@/components/BoxShadowGenerator/BoxShadowGenerator";
+import { Palette } from "@/components/Palette/Pallete";
+import ResumeBuilder from "@/components/ResumeBuilder/ResumerBuilder";
+import { utilities } from "@/data/lists/utilities";
 
-            <header>
-              <h1 className="text-4xl font-bold text-white">{post.title}</h1>
-              {post.excerpt ? (
-                <p className="mt-2 text-xl text-white font-light">{post.excerpt}</p>
-              ) : null}
-              <time className="flex mt-2 text-white">
-                {distanceToNow(new Date(post.date))}
-              </time>
-            </header>
-
-            <div
-              className="prose mt-10 text-white"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </article>
-
-          <Comment />
-        </div>
-      )}
-    </Container>
-  );
-}
-
-type Params = {
-  params: {
-    slug: string;
-  };
+// 1. Create the Map
+const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
+  palette: Palette,
+  javascriptplayground: JsPlayground,
+  imagetotext: ImageToText,
+  pdftowordconverter: PDFToWordConverter,
+  resumebuilder: ResumeBuilder,
+  meshgenerator: MeshGenerator,
+  screenrecorder: ScreenRecorder,
+  imageeditor: ImageEditor,
+  scalemapper: ScaleMapper,
+  metronome: Metronome,
+  tuner: Tuner,
+  planner: Planner,
+  todo: Todo,
+  boxshadowgenerator: BoxShadowGenerator,
 };
 
-export async function getStaticProps({ params }: Params) {
-  const post = getPostBySlug(params.slug, [
-    "slug",
-    "title",
-    "excerpt",
-    "date",
-    "content",
-    "coverImage", // ✅ Include cover image in props
-  ]);
-  const content = await markdownToHtml(post.content || "");
+export default function UtilityToolPage() {
+  const router = useRouter();
+  const { slug } = router.query;
 
-  return {
-    props: {
-      post: {
-        ...post,
-        content,
-      },
-    },
-  };
-}
+  const tool = utilities.find((u) => u.slug === slug);
 
-export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
+  if (!router.isReady) return null;
+  if (!tool) return <p>System Error: Module Not Found</p>;
 
-  return {
-    paths: posts.map(({ slug }) => ({
-      params: { slug },
-    })),
-    fallback: false,
-  };
+  // 2. Resolve the Component
+  const SelectedTool = TOOL_COMPONENTS[tool.slug as string];
+
+  return (
+    <>
+      <MetaHead data={{ title: tool.name, description: tool.description }} />
+
+      <ScreenContainer variant="ambient" maxWidth="xl" isHero={false}>
+        <SectionHeader
+          title={tool.name}
+          highlight="Module"
+          description={tool.description}
+        />
+
+        <div className="mt-8 w-full">
+          {/* 3. Conditional Render */}
+          {SelectedTool ? (
+            <SelectedTool />
+          ) : (
+            <div className="p-20 border border-dashed border-zinc-800 text-center">
+              <p className="text-zinc-500 font-mono uppercase tracking-widest text-xs">
+                Interface Initialization Failed: Component not mapped.
+              </p>
+            </div>
+          )}
+        </div>
+      </ScreenContainer>
+    </>
+  );
 }
