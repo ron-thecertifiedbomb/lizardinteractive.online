@@ -8,7 +8,7 @@ export const homeContent = [
 
   {
     type: "paragraph",
-    content: "Trust • Reliability • Results.",
+    content: "Innovation • Open Source • Solutions.",
     animation: "fade-up",
   },
 
