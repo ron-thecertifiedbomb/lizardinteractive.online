@@ -13,7 +13,8 @@ export default function ServicesPage() {
 
   const seoEntry = servicesContent.find((item) => item.type === "seo");
   return (
-    <ScreenContainer variant="dark" maxWidth="xl">
+
+      <ScreenContainer variant="dark" maxWidth="xl" isHero={true}>
       <MetaHead data={seoEntry?.data} />
       <Hero homeContent={servicesContent} />
 

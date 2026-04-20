@@ -15,7 +15,7 @@ export default function HomePage() {
 
       <MetaHead data={seoEntry?.data} />
 
-      <ScreenContainer variant="dark" maxWidth="xl">
+      <ScreenContainer variant="dark" maxWidth="xl" isHero={true}>
         <Hero homeContent={homeContent} />
       </ScreenContainer>
     </>

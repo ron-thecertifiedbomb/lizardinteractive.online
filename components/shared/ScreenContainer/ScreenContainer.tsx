@@ -1,15 +1,19 @@
+import React from "react";
+
 type ScreenContainerProps = {
     children: React.ReactNode;
     className?: string;
     variant?: "default" | "dark" | "ambient";
     maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
+    isHero?: boolean; // Added to control top spacing
 };
 
 export default function ScreenContainer({
     children,
     className = "",
     variant = "default",
-    maxWidth = "lg"
+    maxWidth = "lg",
+    isHero = false
 }: ScreenContainerProps) {
 
     const backgrounds = {
@@ -44,7 +48,8 @@ export default function ScreenContainer({
                 w-full 
                 mx-auto 
                 px-6 sm:px-10 lg:px-20 
-                pt-24 md:pt-32 /* Proper spacing from top navbar/header */
+                /* Logic: If isHero is true, we use minimal padding because _app.tsx handles the navbar clearance */
+                ${isHero ? "pt-6 md:pt-15" : "pt-5 md:pt-10"}
                 pb-20 
                 flex-1
                 flex flex-col
