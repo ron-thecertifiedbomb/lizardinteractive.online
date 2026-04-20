@@ -8,7 +8,7 @@ export const utilitiesContent = [
   },
   {
     type: "heading",
-    content: "Utilities Hub",
+    content: "Utilities",
     highlight: "Hub",
   },
   {
