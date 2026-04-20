@@ -1,8 +1,8 @@
 'use client'
 
-import ScreenContainer from '../../components/shared/ScreenContainer/ScreenContainer';
-import SectionHeader from '../../components/shared/SectionHeader/SectionHeader';
-import EmulatorGrid from '../../components/emulator/EmulatorGrid/EmulatorGrid';
+import EmulatorGrid from '@/components/emulator/EmulatorGrid/EmulatorGrid';
+import ScreenContainer from '@/components/shared/ScreenContainer/ScreenContainer';
+import SectionHeader from '@/components/shared/SectionHeader/SectionHeader';
 import { EMULATORS } from '@/data/lists/emulatorList';
 
 
