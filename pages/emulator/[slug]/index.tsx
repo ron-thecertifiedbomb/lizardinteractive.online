@@ -1,5 +1,6 @@
+import NesPlayer from "@/components/nes/NesPlayer";
 
-import NesPlayer from '../../../components/emulator/nes/NesPlayer';
+
 
 export default function EmulatorPage() {
  

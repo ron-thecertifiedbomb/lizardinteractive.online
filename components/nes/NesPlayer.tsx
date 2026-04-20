@@ -19,6 +19,22 @@ import { NesSettingsPanel } from "@/components/nes/NesSettingsPanel";
 import { ConfirmDialog } from "@/components/nes/ConfirmDialog";
 import { NesRomLibrary } from "@/components/nes/NesRomLibrary";
 import Link from "next/link";
+import {
+    Cpu,
+    Gamepad2,
+    Settings,
+    Library,
+    Power,
+    RefreshCcw,
+    Maximize,
+    Camera,
+    Square,
+    Volume2,
+    VolumeX,
+    EyeOff,
+    Eye,
+    ChevronLeft
+} from "lucide-react";
 
 import {
     getNesRomBytes,
@@ -45,9 +61,9 @@ export default function NesPlayer() {
     const [romName, setRomName] = useState("-");
     const [romHashState, setRomHashState] = useState("");
     const [status, setStatus] = useState<"idle" | "running" | "paused">("idle");
-    const [message, setMessage] = useState("Upload a .nes ROM to begin.");
+    const [message, setMessage] = useState("System standby. Awaiting ROM input.");
 
-    const [gamepadInfo, setGamepadInfo] = useState("No controller");
+    const [gamepadInfo, setGamepadInfo] = useState("Disconnected");
     const [showSettings, setShowSettings] = useState(false);
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [showEjectConfirm, setShowEjectConfirm] = useState(false);
@@ -80,14 +96,13 @@ export default function NesPlayer() {
         onSaveVersion: () => setSaveVersion((v) => v + 1),
     });
 
-    // init core
     useEffect(() => {
         const c = createJsnesCore();
         coreRef.current = c;
         const canvas = canvasRef.current;
         if (canvas) c.attachCanvas(canvas);
         c.setAudioEnabled?.(audioEnabledRef.current);
-        setMessage("NES core ready. Upload a .nes ROM.");
+        setMessage("Core initialized. Insert cartridge.");
 
         return () => {
             c.pause();
@@ -100,7 +115,7 @@ export default function NesPlayer() {
     async function onUpload(file: File | null) {
         if (!file) return;
         if (!file.name.toLowerCase().endsWith(".nes")) {
-            setMessage("Please upload a .nes file.");
+            setMessage("Invalid file format. Provide .nes only.");
             return;
         }
 
@@ -119,7 +134,7 @@ export default function NesPlayer() {
 
         setRomName(file.name);
         setRomHashState(romHash);
-        setMessage(`ROM loaded: ${file.name} (${romBytes.length.toLocaleString()} bytes)`);
+        setMessage(`SUCCESS: ${file.name.slice(0, 20)}... loaded.`);
 
         try {
             coreRef.current?.loadRom(romBytes, file.name);
@@ -127,7 +142,7 @@ export default function NesPlayer() {
             coreRef.current?.setAudioEnabled?.(audioEnabledRef.current);
         } catch (err: any) {
             console.error(err);
-            setMessage(`Failed to start core: ${err?.message ?? String(err)}`);
+            setMessage(`SYSTEM_ERR: ${err?.message ?? String(err)}`);
         }
     }
 
@@ -149,7 +164,7 @@ export default function NesPlayer() {
             setRomHashState(romHash);
             touchNesLastPlayed(romHash);
             setTab("emulator");
-            setMessage(`ROM loaded: ${name} (${bytes.length.toLocaleString()} bytes)`);
+            setMessage(`PROVISIONING: ${name}`);
 
             try {
                 coreRef.current?.loadRom(bytes, name);
@@ -157,10 +172,9 @@ export default function NesPlayer() {
                 coreRef.current?.setAudioEnabled?.(audioEnabledRef.current);
             } catch (err: any) {
                 console.error(err);
-                setMessage(`Failed to start core: ${err?.message ?? String(err)}`);
+                setMessage(`FAILED TO PROVISION: ${err?.message ?? String(err)}`);
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [romHashState],
     );
 
@@ -170,11 +184,11 @@ export default function NesPlayer() {
         if (c.status === "running") {
             c.pause();
             setStatus("paused");
-            setMessage("Paused.");
+            setMessage("PAUSED.");
         } else {
             c.start();
             setStatus("running");
-            setMessage("Running.");
+            setMessage("ACTIVE_STREAM.");
         }
     }
 
@@ -183,7 +197,7 @@ export default function NesPlayer() {
         if (!c) return;
         c.reset();
         setStatus(c.status);
-        setMessage("Reset.");
+        setMessage("SYSTEM_REBOOT_COMPLETE.");
     }
 
     function onEject() {
@@ -195,7 +209,7 @@ export default function NesPlayer() {
         setStatus("idle");
         setRomName("-");
         setRomHashState("");
-        setMessage("ROM ejected. Upload or pick a ROM to play.");
+        setMessage("CARTRIDGE_EJECTED. System standby.");
         if (fileInputRef.current) fileInputRef.current.value = "";
         const canvas = canvasRef.current;
         if (canvas) {
@@ -205,48 +219,46 @@ export default function NesPlayer() {
     }
 
     async function onSave(slot: Slot) {
-        if (!coreRef.current || !romHashState) { setMessage("Load a ROM first."); return; }
+        if (!coreRef.current || !romHashState) { setMessage("LOAD_ROM_FIRST."); return; }
         const data = coreRef.current.saveState();
-        if (!data) { setMessage("Save failed."); return; }
+        if (!data) { setMessage("SAVE_INTERRUPTED."); return; }
         await putNesSaveState(romHashState, slot, data);
         await putNesMeta({ romHash: romHashState, romName, updatedAt: Date.now(), lastSlot: slot });
         setSaveVersion((v) => v + 1);
-        setMessage(`Saved state to slot ${slot}.`);
+        setMessage(`STATE_STORED_SLOT_${slot}`);
     }
 
     async function onLoad(slot: Slot) {
-        if (!coreRef.current || !romHashState) { setMessage("Load a ROM first."); return; }
+        if (!coreRef.current || !romHashState) { setMessage("LOAD_ROM_FIRST."); return; }
         const data = await getNesSaveState(romHashState, slot);
-        if (!data) { setMessage(`No save data in slot ${slot}.`); return; }
+        if (!data) { setMessage(`SLOT_${slot}_EMPTY.`); return; }
         coreRef.current.loadState(data);
-        setMessage(`Loaded state from slot ${slot}.`);
+        setMessage(`STATE_RESTORED_SLOT_${slot}`);
     }
 
     async function onExportSave(slot: Slot) {
         if (!romHashState) return;
         const data = await getNesSaveState(romHashState, slot);
-        if (!data) { setMessage(`No save data in slot ${slot}.`); return; }
+        if (!data) { setMessage(`EXPORT_ERR: SLOT_${slot}_EMPTY.`); return; }
         const blob = new Blob([data], { type: "application/json" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = `${romName.replace(/\.[^/.]+$/, "")}_slot${slot}.sav`;
         a.click();
         URL.revokeObjectURL(a.href);
-        setMessage(`Exported slot ${slot}.`);
     }
 
     async function onImportSave(slot: Slot, file: File) {
         if (!romHashState) return;
         try {
             const text = await file.text();
-            // Validate it's parseable JSON (NES saves are JSON-serialized)
             JSON.parse(text);
             await putNesSaveState(romHashState, slot, text);
             await putNesMeta({ romHash: romHashState, romName, updatedAt: Date.now(), lastSlot: slot });
             setSaveVersion((v) => v + 1);
-            setMessage(`Imported save to slot ${slot}.`);
+            setMessage("IMPORT_SUCCESS.");
         } catch {
-            setMessage("Import failed — invalid save file.");
+            setMessage("IMPORT_FAILED: INVALID_DATA.");
         }
     }
 
@@ -280,7 +292,6 @@ export default function NesPlayer() {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [showSettings]);
 
-    // F2 shortcut to toggle menu visibility
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "F2") {
@@ -297,105 +308,198 @@ export default function NesPlayer() {
 
     return (
         <div className={[
-            "mx-auto w-full max-w-5xl",
-            menuHidden ? "flex min-h-screen flex-col items-center justify-center" : "p-4 lg:p-6",
+            "mx-auto w-full max-w-5xl transition-all duration-700",
+            menuHidden ? "flex min-h-screen flex-col items-center justify-center bg-black" : "p-4 lg:p-8",
         ].join(" ")}>
-            {/* Floating toggle button — always visible */}
+
             <button
                 onClick={() => setMenuHidden((h) => !h)}
-                className="fixed right-4 top-4 z-30 rounded-full border bg-(--panel) border-(--border) px-3 py-1.5 text-xs shadow-md hover:-translate-y-px transition"
-                type="button"
-                aria-label={menuHidden ? "Show menu" : "Hide menu"}
-                title={`${menuHidden ? "Show" : "Hide"} menu (F2)`}
+                className="fixed right-6 top-6 z-50 rounded-full border bg-zinc-950/80 backdrop-blur-md border-zinc-800 p-3 text-zinc-400 shadow-2xl hover:text-emerald-500 hover:border-emerald-500/50 transition-all active:scale-95"
+                aria-label="Toggle HUD"
             >
-                {menuHidden ? "☰ Show" : "✕ Hide"}
+                {menuHidden ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
 
-            {/* Header */}
             <div className={[
-                "mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between",
-                menuHidden ? "hidden" : "",
+                "mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
+                menuHidden ? "hidden" : "animate-in fade-in slide-in-from-top-4 duration-500",
             ].join(" ")}>
-                <div>
-                    <div className="text-2xl font-bold tracking-tight">NES Emulator</div>
-                    <div className="text-sm text-(--muted)">Upload .nes → Play in browser (JSNES)</div>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                        <Cpu className="text-emerald-500" size={24} />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-black uppercase tracking-tighter text-white leading-tight">NEURAL_NES</h1>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Virtual Environment // 2026_CORE</p>
+                    </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-sm">
-                    <Link href="/" className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition">← Home</Link>
-                    <span className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text)">Controller: {gamepadInfo}</span>
+
+                <div className="flex flex-wrap items-center gap-3">
+                    <Link href="/" className="group flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:border-zinc-700 transition">
+                        <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Back
+                    </Link>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-full">
+                        <Gamepad2 size={12} className={gamepadInfo !== "Disconnected" ? "text-emerald-500" : "text-zinc-600"} />
+                        <span className="text-[10px] font-mono uppercase text-zinc-500">{gamepadInfo}</span>
+                    </div>
                     <ThemeToggle />
-                    <button onClick={openSettings} className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition" type="button">⚙ Settings</button>
+                    <button onClick={openSettings} className="rounded-full bg-emerald-500 p-2.5 text-black hover:rotate-90 transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                        <Settings size={18} />
+                    </button>
                 </div>
             </div>
 
-            {/* Tab bar */}
             <div className={[
-                "mb-4 flex gap-1 rounded-(--radius) border bg-(--panel) border-(--border) p-1",
-                menuHidden ? "hidden" : "",
+                "mb-6 flex p-1 bg-zinc-950 border border-zinc-900 rounded-2xl max-w-sm",
+                menuHidden ? "hidden" : "animate-in fade-in duration-700",
             ].join(" ")}>
                 {(["emulator", "library"] as const).map((t) => (
-                    <button key={t} onClick={() => setTab(t)} className={[
-                        "flex-1 rounded-(--radius) px-4 py-2 text-sm font-medium transition",
-                        tab === t ? "bg-(--accent) text-white shadow-sm" : "text-(--muted) hover:text-(--text)",
-                    ].join(" ")} type="button">
-                        {t === "emulator" ? "🎮 Emulator" : "📚 Library"}
+                    <button
+                        key={t}
+                        onClick={() => setTab(t)}
+                        className={[
+                            "flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-[10px] font-black uppercase tracking-[0.1em] transition-all",
+                            tab === t ? "bg-zinc-800 text-white shadow-xl" : "text-zinc-600 hover:text-zinc-400",
+                        ].join(" ")}
+                    >
+                        {t === "emulator" ? <Power size={14} /> : <Library size={14} />}
+                        {t}
                     </button>
                 ))}
             </div>
 
-            {/* Emulator */}
-            <div className={tab !== "emulator" ? "hidden" : "w-full"}>
-                {/* Controls bar */}
+            <div className={tab !== "emulator" ? "hidden" : "w-full space-y-6"}>
                 <div className={[
-                    "flex flex-wrap items-center justify-between gap-3",
-                    menuHidden ? "hidden" : "",
+                    "flex flex-wrap items-center justify-between gap-4 p-4 bg-zinc-950 border border-zinc-900 rounded-2xl",
+                    menuHidden ? "hidden" : "animate-in slide-in-from-left-4 duration-500",
                 ].join(" ")}>
-                    <div className="flex items-center gap-3">
-                        <div className="text-sm font-medium text-(--text) truncate max-w-48">{romName !== "-" ? romName : "No ROM"}</div>
-                        <div className={[
-                            "h-2 w-2 rounded-full",
-                            status === "running" ? "bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.5)]"
-                                : status === "paused" ? "bg-yellow-400"
-                                    : "bg-(--muted)/40",
-                        ].join(" ")} />
+                    <div className="flex items-center gap-4">
+                        <div className="relative">
+                            <div className={[
+                                "h-3 w-3 rounded-full",
+                                status === "running" ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)] animate-pulse"
+                                    : status === "paused" ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+                                        : "bg-zinc-800",
+                            ].join(" ")} />
+                        </div>
+                        <div className="space-y-0.5">
+                            <div className="text-[10px] font-mono uppercase text-zinc-500">Active_Cartridge</div>
+                            <div className="text-xs font-black uppercase text-white truncate max-w-[200px]">{romName !== "-" ? romName : "NO_DATA"}</div>
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border bg-(--panel) px-3 py-2 text-xs border-(--border)">
-                            <input type="checkbox" className="h-4 w-4" checked={audioEnabled} onChange={(e) => setAudioEnabled(e.target.checked)} />
-                            Audio
-                        </label>
-                        <button onClick={onToggleRun} className="rounded-xl border px-4 py-2 text-xs text-white disabled:opacity-50 transition active:translate-y-px border-(--border) bg-(--accent) hover:brightness-105" disabled={status === "idle"} type="button">{status === "running" ? "Pause" : "Run"}</button>
-                        <button onClick={onReset} className="rounded-xl border border-(--border) px-4 py-2 text-xs disabled:opacity-50" disabled={status === "idle"} type="button">Reset</button>
-                        <button onClick={() => setShowEjectConfirm(true)} className="rounded-xl border border-(--border) px-4 py-2 text-xs disabled:opacity-50 hover:text-red-500 transition" disabled={status === "idle"} type="button">Eject</button>
-                        <button onClick={onFullscreen} className="rounded-xl border border-(--border) px-4 py-2 text-xs disabled:opacity-50" disabled={status === "idle"} type="button">Fullscreen</button>
-                        <button onClick={onScreenshot} className="rounded-xl border border-(--border) px-4 py-2 text-xs disabled:opacity-50" disabled={status === "idle"} type="button">Screenshot</button>
+                        <button
+                            onClick={() => setAudioEnabled(!audioEnabled)}
+                            className={`p-2 rounded-lg border transition-all ${audioEnabled ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' : 'border-zinc-800 text-zinc-500'}`}
+                            title="Toggle Audio"
+                        >
+                            {audioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                        </button>
+
+                        <div className="h-8 w-[1px] bg-zinc-900 mx-1 hidden sm:block" />
+
+                        <button onClick={onToggleRun} disabled={status === "idle"} className="px-6 py-2 rounded-xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors disabled:opacity-20">
+                            {status === "running" ? "PAUSE_SYSTEM" : "BOOT_STREAM"}
+                        </button>
+
+                        <button onClick={onReset} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all disabled:opacity-20">
+                            <RefreshCcw size={16} />
+                        </button>
+
+                        <button
+                            onClick={() => setShowEjectConfirm(true)}
+                            disabled={status === "idle"}
+                            className={[
+                                "p-2.5 rounded-xl border transition-all disabled:opacity-20",
+                                status !== "idle"
+                                    ? "border-rose-500/40 text-rose-500 bg-rose-500/5 hover:bg-rose-500 hover:text-white shadow-[0_0_15px_rgba(244,63,94,0.2)]"
+                                    : "border-zinc-800 text-zinc-500"
+                            ].join(" ")}
+                        >
+                            <Square size={16} fill="currentColor" />
+                        </button>
+
+                        <div className="h-8 w-[1px] bg-zinc-900 mx-1 hidden sm:block" />
+
+                        <button onClick={onScreenshot} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:bg-zinc-900 transition-all disabled:opacity-20">
+                            <Camera size={16} />
+                        </button>
+
+                        <button onClick={onFullscreen} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:bg-zinc-900 transition-all disabled:opacity-20">
+                            <Maximize size={16} />
+                        </button>
                     </div>
                 </div>
 
-                {/* Screen — full width, no extra wrapper */}
-                <NesConsole canvasRef={canvasRef} status={status} />
+                <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+                    <div className="relative bg-zinc-950 border border-zinc-900 rounded-[2rem] p-4 shadow-2xl overflow-hidden">
+                        <NesConsole canvasRef={canvasRef} status={status} />
+                    </div>
+                </div>
 
-                {/* Mobile touch controls */}
                 <NesMobileControls onPress={press} onRelease={release} />
 
-                {/* Bottom row */}
                 <div className={[
-                    "mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
-                    menuHidden ? "hidden" : "",
+                    "mt-4 flex flex-col gap-6 p-6 bg-zinc-950 border border-zinc-900 rounded-2xl sm:flex-row sm:items-center sm:justify-between",
+                    menuHidden ? "hidden" : "animate-in fade-in slide-in-from-bottom-4 duration-700",
                 ].join(" ")}>
-                    <div className="text-sm text-(--muted)">{message}</div>
-                    <label className="inline-flex items-center gap-2">
-                        <input ref={fileInputRef} type="file" accept=".nes" className="block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-(--panel-2) file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-(--panel-3)" onChange={(e) => { onUpload(e.target.files?.[0] ?? null); e.target.value = ""; }} />
+                    <div className="flex items-center gap-4">
+                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+                        <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">{message}</div>
+                    </div>
+
+                    <label className="relative cursor-pointer group">
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".nes"
+                            className="hidden"
+                            onChange={(e) => { onUpload(e.target.files?.[0] ?? null); e.target.value = ""; }}
+                        />
+                        <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
+                            PROVISION_NEW_ROM
+                        </div>
                     </label>
                 </div>
             </div>
 
-            {tab === "library" && <NesRomLibrary onPlay={loadRomFromLibrary} />}
+            {tab === "library" && (
+                <div className="animate-in fade-in zoom-in-95 duration-500">
+                    <NesRomLibrary onPlay={loadRomFromLibrary} />
+                </div>
+            )}
 
-            <NesSettingsPanel show={showSettings} open={settingsOpen} onClose={closeSettings} canInteract={canInteract} romHash={romHashState} saveVersion={saveVersion} onSave={onSave} onLoad={onLoad} onExportSave={onExportSave} onImportSave={onImportSave} autoSaveEnabled={autoSaveEnabled} setAutoSaveEnabled={setAutoSaveEnabled} autoSaveSlot={autoSaveSlot} setAutoSaveSlot={setAutoSaveSlot} keymap={keymap} onSetKey={setKeymapKey} onResetKeymap={resetKeymap} />
+            <NesSettingsPanel
+                show={showSettings}
+                open={settingsOpen}
+                onClose={closeSettings}
+                canInteract={canInteract}
+                romHash={romHashState}
+                saveVersion={saveVersion}
+                onSave={onSave}
+                onLoad={onLoad}
+                onExportSave={onExportSave}
+                onImportSave={onImportSave}
+                autoSaveEnabled={autoSaveEnabled}
+                setAutoSaveEnabled={setAutoSaveEnabled}
+                autoSaveSlot={autoSaveSlot}
+                setAutoSaveSlot={setAutoSaveSlot}
+                keymap={keymap}
+                onSetKey={setKeymapKey}
+                onResetKeymap={resetKeymap}
+            />
 
-            <ConfirmDialog open={showEjectConfirm} title="Eject ROM" message={`Remove "${romName}" from the emulator? Your save states in the library are kept.`} confirmLabel="Eject" danger onConfirm={() => { setShowEjectConfirm(false); onEject(); }} onCancel={() => setShowEjectConfirm(false)} />
+            <ConfirmDialog
+                open={showEjectConfirm}
+                title="EMERGENCY_EJECT"
+                message={`CRITICAL: Terminate current session for "${romName}"? Unsaved data will be lost.`}
+                confirmLabel="TERMINATE_SESSION"
+                danger
+                onConfirm={() => { setShowEjectConfirm(false); onEject(); }}
+                onCancel={() => setShowEjectConfirm(false)}
+            />
         </div>
     );
 }

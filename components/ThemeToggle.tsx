@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 type ThemeMode = "light" | "dark";
 
@@ -30,20 +31,44 @@ export default function ThemeToggle() {
         window.localStorage.setItem("theme", next);
     }
 
+    // Skeleton loader to prevent layout shift during hydration
     if (!mounted) {
         return (
-            <span className="inline-flex h-7.5 w-23 rounded-full border border-(--border) bg-(--panel)" />
+            <div className="h-10 w-20 rounded-full border border-zinc-800 bg-zinc-950/50 animate-pulse" />
         );
     }
 
     return (
         <button
             onClick={toggle}
-            className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition"
-            title="Toggle theme"
+            className="group relative flex h-10 w-20 items-center rounded-full border border-zinc-800 bg-zinc-950 p-1 transition-all hover:border-emerald-500/50"
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             type="button"
         >
-            {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+            {/* Sliding Indicator */}
+            <div
+                className={[
+                    "absolute h-7 w-7 rounded-full transition-all duration-500 flex items-center justify-center",
+                    theme === "dark"
+                        ? "translate-x-10 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                        : "translate-x-1 bg-zinc-100 shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+                ].join(" ")}
+            >
+                {theme === "dark" ? (
+                    <Moon size={14} className="text-black" strokeWidth={3} />
+                ) : (
+                    <Sun size={14} className="text-black" strokeWidth={3} />
+                )}
+            </div>
+
+            {/* Background Icons */}
+            <div className="flex w-full justify-between px-2 text-zinc-600">
+                <Sun size={12} className={theme === "light" ? "opacity-0" : "opacity-100"} />
+                <Moon size={12} className={theme === "dark" ? "opacity-0" : "opacity-100"} />
+            </div>
+
+            {/* Stealth Label (Screen Readers) */}
+            <span className="sr-only">Toggle Theme</span>
         </button>
     );
 }
