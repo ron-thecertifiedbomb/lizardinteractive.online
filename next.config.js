@@ -23,10 +23,20 @@ const nextConfig = {
     ],
   },
 
-  // NEW: This allows the emulator to fetch ROMs without CORS/403 errors
   async headers() {
     return [
       {
+        // APPLY TO ALL ROUTES: Force indexing to fix that SEO 63 score
+        source: "/:path*",
+        headers: [
+          {
+            key: "x-robots-tag",
+            value: "index, follow",
+          },
+        ],
+      },
+      {
+        // EMULATOR CONFIG: ROM fetching headers
         source: "/roms/:path*",
         headers: [
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
@@ -35,13 +45,6 @@ const nextConfig = {
       },
     ];
   },
-
-  // FIX: This block resolves the PDF.js "Object.defineProperty" error
-  // webpack: (config) => {
-  //   config.resolve.alias.canvas = false;
-  //   config.resolve.alias.encoding = false;
-  //   return config;
-  // },
 };
 
 module.exports = withMDX(nextConfig);

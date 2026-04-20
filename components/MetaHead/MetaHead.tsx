@@ -24,7 +24,7 @@ export default function MetaHead({ data }: { data?: SEOData }) {
             <title key="title">{title}</title>
             <meta name="description" content={description} key="description" />
             {data?.keywords && <meta name="keywords" content={data.keywords} key="keywords" />}
-
+            <meta name="robots" content="index, follow" />
             {/* Open Graph */}
             <meta property="og:title" content={title} key="og:title" />
             <meta property="og:description" content={description} key="og:description" />

@@ -1,9 +1,9 @@
 "use client";
 
-import { homeContent } from "../data/homeContent";
-import ScreenContainer from "../components/shared/ScreenContainer/ScreenContainer";
-import Hero from "../components/shared/Hero/Hero";
 import MetaHead from "@/components/MetaHead/MetaHead";
+import Hero from "@/components/shared/Hero/Hero";
+import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
+import { homeContent } from "@/data/homeContent";
 
 
 export default function HomePage() {
