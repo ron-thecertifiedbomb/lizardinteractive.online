@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Zap, Activity } from "lucide-react";
 import { specialLogs } from "../../data/blogContent";
 import { useEffect, useState } from "react";
+import SectionHeader from "../../components/shared/SectionHeader/SectionHeader";
 
 export default function BlogPage() {
     // 1. Default to 'true' or a guess to prevent the 'null' return glitch
@@ -32,43 +33,15 @@ export default function BlogPage() {
     const MotionDiv = useMotion ? motion.div : "div";
 
     return (
-        <div className="min-h-screen w-full bg-black text-white selection:bg-emerald-500 selection:text-black relative z-[1]">
+      
             <ScreenContainer variant="dark" maxWidth="xl">
-                <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 pt-24 pb-40">
+                
 
-                    {/* --- KILLER LOGS HEADER --- */}
-                    <MotionDiv
-                        // 3. Use undefined for clean DOM on mobile
-                        initial={useMotion ? { opacity: 0, y: 30 } : undefined}
-                        animate={useMotion ? { opacity: 1, y: 0 } : undefined}
-                        transition={useMotion ? { duration: 0.6, ease: "easeOut" } : undefined}
-                        className="relative w-full mb-24 border-b border-zinc-900 pb-12"
-                    >
-                        <div className="flex justify-between items-center mb-10">
-                            <div className="flex items-center gap-4">
-                                <div className="relative flex items-center justify-center">
-                                    <div className="w-3 h-3 bg-emerald-500 rounded-none animate-ping absolute opacity-20" />
-                                    <div className="w-2 h-2 bg-emerald-500 rounded-none" />
-                                </div>
-                                <span className="text-emerald-500 font-mono text-[9px] tracking-[0.6em] uppercase font-black">
-                                    TRANSMISSION.ACTIVE // 200_OK
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="relative">
-                            <h1 className="text-6xl sm:text-8xl lg:text-[10rem] font-black uppercase leading-[0.8] tracking-tighter text-white">
-                                Lizard <span className="text-emerald-500">Logs</span>
-                            </h1>
-                            <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
-                                <p className="text-zinc-500 text-xs md:text-sm uppercase tracking-[0.3em] font-bold leading-relaxed max-w-xl">
-                                    Technical breakdowns <span className="text-zinc-800">//</span>
-                                    Production secrets <span className="text-zinc-800">//</span>
-                                    <span className="text-white">High-performance systems & philosophy.</span>
-                                </p>
-                            </div>
-                        </div>
-                    </MotionDiv>
+                 <SectionHeader
+                     title="Daily"
+                     highlight="Blogs"
+                     description="Low-latency, zero-tracker, and optimized for performance."
+                   />
 
                     {/* --- DUAL FEATURED SECTION --- */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-zinc-900 border-y border-zinc-900 mb-32 overflow-hidden relative z-20">
@@ -97,8 +70,8 @@ export default function BlogPage() {
                             </div>
                         ))}
                     </div>
-                </div>
+          
             </ScreenContainer>
-        </div>
+   
     );
 }
