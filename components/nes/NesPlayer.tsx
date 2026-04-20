@@ -314,7 +314,7 @@ export default function NesPlayer() {
 
             <button
                 onClick={() => setMenuHidden((h) => !h)}
-                className="fixed right-6 top-6 z-50 rounded-full border bg-zinc-950/80 backdrop-blur-md border-zinc-800 p-3 text-zinc-400 shadow-2xl hover:text-emerald-500 hover:border-emerald-500/50 transition-all active:scale-95"
+                className="fixed right-6 top-4 z-50 rounded-full border bg-zinc-950/80 backdrop-blur-md border-zinc-800 p-3 text-zinc-400 shadow-2xl hover:text-emerald-500 hover:border-emerald-500/50 transition-all active:scale-95"
                 aria-label="Toggle HUD"
             >
                 {menuHidden ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -326,15 +326,17 @@ export default function NesPlayer() {
             ].join(" ")}>
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                        <Cpu className="text-emerald-500" size={24} />
+                        <Cpu className="text-emerald-500" size={18} />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tighter text-white leading-tight">LIZARD INTERACTIVE ONLINE</h1>
+                        <h1 className="text-[4.2vw] sm:text-2xl font-black uppercase tracking-tighter text-white leading-[0.9] drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]">
+                            LIZARD INTERACTIVE ONLINE
+                        </h1>
                         {/* <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Virtual Environment // 2026_CORE</p> */}
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3 md:mr-15 lg:mr-0">
                     <Link href="/" className="group flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:border-zinc-700 transition">
                         <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Back
                     </Link>
@@ -342,7 +344,7 @@ export default function NesPlayer() {
                         <Gamepad2 size={12} className={gamepadInfo !== "Disconnected" ? "text-emerald-500" : "text-zinc-600"} />
                         <span className="text-[10px] font-mono uppercase text-zinc-500">{gamepadInfo}</span>
                     </div>
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
                     <button onClick={openSettings} className="rounded-full bg-emerald-500 p-2.5 text-black hover:rotate-90 transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                         <Settings size={18} />
                     </button>
