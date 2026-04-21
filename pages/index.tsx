@@ -9,6 +9,8 @@ import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer
 import { homeContent } from "@/data/page/homeContent";
 import Uplink from "@/components/uplink";
 import AnimatedHero from "@/components/shared/AnimatedHero/AnimatedHero";
+import PresentationSection from "@/components/shared/PresentationSection/PresentationSection";
+import { lizardContent } from "@/data/page/lizardContent";
 
 export default function HomePage() {
   const [isBooted, setIsBooted] = useState(false);
@@ -22,7 +24,11 @@ export default function HomePage() {
 
               <ScreenContainer variant="dark" maxWidth="xl" isHero={true}>
                   {/* <Hero homeContent={homeContent} /> */}
-                  <AnimatedHero />
+        {/* <AnimatedHero /> */}
+         <PresentationSection
+          data={lizardContent}
+                badge="Lizard Interactive Online // v1.1"
+              />
               </ScreenContainer>
    
 
