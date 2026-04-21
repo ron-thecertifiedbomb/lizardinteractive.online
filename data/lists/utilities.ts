@@ -85,8 +85,8 @@ export const utilities = [
     category: "Music",
   },
   {
-    name: "Frequency Analyzer",
-    slug: "visualizer",
+    name: "Audio Visualizer",
+    slug: "audiovisualizer",
     description:
       "Real-time audio spectral analysis and waveform visualization.",
     category: "Music",
