@@ -1,4 +1,4 @@
-import { FADE_IN, HERO_TITLE, STAGGER_CONTAINER } from "@/helpers/motion";
+import { FADE_IN_UP, HERO_TITLE, STAGGER_CONTAINER } from "@/helpers/motion";
 import { motion } from "framer-motion";
 
 interface SectionHeaderProps {
@@ -67,7 +67,7 @@ export default function SectionHeader({
 
             {/* Background Decorative Detail (Watermark) */}
             <motion.div
-                variants={FADE_IN}
+                variants={FADE_IN_UP}
                 className="absolute -right-4 top-0 -z-10 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none uppercase"
             >
                 {title.substring(0, 2)}
