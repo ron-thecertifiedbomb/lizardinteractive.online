@@ -29,6 +29,13 @@ export const utilities = [
 
   // --- PRODUCTIVITY & FILES ---
   {
+    name: "Pdf Editor",
+    slug: "pdfeditor",
+    description:
+      "Surgically split, merge, and manipulate PDF pages entirely in-browser.",
+    category: "Files",
+  },
+  {
     name: "Image to Text Converter",
     slug: "imagetotext",
     description:
@@ -84,14 +91,14 @@ export const utilities = [
       "Real-time audio spectral analysis and waveform visualization.",
     category: "Music",
   },
-  // {
-  //   name: "Chord Detector",
-  //   slug: "chorddetector",
-  //   description: "Real-time chord detection and harmonic chroma analysis.",
-  //   category: "Music",
-  // },
   {
-    name: "Tuner",
+    name: "Harmonic Analyzer",
+    slug: "chord-detector",
+    description: "Real-time chord detection and harmonic chroma analysis.",
+    category: "Music",
+  },
+  {
+    name: "Strobe Tuner",
     slug: "tuner",
     description: "High-precision chromatic tuner with TC-style strobe logic.",
     category: "Music",

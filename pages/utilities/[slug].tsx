@@ -26,6 +26,7 @@ import ResumeBuilder from "@/components/ResumeBuilder/ResumerBuilder";
 import { utilities } from "@/data/lists/utilities";
 import AudioVisualizer from "@/components/AudioVisualizer/AudioVisualizer";
 import ChordDetector from "@/components/ChordDetector/ChordDetector";
+import PdfEditor from "@/components/PdfEditor/PdfEditor";
 
 
 
@@ -45,6 +46,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   tuner: Tuner,
   chorddetector: ChordDetector,
   planner: Planner,
+  pdfeditor: PdfEditor,
   todo: Todo,
   boxshadowgenerator: BoxShadowGenerator,
 };
