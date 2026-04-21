@@ -5,27 +5,26 @@ const words = ["Innovation", "Open Source", "Reliability", "Simplicity", "Soluti
 
 export default function AnimatedHero() {
     return (
-        <section className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden px-6 py-24">
-            {/* Dynamic Background Aura - Emerald Reverted */}
-            <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 bg-emerald-500/10 blur-[140px] rounded-full" />
-
-            <div className="mx-auto max-w-5xl text-center">
+        <section className="relative flex  flex-col items-center overflow-hidden px-6 py-18 text-center">
+      
+          
+            <div className="mx-auto max-w-6xl text-center">
                 {/* Badge - Emerald Reverted */}
-                <motion.div
+                {/* <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="mb-8 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-emerald-400 backdrop-blur-xl"
+                    className="mb-8 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[0.625rem] md:text-lg font-medium  text-zinc-200 backdrop-blur-xl"
                 >
                     <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     System Status: Operational
-                </motion.div>
+                </motion.div> */}
 
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-6xl font-bold tracking-tighter text-white sm:text-7xl md:text-7xl uppercase"
+                    className="text-5xl font-bold tracking-tighter text-white sm:text-7xl md:text-8xl uppercase"
                 >
-                    Lizard Interactive Online <br />
+                    {/* Lizard Interactive Online <br /> */}
                     <TextLoop items={words} />
                 </motion.h1>
 
@@ -33,7 +32,7 @@ export default function AnimatedHero() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-zinc-400 md:text-xl"
+                    className="mx-auto mt-8 max-w-3xl text-md leading-relaxed text-zinc-400 md:text-xl"
                 >
                     Forging high-fidelity digital products with
                     <span className="relative mx-1 inline-block text-emerald-500 font-bold tracking-tight pb-1">
