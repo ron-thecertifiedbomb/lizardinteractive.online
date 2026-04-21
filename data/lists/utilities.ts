@@ -78,16 +78,22 @@ export const utilities = [
     category: "Music",
   },
   {
-    name: "Audio Visualizer",
-    slug: "audiovisualizer",
+    name: "Frequency Analyzer",
+    slug: "visualizer",
     description:
       "Real-time audio spectral analysis and waveform visualization.",
     category: "Music",
   },
+  // {
+  //   name: "Chord Detector",
+  //   slug: "chorddetector",
+  //   description: "Real-time chord detection and harmonic chroma analysis.",
+  //   category: "Music",
+  // },
   {
     name: "Tuner",
     slug: "tuner",
-    description: "Chromatic guitar tuner using your device's microphone.",
+    description: "High-precision chromatic tuner with TC-style strobe logic.",
     category: "Music",
   },
 
