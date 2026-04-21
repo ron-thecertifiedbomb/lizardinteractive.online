@@ -16,7 +16,7 @@ export default function BlogPage() {
         <>
             <MetaHead pageContent={blogPageContent} />
 
-            <ScreenContainer variant="dark" maxWidth="xl" className="overflow-x-hidden pt-24 pb-40">
+            <ScreenContainer variant="dark" maxWidth="xl" className="overflow-x-hidden pb-40">
                 <SectionHeader
                     title={headerData?.content || "Daily"}
                     highlight={headerData?.highlight || "Blogs"}

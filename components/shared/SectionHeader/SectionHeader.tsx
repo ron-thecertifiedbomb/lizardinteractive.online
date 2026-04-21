@@ -1,3 +1,6 @@
+import { FADE_IN, HERO_TITLE, STAGGER_CONTAINER } from "@/helpers/motion";
+import { motion } from "framer-motion";
+
 interface SectionHeaderProps {
     label?: string;
     title: string;
@@ -11,27 +14,64 @@ export default function SectionHeader({
     highlight,
     description
 }: SectionHeaderProps) {
+
     return (
-        <header className="py-12 border-b border-white/5 mb-12">
-            {/* Label with Emerald Accent */}
+        <motion.header
+            variants={STAGGER_CONTAINER}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, margin: "-100px" }}
+            className="relative py-16 border-b border-white/5 mb-16 overflow-hidden"
+        >
+            {/* 1. Label with Emerald Accent Line */}
             <div className="flex items-center gap-4 mb-6">
-                <div className="h-[2px] w-10 bg-emerald-500" />
-                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-emerald-500/70">
-                    {label}
-                </span>
+                <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: 40 }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="h-[2px] bg-emerald-500"
+                />
+                <motion.div variants={HERO_TITLE}>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-emerald-500/70">
+                        {label}
+                    </span>
+                </motion.div>
             </div>
 
-            {/* Main Heading - Responsive sizing included */}
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
-                {title} {highlight && <span className="text-emerald-500">{highlight}</span>}
-            </h1>
+            {/* 2. Main Heading with Original Highlight Color */}
+            <div className="overflow-hidden">
+                <motion.h2
+                    variants={HERO_TITLE}
+                    className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85] text-white"
+                >
+                    {title}{" "}
+                    {highlight && (
+                        <span className="text-emerald-500">
+                            {highlight}
+                        </span>
+                    )}
+                </motion.h2>
+            </div>
 
-            {/* Description */}
+            {/* 3. Description with Emerald Border Accent */}
             {description && (
-                <p className="text-zinc-500 mt-6 max-w-xl font-light leading-relaxed text-sm md:text-base">
-                    {description}
-                </p>
+                <div className="overflow-hidden">
+                    <motion.p
+                        variants={HERO_TITLE}
+                        className="text-zinc-500 mt-8 max-w-2xl font-light leading-relaxed text-base md:text-lg border-l border-emerald-500/30 pl-6 py-1"
+                    >
+                        {description}
+                    </motion.p>
+                </div>
             )}
-        </header>
+
+            {/* Background Decorative Detail (Watermark) */}
+            <motion.div
+                variants={FADE_IN}
+                className="absolute -right-4 top-0 -z-10 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none uppercase"
+            >
+                {title.substring(0, 2)}
+            </motion.div>
+        </motion.header>
     );
 }
