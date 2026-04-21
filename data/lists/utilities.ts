@@ -78,6 +78,13 @@ export const utilities = [
     category: "Music",
   },
   {
+    name: "Audio Visualizer",
+    slug: "audiovisualizer",
+    description:
+      "Real-time audio spectral analysis and waveform visualization.",
+    category: "Music",
+  },
+  {
     name: "Tuner",
     slug: "tuner",
     description: "Chromatic guitar tuner using your device's microphone.",

@@ -24,6 +24,7 @@ import BoxShadowGenerator from "@/components/BoxShadowGenerator/BoxShadowGenerat
 import { Palette } from "@/components/Palette/Pallete";
 import ResumeBuilder from "@/components/ResumeBuilder/ResumerBuilder";
 import { utilities } from "@/data/lists/utilities";
+import AudioVisualizer from "@/components/AudioVisualizer/AudioVisualizer";
 
 // 1. Create the Map
 const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
@@ -37,6 +38,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   imageeditor: ImageEditor,
   scalemapper: ScaleMapper,
   metronome: Metronome,
+  audiovisualizer: AudioVisualizer,
   tuner: Tuner,
   planner: Planner,
   todo: Todo,
