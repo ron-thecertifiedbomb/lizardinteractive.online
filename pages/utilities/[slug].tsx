@@ -68,7 +68,7 @@ export default function UtilityToolPage() {
           description={tool.description}
         />
 
-        <div className="mt-8 w-full">
+        <div className="mt-1 w-full">
           {/* 3. Conditional Render */}
           {SelectedTool ? (
             <SelectedTool />
