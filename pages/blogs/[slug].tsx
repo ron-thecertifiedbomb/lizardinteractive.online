@@ -29,7 +29,8 @@ export default function BlogPostPage() {
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
 
-  const ogUrl = `https://lizardinteractive.online/${post.ogImage}`;
+  // ✅ Use ogImage for social sharing (JPG), image for web display (WebP)
+  const ogUrl = `https://lizardinteractive.online/blogs/${post.id}`;
 
   return (
     <>
@@ -37,8 +38,8 @@ export default function BlogPostPage() {
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: post.ogImage,
-          ogUrl: ogUrl,
+          ogImage: post.ogImage,  // ✅ JPG for social media
+          ogUrl: ogUrl,           // ✅ Blog post URL
           ogType: "article",
         }}
       />
@@ -46,15 +47,11 @@ export default function BlogPostPage() {
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
 
-          {/* Featured Image */}
+          {/* Featured Image - uses WebP for faster loading */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
               <Image
-                src={
-                  post.image.startsWith("http")
-                    ? post.image
-                    : `/${post.image.replace(/^\/+/, "")}`
-                }
+                src={`/${post.image}`}
                 alt={post.title}
                 fill
                 className="object-cover"
