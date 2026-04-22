@@ -487,14 +487,14 @@ export default function NesPlayer() {
                                             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
                                                 <span className="text-sm font-black text-red-300">Z</span>
                                             </div>
-                                            <span className="text-[7px] font-mono text-zinc-600">B BUTTON</span>
+                                            <span className="text-[7px] font-mono text-zinc-600"> A BUTTON</span>
                                         </div>
 
                                         <div className="flex flex-col items-center gap-1">
                                             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
                                                 <span className="text-sm font-black text-red-300">X</span>
                                             </div>
-                                            <span className="text-[7px] font-mono text-zinc-600">A BUTTON</span>
+                                            <span className="text-[7px] font-mono text-zinc-600">B BUTTON</span>
                                         </div>
                                     </div>
                                 </div>

@@ -13,7 +13,7 @@ type Props = {
 export function NesMobileControls({ onPress, onRelease }: Props) {
     const joystickRef = useRef<HTMLDivElement>(null);
     const [stickPos, setStickPos] = useState({ x: 0, y: 0 });
-    const [activeDir, setActiveDir] = useState<NesButton | null>(null);
+    const [activeDirs, setActiveDirs] = useState<Set<NesButton>>(new Set());
 
     const handleJoystickMove = (e: React.PointerEvent) => {
         if (!joystickRef.current) return;
@@ -34,28 +34,45 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
 
         setStickPos({ x: dx, y: dy });
 
-        // Reduced threshold for a smaller physical stick range
-        const threshold = 10;
-        let newDir: NesButton | null = null;
+        // Threshold for diagonal detection (lowered for better sensitivity)
+        const threshold = 8;
+        const newDirs = new Set<NesButton>();
 
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > threshold) newDir = "RIGHT";
-            else if (dx < -threshold) newDir = "LEFT";
-        } else {
-            if (dy > threshold) newDir = "DOWN";
-            else if (dy < -threshold) newDir = "UP";
+        // Check horizontal direction
+        if (Math.abs(dx) > threshold) {
+            if (dx > threshold) newDirs.add("RIGHT");
+            else if (dx < -threshold) newDirs.add("LEFT");
         }
 
-        if (newDir !== activeDir) {
-            if (activeDir) onRelease(activeDir);
-            if (newDir) onPress(newDir);
-            setActiveDir(newDir);
+        // Check vertical direction
+        if (Math.abs(dy) > threshold) {
+            if (dy > threshold) newDirs.add("DOWN");
+            else if (dy < -threshold) newDirs.add("UP");
         }
+
+        // Release buttons that are no longer active
+        for (const dir of activeDirs) {
+            if (!newDirs.has(dir)) {
+                onRelease(dir);
+            }
+        }
+
+        // Press new buttons
+        for (const dir of newDirs) {
+            if (!activeDirs.has(dir)) {
+                onPress(dir);
+            }
+        }
+
+        setActiveDirs(newDirs);
     };
 
     const resetJoystick = () => {
-        if (activeDir) onRelease(activeDir);
-        setActiveDir(null);
+        // Release all active directions
+        for (const dir of activeDirs) {
+            onRelease(dir);
+        }
+        setActiveDirs(new Set());
         setStickPos({ x: 0, y: 0 });
     };
 
@@ -80,10 +97,10 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                                 className="w-20 h-20 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border-2 border-zinc-600 shadow-xl z-10 flex items-center justify-center pointer-events-none"
                             >
-                                <div className={`w-3 h-3 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
+                                <div className={`w-3 h-3 rounded-full transition-all duration-200 ${activeDirs.size > 0 ? 'bg-emerald-400 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
                             </motion.div>
                         </div>
-                      
+
                     </div>
 
                     {/* RIGHT: ACTION BUTTONS WITH MODERATELY LARGER RED BUTTONS */}
