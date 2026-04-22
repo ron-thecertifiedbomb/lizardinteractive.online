@@ -12,41 +12,27 @@ export default function BlogPostPage() {
   const router = useRouter();
   const { slug } = router.query;
 
-  // Wait for router to be ready
   if (!router.isReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 bg-black">
-        [ LOADING... ]
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // Find the post
   const post = blogArticles.find((article) => article.id === slug);
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 bg-black">
-        [ 404_NULL: transmission_lost ]
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center">404 - Post not found</div>;
   }
 
-  // Calculate read time
   const readTime = Math.ceil(
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
-
-  // ✅ CRITICAL: Make sure we have the image path
-  const ogImagePath = post.image || "og-image-homepage.jpg";
-
   return (
     <>
       <MetaHead
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: ogImagePath,  // ✅ This should be like "blogs/password-security.webp"
+          // ✅ Use the dynamic OG API endpoint
+          ogImage: `/api/og/${post.id}`,
           ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
           ogType: "article",
         }}
