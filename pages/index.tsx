@@ -1,38 +1,83 @@
 'use client'
 
-import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 import MetaHead from "@/components/MetaHead/MetaHead";
-import Hero from "@/components/shared/Hero/Hero";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-import { homeContent } from "@/data/page/homeContent";
-import Uplink from "@/components/uplink";
-import AnimatedHero from "@/components/shared/AnimatedHero/AnimatedHero";
 import PresentationSection from "@/components/shared/PresentationSection/PresentationSection";
+import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
+import { utilities } from "@/data/lists/utilities";
+
+// Get featured tools (first 8 for homepage)
+const featuredTools = utilities.slice(0, 8);
 
 export default function HomePage() {
-  const [isBooted, setIsBooted] = useState(false);
   const seoEntry = homeContent.find((item) => item.type === "seo");
 
   return (
     <>
       <MetaHead data={seoEntry?.data} />
 
-  
-
-              <ScreenContainer>
-                  {/* <Hero homeContent={homeContent} /> */}
-        {/* <AnimatedHero /> */}
-         <PresentationSection
+      <ScreenContainer >
+        {/* Hero Section */}
+        {/* <PresentationSection
           data={lizardContent}
-                badge="Lizard Interactive Online // v1.1"
-              />
-              </ScreenContainer>
-   
+          badge="Lizard Interactive Online // v1.1"
+        /> */}
 
-   
+        {/* Featured Tools Section */}
+        <div className="mt-30 mb-12 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-black uppercase tracking-tighter text-center mb-2 bg-gradient-to-r from-emerald-500 to-white bg-clip-text text-transparent">
+              FREE ONLINE TOOLS
+            </h2>
+            <p className="text-center text-zinc-500 text-sm font-mono mb-8">
+              Professional utilities for developers, designers, and creators
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {featuredTools.map((tool, index) => (
+                <motion.div
+                  key={tool.slug}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    href={`/utilities/${tool.slug}`}
+                    className="group block p-4 rounded-2xl bg-zinc-950 border border-zinc-900 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
+                  >
+                    <div className="text-3xl mb-2">{tool.icon}</div>
+                    <h3 className="font-black text-white text-sm uppercase tracking-wider mb-1">
+                      {tool.name}
+                    </h3>
+                    <p className="text-[10px] font-mono text-zinc-500 line-clamp-2">
+                      {tool.description}
+                    </p>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* View All Link */}
+            <div className="text-center mt-8">
+              <Link
+                href="/utilities"
+                className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-emerald-500 hover:border-emerald-500/50 transition text-xs font-mono uppercase tracking-wider"
+              >
+                View All {utilities.length} Tools →
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </ScreenContainer>
     </>
   );
 }
