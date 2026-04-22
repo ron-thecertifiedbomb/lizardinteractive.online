@@ -290,7 +290,7 @@ export default function NesPlayer() {
         const onKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") closeSettings(); };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showSettings]);
 
     useEffect(() => {
@@ -432,23 +432,13 @@ export default function NesPlayer() {
                         <NesConsole
                             canvasRef={canvasRef}
                             status={status}
-                            fileInputRef={fileInputRef} 
-                            onUpload={onUpload}     
+                            fileInputRef={fileInputRef}
+                            onUpload={onUpload}
                         />
                     </div>
                 </div>
 
                 <NesMobileControls onPress={press} onRelease={release} />
-{/* 
-                <div className={[
-                    "mt-4 flex flex-col gap-6 p-6 bg-zinc-950 border border-zinc-900 rounded-2xl sm:flex-row sm:items-center sm:justify-between",
-                    menuHidden ? "hidden" : "animate-in fade-in slide-in-from-bottom-4 duration-700",
-                ].join(" ")}>
-                    <div className="flex items-center gap-4">
-                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                        <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">{message}</div>
-                    </div>
-                </div> */}
             </div>
 
             {tab === "library" && (
