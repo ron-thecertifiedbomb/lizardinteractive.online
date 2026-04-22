@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import type { NesButton } from "@/lib/nes/input";
 import { motion } from "framer-motion";
 
@@ -22,13 +22,11 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        // Calculate distance from center
         let dx = e.clientX - centerX;
         let dy = e.clientY - centerY;
         const distance = Math.sqrt(dx * dx + dy * dy);
         const maxRadius = rect.width / 2;
 
-        // Clamp stick movement
         if (distance > maxRadius) {
             dx = (dx / distance) * maxRadius;
             dy = (dy / distance) * maxRadius;
@@ -36,8 +34,7 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
 
         setStickPos({ x: dx, y: dy });
 
-        // Logic to trigger NES buttons based on stick angle
-        const threshold = 15; // sensitivity
+        const threshold = 15;
         let newDir: NesButton | null = null;
 
         if (Math.abs(dx) > Math.abs(dy)) {
@@ -62,84 +59,88 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
     };
 
     return (
-        <div className="mt-6 w-full lg:hidden select-none touch-none pb-12">
-            <div className="flex items-center justify-between px-10">
+        <div className="mt-8 w-full lg:hidden select-none touch-none pb-12 px-6">
+            <div className="flex flex-col gap-12">
 
-                {/* --- ANALOG STYLE THUMBSTICK --- */}
-                <div className="relative group">
-                    {/* Outer Ring */}
-                    <div
-                        ref={joystickRef}
-                        onPointerMove={handleJoystickMove}
-                        onPointerUp={resetJoystick}
-                        onPointerLeave={resetJoystick}
-                        className="w-44 h-44 rounded-full bg-zinc-950 border-2 border-zinc-900 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] flex items-center justify-center relative overflow-hidden"
-                    >
-                        {/* Decorative Axes */}
-                        <div className="absolute w-full h-[1px] bg-zinc-900/50" />
-                        <div className="absolute h-full w-[1px] bg-zinc-900/50" />
+                {/* --- MAIN CONTROL DECK --- */}
+                <div className="flex items-center justify-between">
 
-                        {/* The Actual Moving Stick (The "Nub") */}
-                        <motion.div
-                            animate={{ x: stickPos.x, y: stickPos.y }}
-                            transition={{ type: "spring", damping: 15, stiffness: 200 }}
-                            className="w-20 h-20 rounded-full bg-gradient-to-b from-zinc-800 to-zinc-950 border border-zinc-700 shadow-2xl z-10 flex items-center justify-center pointer-events-none"
+                    {/* LEFT: ANALOG STICK (Famicom-style colors) */}
+                    <div className="relative">
+                        <div
+                            ref={joystickRef}
+                            onPointerMove={handleJoystickMove}
+                            onPointerUp={resetJoystick}
+                            onPointerLeave={resetJoystick}
+                            className="w-40 h-40 rounded-full bg-zinc-950 border-[3px] border-zinc-900 shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] flex items-center justify-center"
                         >
-                            {/* Inner thumb grip texture */}
-                            <div className="w-14 h-14 rounded-full border border-zinc-800 bg-zinc-900/50 shadow-inner flex items-center justify-center">
-                                <div className={`w-2 h-2 rounded-full transition-colors duration-200 ${activeDir ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
+                            <motion.div
+                                animate={{ x: stickPos.x, y: stickPos.y }}
+                                transition={{ type: "spring", damping: 20, stiffness: 250 }}
+                                className="w-16 h-16 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border border-zinc-600 shadow-2xl z-10 flex items-center justify-center pointer-events-none"
+                            >
+                                <div className={`w-3 h-3 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_15px_#10b981]' : 'bg-zinc-800'}`} />
+                            </motion.div>
+                        </div>
+                        <span className="absolute -bottom-6 left-0 text-[6px] font-black tracking-[0.5em] text-zinc-800 uppercase">Input_Unit_01</span>
+                    </div>
+
+                    {/* RIGHT: ACTION BUTTONS (Aligned like NES/Famicom) */}
+                    <div className="relative bg-zinc-900/30 p-4 rounded-xl border border-zinc-800 flex flex-col items-center gap-1 shadow-inner">
+                        <div className="flex items-center gap-6">
+                            {/* BUTTON B */}
+                            <div className="flex flex-col items-center gap-2">
+                                <button
+                                    onPointerDown={() => onPress("B")}
+                                    onPointerUp={() => onRelease("B")}
+                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-4 border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-xl shadow-lg"
+                                >
+                                    B
+                                </button>
+                                <span className="text-[8px] font-black text-zinc-600 tracking-widest">SIGNAL_B</span>
                             </div>
-                        </motion.div>
 
-                        {/* Visual Feedback Ring */}
-                        <div className={`absolute inset-4 rounded-full border border-emerald-500/10 transition-opacity duration-300 ${activeDir ? 'opacity-100' : 'opacity-0'}`} />
-                    </div>
-                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[7px] font-black tracking-[0.4em] text-zinc-700 uppercase">Analog_Signal_Input</span>
-                </div>
-
-                {/* --- ACTION BUTTONS (XBOX STYLE OFFSET) --- */}
-                <div className="flex flex-col gap-6 transform -rotate-12">
-                    <div className="flex gap-4">
-                        {/* Rapid B */}
-                        <div className="flex flex-col items-center gap-2 translate-y-4">
-                            <button
-                                onPointerDown={() => onPress("B")}
-                                onPointerUp={() => onRelease("B")}
-                                className="w-16 h-16 rounded-full bg-zinc-900 border-2 border-zinc-800 text-rose-600 font-black text-xl shadow-xl active:bg-rose-600 active:text-white transition-all active:scale-90"
-                            >
-                                B
-                            </button>
+                            {/* BUTTON A */}
+                            <div className="flex flex-col items-center gap-2">
+                                <button
+                                    onPointerDown={() => onPress("A")}
+                                    onPointerUp={() => onRelease("A")}
+                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-4 border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-xl shadow-lg"
+                                >
+                                    A
+                                </button>
+                                <span className="text-[8px] font-black text-zinc-600 tracking-widest">SIGNAL_A</span>
+                            </div>
                         </div>
-                        {/* Rapid A */}
-                        <div className="flex flex-col items-center gap-2 -translate-y-4">
-                            <button
-                                onPointerDown={() => onPress("A")}
-                                onPointerUp={() => onRelease("A")}
-                                className="w-16 h-16 rounded-full bg-zinc-900 border-2 border-zinc-800 text-emerald-500 font-black text-xl shadow-xl active:bg-emerald-500 active:text-black transition-all active:scale-90"
-                            >
-                                A
-                            </button>
-                        </div>
+                        {/* Decorative Stripe */}
+                        <div className="w-full h-[1px] bg-zinc-800 mt-2" />
                     </div>
                 </div>
-            </div>
 
-            {/* --- SYSTEM BUTTONS --- */}
-            <div className="flex justify-center gap-10 mt-16 px-10">
-                <button
-                    onPointerDown={() => onPress("SELECT")}
-                    onPointerUp={() => onRelease("SELECT")}
-                    className="flex-1 py-3 bg-zinc-950 border border-zinc-900 rounded-sm text-[8px] tracking-[0.3em] font-black text-zinc-600 uppercase active:text-white active:border-zinc-700 transition-colors"
-                >
-                    Select
-                </button>
-                <button
-                    onPointerDown={() => onPress("START")}
-                    onPointerUp={() => onRelease("START")}
-                    className="flex-1 py-3 bg-zinc-950 border border-zinc-900 rounded-sm text-[8px] tracking-[0.3em] font-black text-zinc-600 uppercase active:text-white active:border-zinc-700 transition-colors"
-                >
-                    Start
-                </button>
+                {/* --- CENTER SYSTEM CONTROLS (Pill style) --- */}
+                <div className="flex justify-center items-center gap-4 py-6 border-y border-zinc-900/50">
+                    <div className="flex flex-col items-center gap-2">
+                        <button
+                            onPointerDown={() => onPress("SELECT")}
+                            onPointerUp={() => onRelease("SELECT")}
+                            className="w-24 h-6 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
+                        />
+                        <span className="text-[7px] font-black text-rose-900/80 tracking-[0.2em] uppercase">Select</span>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-2">
+                        <button
+                            onPointerDown={() => onPress("START")}
+                            onPointerUp={() => onRelease("START")}
+                            className="w-24 h-6 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
+                        />
+                        <span className="text-[7px] font-black text-rose-900/80 tracking-[0.2em] uppercase">Start</span>
+                    </div>
+                </div>
+
+                <div className="text-center opacity-10">
+                    <span className="text-[8px] font-mono tracking-[1em]">LIZARD INTERACTIVE ONLINE</span>
+                </div>
             </div>
         </div>
     );
