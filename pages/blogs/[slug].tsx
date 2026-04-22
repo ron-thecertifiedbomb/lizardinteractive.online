@@ -32,7 +32,7 @@ export default function BlogPostPage() {
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
           // ✅ Use the dynamic OG API endpoint
-          ogImage: `/api/og/${post.id}`,
+          ogImage: post.image, 
           ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
           ogType: "article",
         }}
