@@ -80,7 +80,7 @@ export function TextTools() {
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         placeholder="Paste or type your text here..."
-                        className="w-full h-[300px] bg-transparent px-4 py-4 text-white font-mono text-sm focus:outline-none resize-none"
+                        className="w-full h-[200px] bg-transparent px-4 py-4 text-white font-mono text-sm focus:outline-none resize-none"
                     />
                 </div>
 
