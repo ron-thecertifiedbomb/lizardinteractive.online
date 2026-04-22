@@ -30,6 +30,7 @@ import PdfEditor from "@/components/PdfEditor/PdfEditor";
 import Metronome from "@/components/Metronome/Metronome";
 import { TextTools } from "@/components/TextTools/TextTools";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator/QRCodeGenerator";
+import { PasswordGenerator } from "@/components/PasswordGenerator/PasswordGenertator";
 
 
 // 1. Create the Map
@@ -53,6 +54,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   boxshadowgenerator: BoxShadowGenerator,
   "text-tools": TextTools,
   "qrcode-generator": QRCodeGenerator,
+  "password-generator": PasswordGenerator,
 };
 
 export default function UtilityToolPage() {

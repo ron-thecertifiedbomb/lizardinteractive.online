@@ -75,6 +75,13 @@ export const utilities = [
       "Create custom QR codes with colors, sizes, and error correction. Download or share instantly.",
     category: "Productivity",
   },
+  {
+    name: "Password Generator",
+    slug: "password-generator",
+    description:
+      "Generate strong, secure passwords with customizable length and character types. Local-only for privacy.",
+    category: "Security",
+  },
 
   // --- TEXT TOOLS ---
   {
