@@ -34,7 +34,8 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
 
         setStickPos({ x: dx, y: dy });
 
-        const threshold = 15;
+        // Reduced threshold for a smaller physical stick range
+        const threshold = 10;
         let newDir: NesButton | null = null;
 
         if (Math.abs(dx) > Math.abs(dy)) {
@@ -59,87 +60,89 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
     };
 
     return (
-        <div className="mt-8 w-full lg:hidden select-none touch-none pb-12 px-6">
-            <div className="flex flex-col gap-12">
+        <div className="mt-4 w-full lg:hidden select-none touch-none pb-8 px-6">
+            <div className="flex flex-col gap-8">
 
                 {/* --- MAIN CONTROL DECK --- */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between px-2">
 
-                    {/* LEFT: ANALOG STICK (Famicom-style colors) */}
+                    {/* LEFT: SMALLER ANALOG STICK */}
                     <div className="relative">
                         <div
                             ref={joystickRef}
                             onPointerMove={handleJoystickMove}
                             onPointerUp={resetJoystick}
                             onPointerLeave={resetJoystick}
-                            className="w-40 h-40 rounded-full bg-zinc-950 border-[3px] border-zinc-900 shadow-[inset_0_4px_10px_rgba(0,0,0,0.8)] flex items-center justify-center"
+                            // Scaled from w-40 to w-24
+                            className="w-24 h-24 rounded-full bg-zinc-950 border-2 border-zinc-900 shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)] flex items-center justify-center"
                         >
                             <motion.div
                                 animate={{ x: stickPos.x, y: stickPos.y }}
-                                transition={{ type: "spring", damping: 20, stiffness: 250 }}
-                                className="w-16 h-16 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border border-zinc-600 shadow-2xl z-10 flex items-center justify-center pointer-events-none"
+                                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                                // Scaled from w-16 to w-10
+                                className="w-10 h-10 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border border-zinc-600 shadow-xl z-10 flex items-center justify-center pointer-events-none"
                             >
-                                <div className={`w-3 h-3 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_15px_#10b981]' : 'bg-zinc-800'}`} />
+                                <div className={`w-2 h-2 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
                             </motion.div>
                         </div>
-                        <span className="absolute -bottom-6 left-0 text-[6px] font-black tracking-[0.5em] text-zinc-800 uppercase">Input_Unit_01</span>
+                        <span className="absolute -bottom-4 left-0 text-[5px] font-black tracking-[0.3em] text-zinc-800 uppercase">Input_01</span>
                     </div>
 
-                    {/* RIGHT: ACTION BUTTONS (Aligned like NES/Famicom) */}
-                    <div className="relative bg-zinc-900/30 p-4 rounded-xl border border-zinc-800 flex flex-col items-center gap-1 shadow-inner">
-                        <div className="flex items-center gap-6">
+                    {/* RIGHT: SMALLER ACTION BUTTONS */}
+                    <div className="relative bg-zinc-900/20 p-3 rounded-lg border border-zinc-800/50 flex flex-col items-center gap-1 shadow-inner">
+                        <div className="flex items-center gap-4">
                             {/* BUTTON B */}
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("B")}
                                     onPointerUp={() => onRelease("B")}
-                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-4 border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-xl shadow-lg"
+                                    // Scaled from w-16 to w-12
+                                    className="w-12 h-12 rounded-full bg-[#8b1d1d] border-b-[3px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-sm shadow-md"
                                 >
                                     B
                                 </button>
-                                <span className="text-[8px] font-black text-zinc-600 tracking-widest">SIGNAL_B</span>
                             </div>
 
                             {/* BUTTON A */}
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("A")}
                                     onPointerUp={() => onRelease("A")}
-                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-4 border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-xl shadow-lg"
+                                    // Scaled from w-16 to w-12
+                                    className="w-12 h-12 rounded-full bg-[#8b1d1d] border-b-[3px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-sm shadow-md"
                                 >
                                     A
                                 </button>
-                                <span className="text-[8px] font-black text-zinc-600 tracking-widest">SIGNAL_A</span>
                             </div>
                         </div>
-                        {/* Decorative Stripe */}
-                        <div className="w-full h-[1px] bg-zinc-800 mt-2" />
                     </div>
                 </div>
 
-                {/* --- CENTER SYSTEM CONTROLS (Pill style) --- */}
-                <div className="flex justify-center items-center gap-4 py-6 border-y border-zinc-900/50">
-                    <div className="flex flex-col items-center gap-2">
+                {/* --- CENTER SYSTEM CONTROLS (Slimmer) --- */}
+                <div className="flex justify-center items-center gap-3 py-4 border-y border-zinc-900/30">
+                    <div className="flex flex-col items-center gap-1">
                         <button
                             onPointerDown={() => onPress("SELECT")}
                             onPointerUp={() => onRelease("SELECT")}
-                            className="w-24 h-6 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
+                            // Scaled from w-24 to w-16
+                            className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
-                        <span className="text-[7px] font-black text-rose-900/80 tracking-[0.2em] uppercase">Select</span>
+                        <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Select</span>
                     </div>
 
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-1">
                         <button
                             onPointerDown={() => onPress("START")}
                             onPointerUp={() => onRelease("START")}
-                            className="w-24 h-6 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
+                            // Scaled from w-24 to w-16
+                            className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
-                        <span className="text-[7px] font-black text-rose-900/80 tracking-[0.2em] uppercase">Start</span>
+                        <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Start</span>
                     </div>
                 </div>
 
-                <div className="text-center opacity-10">
-                    <span className="text-[8px] font-mono tracking-[1em]">LIZARD INTERACTIVE ONLINE</span>
+                <div className="text-center opacity-5">
+                    <span className="text-[6px] font-mono tracking-[0.8em]">LIZARD INTERACTIVE ONLINE</span>
                 </div>
             </div>
         </div>
