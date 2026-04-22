@@ -52,9 +52,10 @@ import { hashRom } from "@/lib/hashRom";
 type Tab = "emulator" | "library";
 
 export default function NesPlayer() {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    // Correctly typed as RefObject by providing (null) as initial value
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const coreRef = useRef<NesCore | null>(null);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [tab, setTab] = useState<Tab>("emulator");
     const [romName, setRomName] = useState("-");
@@ -427,7 +428,6 @@ export default function NesPlayer() {
                 </div>
 
                 <div className="relative group">
-                    <div className="absolute "></div>
                     <div className="relative p-1 shadow-2xl overflow-hidden">
                         <NesConsole
                             canvasRef={canvasRef}
