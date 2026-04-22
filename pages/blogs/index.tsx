@@ -16,19 +16,16 @@ export default function BlogPage() {
         <>
             <MetaHead pageContent={blogPageContent} />
 
-            <ScreenContainer className="pt-16 md:pt-12">
+            <ScreenContainer className="pt-16 md:pt-10">
                 <SectionHeader
                     title={headerData?.content || "Daily"}
                     highlight={headerData?.highlight || "Blogs"}
-                    description={subData?.content || ""}
+                    // description={subData?.content || ""}
                 />
 
-                <div className="mt-20">
-                    {/* Now passing the array where slugs are generated 
-                      on-the-fly inside the BlogGrid component.
-                    */}
+     
                     <BlogGrid posts={blogArticles} />
-                </div>
+             
             </ScreenContainer>
         </>
     );

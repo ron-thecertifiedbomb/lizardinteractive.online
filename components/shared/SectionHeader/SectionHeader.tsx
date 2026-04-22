@@ -22,10 +22,10 @@ export default function SectionHeader({
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
-            className="relative py-4 md:py-16 border-b border-white/5 mb-6 md:mb-16 overflow-hidden"
+            className="relative py-4 md:py-16 border-b border-white/5 mb-6 md:mb-16 overflow-hidden px-6"
         >
             {/* 1. Protocol Label */}
-            <div className="flex items-center gap-2 mb-3 md:mb-6">
+            <div className="flex items-center gap-2">
                 <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: 16 }}
@@ -43,10 +43,6 @@ export default function SectionHeader({
             <div className="overflow-hidden">
                 <motion.h2
                     variants={HERO_TITLE}
-                    /* Mobile: text-xl (20px) 
-                       Tablet: text-3xl (30px)
-                       Desktop: text-6xl (60px)
-                    */
                     className="text-xl sm:text-3xl md:text-6xl lg:text-7xl font-extrabold tracking-tight uppercase leading-tight md:leading-[0.85] text-white"
                 >
                     {title}{" "}
@@ -58,7 +54,7 @@ export default function SectionHeader({
                 </motion.h2>
             </div>
 
-            {/* 3. Description // HUD Style */}
+ 
             {description && (
                 <div className="overflow-hidden">
                     <motion.p

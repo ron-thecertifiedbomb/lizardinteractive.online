@@ -8,14 +8,14 @@ import { EMULATORS } from '@/data/lists/emulatorList';
 
 export default function GamesPage() {
     return (
-        <ScreenContainer variant="dark" maxWidth="xl">
+      <ScreenContainer className="pt-16 md:pt-10">
             <SectionHeader
                 title="Emulator"
                 highlight="Vault"
-                description="Initialize legacy hardware protocols. Optimized for low-latency browser execution."
+                // description="Initialize legacy hardware protocols. Optimized for low-latency browser execution."
             />
 
-            {/* ✅ Pass the EMULATORS array here */}
+
             <EmulatorGrid emulators={EMULATORS} />
 
     =

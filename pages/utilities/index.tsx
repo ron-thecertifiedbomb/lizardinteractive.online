@@ -15,20 +15,15 @@ export default function UtilitiesPage() {
 
   return (
 
-    <ScreenContainer
-      variant="dark"
-      maxWidth="xl"
-      isHero={false}
-      className="overflow-hidden w-full"
-    >
-      {/* 1. Dynamic SEO from utilitiesContent */}
+     <ScreenContainer className="pt-16 md:pt-10">
+   
       <MetaHead pageContent={utilitiesContent} />
 
       {/* 2. Dynamic Header from utilitiesContent */}
       <SectionHeader
         title={headerData?.content || "Utilities Hub"}
         highlight={headerData?.highlight || "Hub"}
-        description={paragraphData?.content || "Zero-tracker, low-latency interfaces."}
+        // description={paragraphData?.content || "Zero-tracker, low-latency interfaces."}
       />
 
       {/* 3. The Grid */}
