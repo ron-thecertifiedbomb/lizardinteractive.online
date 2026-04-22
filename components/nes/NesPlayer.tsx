@@ -431,8 +431,7 @@ export default function NesPlayer() {
                         <NesConsole
                             canvasRef={canvasRef}
                             status={status}
-                            fileInputRef={fileInputRef}
-                            onUpload={onUpload}
+                            onRomLoad={onUpload}  // Just pass the upload handler
                         />
                     </div>
                 </div>

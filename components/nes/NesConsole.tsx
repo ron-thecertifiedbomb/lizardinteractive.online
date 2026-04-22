@@ -2,19 +2,30 @@
 "use client";
 
 import { Activity, Lock } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 
 export function NesConsole({
     canvasRef,
     status,
-    fileInputRef,
-    onUpload,
+    onRomLoad,
 }: {
     canvasRef: React.RefObject<HTMLCanvasElement>;
     status: "idle" | "running" | "paused";
-    fileInputRef: React.RefObject<HTMLInputElement>;
-    onUpload: (file: File | null) => void;
+    onRomLoad?: (file: File) => void;
 }) {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && onRomLoad) {
+            onRomLoad(file);
+        }
+        // Reset input so same file can be uploaded again
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
     return (
         <div className="mx-auto w-full max-w-4xl animate-in fade-in zoom-in-95 duration-700">
             {/* Main Console Chassis */}
@@ -64,10 +75,7 @@ export function NesConsole({
                                         type="file"
                                         accept=".nes"
                                         className="hidden"
-                                        onChange={(e) => {
-                                            onUpload(e.target.files?.[0] ?? null);
-                                            e.target.value = "";
-                                        }}
+                                        onChange={handleFileUpload}
                                     />
                                     <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
                                         PROVISION_NEW_ROM
