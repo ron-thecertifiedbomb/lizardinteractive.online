@@ -88,28 +88,26 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                         <span className="absolute -bottom-4 left-0 text-[5px] font-black tracking-[0.3em] text-zinc-800 uppercase">Input_01</span>
                     </div>
 
-                    {/* RIGHT: SMALLER ACTION BUTTONS */}
+                    {/* RIGHT: ACTION BUTTONS WITH MODERATELY LARGER RED BUTTONS */}
                     <div className="relative bg-zinc-900/20 p-3 rounded-lg border border-zinc-800/50 flex flex-col items-center gap-1 shadow-inner">
-                        <div className="flex items-center gap-4">
-                            {/* BUTTON B */}
+                        <div className="flex items-center gap-5">
+                            {/* BUTTON B - MODERATELY LARGER */}
                             <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("B")}
                                     onPointerUp={() => onRelease("B")}
-                                    // Scaled from w-16 to w-12
-                                    className="w-12 h-12 rounded-full bg-[#8b1d1d] border-b-[3px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-sm shadow-md"
+                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     B
                                 </button>
                             </div>
 
-                            {/* BUTTON A */}
+                            {/* BUTTON A - MODERATELY LARGER */}
                             <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("A")}
                                     onPointerUp={() => onRelease("A")}
-                                    // Scaled from w-16 to w-12
-                                    className="w-12 h-12 rounded-full bg-[#8b1d1d] border-b-[3px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-sm shadow-md"
+                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     A
                                 </button>
