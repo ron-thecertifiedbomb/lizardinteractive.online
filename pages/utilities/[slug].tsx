@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
@@ -73,15 +74,97 @@ export default function UtilityToolPage() {
 
   const tool = utilities.find((u) => u.slug === slug);
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lizardinteractive.online";
+
   if (!router.isReady) return null;
   if (!tool) return <p>System Error: Module Not Found</p>;
 
   // 2. Resolve the Component
   const SelectedTool = TOOL_COMPONENTS[tool.slug as string];
 
+  // Generate category-specific keywords
+  const getKeywords = () => {
+    const baseKeywords = "online tool, free tool, web utility";
+    const categoryKeywords: Record<string, string> = {
+      Dev: "developer tools, programming, code",
+      Design: "design tools, UI, CSS",
+      Files: "file converter, document editor",
+      Productivity: "productivity tools, work efficiency",
+      Media: "media tools, video, image",
+      Music: "music tools, audio, guitar",
+      Security: "security tools, password, encryption",
+      Network: "network tools, speed test, connection",
+    };
+    return `${tool.name}, ${categoryKeywords[tool.category] || ""}, ${baseKeywords}`;
+  };
+
   return (
     <>
       <MetaHead data={{ title: tool.name, description: tool.description }} />
+
+      {/* Additional SEO Head tags */}
+      <Head>
+        {/* Primary Meta Tags */}
+        <title>{tool.name} | Lizard Interactive Online Tools</title>
+        <meta name="title" content={`${tool.name} | Lizard Interactive Online Tools`} />
+        <meta name="description" content={tool.description} />
+        <meta name="keywords" content={getKeywords()} />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${baseUrl}/tools/${tool.slug}`} />
+        <meta property="og:title" content={`${tool.name} | Lizard Interactive`} />
+        <meta property="og:description" content={tool.description} />
+        <meta property="og:image" content={`${baseUrl}/og-image.png`} />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={`${baseUrl}/tools/${tool.slug}`} />
+        <meta property="twitter:title" content={`${tool.name} | Lizard Interactive`} />
+        <meta property="twitter:description" content={tool.description} />
+        <meta property="twitter:image" content={`${baseUrl}/og-image.png`} />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href={`${baseUrl}/tools/${tool.slug}`} />
+
+        {/* Schema.org markup for Google */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": tool.name,
+              "description": tool.description,
+              "applicationCategory": tool.category,
+              "operatingSystem": "Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "url": `${baseUrl}/tools/${tool.slug}`,
+              "author": {
+                "@type": "Organization",
+                "name": "Lizard Interactive"
+              }
+            })
+          }}
+        />
+
+        {/* Additional meta tags for better SEO */}
+        <meta name="author" content="Lizard Interactive" />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
+
+        {/* Mobile optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+
+        {/* Theme color */}
+        <meta name="theme-color" content="#10b981" />
+      </Head>
 
       <ScreenContainer className="pt-20 px-3 md:pt-30 ">
         {SelectedTool ? (
