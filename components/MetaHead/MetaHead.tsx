@@ -1,4 +1,3 @@
-// components/MetaHead/MetaHead.tsx
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -64,7 +63,7 @@ export default function MetaHead({ data, pageContent }: MetaHeadProps) {
             <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
             <link rel="apple-touch-icon" href="/lizardinteractive.png" />
 
-            {/* Open Graph / Facebook - USING ABSOLUTE URLS */}
+            {/* Open Graph / Facebook */}
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={absoluteOgImage} />
@@ -77,7 +76,7 @@ export default function MetaHead({ data, pageContent }: MetaHeadProps) {
             <meta property="og:locale" content="en_US" />
             {fbAppId && <meta property="fb:app_id" content={fbAppId} />}
 
-            {/* Twitter Card - USING ABSOLUTE URLS */}
+            {/* Twitter Card */}
             <meta name="twitter:card" content={twitterCard} />
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={description} />
