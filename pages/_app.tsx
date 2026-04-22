@@ -1,6 +1,5 @@
 import '../styles/global.css';
 import type { AppProps } from "next/app";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { Analytics } from "@vercel/analytics/next";
@@ -20,10 +19,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
       authorizationParams={{ redirect_uri: typeof window !== 'undefined' ? window.location.origin : undefined }}
     >
-      <Head>
-        <link rel="icon" type="image/png" sizes="32x32" href="/lizardinteractive.png" />
-        <link rel="apple-touch-icon" href="/lizardinteractive.png" />
-      </Head>
+
 
       {/* Navigation */}
       {!isEmulatorPage && (
