@@ -47,7 +47,7 @@ export default function BlogPostPage() {
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: post.image || "/og-image.png",
+          ogImage: post.image,
           ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
           ogType: "article",
           twitterCard: "summary_large_image",
