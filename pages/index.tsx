@@ -11,8 +11,11 @@ import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
 
-// Get featured tools (first 8 for homepage)
-const featuredTools = utilities.slice(0, 8);
+// Get featured tools (specific tools you want to highlight)
+const featuredTools = utilities.filter(tool =>
+  ["text-tools", "qrcode-generator", "password-generator", "json-formatter",
+    "unit-converter", "speed-test", "base64-tool", "video-to-gif", "pagespeed-insights"].includes(tool.slug)
+);
 
 export default function HomePage() {
   const seoEntry = homeContent.find((item) => item.type === "seo");
@@ -42,7 +45,7 @@ export default function HomePage() {
               Professional utilities for developers, designers, and creators
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {featuredTools.map((tool, index) => (
                 <motion.div
                   key={tool.slug}

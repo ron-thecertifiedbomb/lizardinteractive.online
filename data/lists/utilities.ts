@@ -32,11 +32,27 @@ export const utilities = [
     icon: "📋",
   },
   {
+    name: "Image Converter",
+    slug: "image-converter",
+    description:
+      "Convert images between PNG, JPEG, WebP, and BMP formats. Compress and optimize images instantly.",
+    category: "Media",
+    icon: "🖼️",
+  },
+  {
     name: "Mesh Gradient Generator",
     slug: "meshgenerator",
     description: "Create beautiful, fluid mesh gradients for your UI designs.",
     category: "Design",
     icon: "🌈",
+  },
+  {
+    name: "PageSpeed Insights",
+    slug: "pagespeed-insights",
+    description:
+      "Analyze your website performance with Google's Lighthouse. Get scores for performance, accessibility, SEO, and Core Web Vitals.",
+    category: "Dev",
+    icon: "🚀",
   },
   {
     name: "Box Shadow Generator",

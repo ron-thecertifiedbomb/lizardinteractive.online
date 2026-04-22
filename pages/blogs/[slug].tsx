@@ -1,24 +1,24 @@
 "use client";
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-
 import BlogContent from '@/components/BlogContent/BlogContent';
 import { blogArticles } from '@/data/lists/blogArticle';
+import { Calendar, Clock, ImageIcon } from 'lucide-react';
 
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params?.slug as string;
+  const [imageError, setImageError] = useState(false);
 
-  // 1. FIND THE POST: Search directly by ID
   const post = useMemo(() => {
     if (!slug) return null;
     return blogArticles.find((article) => article.id === slug);
   }, [slug]);
 
-  // 2. 404 STATE: Transmission Lost
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 bg-black">
@@ -27,35 +27,87 @@ export default function BlogPostPage() {
     );
   }
 
+  // Calculate read time
+  const readTime = Math.ceil(
+    post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
+  );
+
   return (
     <>
-      {/* 3. UPDATED META: Using flat properties */}
       <MetaHead
         data={{
           title: post.title,
           ogImage: post.image,
-          description: post.sections?.[0]?.content || ""
+          description: post.sections?.[0]?.content?.substring(0, 160) || ""
         }}
       />
 
       <ScreenContainer>
-        <div className="max-w-4xl mx-auto pt-24 pb-40 px-4 md:px-6">
+        <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
 
-          {/* --- 4. PAGE HEADER: Refined to match your universal layout --- */}
-          <header className="border-b border-zinc-900 pb-12 mb-20 space-y-8">
-            <h1 className="text-[clamp(2.2rem,8vw,5.5rem)] font-black uppercase leading-[0.9] tracking-tighter text-white">
+          {/* --- FEATURED IMAGE AT THE TOP with Next.js Image --- */}
+          {post.image && (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
+              {!imageError ? (
+                <Image
+                  src={`/${post.image}`}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1200px) 100vw, 1200px"
+                  priority
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-zinc-900">
+                  <div className="text-center">
+                    <ImageIcon size={48} className="text-zinc-700 mx-auto mb-2" />
+                    <p className="text-xs font-mono text-zinc-600">Featured image not available</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* --- HEADER with Meta Info --- */}
+          <header className="border-b border-zinc-900 pb-8 mb-12 space-y-6">
+            {/* Category Badge */}
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-wider">
+                {post.category}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-[clamp(2rem,8vw,4rem)] font-black uppercase leading-[1.1] tracking-tighter text-white">
               {post.title}
             </h1>
 
-            {/* Grab the first section's content as the intro summary */}
+            {/* Meta Info */}
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
+              <div className="flex items-center gap-1.5">
+                <Calendar size={12} />
+                <span>{new Date(post.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Clock size={12} />
+                <span>{readTime} min read</span>
+              </div>
+            </div>
+
+            {/* Excerpt/Description */}
             {post.sections?.[0] && (
-              <p className="text-zinc-500 border-l-2 border-emerald-500 pl-6 uppercase tracking-widest text-[11px] md:text-sm font-medium italic leading-relaxed">
+              <p className="text-zinc-400 text-sm md:text-base leading-relaxed italic border-l-2 border-emerald-500 pl-5">
                 {post.sections[0].content}
               </p>
             )}
           </header>
 
-          {/* --- 5. CONTENT ENGINE: Renders the rest of the sections and items --- */}
+          {/* --- CONTENT --- */}
           <BlogContent article={post} />
 
         </div>

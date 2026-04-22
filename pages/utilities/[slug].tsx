@@ -37,6 +37,8 @@ import { UnitConverter } from "@/components/UnitConverter/UnitConverter";
 import { SpeedTest } from "@/components/SpeedTest/SpeedTest";
 import { Base64Tool } from "@/components/Base64Tool/Base64Tool";
 import { VideoToGIF } from "@/components/VideoToGIF/VideoToGIF";
+import { PageSpeedTool } from "@/components/PageSpeedTool/PageSpeedTool";
+import { ImageConverter } from "@/components/ImageConverter/ImageConverter";
 
 
 // 1. Create the Map
@@ -66,6 +68,8 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   "speed-test": SpeedTest,
   "base64-tool": Base64Tool,
   "video-to-gif": VideoToGIF,
+  "pagespeed-insights": PageSpeedTool,
+  "image-converter": ImageConverter,
 };
 
 export default function UtilityToolPage() {

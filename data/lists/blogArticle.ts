@@ -22,7 +22,7 @@ export const blogArticles: BlogArticle[] = [
     id: "best-laptops-2026",
     title: "2026 Best Laptops for Creators & Engineers",
     category: "GEAR_AUDIT",
-    image: "blogs/laptop-header.jpg",
+    image: "blogs/laptop-header.webp",
     createdAt: "2026-04-20T10:00:00Z",
     sections: [
       {
@@ -86,7 +86,7 @@ export const blogArticles: BlogArticle[] = [
     id: "ai-human-future",
     title: "The Bio-Digital Synthesis: Why the Future of AI is Human",
     category: "SYSTEM_PHILOSOPHY",
-    image: "blogs/ai-synth.jpg",
+    image: "blogs/ai-synth.webp",
     createdAt: "2026-04-19T14:30:00Z",
     sections: [
       {
@@ -118,6 +118,288 @@ export const blogArticles: BlogArticle[] = [
         heading: "The Great Decoupling",
         content:
           "We are moving from manual execution to high-level orchestration. Your effectiveness is now measured by your ability to direct agents, not your ability to type.",
+      },
+    ],
+  },
+
+  // --- 3. PASSWORD GENERATOR GUIDE ---
+  {
+    id: "password-security-2026",
+    title: "Why You're Still Using Weak Passwords in 2026 (And How to Fix It)",
+    category: "SECURITY_GUIDES",
+    image: "blogs/password-security.webp",
+    createdAt: "2026-04-18T09:00:00Z",
+    sections: [
+      {
+        heading: "The Password Problem",
+        content:
+          "Despite advances in biometrics and passkeys, passwords remain the primary authentication method for 80% of online services. Yet most people still use passwords that can be cracked in seconds.",
+        items: [
+          {
+            name: "Common Password Mistakes",
+            description:
+              "Using 'password123', 'qwerty', or your birthday might be convenient, but hackers can crack these instantly.",
+            details: [
+              { label: "Crack Time", value: "0.0002 seconds" },
+              { label: "Risk Level", value: "Critical" },
+            ],
+          },
+          {
+            name: "The 16-Character Rule",
+            description:
+              "A 16-character password with mixed cases, numbers, and symbols takes 41 million years to crack.",
+            details: [
+              { label: "Crack Time", value: "41 million years" },
+              { label: "Risk Level", value: "Secure" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "How to Generate Strong Passwords",
+        content:
+          "Our free password generator creates cryptographically secure passwords instantly. No servers, no tracking - just local generation in your browser.",
+      },
+    ],
+  },
+
+  // --- 4. QR CODE BUSINESS GUIDE ---
+  {
+    id: "qr-code-business-tips",
+    title: "7 Ways Businesses Are Using QR Codes in 2026 (And How You Can Too)",
+    category: "BUSINESS_TOOLS",
+    image: "blogs/qr-business.webp",
+    createdAt: "2026-04-17T11:30:00Z",
+    sections: [
+      {
+        heading: "QR Codes Are Everywhere",
+        content:
+          "QR codes have evolved from pandemic-era menus to powerful marketing tools. Here's how smart businesses are leveraging them.",
+        items: [
+          {
+            name: "Smart Restaurant Menus",
+            description:
+              "Dynamic QR codes that update menu items and prices in real-time without reprinting.",
+            details: [
+              { label: "Savings", value: "$500-2000/month" },
+              { label: "Industry", value: "Hospitality" },
+            ],
+          },
+          {
+            name: "Product Authentication",
+            description:
+              "Luxury brands use QR codes with blockchain verification to combat counterfeiting.",
+            details: [
+              { label: "Success Rate", value: "99.9%" },
+              { label: "Industry", value: "Retail" },
+            ],
+          },
+          {
+            name: "Smart Packaging",
+            description:
+              "Scan packaging to see assembly instructions, recipes, or sustainability info.",
+            details: [
+              { label: "Engagement Lift", value: "40%" },
+              { label: "Industry", value: "Consumer Goods" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Create Your Own QR Codes",
+        content:
+          "Use our free QR code generator to create custom codes with your brand colors. Download instantly and start driving engagement.",
+      },
+    ],
+  },
+
+  // --- 5. INTERNET SPEED TEST GUIDE ---
+  {
+    id: "understand-internet-speed",
+    title: "What Your Internet Speed Test Results Actually Mean",
+    category: "NETWORK_GUIDES",
+    image: "blogs/speed-test.webp",
+    createdAt: "2026-04-16T13:00:00Z",
+    sections: [
+      {
+        heading: "Decoding Your Results",
+        content:
+          "You ran a speed test. Now what? Here's what those numbers mean for your daily activities.",
+        items: [
+          {
+            name: "Download Speed",
+            description:
+              "How fast data reaches you. 25+ Mbps for HD streaming, 50+ Mbps for 4K and gaming.",
+            details: [
+              { label: "Good for", value: "Streaming, browsing" },
+              { label: "Poor below", value: "10 Mbps" },
+            ],
+          },
+          {
+            name: "Upload Speed",
+            description:
+              "How fast you send data. Critical for video calls, cloud backups, and content creation.",
+            details: [
+              { label: "Good for", value: "Zoom, uploads" },
+              { label: "Poor below", value: "5 Mbps" },
+            ],
+          },
+          {
+            name: "Ping (Latency)",
+            description:
+              "Response time. Under 50ms for gaming, under 100ms for video calls.",
+            details: [
+              { label: "Gaming ideal", value: "<20ms" },
+              { label: "Noticeable delay", value: ">100ms" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Test Your Connection",
+        content:
+          "Use our free speed test to measure your download, upload, and ping. Compare against these benchmarks and see if you need to upgrade.",
+      },
+    ],
+  },
+
+  // --- 6. JSON FORMATTER TUTORIAL ---
+  {
+    id: "json-formatter-guide",
+    title: "JSON Formatter: Why Every Developer Needs This Tool",
+    category: "DEV_TOOLS",
+    image: "blogs/json-guide.webp",
+    createdAt: "2026-04-15T15:00:00Z",
+    sections: [
+      {
+        heading: "Debugging JSON Doesn't Have to Be Painful",
+        content:
+          "JSON is everywhere - APIs, config files, databases. But unformatted JSON is nearly impossible to read. Here's why formatting matters.",
+        items: [
+          {
+            name: "API Debugging",
+            description:
+              "Minified API responses are unreadable. Format them instantly to spot errors.",
+            details: [
+              { label: "Time Saved", value: "5-10 minutes per debug" },
+              { label: "Error Rate", value: "Reduced by 60%" },
+            ],
+          },
+          {
+            name: "Configuration Files",
+            description:
+              "package.json, tsconfig.json, .prettierrc - keep them clean and validated.",
+            details: [
+              { label: "Team Standard", value: "Always formatted" },
+              { label: "Best Practice", value: "Validate before commit" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Use Our JSON Tool",
+        content:
+          "Our JSON formatter validates, beautifies, and minifies in real-time. No data leaves your browser - secure for sensitive API keys.",
+      },
+    ],
+  },
+
+  // --- 7. BASE64 ENCODING EXPLAINED ---
+  {
+    id: "base64-encoding-use-cases",
+    title: "Base64 Encoding: What It Is and When to Use It",
+    category: "DEV_TOOLS",
+    image: "blogs/base64-guide.webp",
+    createdAt: "2026-04-14T10:00:00Z",
+    sections: [
+      {
+        heading: "Why Base64 Matters",
+        content:
+          "Base64 encoding converts binary data to text. It's essential for email attachments, JSON APIs, and embedding images in HTML/CSS.",
+        items: [
+          {
+            name: "Email Attachments",
+            description:
+              "SMTP was designed for text. Base64 encodes binary files for email transmission.",
+            details: [
+              { label: "Standard", value: "MIME" },
+              { label: "Used by", value: "Every email client" },
+            ],
+          },
+          {
+            name: "Data URLs",
+            description:
+              "Embed images directly in CSS or HTML without extra HTTP requests.",
+            details: [
+              { label: "Use Case", value: "Icons, small images" },
+              { label: "Trade-off", value: "Larger file size" },
+            ],
+          },
+          {
+            name: "API Payloads",
+            description:
+              "Send binary data (images, files) through JSON APIs safely.",
+            details: [
+              { label: "Common in", value: "REST APIs" },
+              { label: "Alternative", value: "Multipart forms" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Try Our Base64 Tool",
+        content:
+          "Convert text to Base64 and back. Upload images to get data URLs. Perfect for developers working with APIs.",
+      },
+    ],
+  },
+
+  // --- 8. METRONOME PRACTICE TIPS ---
+  {
+    id: "metronome-practice-techniques",
+    title: "5 Metronome Practice Techniques That Actually Work",
+    category: "MUSIC_GUIDES",
+    image: "blogs/metronome-practice.webp",
+    createdAt: "2026-04-13T12:00:00Z",
+    sections: [
+      {
+        heading: "Practice Smarter, Not Harder",
+        content:
+          "Using a metronome is essential. But most musicians use it wrong. Here are proven techniques to improve your timing.",
+        items: [
+          {
+            name: "The 10 BPM Rule",
+            description:
+              "Practice at 60 BPM until perfect. Increase by 10 BPM only when flawless.",
+            details: [
+              { label: "Proven by", value: "Conservatory studies" },
+              { label: "Time to mastery", value: "2-4 weeks" },
+            ],
+          },
+          {
+            name: "Off-Beat Training",
+            description:
+              "Set metronome to click on beats 2 and 4 only. Builds internal groove.",
+            details: [
+              { label: "Best for", value: "Jazz, funk, rock" },
+              { label: "Difficulty", value: "Intermediate" },
+            ],
+          },
+          {
+            name: "The Slow Burn",
+            description:
+              "Set metronome to half tempo. Play twice as fast. Builds precision.",
+            details: [
+              { label: "Best for", value: "Fast passages" },
+              { label: "Challenge", value: "Mental focus" },
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Use Our Free Metronome",
+        content:
+          "Adjustable BPM, multiple time signatures, visual feedback. Perfect for daily practice.",
       },
     ],
   },

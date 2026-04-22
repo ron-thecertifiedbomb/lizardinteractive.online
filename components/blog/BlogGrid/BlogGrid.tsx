@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Activity, ArrowUpRight } from "lucide-react";
+import { Activity, ArrowUpRight, Calendar } from "lucide-react";
 
-// 1. Updated Interface to match the new "Universal" object
+// Updated Interface with image
 interface Post {
     id: string;
     title: string;
@@ -23,59 +24,97 @@ interface BlogGridProps {
 
 export default function BlogGrid({ posts }: BlogGridProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {posts.map((post, idx) => {
-                // Use the ID as the slug directly for stability
                 const dynamicSlug = post.id;
-
-                // Pull the first paragraph of the first section as the preview text
-                const previewText = post.sections?.[0]?.content || "No description available.";
+                const previewText = post.sections?.[0]?.content?.substring(0, 120) || "Read more...";
 
                 return (
                     <motion.div
                         key={dynamicSlug}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: idx * 0.05 }}
+                        transition={{ delay: idx * 0.1 }}
                     >
                         <Link
                             href={`/blogs/${dynamicSlug}`}
-                            className="group relative flex flex-col justify-between p-6 h-72 bg-[#050505] border border-zinc-900 hover:border-emerald-500/40 transition-all duration-500 overflow-hidden"
+                            className="group block bg-[#050505] border border-zinc-900 rounded-2xl overflow-hidden hover:border-emerald-500/40 transition-all duration-500 hover:scale-[1.02]"
                         >
-                            {/* Industrial Index Tag */}
-                            <span className="absolute top-4 right-4 font-mono text-[10px] text-zinc-800 group-hover:text-emerald-500/20 transition-colors">
-                                {post.category.replace("_", ".")} // 00{idx + 1}
-                            </span>
+                            {/* Image Section with Next.js Image */}
+                            <div className="relative w-full h-48 overflow-hidden bg-zinc-900">
+                                {post.image ? (
+                                    <Image
+                                        src={`/${post.image}`}
+                                        alt={post.title}
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition duration-500"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        onError={(e) => {
+                                            // Fallback if image fails to load
+                                            const target = e.currentTarget;
+                                            target.style.display = 'none';
+                                            const parent = target.parentElement;
+                                            if (parent) {
+                                                const fallback = document.createElement('div');
+                                                fallback.className = 'w-full h-full flex items-center justify-center bg-zinc-900';
+                                                fallback.innerHTML = `
+                                                    <div class="text-center">
+                                                        <div class="text-4xl mb-2">📝</div>
+                                                        <div class="text-[10px] font-mono text-zinc-600">${post.category}</div>
+                                                    </div>
+                                                `;
+                                                parent.appendChild(fallback);
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-zinc-900">
+                                        <div className="text-center">
+                                            <div className="text-4xl mb-2">📝</div>
+                                            <div className="text-[10px] font-mono text-zinc-600">{post.category}</div>
+                                        </div>
+                                    </div>
+                                )}
 
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2 text-emerald-500/40 font-mono text-[8px] uppercase tracking-[0.2em]">
-                                    <Activity size={8} /> SYSTEM_STREAM
+                                {/* Category Badge Overlay */}
+                                <div className="absolute top-3 left-3 z-10">
+                                    <span className="px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-[8px] font-black text-emerald-500 uppercase tracking-wider">
+                                        {post.category.replace("_", " ")}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Content Section */}
+                            <div className="p-5 space-y-3">
+                                {/* Date */}
+                                <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-600">
+                                    <Calendar size={10} />
+                                    <span>
+                                        {new Date(post.createdAt).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
+                                    </span>
                                 </div>
 
-                                <h3 className="text-xl font-black uppercase tracking-tighter leading-[1.1] group-hover:text-emerald-400 transition-colors break-words">
+                                {/* Title */}
+                                <h3 className="text-lg font-black uppercase tracking-tighter leading-tight group-hover:text-emerald-400 transition-colors line-clamp-2">
                                     {post.title}
                                 </h3>
 
-                                <p className="text-zinc-600 text-[10px] uppercase tracking-wider line-clamp-3 leading-relaxed font-medium">
+                                {/* Preview */}
+                                {/* <p className="text-zinc-500 text-xs font-mono line-clamp-2">
                                     {previewText}
-                                </p>
-                            </div>
+                                </p> */}
 
-                            <div className="flex items-center justify-between pt-4 border-t border-zinc-900/50">
-                                <span className="text-zinc-700 font-mono text-[8px] uppercase">
-                                    {new Date(post.createdAt)
-                                        .toLocaleDateString("en-GB")
-                                        .replace(/\//g, ".")}
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[8px] font-mono text-zinc-800 uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                                        Open_File
-                                    </span>
-                                    <ArrowUpRight
-                                        size={12}
-                                        className="text-zinc-800 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
-                                    />
+                                {/* Read More Link */}
+                                <div className="flex items-center justify-end pt-2">
+                                    <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-600 group-hover:text-emerald-500 transition-colors">
+                                        Read Article
+                                        <ArrowUpRight size={10} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
+                                    </div>
                                 </div>
                             </div>
                         </Link>
