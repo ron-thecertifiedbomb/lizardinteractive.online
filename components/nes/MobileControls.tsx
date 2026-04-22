@@ -88,13 +88,13 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
 
                     {/* RIGHT: ACTION BUTTONS WITH MODERATELY LARGER RED BUTTONS */}
                     <div className="relative  rounded-lg  flex flex-col gap-1 shadow-inner">
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-3">
                             {/* BUTTON B - MODERATELY LARGER */}
                             <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("B")}
                                     onPointerUp={() => onRelease("B")}
-                                    className="w-20 h-20 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
+                                    className="w-17 h-17 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     B
                                 </button>
@@ -105,7 +105,7 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                                 <button
                                     onPointerDown={() => onPress("A")}
                                     onPointerUp={() => onRelease("A")}
-                                    className="w-20 h-20 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
+                                    className="w-17 h-17 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     A
                                 </button>
