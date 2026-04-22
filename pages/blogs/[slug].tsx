@@ -7,10 +7,10 @@ import { blogArticles } from '@/data/lists/blogArticle';
 import { Calendar, Clock } from 'lucide-react';
 
 export default function BlogPostPage() {
+
   const router = useRouter();
   const { slug } = router.query;
 
-  // ✅ Wait for router (prevents undefined issues)
   if (!router.isReady || typeof slug !== "string") {
     return null;
   }
@@ -29,14 +29,7 @@ export default function BlogPostPage() {
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
 
-  // ✅ FINAL OG IMAGE FIX (uses ogImage, fallback to jpg)
-  const absoluteOgImage = post.ogImage
-    ? `https://lizardinteractive.online/${post.ogImage.replace(/^\/+/, "")}`
-    : `https://lizardinteractive.online/${post.image
-      .replace(/^\/+/, "")
-      .replace(".webp", ".jpg")}`;
-
-  const absoluteOgUrl = `https://lizardinteractive.online/blogs/${post.id}`;
+  const ogUrl = `https://lizardinteractive.online/${post.ogImage}`;
 
   return (
     <>
@@ -44,8 +37,8 @@ export default function BlogPostPage() {
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: absoluteOgImage,
-          ogUrl: absoluteOgUrl,
+          ogImage: post.ogImage,
+          ogUrl: ogUrl,
           ogType: "article",
         }}
       />

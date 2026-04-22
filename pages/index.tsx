@@ -22,15 +22,17 @@ export default function HomePage() {
 
   return (
     <>
-      <MetaHead data={seoEntry?.data} />
+      <MetaHead
+        data={{
+          title: seoEntry?.data?.title || "Lizard Interactive Online",
+          description: seoEntry?.data?.description || "Free online tools for developers, designers, and creators.",
+          ogImage: seoEntry?.data?.ogImage || "/og-image-homepage.jpg",
+          ogUrl: "https://lizardinteractive.online",
+          ogType: "website",
+        }}
+      />
 
-      <ScreenContainer >
-        {/* Hero Section */}
-        {/* <PresentationSection
-          data={lizardContent}
-          badge="Lizard Interactive Online // v1.1"
-        /> */}
-
+      <ScreenContainer>
         {/* Featured Tools Section */}
         <div className="mt-30 mb-12 px-4">
           <motion.div
