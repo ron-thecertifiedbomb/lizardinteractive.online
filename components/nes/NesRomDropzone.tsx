@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { UploadCloud, FileCode, Zap } from "lucide-react";
 
 type Props = {
     onFile: (file: File) => void;
@@ -59,9 +60,10 @@ export function NesRomDropzone({ onFile }: Props) {
                 if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
             }}
             className={[
-                "cursor-pointer rounded-(--radius) border-2 border-dashed p-8 text-center transition",
-                "bg-(--panel) border-(--border) hover:border-(--accent)",
-                dragging ? "border-(--accent) bg-(--panel-2) scale-[1.01]" : "",
+                "relative group cursor-pointer border transition-colors duration-300",
+                dragging
+                    ? "border-emerald-500 bg-emerald-500/5"
+                    : "border-zinc-900 bg-zinc-950 hover:border-zinc-700"
             ].join(" ")}
         >
             <input
@@ -69,13 +71,34 @@ export function NesRomDropzone({ onFile }: Props) {
                 type="file"
                 accept=".nes"
                 className="hidden"
-                onChange={(e) => handleFiles(e.target.files)}
+                onChange={(e) => {
+                    handleFiles(e.target.files);
+                    e.target.value = "";
+                }}
             />
-            <div className="text-3xl">🎮</div>
-            <div className="mt-2 text-sm font-medium text-(--text)">
-                {dragging ? "Drop ROM here" : "Drag & drop .nes ROM or click to browse"}
+
+            <div className="relative flex flex-col items-center justify-center p-12">
+                <div className={`mb-4 flex items-center justify-center p-3 transition-colors ${dragging ? "bg-emerald-500 text-black" : "bg-zinc-900 text-zinc-600 group-hover:text-emerald-500"
+                    }`}>
+                    {dragging ? <Zap size={24} fill="currentColor" /> : <UploadCloud size={24} />}
+                </div>
+
+                <div className="text-center space-y-1">
+                    <h3 className={`text-[10px] font-black uppercase tracking-[0.4em] ${dragging ? "text-emerald-400" : "text-white"
+                        }`}>
+                        {dragging ? "Release_to_Upload" : "Initialize_Upload"}
+                    </h3>
+                    <p className="text-[9px] font-mono text-zinc-600 uppercase">
+                        Protocol: iNES_v1.0
+                    </p>
+                </div>
             </div>
-            <div className="mt-1 text-xs text-(--muted)">Only .nes files are accepted</div>
+
+            {/* Flat Corner Brackets */}
+            <div className="absolute top-0 left-0 h-4 w-4 border-t-2 border-l-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute top-0 right-0 h-4 w-4 border-t-2 border-r-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
     );
 }

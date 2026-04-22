@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { NesRomDropzone } from "./NesRomDropzone";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { Play, Trash2, Box, Calendar, HardDrive } from "lucide-react";
 import {
     type NesRomEntry,
     getNesRomList,
@@ -57,7 +57,7 @@ export function NesRomLibrary({ onPlay }: Props) {
                 lastPlayedAt: null,
             });
             refresh();
-            setToast(`Added: ${file.name}`);
+            setToast(`DATABASE_UPDATE: ${file.name} INGESTED`);
         },
         [refresh],
     );
@@ -66,7 +66,7 @@ export function NesRomLibrary({ onPlay }: Props) {
         async (romHash: string) => {
             await deleteNesRom(romHash);
             refresh();
-            setToast("ROM removed.");
+            setToast("SECTOR_CLEARED: ROM PURGED");
         },
         [refresh],
     );
@@ -87,45 +87,87 @@ export function NesRomLibrary({ onPlay }: Props) {
     }
 
     function fmtDate(ts: number | null) {
-        if (!ts) return "—";
+        if (!ts) return "NEVER";
         return new Date(ts).toLocaleDateString(undefined, {
             month: "short", day: "numeric", hour: "2-digit", minute: "2-digit",
-        });
+        }).toUpperCase();
     }
 
     return (
-        <div className="space-y-4">
-            <NesRomDropzone onFile={handleImport} />
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Upload Zone */}
+            <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-zinc-500/20 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-500" />
+                <div className="relative">
+                    <NesRomDropzone onFile={handleImport} />
+                </div>
+            </div>
 
+            {/* System Notification */}
             {toast && (
-                <div className="rounded-(--radius) border bg-(--accent) px-4 py-2 text-sm font-medium text-white border-transparent" role="status">
+                <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[10px] font-black tracking-widest text-emerald-400 uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)]" role="status">
+                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     {toast}
                 </div>
             )}
 
             {list.length === 0 ? (
-                <div className="py-8 text-center text-sm text-(--muted)">
-                    No ROMs in library yet. Drop a .nes file above to get started.
+                <div className="flex flex-col items-center justify-center py-20 rounded-3xl border border-dashed border-zinc-800 bg-zinc-950/30">
+                    <Box size={32} className="text-zinc-700 mb-4" />
+                    <div className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">
+                        Library_Empty // Waiting_For_Input
+                    </div>
                 </div>
             ) : (
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {list.map((entry) => (
-                        <div key={entry.romHash} className="flex items-center gap-3 rounded-(--radius) border bg-(--panel) border-(--border) p-3 transition hover:shadow-(--shadow)">
-                            {entry.coverDataUrl ? (
-                                <img src={entry.coverDataUrl} alt={entry.name} className="h-12 w-16 rounded object-cover pixel-perfect" />
-                            ) : (
-                                <div className="grid h-12 w-16 place-items-center rounded bg-(--panel-2) text-lg">🎮</div>
-                            )}
-                            <div className="min-w-0 flex-1">
-                                <div className="truncate text-sm font-semibold text-(--text)">{entry.name}</div>
-                                <div className="text-xs text-(--muted)">
-                                    {fmtSize(entry.size)} · Added {fmtDate(entry.addedAt)}
-                                    {entry.lastPlayedAt ? ` · Played ${fmtDate(entry.lastPlayedAt)}` : ""}
+                        <div key={entry.romHash} className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950 p-4 transition-all hover:border-emerald-500/40 hover:shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+
+                            {/* Card Header: Cover Art or Placeholder */}
+                            <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-900 mb-4 border border-zinc-800/50">
+                                {entry.coverDataUrl ? (
+                                    <img
+                                        src={entry.coverDataUrl}
+                                        alt={entry.name}
+                                        className="h-full w-full object-cover pixel-perfect transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <div className="flex h-full w-full items-center justify-center text-zinc-800">
+                                        <Box size={40} strokeWidth={1} />
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
+                            </div>
+
+                            {/* ROM Info */}
+                            <div className="mb-6 flex-1 space-y-1">
+                                <h3 className="truncate text-xs font-black uppercase tracking-tight text-white group-hover:text-emerald-400 transition-colors">
+                                    {entry.name.replace(".nes", "").replace(/_/g, " ")}
+                                </h3>
+                                <div className="flex flex-col gap-1">
+                                    <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500">
+                                        <HardDrive size={10} /> {fmtSize(entry.size)}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500">
+                                        <Calendar size={10} /> LAST: {fmtDate(entry.lastPlayedAt)}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <button onClick={() => handlePlay(entry)} className="rounded-xl border px-3 py-1.5 text-xs font-medium text-white transition active:translate-y-px bg-(--accent) border-(--border) hover:brightness-105" type="button">Play</button>
-                                <button onClick={() => setDeleteTarget(entry)} className="rounded-xl border px-3 py-1.5 text-xs transition active:translate-y-px border-(--border) text-(--muted) hover:text-red-500" type="button">Delete</button>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-2 border-t border-zinc-900 pt-4">
+                                <button
+                                    onClick={() => handlePlay(entry)}
+                                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-black transition hover:bg-emerald-500 active:scale-95"
+                                >
+                                    <Play size={12} fill="currentColor" /> Play
+                                </button>
+                                <button
+                                    onClick={() => setDeleteTarget(entry)}
+                                    className="flex items-center justify-center rounded-lg border border-zinc-800 p-2 text-zinc-500 transition hover:border-rose-500/50 hover:text-rose-500 active:scale-95"
+                                >
+                                    <Trash2 size={14} />
+                                </button>
                             </div>
                         </div>
                     ))}
@@ -134,9 +176,9 @@ export function NesRomLibrary({ onPlay }: Props) {
 
             <ConfirmDialog
                 open={deleteTarget !== null}
-                title="Delete ROM"
-                message={`Permanently delete "${deleteTarget?.name ?? ""}" and its save data from the library?`}
-                confirmLabel="Delete"
+                title="TERMINATE_ROM"
+                message={`CRITICAL: Wipe "${deleteTarget?.name ?? ""}" from local storage? This action is irreversible.`}
+                confirmLabel="CONFIRM_PURGE"
                 danger
                 onConfirm={() => { if (deleteTarget) handleDelete(deleteTarget.romHash); setDeleteTarget(null); }}
                 onCancel={() => setDeleteTarget(null)}

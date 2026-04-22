@@ -1,21 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Activity, Lock, Cpu } from "lucide-react";
+import { Activity, Lock } from "lucide-react";
+import React from "react";
 
 export function NesConsole({
     canvasRef,
     status,
+    fileInputRef,
+    onUpload,
 }: {
     canvasRef: React.RefObject<HTMLCanvasElement | null>;
     status: "idle" | "running" | "paused";
+    fileInputRef: React.RefObject<HTMLInputElement | null>;
+    onUpload: (file: File | null) => void;
 }) {
     return (
         <div className="mx-auto w-full max-w-4xl animate-in fade-in zoom-in-95 duration-700">
             {/* Main Console Chassis */}
             <div className="relative rounded-[2.5rem] bg-zinc-900 p-2 shadow-[0_0_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
 
-                {/* 1. HUD moved ABOVE the screen bezel to prevent overlap */}
+                {/* 1. HUD */}
                 <div className="flex items-center justify-between px-8 py-3 bg-transparent">
                     <div className="flex items-center gap-3">
                         <div className={["h-1.5 w-1.5 rounded-full", status === "running" ? "bg-emerald-500 animate-pulse" : "bg-zinc-700"].join(" ")} />
@@ -35,11 +40,11 @@ export function NesConsole({
                     </div>
                 </div>
 
-                {/* 2. Internal Bezel (Now strictly containing the game) */}
+                {/* 2. Internal Bezel */}
                 <div className="relative overflow-hidden rounded-[1.5rem] bg-black p-1 shadow-[inset_0_0_20px_rgba(0,0,0,1)] border border-zinc-800/50">
 
                     {/* Screen Area */}
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black rounded-xl">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black rounded-xl flex items-center justify-center">
                         <canvas
                             ref={canvasRef}
                             width={256}
@@ -50,10 +55,31 @@ export function NesConsole({
                             ].join(" ")}
                         />
 
-                        {/* 3. Scanline layer (Low opacity so it doesn't wash out the UI) */}
+                        {/* --- IMPORT BUTTON CENTER CANVAS --- */}
+                        {status === "idle" && (
+                            <div className="absolute inset-0 z-30 flex items-center justify-center">
+                                <label className="relative cursor-pointer group">
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept=".nes"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            onUpload(e.target.files?.[0] ?? null);
+                                            e.target.value = "";
+                                        }}
+                                    />
+                                    <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
+                                        PROVISION_NEW_ROM
+                                    </div>
+                                </label>
+                            </div>
+                        )}
+
+                        {/* 3. Scanline layer */}
                         <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.08] scanlines" />
 
-                        {/* 4. Subtle Vignette - Darkens edges slightly for CRT feel without hiding info */}
+                        {/* 4. Subtle Vignette */}
                         <div className="pointer-events-none absolute inset-0 z-10 shadow-[inset_0_0_80px_rgba(0,0,0,0.4)]" />
 
                         {/* Pause State Overlay */}

@@ -12,7 +12,6 @@ import { defaultNesKeymap } from "@/lib/nes/input";
 import { defaultNesGamepadMapping } from "@/lib/nes/gamepad";
 import type { Slot } from "@/lib/storage/nesSaveStateStore";
 
-import ThemeToggle from "@/components/ThemeToggle";
 import { NesConsole } from "@/components/nes/NesConsole";
 import { NesMobileControls } from "@/components/nes/MobileControls";
 import { NesSettingsPanel } from "@/components/nes/NesSettingsPanel";
@@ -175,6 +174,7 @@ export default function NesPlayer() {
                 setMessage(`FAILED TO PROVISION: ${err?.message ?? String(err)}`);
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [romHashState],
     );
 
@@ -290,6 +290,7 @@ export default function NesPlayer() {
         const onKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") closeSettings(); };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showSettings]);
 
     useEffect(() => {
@@ -309,7 +310,7 @@ export default function NesPlayer() {
     return (
         <div className={[
             "mx-auto w-full max-w-5xl transition-all duration-700",
-            menuHidden ? "flex min-h-screen flex-col items-center justify-center bg-black" : "p-4 lg:p-8",
+            menuHidden ? "flex min-h-screen flex-col items-center justify-center bg-black" : "p-2 lg:p-4",
         ].join(" ")}>
 
             <button
@@ -321,7 +322,7 @@ export default function NesPlayer() {
             </button>
 
             <div className={[
-                "mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
+                "mb-2 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between",
                 menuHidden ? "hidden" : "animate-in fade-in slide-in-from-top-4 duration-500",
             ].join(" ")}>
                 <div className="flex items-center gap-4">
@@ -332,7 +333,6 @@ export default function NesPlayer() {
                         <h1 className="text-[4.2vw] sm:text-2xl font-black uppercase tracking-tighter text-white leading-[0.9] drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]">
                             LIZARD INTERACTIVE ONLINE
                         </h1>
-                        {/* <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Virtual Environment // 2026_CORE</p> */}
                     </div>
                 </div>
 
@@ -344,7 +344,6 @@ export default function NesPlayer() {
                         <Gamepad2 size={12} className={gamepadInfo !== "Disconnected" ? "text-emerald-500" : "text-zinc-600"} />
                         <span className="text-[10px] font-mono uppercase text-zinc-500">{gamepadInfo}</span>
                     </div>
-                    {/* <ThemeToggle /> */}
                     <button onClick={openSettings} className="rounded-full bg-emerald-500 p-2.5 text-black hover:rotate-90 transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                         <Settings size={18} />
                     </button>
@@ -352,7 +351,7 @@ export default function NesPlayer() {
             </div>
 
             <div className={[
-                "mb-6 flex p-1 bg-zinc-950 border border-zinc-900 rounded-2xl max-w-sm",
+                "mb-4 flex p-1 bg-zinc-950 border border-zinc-900 rounded-2xl max-w-sm",
                 menuHidden ? "hidden" : "animate-in fade-in duration-700",
             ].join(" ")}>
                 {(["emulator", "library"] as const).map((t) => (
@@ -370,9 +369,9 @@ export default function NesPlayer() {
                 ))}
             </div>
 
-            <div className={tab !== "emulator" ? "hidden" : "w-full space-y-6"}>
+            <div className={tab !== "emulator" ? "hidden" : "w-full space-y-2"}>
                 <div className={[
-                    "flex flex-wrap items-center justify-between gap-4 p-4 bg-zinc-950 border border-zinc-900 rounded-2xl",
+                    "flex flex-wrap items-center justify-between gap-4 p-2 bg-zinc-950 border border-zinc-900 rounded-2xl",
                     menuHidden ? "hidden" : "animate-in slide-in-from-left-4 duration-500",
                 ].join(" ")}>
                     <div className="flex items-center gap-4">
@@ -398,17 +397,13 @@ export default function NesPlayer() {
                         >
                             {audioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                         </button>
-
                         <div className="h-8 w-[1px] bg-zinc-900 mx-1 hidden sm:block" />
-
                         <button onClick={onToggleRun} disabled={status === "idle"} className="px-6 py-2 rounded-xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors disabled:opacity-20">
                             {status === "running" ? "PAUSE_SYSTEM" : "BOOT_STREAM"}
                         </button>
-
                         <button onClick={onReset} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all disabled:opacity-20">
                             <RefreshCcw size={16} />
                         </button>
-
                         <button
                             onClick={() => setShowEjectConfirm(true)}
                             disabled={status === "idle"}
@@ -421,13 +416,10 @@ export default function NesPlayer() {
                         >
                             <Square size={16} fill="currentColor" />
                         </button>
-
                         <div className="h-8 w-[1px] bg-zinc-900 mx-1 hidden sm:block" />
-
                         <button onClick={onScreenshot} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:bg-zinc-900 transition-all disabled:opacity-20">
                             <Camera size={16} />
                         </button>
-
                         <button onClick={onFullscreen} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:bg-zinc-900 transition-all disabled:opacity-20">
                             <Maximize size={16} />
                         </button>
@@ -435,14 +427,19 @@ export default function NesPlayer() {
                 </div>
 
                 <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[2rem] blur-2xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-                    <div className="relative bg-zinc-950 border border-zinc-900 rounded-[2rem] p-4 shadow-2xl overflow-hidden">
-                        <NesConsole canvasRef={canvasRef} status={status} />
+                    <div className="absolute "></div>
+                    <div className="relative p-1 shadow-2xl overflow-hidden">
+                        <NesConsole
+                            canvasRef={canvasRef}
+                            status={status}
+                            fileInputRef={fileInputRef} 
+                            onUpload={onUpload}     
+                        />
                     </div>
                 </div>
 
                 <NesMobileControls onPress={press} onRelease={release} />
-
+{/* 
                 <div className={[
                     "mt-4 flex flex-col gap-6 p-6 bg-zinc-950 border border-zinc-900 rounded-2xl sm:flex-row sm:items-center sm:justify-between",
                     menuHidden ? "hidden" : "animate-in fade-in slide-in-from-bottom-4 duration-700",
@@ -451,20 +448,7 @@ export default function NesPlayer() {
                         <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
                         <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">{message}</div>
                     </div>
-
-                    <label className="relative cursor-pointer group">
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept=".nes"
-                            className="hidden"
-                            onChange={(e) => { onUpload(e.target.files?.[0] ?? null); e.target.value = ""; }}
-                        />
-                        <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
-                            PROVISION_NEW_ROM
-                        </div>
-                    </label>
-                </div>
+                </div> */}
             </div>
 
             {tab === "library" && (
