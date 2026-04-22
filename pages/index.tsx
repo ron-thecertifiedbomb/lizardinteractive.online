@@ -22,7 +22,7 @@ export default function HomePage() {
 
   
 
-              <ScreenContainer variant="dark" maxWidth="xl" isHero={true}>
+              <ScreenContainer>
                   {/* <Hero homeContent={homeContent} /> */}
         {/* <AnimatedHero /> */}
          <PresentationSection

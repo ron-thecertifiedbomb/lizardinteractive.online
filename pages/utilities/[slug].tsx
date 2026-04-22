@@ -67,25 +67,20 @@ export default function UtilityToolPage() {
     <>
       <MetaHead data={{ title: tool.name, description: tool.description }} />
 
-      <ScreenContainer>
-        <SectionHeader
-          title={tool.name}
-          // highlight="Module"
-          description={tool.description}
-        />
+      <ScreenContainer className="pt-20 px-2 md:pt-30 ">
 
-        <div className="mt-1 w-full">
-          {/* 3. Conditional Render */}
-          {SelectedTool ? (
-            <SelectedTool />
-          ) : (
-            <div className="p-20 border border-dashed border-zinc-800 text-center">
-              <p className="text-zinc-500 font-mono uppercase tracking-widest text-xs">
-                Interface Initialization Failed: Component not mapped.
-              </p>
-            </div>
-          )}
-        </div>
+
+
+        {SelectedTool ? (
+          <SelectedTool />
+        ) : (
+          <div className="p-20 border border-dashed border-zinc-800 text-center">
+            <p className="text-zinc-500 font-mono uppercase tracking-widest text-xs">
+              Interface Initialization Failed: Component not mapped.
+            </p>
+          </div>
+        )}
+
       </ScreenContainer>
     </>
   );
