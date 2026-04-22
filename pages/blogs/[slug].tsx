@@ -1,25 +1,18 @@
 "use client";
 
-import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import BlogContent from '@/components/BlogContent/BlogContent';
 import { blogArticles } from '@/data/lists/blogArticle';
-import { Calendar, Clock, ImageIcon } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 
 export default function BlogPostPage() {
   const router = useRouter();
   const { slug } = router.query;
 
-  // ✅ IMPORTANT: Only find the post after router is ready
-  const post = useMemo(() => {
-    if (!router.isReady || !slug) return null;
-    return blogArticles.find((article) => article.id === slug);
-  }, [router.isReady, slug]);
-
-  // Show loading while router is not ready
+  // Wait for router to be ready
   if (!router.isReady) {
     return (
       <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 bg-black">
@@ -27,6 +20,9 @@ export default function BlogPostPage() {
       </div>
     );
   }
+
+  // Find the post
+  const post = blogArticles.find((article) => article.id === slug);
 
   if (!post) {
     return (
@@ -41,22 +37,23 @@ export default function BlogPostPage() {
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
 
+  // ✅ CRITICAL: Make sure we have the image path
+  const ogImagePath = post.image || "og-image-homepage.jpg";
+
   return (
     <>
       <MetaHead
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: post.image,
+          ogImage: ogImagePath,  // ✅ This should be like "blogs/password-security.webp"
           ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
           ogType: "article",
-          twitterCard: "summary_large_image",
         }}
       />
 
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
-
           {/* Featured Image */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
@@ -66,10 +63,6 @@ export default function BlogPostPage() {
                 fill
                 className="object-cover"
                 priority
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = 'none';
-                }}
               />
             </div>
           )}
