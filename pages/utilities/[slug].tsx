@@ -67,10 +67,10 @@ export default function UtilityToolPage() {
     <>
       <MetaHead data={{ title: tool.name, description: tool.description }} />
 
-      <ScreenContainer variant="ambient" maxWidth="xl" isHero={false}>
+      <ScreenContainer>
         <SectionHeader
           title={tool.name}
-          highlight="Module"
+          // highlight="Module"
           description={tool.description}
         />
 

@@ -56,9 +56,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
       {/* Main Content Area */}
       <TurboToastProvider>
-        <div className={!isEmulatorPage ? "pt-16" : ""}>
+     
           <Component {...pageProps} />
-        </div>
+  
         <Analytics />
       </TurboToastProvider>
 

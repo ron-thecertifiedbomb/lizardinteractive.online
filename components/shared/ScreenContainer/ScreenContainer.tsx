@@ -2,24 +2,21 @@ import React from "react";
 
 type ScreenContainerProps = {
     children: React.ReactNode;
-    className?: string;
-    variant?: "default" | "dark" | "ambient";
+    className?: string; // Use this for pt, pb, gap, or any extra styles
+    variant?: "transparent" | "ambient";
     maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
-    isHero?: boolean; // Added to control top spacing
 };
 
 export default function ScreenContainer({
     children,
     className = "",
-    variant = "default",
+    variant = "transparent",
     maxWidth = "lg",
-    isHero = false
 }: ScreenContainerProps) {
 
-    const backgrounds = {
-        default: "bg-black",
-        dark: "bg-black",
-        ambient: "bg-black bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black"
+    const variants = {
+        transparent: "",
+        ambient: "bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-900/50 via-black to-black"
     };
 
     const maxWidthClasses = {
@@ -32,32 +29,17 @@ export default function ScreenContainer({
     };
 
     return (
-        /* OUTER WRAPPER: Always full screen width and background */
-        <main
+        <section
             className={`
                 w-full 
                 min-h-screen 
-                flex flex-col
-                ${backgrounds[variant]} 
-                transition-all duration-700
-                overflow-x-hidden
+                ${variants[variant]} 
+                ${className} 
             `}
         >
-            {/* INNER CONTENT: Handles the max-width and horizontal centering */}
-            <div className={`
-                w-full 
-                mx-auto 
-                px-6 sm:px-10 lg:px-20 
-                /* Logic: If isHero is true, we use minimal padding because _app.tsx handles the navbar clearance */
-                ${isHero ? "pt-6 md:pt-15" : "pt-5 md:pt-10"}
-                pb-20 
-                flex-1
-                flex flex-col
-                ${maxWidthClasses[maxWidth]}
-                ${className}
-            `}>
+            <div className={`w-full mx-auto ${maxWidthClasses[maxWidth]}`}>
                 {children}
             </div>
-        </main>
+        </section>
     );
 }
