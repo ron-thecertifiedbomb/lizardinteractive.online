@@ -31,6 +31,7 @@ import Metronome from "@/components/Metronome/Metronome";
 import { TextTools } from "@/components/TextTools/TextTools";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator/QRCodeGenerator";
 import { PasswordGenerator } from "@/components/PasswordGenerator/PasswordGenertator";
+import { JSONFormatter } from "@/components/JSONFormatter/JSONFormatter";
 
 
 // 1. Create the Map
@@ -55,6 +56,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   "text-tools": TextTools,
   "qrcode-generator": QRCodeGenerator,
   "password-generator": PasswordGenerator,
+  "json-formatter": JSONFormatter,
 };
 
 export default function UtilityToolPage() {

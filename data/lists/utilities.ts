@@ -36,6 +36,13 @@ export const utilities = [
     category: "Files",
   },
   {
+    name: "JSON Formatter",
+    slug: "json-formatter",
+    description:
+      "Format, minify, and validate JSON data. Free developer tool with syntax highlighting.",
+    category: "Dev",
+  },
+  {
     name: "Image to Text Converter",
     slug: "imagetotext",
     description:
