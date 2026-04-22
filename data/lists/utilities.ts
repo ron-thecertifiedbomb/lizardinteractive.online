@@ -68,6 +68,13 @@ export const utilities = [
     description: "Fast, browser-based image editing with filters and cropping.",
     category: "Media",
   },
+  {
+    name: "QR Code Generator",
+    slug: "qrcode-generator",
+    description:
+      "Create custom QR codes with colors, sizes, and error correction. Download or share instantly.",
+    category: "Productivity",
+  },
 
   // --- TEXT TOOLS ---
   {

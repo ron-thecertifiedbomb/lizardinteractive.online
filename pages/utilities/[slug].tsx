@@ -29,6 +29,7 @@ import ChordDetector from "@/components/ChordDetector/ChordDetector";
 import PdfEditor from "@/components/PdfEditor/PdfEditor";
 import Metronome from "@/components/Metronome/Metronome";
 import { TextTools } from "@/components/TextTools/TextTools";
+import { QRCodeGenerator } from "@/components/QRCodeGenerator/QRCodeGenerator";
 
 
 // 1. Create the Map
@@ -51,6 +52,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   todo: Todo,
   boxshadowgenerator: BoxShadowGenerator,
   "text-tools": TextTools,
+  "qrcode-generator": QRCodeGenerator,
 };
 
 export default function UtilityToolPage() {
