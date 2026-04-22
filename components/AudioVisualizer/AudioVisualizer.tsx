@@ -160,7 +160,7 @@ export default function AudioVisualizer() {
                 <div className="space-y-4">
                     <div className="flex flex-wrap gap-6">
                         <div>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] block mb-2">// Mode</span>
+                        
                             <div className="flex gap-1">
                                 {(['bars', 'wave', 'radial'] as const).map(mode => (
                                     <button
@@ -178,7 +178,7 @@ export default function AudioVisualizer() {
                         </div>
 
                         <div>
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.3em] block mb-2">// Palette</span>
+                       
                             <div className="flex gap-1.5 items-center h-[26px]">
                                 {COLOR_PALETTE.map(color => (
                                     <button
