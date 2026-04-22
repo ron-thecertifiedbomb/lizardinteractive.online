@@ -32,6 +32,7 @@ import { TextTools } from "@/components/TextTools/TextTools";
 import { QRCodeGenerator } from "@/components/QRCodeGenerator/QRCodeGenerator";
 import { PasswordGenerator } from "@/components/PasswordGenerator/PasswordGenertator";
 import { JSONFormatter } from "@/components/JSONFormatter/JSONFormatter";
+import { UnitConverter } from "@/components/UnitConverter/UnitConverter";
 
 
 // 1. Create the Map
@@ -57,6 +58,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   "qrcode-generator": QRCodeGenerator,
   "password-generator": PasswordGenerator,
   "json-formatter": JSONFormatter,
+  "unit-converter": UnitConverter,
 };
 
 export default function UtilityToolPage() {

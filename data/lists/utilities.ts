@@ -56,6 +56,13 @@ export const utilities = [
     category: "Files",
   },
   {
+    name: "Unit Converter",
+    slug: "unit-converter",
+    description:
+      "Convert between 50+ units including length, weight, temperature, area, volume, time, and speed.",
+    category: "Productivity",
+  },
+  {
     name: "Resume Builder",
     slug: "resumebuilder",
     description:
