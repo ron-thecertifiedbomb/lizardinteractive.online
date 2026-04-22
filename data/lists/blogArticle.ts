@@ -2,7 +2,8 @@ export interface BlogArticle {
   id: string;
   title: string;
   category: string;
-  image: string;
+  image: string; // for UI (can be webp)
+  ogImage?: string; // ✅ for social (jpg/png)
   createdAt: string;
   sections: {
     heading: string;
@@ -15,7 +16,6 @@ export interface BlogArticle {
     }[];
   }[];
 }
-
 export const blogArticles: BlogArticle[] = [
   // --- 1. LAPTOP ARTICLE ---
   {
@@ -23,6 +23,7 @@ export const blogArticles: BlogArticle[] = [
     title: "2026 Best Laptops for Creators & Engineers",
     category: "GEAR_AUDIT",
     image: "blogs/laptop-header.webp",
+    ogImage: "blogs/laptop-header.jpg",
     createdAt: "2026-04-20T10:00:00Z",
     sections: [
       {
@@ -87,6 +88,7 @@ export const blogArticles: BlogArticle[] = [
     title: "The Bio-Digital Synthesis: Why the Future of AI is Human",
     category: "SYSTEM_PHILOSOPHY",
     image: "blogs/ai-synth.webp",
+    ogImage: "blogs/ai-synth.jpg",
     createdAt: "2026-04-19T14:30:00Z",
     sections: [
       {
@@ -128,6 +130,7 @@ export const blogArticles: BlogArticle[] = [
     title: "Why You're Still Using Weak Passwords in 2026 (And How to Fix It)",
     category: "SECURITY_GUIDES",
     image: "blogs/password-security.webp",
+    ogImage: "blogs/password-security.jpg",
     createdAt: "2026-04-18T09:00:00Z",
     sections: [
       {
@@ -169,6 +172,8 @@ export const blogArticles: BlogArticle[] = [
     title: "7 Ways Businesses Are Using QR Codes in 2026 (And How You Can Too)",
     category: "BUSINESS_TOOLS",
     image: "blogs/qr-business.webp",
+    ogImage: "blogs/qr-business.jpg",
+
     createdAt: "2026-04-17T11:30:00Z",
     sections: [
       {
@@ -219,6 +224,7 @@ export const blogArticles: BlogArticle[] = [
     title: "What Your Internet Speed Test Results Actually Mean",
     category: "NETWORK_GUIDES",
     image: "blogs/speed-test.webp",
+    ogImage: "blogs/speed-test.jpg",
     createdAt: "2026-04-16T13:00:00Z",
     sections: [
       {
@@ -269,6 +275,7 @@ export const blogArticles: BlogArticle[] = [
     title: "JSON Formatter: Why Every Developer Needs This Tool",
     category: "DEV_TOOLS",
     image: "blogs/json-guide.webp",
+    ogImage: "blogs/json-guide.jpg",
     createdAt: "2026-04-15T15:00:00Z",
     sections: [
       {
@@ -310,6 +317,7 @@ export const blogArticles: BlogArticle[] = [
     title: "Base64 Encoding: What It Is and When to Use It",
     category: "DEV_TOOLS",
     image: "blogs/base64-guide.webp",
+    ogImage: "blogs/base64-guide.jpg",
     createdAt: "2026-04-14T10:00:00Z",
     sections: [
       {
@@ -360,6 +368,7 @@ export const blogArticles: BlogArticle[] = [
     title: "5 Metronome Practice Techniques That Actually Work",
     category: "MUSIC_GUIDES",
     image: "blogs/metronome-practice.webp",
+    ogImage: "blogs/metronome-practice.jpg",
     createdAt: "2026-04-13T12:00:00Z",
     sections: [
       {

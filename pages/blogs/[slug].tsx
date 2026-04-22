@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import MetaHead from "@/components/MetaHead/MetaHead";
@@ -12,39 +10,58 @@ export default function BlogPostPage() {
   const router = useRouter();
   const { slug } = router.query;
 
-  if (!router.isReady) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  // ✅ Wait for router (prevents undefined issues)
+  if (!router.isReady || typeof slug !== "string") {
+    return null;
   }
 
   const post = blogArticles.find((article) => article.id === slug);
 
   if (!post) {
-    return <div className="min-h-screen flex items-center justify-center">404 - Post not found</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        404 - Post not found
+      </div>
+    );
   }
 
   const readTime = Math.ceil(
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
+
+  // ✅ FINAL OG IMAGE FIX (uses ogImage, fallback to jpg)
+  const absoluteOgImage = post.ogImage
+    ? `https://lizardinteractive.online/${post.ogImage.replace(/^\/+/, "")}`
+    : `https://lizardinteractive.online/${post.image
+      .replace(/^\/+/, "")
+      .replace(".webp", ".jpg")}`;
+
+  const absoluteOgUrl = `https://lizardinteractive.online/blogs/${post.id}`;
+
   return (
     <>
       <MetaHead
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          // ✅ Use the dynamic OG API endpoint
-          ogImage: post.image, 
-          ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
+          ogImage: absoluteOgImage,
+          ogUrl: absoluteOgUrl,
           ogType: "article",
         }}
       />
 
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
+
           {/* Featured Image */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
               <Image
-                src={`/${post.image}`}
+                src={
+                  post.image.startsWith("http")
+                    ? post.image
+                    : `/${post.image.replace(/^\/+/, "")}`
+                }
                 alt={post.title}
                 fill
                 className="object-cover"
@@ -68,12 +85,15 @@ export default function BlogPostPage() {
             <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
               <div className="flex items-center gap-1.5">
                 <Calendar size={12} />
-                <span>{new Date(post.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</span>
+                <span>
+                  {new Date(post.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
               </div>
+
               <div className="flex items-center gap-1.5">
                 <Clock size={12} />
                 <span>{readTime} min read</span>

@@ -1,42 +1,59 @@
-import '../styles/global.css';
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { Auth0Provider } from "@auth0/auth0-react";
-import { Analytics } from "@vercel/analytics/next";
-import Footer from "../components/Footer/Footer";
-import NavBar from "../components/NavBar/NavBar";
-import { TurboToastProvider } from "@/components/gba/TurboToastProvider";
+import "@/styles/globals.css";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-
-  // Define routes where we want a "Clean Hardware" look
-  const isEmulatorPage = router.pathname.startsWith('/emulator/');
-
+export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Auth0Provider
-      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!}
-      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN!}
-      authorizationParams={{ redirect_uri: typeof window !== 'undefined' ? window.location.origin : undefined }}
-    >
-      {/* ✅ REMOVED the global Head - each page will handle its own meta tags */}
+    <>
+      {/* ✅ Global fallback meta (safe defaults only) */}
+      <Head>
+        {/* Basic */}
+        <title>Lizard Interactive Online</title>
+        <meta
+          name="description"
+          content="Free online tools for developers, designers, and creators."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet="utf-8" />
+        <meta name="robots" content="index, follow" />
+        <meta name="theme-color" content="#000000" />
 
-      {/* Navigation */}
-      {!isEmulatorPage && (
-        <div className="fixed top-0 left-0 w-full z-[99999] pointer-events-auto">
-          <NavBar />
-        </div>
-      )}
+        {/* Favicon */}
+        <link rel="icon" href="/lizardinteractive.png" />
+        <link rel="apple-touch-icon" href="/lizardinteractive.png" />
 
-      {/* Main Content Area */}
-      <TurboToastProvider>
-        <Component {...pageProps} />
-        <Analytics />
-      </TurboToastProvider>
+        {/* ✅ Minimal Open Graph fallback */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Lizard Interactive Online" />
+        <meta property="og:title" content="Lizard Interactive Online" />
+        <meta
+          property="og:description"
+          content="Free online tools for developers, designers, and creators."
+        />
+        <meta
+          property="og:image"
+          content="https://lizardinteractive.online/og-image.png"
+        />
+        <meta
+          property="og:url"
+          content="https://lizardinteractive.online"
+        />
 
-      {/* Footer */}
-      {!isEmulatorPage && <Footer />}
-    </Auth0Provider>
+        {/* ✅ Twitter fallback */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Lizard Interactive Online" />
+        <meta
+          name="twitter:description"
+          content="Free online tools for developers, designers, and creators."
+        />
+        <meta
+          name="twitter:image"
+          content="https://lizardinteractive.online/og-image.png"
+        />
+      </Head>
+
+      {/* ✅ Page-level SEO (MetaHead) overrides this */}
+      <Component {...pageProps} />
+    </>
   );
 }
