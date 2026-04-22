@@ -8,7 +8,7 @@ export const blogPageContent = [
       "Deep dives into high-performance web tech and system optimization.",
     keywords:
       "Web Optimization, Performance, Next.js Blogs, Software Engineering Logs, Lizard Interactive",
-    ogImage: "/og-image-homepage.jpg",
+
   },
   {
     type: "heading",
