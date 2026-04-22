@@ -8,6 +8,7 @@ import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer
 import ServicesCards from "@/components/shared/ServicesCards/ServicesCards";
 import { niches } from "@/data/lists/nichesList";
 import { landingPagePresentation } from "@/data/page/landingPagePresentation";
+import { lizardContent } from "@/data/page/lizardContent";
 
 import { servicesContent } from "@/data/servicesContent";
 import { Presentation } from "lucide-react";
@@ -21,6 +22,10 @@ export default function ServicesPage() {
       <ScreenContainer>
       <MetaHead data={seoEntry?.data} />
       {/* <Hero homeContent={servicesContent} /> */}
+      <PresentationSection
+             data={lizardContent}
+                   badge="Lizard Interactive Online // v1.1"
+                 />
       <PresentationSection
         data={landingPagePresentation}
         badge="Deployment Blueprint // v2.1"

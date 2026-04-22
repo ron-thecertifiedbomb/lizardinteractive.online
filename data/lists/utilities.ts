@@ -70,6 +70,13 @@ export const utilities = [
     category: "Productivity",
   },
   {
+    name: "Speed Test",
+    slug: "speed-test",
+    description:
+      "Test your internet connection speed. Measure download, upload, ping, and jitter for free.",
+    category: "Network",
+  },
+  {
     name: "Screen Recorder",
     slug: "screenrecorder",
     description:

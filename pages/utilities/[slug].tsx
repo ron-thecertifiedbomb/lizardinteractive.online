@@ -33,6 +33,7 @@ import { QRCodeGenerator } from "@/components/QRCodeGenerator/QRCodeGenerator";
 import { PasswordGenerator } from "@/components/PasswordGenerator/PasswordGenertator";
 import { JSONFormatter } from "@/components/JSONFormatter/JSONFormatter";
 import { UnitConverter } from "@/components/UnitConverter/UnitConverter";
+import { SpeedTest } from "@/components/SpeedTest/SpeedTest";
 
 
 // 1. Create the Map
@@ -59,6 +60,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   "password-generator": PasswordGenerator,
   "json-formatter": JSONFormatter,
   "unit-converter": UnitConverter,
+  "speed-test": SpeedTest,
 };
 
 export default function UtilityToolPage() {
