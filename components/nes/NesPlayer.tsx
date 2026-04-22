@@ -18,6 +18,7 @@ import { NesSettingsPanel } from "@/components/nes/NesSettingsPanel";
 import { ConfirmDialog } from "@/components/nes/ConfirmDialog";
 import { NesRomLibrary } from "@/components/nes/NesRomLibrary";
 import Link from "next/link";
+import Image from "next/image";
 import {
     Cpu,
     Gamepad2,
@@ -32,7 +33,12 @@ import {
     VolumeX,
     EyeOff,
     Eye,
-    ChevronLeft
+    ChevronLeft,
+    ArrowUp,
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    Keyboard
 } from "lucide-react";
 
 import {
@@ -309,16 +315,15 @@ export default function NesPlayer() {
 
     return (
         <div className={[
-            "mx-auto w-full max-w-5xl transition-all duration-700",
-            menuHidden ? "flex min-h-screen flex-col items-center justify-center bg-black" : "p-2 lg:p-4",
+            "mx-auto w-full max-w-5xl transition-all duration-700 p-2",
+            menuHidden ? "flex min-h-screen flex-col items-center  bg-black" : ""
         ].join(" ")}>
-
             <button
                 onClick={() => setMenuHidden((h) => !h)}
-                className="fixed right-6 top-4 z-50 rounded-full border bg-zinc-950/80 backdrop-blur-md border-zinc-800 p-3 text-zinc-400 shadow-2xl hover:text-emerald-500 hover:border-emerald-500/50 transition-all active:scale-95"
+                className="fixed right-7 top-5 z-50 rounded-full border bg-zinc-950/80 backdrop-blur-md border-zinc-800 p-2 text-zinc-400 shadow-2xl hover:text-emerald-500 hover:border-emerald-500/50 transition-all active:scale-95"
                 aria-label="Toggle HUD"
             >
-                {menuHidden ? <Eye size={18} /> : <EyeOff size={18} />}
+                {menuHidden ? <Eye size={16} /> : <EyeOff size={16} />}
             </button>
 
             <div className={[
@@ -326,8 +331,15 @@ export default function NesPlayer() {
                 menuHidden ? "hidden" : "animate-in fade-in slide-in-from-top-4 duration-500",
             ].join(" ")}>
                 <div className="flex items-center gap-4">
-                    <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                        <Cpu className="text-emerald-500" size={18} />
+                    <div className="p-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+                        <Image
+                            src="/lizardinteractive.png"
+                            alt="Logo"
+                            width={28}
+                            height={28}
+                            className="rounded-full"
+                            priority
+                        />
                     </div>
                     <div>
                         <h1 className="text-[4.2vw] sm:text-2xl font-black uppercase tracking-tighter text-white leading-[0.9] drop-shadow-[0_0_8px_rgba(255,255,255,0.15)]">
@@ -431,8 +443,89 @@ export default function NesPlayer() {
                         <NesConsole
                             canvasRef={canvasRef}
                             status={status}
-                            onRomLoad={onUpload}  // Just pass the upload handler
+                            onRomLoad={onUpload}
                         />
+                    </div>
+                </div>
+
+                {/* KILLER UI - KEYBOARD CONTROLS INFO BAR (Hidden on mobile & tablet) */}
+                <div className="hidden md:block mt-4 w-full">
+                    <div className="bg-gradient-to-r from-zinc-950/50 via-zinc-900/30 to-zinc-950/50 backdrop-blur-sm rounded-xl border border-zinc-800/50 p-3">
+                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                            {/* Left Section - Keyboard Controls */}
+                            <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-2">
+                                    <Keyboard size={14} className="text-emerald-500" />
+                                    <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500">KEYBOARD</span>
+                                </div>
+
+                                <div className="flex items-center gap-4">
+                                    {/* Arrow Keys */}
+                                    <div className="flex flex-col items-center gap-1">
+                                        <div className="flex gap-1">
+                                            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                                <ArrowUp size={12} className="text-zinc-400" />
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                                <ArrowLeft size={12} className="text-zinc-400" />
+                                            </div>
+                                            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                                <ArrowDown size={12} className="text-zinc-400" />
+                                            </div>
+                                            <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                                <ArrowRight size={12} className="text-zinc-400" />
+                                            </div>
+                                        </div>
+                                        <span className="text-[7px] font-mono text-zinc-600 mt-1">MOVEMENT</span>
+                                    </div>
+
+                                    {/* Action Keys */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex flex-col items-center gap-1">
+                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
+                                                <span className="text-sm font-black text-red-300">Z</span>
+                                            </div>
+                                            <span className="text-[7px] font-mono text-zinc-600">B BUTTON</span>
+                                        </div>
+
+                                        <div className="flex flex-col items-center gap-1">
+                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
+                                                <span className="text-sm font-black text-red-300">X</span>
+                                            </div>
+                                            <span className="text-[7px] font-mono text-zinc-600">A BUTTON</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Section - System Keys */}
+                            <div className="flex items-center gap-4">
+                                <div className="flex flex-col items-center gap-1">
+                                    <div className="w-12 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                        <span className="text-[8px] font-mono font-bold text-zinc-500">ENTER</span>
+                                    </div>
+                                    <span className="text-[7px] font-mono text-zinc-600">START</span>
+                                </div>
+
+                                <div className="flex flex-col items-center gap-1">
+                                    <div className="w-12 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                        <span className="text-[8px] font-mono font-bold text-zinc-500">R-SHIFT</span>
+                                    </div>
+                                    <span className="text-[7px] font-mono text-zinc-600">SELECT</span>
+                                </div>
+
+                                <div className="w-px h-8 bg-zinc-800/50" />
+
+                                <div className="flex flex-col items-center gap-1">
+                                    <div className="w-8 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
+                                        <span className="text-[8px] font-mono font-bold text-zinc-500">R</span>
+                                    </div>
+                                    <span className="text-[7px] font-mono text-zinc-600">RESET</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

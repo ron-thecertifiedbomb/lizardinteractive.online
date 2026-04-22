@@ -60,10 +60,10 @@ export function NesRomDropzone({ onFile }: Props) {
                 if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
             }}
             className={[
-                "relative group cursor-pointer border transition-colors duration-300",
+                "relative group cursor-pointer border transition-colors duration-300 rounded-2xl",
                 dragging
                     ? "border-emerald-500 bg-emerald-500/5"
-                    : "border-zinc-900 bg-zinc-950 hover:border-zinc-700"
+                    : "border-zinc-900 bg-zinc-950 hover:border-zinc-800"
             ].join(" ")}
         >
             <input
@@ -88,17 +88,11 @@ export function NesRomDropzone({ onFile }: Props) {
                         }`}>
                         {dragging ? "Release_to_Upload" : "Initialize_Upload"}
                     </h3>
-                    <p className="text-[9px] font-mono text-zinc-600 uppercase">
-                        Protocol: iNES_v1.0
-                    </p>
+                
                 </div>
             </div>
 
-            {/* Flat Corner Brackets */}
-            <div className="absolute top-0 left-0 h-4 w-4 border-t-2 border-l-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute top-0 right-0 h-4 w-4 border-t-2 border-r-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+          
         </div>
     );
 }

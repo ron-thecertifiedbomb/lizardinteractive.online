@@ -60,43 +60,41 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
     };
 
     return (
-        <div className="mt-4 w-full lg:hidden select-none touch-none pb-8 px-6">
+        <div className="mt-8 w-full lg:hidden select-none touch-none pb-8 pl-9 pr-4">
             <div className="flex flex-col gap-8">
 
                 {/* --- MAIN CONTROL DECK --- */}
-                <div className="flex items-center justify-between px-2">
+                <div className="flex items-center justify-between ">
 
-                    {/* LEFT: SMALLER ANALOG STICK */}
+                    {/* LEFT: ANALOG STICK WITH LARGER TOGGLE CIRCLE */}
                     <div className="relative">
                         <div
                             ref={joystickRef}
                             onPointerMove={handleJoystickMove}
                             onPointerUp={resetJoystick}
                             onPointerLeave={resetJoystick}
-                            // Scaled from w-40 to w-24
                             className="w-24 h-24 rounded-full bg-zinc-950 border-2 border-zinc-900 shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)] flex items-center justify-center"
                         >
                             <motion.div
                                 animate={{ x: stickPos.x, y: stickPos.y }}
                                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                // Scaled from w-16 to w-10
-                                className="w-10 h-10 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border border-zinc-600 shadow-xl z-10 flex items-center justify-center pointer-events-none"
+                                className="w-20 h-20 rounded-full bg-gradient-to-b from-zinc-700 to-zinc-900 border-2 border-zinc-600 shadow-xl z-10 flex items-center justify-center pointer-events-none"
                             >
-                                <div className={`w-2 h-2 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
+                                <div className={`w-3 h-3 rounded-full transition-all duration-200 ${activeDir ? 'bg-emerald-400 shadow-[0_0_10px_#10b981]' : 'bg-zinc-800'}`} />
                             </motion.div>
                         </div>
-                        <span className="absolute -bottom-4 left-0 text-[5px] font-black tracking-[0.3em] text-zinc-800 uppercase">Input_01</span>
+                      
                     </div>
 
                     {/* RIGHT: ACTION BUTTONS WITH MODERATELY LARGER RED BUTTONS */}
-                    <div className="relative bg-zinc-900/20 p-3 rounded-lg border border-zinc-800/50 flex flex-col items-center gap-1 shadow-inner">
-                        <div className="flex items-center gap-5">
+                    <div className="relative  rounded-lg  flex flex-col gap-1 shadow-inner">
+                        <div className="flex items-center gap-6">
                             {/* BUTTON B - MODERATELY LARGER */}
                             <div className="flex flex-col items-center gap-1">
                                 <button
                                     onPointerDown={() => onPress("B")}
                                     onPointerUp={() => onRelease("B")}
-                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
+                                    className="w-20 h-20 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     B
                                 </button>
@@ -107,7 +105,7 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                                 <button
                                     onPointerDown={() => onPress("A")}
                                     onPointerUp={() => onRelease("A")}
-                                    className="w-16 h-16 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
+                                    className="w-20 h-20 rounded-full bg-[#8b1d1d] border-b-[4px] border-black active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center text-black/50 font-black text-lg shadow-md"
                                 >
                                     A
                                 </button>
@@ -122,7 +120,6 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                         <button
                             onPointerDown={() => onPress("SELECT")}
                             onPointerUp={() => onRelease("SELECT")}
-                            // Scaled from w-24 to w-16
                             className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
                         <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Select</span>
@@ -132,15 +129,14 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                         <button
                             onPointerDown={() => onPress("START")}
                             onPointerUp={() => onRelease("START")}
-                            // Scaled from w-24 to w-16
                             className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
                         <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Start</span>
                     </div>
                 </div>
 
-                <div className="text-center opacity-5">
-                    <span className="text-[6px] font-mono tracking-[0.8em]">LIZARD INTERACTIVE ONLINE</span>
+                <div className="text-center ">
+                    <span className="text-[6px] font-mono tracking-[0.8em] text-emerald-500">LIZARD INTERACTIVE ONLINE</span>
                 </div>
             </div>
         </div>

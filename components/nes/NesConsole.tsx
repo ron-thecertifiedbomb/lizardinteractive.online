@@ -29,33 +29,30 @@ export function NesConsole({
     return (
         <div className="mx-auto w-full max-w-4xl animate-in fade-in zoom-in-95 duration-700">
             {/* Main Console Chassis */}
-            <div className="relative rounded-[2.5rem] bg-zinc-900 p-2 shadow-[0_0_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
+            <div className="relative rounded-[2rem] bg-zinc-900 p-2 md:p-4 shadow-[0_0_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)]">
 
                 {/* 1. HUD */}
-                <div className="flex items-center justify-between px-8 py-3 bg-transparent">
+                <div className="flex items-center justify-between px-4 py-3 bg-transparent">
                     <div className="flex items-center gap-3">
                         <div className={["h-1.5 w-1.5 rounded-full", status === "running" ? "bg-emerald-500 animate-pulse" : "bg-zinc-700"].join(" ")} />
                         <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">
-                            SYSTEM_CORE: {status === "idle" ? "OFFLINE" : "STABLE"}
+                       {status === "idle" ? "OFFLINE" : "STABLE"}
                         </span>
                     </div>
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-1.5">
                             <Activity size={12} className={status === "running" ? "text-emerald-500" : "text-zinc-800"} />
-                            <span className="text-[9px] font-mono font-bold text-zinc-600">60_FPS</span>
+                          
                         </div>
-                        <div className="flex items-center gap-1.5">
-                            <Lock size={12} className="text-zinc-700" />
-                            <span className="text-[9px] font-mono font-bold text-zinc-700 uppercase">Signal_Lock</span>
-                        </div>
+               
                     </div>
                 </div>
 
                 {/* 2. Internal Bezel */}
-                <div className="relative overflow-hidden rounded-[1.5rem] bg-black p-1 shadow-[inset_0_0_20px_rgba(0,0,0,1)] border border-zinc-800/50">
+                <div className="relative overflow-hidden rounded-[0.8rem] bg-black p-1 shadow-[inset_0_0_20px_rgba(0,0,0,1)] ">
 
                     {/* Screen Area */}
-                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black rounded-xl flex items-center justify-center">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden flex items-center justify-center">
                         <canvas
                             ref={canvasRef}
                             width={256}

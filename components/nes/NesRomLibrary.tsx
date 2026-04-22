@@ -97,7 +97,7 @@ export function NesRomLibrary({ onPlay }: Props) {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Upload Zone */}
             <div className="relative group">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 to-zinc-500/20 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-500" />
+             
                 <div className="relative">
                     <NesRomDropzone onFile={handleImport} />
                 </div>
