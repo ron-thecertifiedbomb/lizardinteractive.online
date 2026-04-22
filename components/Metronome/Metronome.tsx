@@ -1,169 +1,212 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Play, Square, Activity } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Play, Square, Activity, Clock, Settings2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function MetronomeProcessor() {
-    const [bpm, setBpmState] = useState(100);
-    const [isPlaying, setIsPlaying] = useState(false);
+type SchedulerState = { nextNoteTime: number; currentBeat: number; };
 
-    const audioContext = useRef<AudioContext | null>(null);
-    const nextNoteTime = useRef(0.0);
-    const timerID = useRef<number | null>(null);
-    const bpmRef = useRef(100);
+export default function Metronome() {
+    const [bpm, setBpm] = useState(100);
+    const [beatsPerBar, setBeatsPerBar] = useState(4);
+    const [isRunning, setIsRunning] = useState(false);
+    const [tapTimes, setTapTimes] = useState<number[]>([]);
+    const [visualBeat, setVisualBeat] = useState<number>(-1);
+    const [subdivision, setSubdivision] = useState(1);
 
-    // Beat tracking for 4/4
-    const currentBeat = useRef(0);
+    const audioCtxRef = useRef<AudioContext | null>(null);
+    const schedulerStateRef = useRef<SchedulerState>({ nextNoteTime: 0, currentBeat: 0 });
+    const timerIdRef = useRef<number | null>(null);
 
-    const updateBpm = (val: number) => {
-        const cappedVal = val > 300 ? 300 : val;
-        setBpmState(cappedVal);
-        if (cappedVal >= 10) {
-            bpmRef.current = cappedVal;
+    // CRITICAL: Use a ref for BPM so the scheduler can see changes mid-stream
+    const bpmRef = useRef(bpm);
+    const subdivisionRef = useRef(subdivision);
+
+    useEffect(() => {
+        bpmRef.current = bpm;
+        subdivisionRef.current = subdivision;
+    }, [bpm, subdivision]);
+
+    // FIX: Cleanup when navigating away
+    useEffect(() => {
+        return () => {
+            if (timerIdRef.current) clearInterval(timerIdRef.current);
+            if (audioCtxRef.current) audioCtxRef.current.close();
+        };
+    }, []);
+
+    const ensureAudioContext = () => {
+        if (!audioCtxRef.current) {
+            audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
+        if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
+        return true;
     };
 
-    const scheduleNote = (time: number, beatIndex: number) => {
-        if (!audioContext.current) return;
+    const scheduleClick = (time: number, isAccent: boolean) => {
+        const ctx = audioCtxRef.current!;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-        const osc = audioContext.current.createOscillator();
-        const envelope = audioContext.current.createGain();
+        osc.type = isAccent ? "triangle" : "sine";
+        osc.frequency.setValueAtTime(isAccent ? 1200 : 800, time);
 
-        // ACCENT LOGIC: Beat 0 of the measure is higher (1600Hz), others are 1200Hz
-        const isAccent = beatIndex === 0;
-        osc.frequency.setValueAtTime(isAccent ? 1600 : 1200, time);
-        osc.frequency.exponentialRampToValueAtTime(40, time + 0.05);
+        gain.gain.setValueAtTime(0.4, time);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05);
 
-        envelope.gain.setValueAtTime(isAccent ? 1.8 : 1.4, time);
-        envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
-
-        osc.connect(envelope);
-        envelope.connect(audioContext.current.destination);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
 
         osc.start(time);
-        osc.stop(time + 0.05);
+        osc.stop(time + 0.1);
     };
 
-    const scheduler = () => {
-        const lookahead = 25.0;
-        const scheduleAheadTime = 0.1;
+    const schedulerTick = () => {
+        if (!audioCtxRef.current) return;
+        const ctx = audioCtxRef.current;
 
-        while (nextNoteTime.current < audioContext.current!.currentTime + scheduleAheadTime) {
-            // Pass the current beat to the scheduler
-            scheduleNote(nextNoteTime.current, currentBeat.current);
+        // Use Ref values to ensure the click follows the slider immediately
+        const currentBpm = bpmRef.current;
+        const currentSub = subdivisionRef.current;
+        const spb = 60 / currentBpm / currentSub;
 
-            const secondsPerBeat = 60.0 / (bpmRef.current || 100);
-            nextNoteTime.current += secondsPerBeat;
+        while (schedulerStateRef.current.nextNoteTime < ctx.currentTime + 0.1) {
+            const beat = schedulerStateRef.current.currentBeat;
+            const totalBeats = beatsPerBar * currentSub;
+            const isAccent = beat % totalBeats === 0;
 
-            // Increment beat and reset every 4 beats (4/4 time)
-            currentBeat.current = (currentBeat.current + 1) % 4;
+            scheduleClick(schedulerStateRef.current.nextNoteTime, isAccent);
+
+            const delay = Math.max(0, (schedulerStateRef.current.nextNoteTime - ctx.currentTime) * 1000);
+            setTimeout(() => setVisualBeat(beat), delay);
+
+            schedulerStateRef.current.currentBeat += 1;
+            schedulerStateRef.current.nextNoteTime += spb;
         }
-        timerID.current = window.setTimeout(scheduler, lookahead);
     };
 
     const toggleMetronome = () => {
-        if (!audioContext.current) {
-            audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-        }
-
-        if (!isPlaying) {
-            setIsPlaying(true);
-            currentBeat.current = 0; // Always start on the "1"
-            nextNoteTime.current = audioContext.current.currentTime + 0.05;
-            scheduler();
+        if (isRunning) {
+            setIsRunning(false);
+            if (timerIdRef.current) clearInterval(timerIdRef.current);
+            timerIdRef.current = null;
+            setVisualBeat(-1);
         } else {
-            setIsPlaying(false);
-            if (timerID.current) clearTimeout(timerID.current);
+            ensureAudioContext();
+            const ctx = audioCtxRef.current!;
+            schedulerStateRef.current = { nextNoteTime: ctx.currentTime + 0.05, currentBeat: 0 };
+            setIsRunning(true);
+            timerIdRef.current = window.setInterval(schedulerTick, 25);
         }
     };
 
-    useEffect(() => {
-        return () => { if (timerID.current) clearTimeout(timerID.current); };
-    }, []);
+    const onTap = () => {
+        const now = performance.now();
+        const updated = [...tapTimes, now].filter(t => now - t < 2000);
+        setTapTimes(updated);
+        if (updated.length >= 2) {
+            const avg = (updated[updated.length - 1] - updated[0]) / (updated.length - 1);
+            const newBpm = Math.max(30, Math.min(280, Math.round(60000 / avg)));
+            setBpm(newBpm);
+        }
+    };
 
     return (
-        <div className="w-full flex justify-center items-center py-10 selection:bg-emerald-500 selection:text-black font-sans">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-2xl bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-            >
-                <div className="flex justify-between items-start mb-10">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-zinc-800'}`} />
-                            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
-                                Metronome
-                            </h2>
-                        </div>
+        <div className="w-full max-w-md mx-auto bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden group">
+            {/* HUD Status */}
+            <div className="flex justify-between items-start mb-10">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                        <Activity className={`w-3 h-3 ${isRunning ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Metronome</h2>
                     </div>
-                    <Activity className={`w-4 h-4 ${isPlaying ? 'text-emerald-500' : 'text-zinc-800'} transition-colors`} />
+                    <p className="text-[9px] text-zinc-600 uppercase font-mono">Engine: WebAudio_V2 // {isRunning ? 'Sync_Active' : 'Idle'}</p>
                 </div>
+                <div className="text-right">
+                    <div className="text-3xl font-black text-white tabular-nums tracking-tighter">{bpm}</div>
+                    <div className="text-[8px] text-zinc-700 uppercase font-mono">Beats_Per_Minute</div>
+                </div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div className="space-y-8">
-                        <div className="relative group">
-                            <div className="absolute -inset-4 bg-emerald-500/5 blur-xl transition-all rounded-full" />
-                            <div className="relative flex flex-col items-center justify-center border border-zinc-900 bg-black/50 py-10 rounded-sm shadow-inner">
-                               
-                                <div className="flex items-baseline justify-center gap-2">
-                                    <input
-                                        type="number"
-                                        value={bpm || ""}
-                                        onChange={(e) => updateBpm(parseInt(e.target.value))}
-                                        className="bg-transparent text-7xl font-black text-white tracking-tighter w-[160px] text-center outline-none focus:text-emerald-500 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                        placeholder="0"
-                                    />
-                                    <span className="text-xs text-emerald-500 font-mono tracking-normal italic uppercase">BPM</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-zinc-500 font-mono">
-                                <span>LOCKED_4/4</span>
-                                <span>MAX_300</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="40"
-                                max="300"
-                                value={bpm || 100}
-                                onChange={(e) => updateBpm(parseInt(e.target.value))}
-                                className="w-full h-1 bg-zinc-900 appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all"
+            {/* Visual Beat Track */}
+            <div className="flex gap-2 justify-between mb-10 h-12 items-center">
+                {Array.from({ length: beatsPerBar }).map((_, i) => {
+                    const isActive = Math.floor(visualBeat / subdivision) % beatsPerBar === i;
+                    return (
+                        <div key={i} className="flex-1 flex flex-col gap-1 items-center">
+                            <motion.div
+                                animate={{
+                                    backgroundColor: isActive ? (i === 0 ? "#ef4444" : "#10b981") : "#18181b",
+                                    scale: isActive ? 1.1 : 1
+                                }}
+                                className="w-full h-1.5 rounded-none"
                             />
+                            <span className={`text-[8px] font-mono ${isActive ? 'text-white' : 'text-zinc-800'}`}>0{i + 1}</span>
                         </div>
-                    </div>
+                    );
+                })}
+            </div>
 
-                    <div className="flex flex-col gap-4">
-                        <button
-                            onClick={toggleMetronome}
-                            className={`group relative flex items-center justify-center gap-3 w-full py-6 text-[11px] font-black uppercase tracking-[0.3em] transition-all border ${isPlaying
-                                ? 'bg-red-500/10 border-red-500/50 text-red-500'
-                                : 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500'
-                                } hover:scale-[1.02] active:scale-95`}
+            {/* Primary Controls */}
+            <div className="space-y-8">
+                <div className="relative group/slider">
+                    <input
+                        type="range" min={30} max={240} value={bpm}
+                        onChange={(e) => setBpm(parseInt(e.target.value))}
+                        className="w-full h-1 bg-zinc-900 appearance-none cursor-crosshair accent-emerald-500"
+                    />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-zinc-600 flex items-center gap-2"><Settings2 className="w-3 h-3" /> Signature</label>
+                        <select
+                            value={beatsPerBar}
+                            onChange={(e) => setBeatsPerBar(parseInt(e.target.value))}
+                            className="w-full bg-black border border-zinc-900 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none focus:border-emerald-500/50"
                         >
-                            {isPlaying ? (
-                                <><Square className="w-4 h-4 fill-current" /> Stop</>
-                            ) : (
-                                <><Play className="w-4 h-4 fill-current" /> Start</>
-                            )}
-                            <div className={`absolute inset-0 opacity-10 blur-lg ${isPlaying ? 'bg-red-500' : 'bg-emerald-500'}`} />
-                        </button>
-            
+                            {[2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}/4 Time</option>)}
+                        </select>
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[8px] uppercase tracking-widest text-zinc-600 flex items-center gap-2"><Clock className="w-3 h-3" /> Division</label>
+                        <select
+                            value={subdivision}
+                            onChange={(e) => setSubdivision(parseInt(e.target.value))}
+                            className="w-full bg-black border border-zinc-900 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none focus:border-emerald-500/50"
+                        >
+                            <option value={1}>1/4 Notes</option>
+                            <option value={2}>1/8 Notes</option>
+                            <option value={3}>Triplets</option>
+                            <option value={4}>1/16 Notes</option>
+                        </select>
                     </div>
                 </div>
 
-                <div className="mt-12 flex justify-between items-center opacity-30">
-                    <div className="text-[8px] font-mono text-zinc-500 tracking-[0.2em]">LIZARD INTERACTIVE ONLINE // {new Date().getFullYear()}</div>
-                    <div className="flex gap-1">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className={`w-1 h-1 rounded-full ${isPlaying ? 'bg-emerald-500 animate-bounce shadow-[0_0_5px_#10b981]' : 'bg-zinc-800'}`} style={{ animationDelay: `${i * 0.1}s` }} />
-                        ))}
-                    </div>
+                <div className="flex gap-2">
+                    <button
+                        onClick={toggleMetronome}
+                        className={`flex-1 flex items-center justify-center gap-3 py-4 text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${isRunning ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-white text-black hover:bg-emerald-500'}`}
+                    >
+                        {isRunning ? <Square className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+                        {isRunning ? 'Stop' : 'Start'}
+                    </button>
+                    <button
+                        onClick={onTap}
+                        className="px-6 bg-[#0c0c0c] border border-zinc-900 text-zinc-500 hover:text-white hover:border-zinc-700 transition-all text-[10px] font-black uppercase tracking-widest"
+                    >
+                        Tap
+                    </button>
                 </div>
-            </motion.div>
+            </div>
+
+            {/* Shortcuts Guide */}
+            <div className="mt-8 pt-6 border-t border-zinc-900/50 flex justify-between items-center">
+                <span className="text-[8px] text-zinc-800 uppercase font-mono tracking-tighter">Lizard Interactive Online</span>
+                <div className="flex gap-1">
+                    <div className={`w-1 h-1 rounded-full ${isRunning ? 'bg-emerald-500 animate-ping' : 'bg-zinc-900'}`} />
+                </div>
+            </div>
         </div>
     );
 }

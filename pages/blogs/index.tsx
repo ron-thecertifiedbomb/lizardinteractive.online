@@ -8,10 +8,9 @@ import { blogPageContent } from "@/data/page/blogPageContent";
 import { blogArticles } from "@/data/lists/blogArticle";
 
 export default function BlogPage() {
-    // Dynamic extraction for the SectionHeader
+  
     const headerData = blogPageContent.find(item => item.type === "heading");
-    const subData = blogPageContent.find(item => item.type === "paragraph");
-
+   
     return (
         <>
             <MetaHead pageContent={blogPageContent} />
@@ -20,10 +19,8 @@ export default function BlogPage() {
                 <SectionHeader
                     title={headerData?.content || "Daily"}
                     highlight={headerData?.highlight || "Blogs"}
-                    // description={subData?.content || ""}
                 />
 
-     
                     <BlogGrid posts={blogArticles} />
              
             </ScreenContainer>

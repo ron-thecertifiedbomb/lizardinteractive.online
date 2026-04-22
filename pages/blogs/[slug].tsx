@@ -38,7 +38,7 @@ export default function BlogPostPage() {
         }}
       />
 
-      <ScreenContainer variant="dark" maxWidth="xl">
+      <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-24 pb-40 px-4 md:px-6">
 
           {/* --- 4. PAGE HEADER: Refined to match your universal layout --- */}
