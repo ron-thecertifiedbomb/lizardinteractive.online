@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
@@ -10,14 +10,23 @@ import { blogArticles } from '@/data/lists/blogArticle';
 import { Calendar, Clock, ImageIcon } from 'lucide-react';
 
 export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
-  const [imageError, setImageError] = useState(false);
+  const router = useRouter();
+  const { slug } = router.query;
 
+  // ✅ IMPORTANT: Only find the post after router is ready
   const post = useMemo(() => {
-    if (!slug) return null;
+    if (!router.isReady || !slug) return null;
     return blogArticles.find((article) => article.id === slug);
-  }, [slug]);
+  }, [router.isReady, slug]);
+
+  // Show loading while router is not ready
+  if (!router.isReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-mono text-zinc-800 bg-black">
+        [ LOADING... ]
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -48,45 +57,35 @@ export default function BlogPostPage() {
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
 
-          {/* --- FEATURED IMAGE AT THE TOP with Next.js Image --- */}
+          {/* Featured Image */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
-              {!imageError ? (
-                <Image
-                  src={`/${post.image}`}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1200px) 100vw, 1200px"
-                  priority
-                  onError={() => setImageError(true)}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-zinc-900">
-                  <div className="text-center">
-                    <ImageIcon size={48} className="text-zinc-700 mx-auto mb-2" />
-                    <p className="text-xs font-mono text-zinc-600">Featured image not available</p>
-                  </div>
-                </div>
-              )}
+              <Image
+                src={`/${post.image}`}
+                alt={post.title}
+                fill
+                className="object-cover"
+                priority
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = 'none';
+                }}
+              />
             </div>
           )}
 
-          {/* --- HEADER with Meta Info --- */}
+          {/* Header */}
           <header className="border-b border-zinc-900 pb-8 mb-12 space-y-6">
-            {/* Category Badge */}
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-wider">
                 {post.category}
               </span>
             </div>
 
-            {/* Title */}
             <h1 className="text-[clamp(2rem,8vw,4rem)] font-black uppercase leading-[1.1] tracking-tighter text-white">
               {post.title}
             </h1>
 
-            {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
               <div className="flex items-center gap-1.5">
                 <Calendar size={12} />
@@ -102,7 +101,6 @@ export default function BlogPostPage() {
               </div>
             </div>
 
-            {/* Excerpt/Description */}
             {post.sections?.[0] && (
               <p className="text-zinc-400 text-sm md:text-base leading-relaxed italic border-l-2 border-emerald-500 pl-5">
                 {post.sections[0].content}
@@ -110,9 +108,7 @@ export default function BlogPostPage() {
             )}
           </header>
 
-          {/* --- CONTENT --- */}
           <BlogContent article={post} />
-
         </div>
       </ScreenContainer>
     </>
