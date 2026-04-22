@@ -10,9 +10,9 @@ export function NesConsole({
     fileInputRef,
     onUpload,
 }: {
-    canvasRef: React.RefObject<HTMLCanvasElement | null>;
+    canvasRef: React.RefObject<HTMLCanvasElement>;
     status: "idle" | "running" | "paused";
-    fileInputRef: React.RefObject<HTMLInputElement | null>;
+    fileInputRef: React.RefObject<HTMLInputElement>;
     onUpload: (file: File | null) => void;
 }) {
     return (

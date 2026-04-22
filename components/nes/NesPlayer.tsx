@@ -52,7 +52,6 @@ import { hashRom } from "@/lib/hashRom";
 type Tab = "emulator" | "library";
 
 export default function NesPlayer() {
-    // Correctly typed as RefObject by providing (null) as initial value
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const coreRef = useRef<NesCore | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
