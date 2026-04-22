@@ -16,7 +16,7 @@ import MeshGenerator from "@/components/MeshGenerator/MeshGenerator";
 import ScreenRecorder from "@/components/ScreenRecorder/ScreenRecorder";
 import ImageEditor from "@/components/ImageEditor/ImageEditor";
 import ScaleMapper from "@/components/ScaleMapper/ScaleMapper";
-import Metronome from "@/components/Metronome/Metronome";
+
 import Tuner from "@/components/Tuner/Tuner";
 import Planner from "@/components/Planner/Planner";
 import Todo from "@/components/Todo/Todo";
@@ -27,6 +27,7 @@ import { utilities } from "@/data/lists/utilities";
 import AudioVisualizer from "@/components/AudioVisualizer/AudioVisualizer";
 import ChordDetector from "@/components/ChordDetector/ChordDetector";
 import PdfEditor from "@/components/PdfEditor/PdfEditor";
+import  Metronome from "@/components/Metronome/Metronome";
 
 
 
