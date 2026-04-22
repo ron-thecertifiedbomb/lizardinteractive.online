@@ -37,8 +37,11 @@ export default function BlogPostPage() {
       <MetaHead
         data={{
           title: post.title,
-          ogImage: post.image,
-          description: post.sections?.[0]?.content?.substring(0, 160) || ""
+          description: post.sections?.[0]?.content?.substring(0, 160) || "",
+          ogImage: post.image || "/og-image.png",
+          ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
+          ogType: "article",
+          twitterCard: "summary_large_image",
         }}
       />
 
