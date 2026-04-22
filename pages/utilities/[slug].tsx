@@ -27,8 +27,8 @@ import { utilities } from "@/data/lists/utilities";
 import AudioVisualizer from "@/components/AudioVisualizer/AudioVisualizer";
 import ChordDetector from "@/components/ChordDetector/ChordDetector";
 import PdfEditor from "@/components/PdfEditor/PdfEditor";
-import  Metronome from "@/components/Metronome/Metronome";
-
+import Metronome from "@/components/Metronome/Metronome";
+import { TextTools } from "@/components/TextTools/TextTools";
 
 
 // 1. Create the Map
@@ -50,6 +50,7 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   pdfeditor: PdfEditor,
   todo: Todo,
   boxshadowgenerator: BoxShadowGenerator,
+  "text-tools": TextTools,
 };
 
 export default function UtilityToolPage() {
@@ -68,10 +69,7 @@ export default function UtilityToolPage() {
     <>
       <MetaHead data={{ title: tool.name, description: tool.description }} />
 
-      <ScreenContainer className="pt-20 px-2 md:pt-30 ">
-
-
-
+      <ScreenContainer className="pt-20 px-3 md:pt-30 ">
         {SelectedTool ? (
           <SelectedTool />
         ) : (
@@ -81,7 +79,6 @@ export default function UtilityToolPage() {
             </p>
           </div>
         )}
-
       </ScreenContainer>
     </>
   );

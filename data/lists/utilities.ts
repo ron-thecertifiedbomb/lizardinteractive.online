@@ -69,6 +69,15 @@ export const utilities = [
     category: "Media",
   },
 
+  // --- TEXT TOOLS ---
+  {
+    name: "Text Tools Suite",
+    slug: "text-tools",
+    description:
+      "Analyze text with character counter, word counter, case converter, and more.",
+    category: "Productivity",
+  },
+
   // --- MUSIC TOOLS (The Psychedelic Riffer Essentials) ---
   {
     name: "Scale Mapper",
