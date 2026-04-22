@@ -14,6 +14,13 @@ export const utilities = [
     category: "Dev",
   },
   {
+    name: "Base64 Encoder/Decoder",
+    slug: "base64-tool",
+    description:
+      "Encode text to Base64 or decode Base64 back to text. Supports images and file uploads.",
+    category: "Dev",
+  },
+  {
     name: "Mesh Gradient Generator",
     slug: "meshgenerator",
     description: "Create beautiful, fluid mesh gradients for your UI designs.",
@@ -34,6 +41,13 @@ export const utilities = [
     description:
       "Surgically split, merge, and manipulate PDF pages entirely in-browser.",
     category: "Files",
+  },
+  {
+    name: "Video to GIF Converter",
+    slug: "video-to-gif",
+    description:
+      "Convert video clips to animated GIFs. Perfect for memes, previews, and sharing on social media.",
+    category: "Media",
   },
   {
     name: "JSON Formatter",

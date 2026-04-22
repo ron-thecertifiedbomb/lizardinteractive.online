@@ -34,6 +34,8 @@ import { PasswordGenerator } from "@/components/PasswordGenerator/PasswordGenert
 import { JSONFormatter } from "@/components/JSONFormatter/JSONFormatter";
 import { UnitConverter } from "@/components/UnitConverter/UnitConverter";
 import { SpeedTest } from "@/components/SpeedTest/SpeedTest";
+import { Base64Tool } from "@/components/Base64Tool/Base64Tool";
+import { VideoToGIF } from "@/components/VideoToGIF/VideoToGIF";
 
 
 // 1. Create the Map
@@ -61,6 +63,8 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
   "json-formatter": JSONFormatter,
   "unit-converter": UnitConverter,
   "speed-test": SpeedTest,
+  "base64-tool": Base64Tool,
+  "video-to-gif": VideoToGIF,
 };
 
 export default function UtilityToolPage() {

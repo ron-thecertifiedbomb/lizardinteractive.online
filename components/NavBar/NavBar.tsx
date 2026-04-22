@@ -41,7 +41,7 @@ export default function NavBar() {
         }, 600);
     };
 
-    const brandName = "LIZARD INTERACTIVE";
+    const brandName = "LIZARD INTERACTIVE ONLINE";
 
     return (
         <>
