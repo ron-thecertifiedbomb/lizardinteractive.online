@@ -16,8 +16,9 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
   }
 
   const siteUrl = "https://lizardinteractive.online";
-  // ✅ ABSOLUTE URL - Facebook needs this!
-  const ogImageUrl = `${siteUrl}/api/og/${post.id}`;
+
+  // ✅ Use the actual blog image (ogImage for better compatibility)
+  const ogImageUrl = `${siteUrl}/${post.ogImage || post.image}`;
   const ogUrl = `${siteUrl}/blogs/${post.id}`;
   const description = post.sections?.[0]?.content?.substring(0, 160) || "";
 
