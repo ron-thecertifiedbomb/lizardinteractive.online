@@ -429,7 +429,7 @@ export const blogArticles: BlogArticle[] = [
       {
         heading: "The Failure",
         content:
-          "Then I shared my blog post on Facebook. Nothing. No image. No title. Just a blank link. I checked the Facebook Sharing Debugger. It said 'Inferred Property' and 'Missing og:image'. I was confused. The meta tags were clearly in my code. I used getServerSideProps. I passed the data correctly. I even added fallbacks. But Facebook kept showing the homepage image instead of my dynamic OG image. Something was very wrong.",
+          "Then came the gut punch. I shared my blog post on Facebook. Nothing. No image. No title. Just a dead, blank link staring back at me. I ran to the Facebook Sharing Debugger. 'Inferred Property.' 'Missing og:image.' I couldn't believe it. The meta tags were RIGHT THERE in my code. I used getServerSideProps. I passed the data correctly. I added fallbacks. I tried every trick in the book. But Facebook kept shoving my homepage image down the crawler's throat instead of my dynamic OG image. Deployment after deployment. Nothing changed. That's when the doubt crept in. Maybe I was too old for this. Maybe the machine had finally won. But I wasn't ready to raise the white flag. I can still stand against the machine. I just needed to figure out how.",
       },
       {
         heading: "The Discovery",

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ShoppingCart, Terminal } from "lucide-react";
+import { User } from "lucide-react";
 
 // This interface must match what you pass from the slug page
 interface BlogContentProps {
@@ -39,7 +39,8 @@ export default function BlogContent({ article }: BlogContentProps) {
                             <span className="text-emerald-500/50 text-sm font-mono">0{sIdx + 1}</span>
                             {section.heading}
                         </h2>
-                        <p className="text-zinc-400 leading-relaxed italic border-l border-zinc-900 pl-6">
+                        {/* ✅ Removed italic class */}
+                        <p className="text-zinc-400 leading-relaxed border-l border-zinc-900 pl-6">
                             {section.content}
                         </p>
                     </div>
