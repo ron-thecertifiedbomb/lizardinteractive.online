@@ -19,8 +19,21 @@ export default async function handler(req: Request) {
     const category = post.category.replace('_', ' ');
     const title = post.title;
 
-    // ✅ Force proper image response
-    const image = new ImageResponse(
+    // ✅ Use absolute URL for your logo (Vercel production URL)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lizardinteractive.online';
+    const logoUrl = `${siteUrl}/lizardround.png`;
+
+    let logoBuffer = null;
+    try {
+        const response = await fetch(logoUrl);
+        if (response.ok) {
+            logoBuffer = await response.arrayBuffer();
+        }
+    } catch (error) {
+        console.log('Could not load logo, using emoji fallback');
+    }
+
+    return new ImageResponse(
         (
             <div
                 style={{
@@ -34,30 +47,43 @@ export default async function handler(req: Request) {
                     padding: '60px 80px',
                 }}
             >
-                {/* Logo */}
+                {/* Logo with fallback */}
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px',
+                        justifyContent: 'center',
+                        gap: '16px',
                         marginBottom: '40px',
                     }}
                 >
+                    {logoBuffer ? (
+                        <img
+                            src={logoBuffer as any}
+                            width={70}
+                            height={70}
+                            style={{
+                                borderRadius: '20px',
+                            }}
+                            alt="Lizard Interactive"
+                        />
+                    ) : (
+                        <div
+                            style={{
+                                width: '70px',
+                                height: '70px',
+                                background: '#10b981',
+                                borderRadius: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '40px',
+                            }}
+                        >
+                            🦎
+                        </div>
+                    )}
                     <div
-                        style={{
-                            width: '56px',
-                            height: '56px',
-                            background: '#10b981',
-                            borderRadius: '16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '32px',
-                        }}
-                    >
-                        🦎
-                    </div>
-                    <span
                         style={{
                             fontSize: '28px',
                             fontWeight: 'bold',
@@ -66,7 +92,7 @@ export default async function handler(req: Request) {
                         }}
                     >
                         LIZARD INTERACTIVE
-                    </span>
+                    </div>
                 </div>
 
                 {/* Category Badge */}
@@ -112,6 +138,18 @@ export default async function handler(req: Request) {
                     </span>
                 </div>
 
+                {/* Bottom border accent */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        background: 'linear-gradient(90deg, #10b981, #3b82f6, #a855f7)',
+                    }}
+                />
+
                 {/* Footer */}
                 <div
                     style={{
@@ -137,13 +175,6 @@ export default async function handler(req: Request) {
         {
             width: 1200,
             height: 630,
-            // ✅ Add these headers
-            headers: {
-                'content-type': 'image/png',
-                'cache-control': 'public, max-age=31536000, immutable',
-            },
         }
     );
-
-    return image;
 }
