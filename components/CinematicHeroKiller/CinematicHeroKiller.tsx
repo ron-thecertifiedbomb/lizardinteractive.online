@@ -71,28 +71,33 @@ export default function CinematicHeroKiller() {
 
                 <div className="w-56 h-56 rounded-full  border-zinc-300 bg-transparent flex items-center justify-center relative overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.2)]">
 
-                    {/* Internal Scanline */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent bg-[length:100%_4px] animate-scan opacity-30" />
+                    <div className="w-56 h-56 rounded-full border border-zinc-700/50 bg-transparent flex items-center justify-center relative overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.2)]">
 
-                    {/* THE LOGO */}
-                    <Image
-                        src="/lizard/lizardlogo.png"
-                        alt="Logo"
-                        width={100}
-                        height={100}
-                        priority
-                        className="relative z-20 object-contain scale-300"
-                    />
+                        {/* Internal Scanline Effect */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent bg-[length:100%_4px] animate-pulse opacity-30" />
 
-                    {/* INTERNAL ARC EFFECT (Lightning inside the circle) */}
-                    <motion.div
-                        animate={{
-                            opacity: [0, 1, 0, 0.8, 0],
-                            x: [-20, 20, -10, 10, 0]
-                        }}
-                        transition={{ repeat: Infinity, duration: 0.5, repeatDelay: 4 }}
-                        className="absolute inset-0 bg-white/10 mix-blend-color-dodge z-30 pointer-events-none"
-                    />
+                        {/* THE FIX: Use a wrapper div for the image to control scale without warnings */}
+                        <div className="relative w-20 h-20 scale-[3] z-20">
+                            <Image
+                                src="/lizard/lizardlogo.png"
+                                alt="Logo"
+                                fill
+                                sizes="20vw"
+                                priority
+                                className="object-contain"
+                            />
+                        </div>
+
+                        {/* INTERNAL ARC EFFECT */}
+                        <motion.div
+                            animate={{
+                                opacity: [0, 1, 0, 0.8, 0],
+                                x: [-20, 20, -10, 10, 0]
+                            }}
+                            transition={{ repeat: Infinity, duration: 0.5, repeatDelay: 4 }}
+                            className="absolute inset-0 bg-emerald-400/20 mix-blend-color-dodge z-30 pointer-events-none"
+                        />
+                    </div>
                 </div>
             </motion.div>
         </motion.section>
