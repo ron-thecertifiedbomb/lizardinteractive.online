@@ -1,7 +1,6 @@
+// pages/api/og/[slug].tsx
 import { ImageResponse } from '@vercel/og';
 import { blogArticles } from '@/data/lists/blogArticle';
-import fs from 'fs';
-import path from 'path';
 
 export const config = {
     runtime: 'edge',
@@ -20,20 +19,8 @@ export default async function handler(req: Request) {
     const category = post.category.replace('_', ' ');
     const title = post.title;
 
-    // Try to load the blog's actual image if it exists
-    let blogImageData = null;
-    if (post.image) {
-        try {
-            // For Edge runtime, we need to fetch the image via URL
-            const imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${post.image}`;
-            const imageResponse = await fetch(imageUrl);
-            blogImageData = await imageResponse.arrayBuffer();
-        } catch (err) {
-            console.log('Could not load blog image:', err);
-        }
-    }
-
-    return new ImageResponse(
+    // ✅ Force proper image response
+    const image = new ImageResponse(
         (
             <div
                 style={{
@@ -41,157 +28,122 @@ export default async function handler(req: Request) {
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    position: 'relative',
-                    fontFamily: 'system-ui, -apple-system, sans-serif',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
+                    padding: '60px 80px',
                 }}
             >
-                {/* If blog image exists, use it as background */}
-                {blogImageData ? (
-                    <img
-                        src={`data:image/jpeg;base64,${Buffer.from(blogImageData).toString('base64')}`}
-                        alt=""
+                {/* Logo */}
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        marginBottom: '40px',
+                    }}
+                >
+                    <div
                         style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
+                            width: '56px',
+                            height: '56px',
+                            background: '#10b981',
+                            borderRadius: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '32px',
                         }}
-                    />
-                ) : null}
+                    >
+                        🦎
+                    </div>
+                    <span
+                        style={{
+                            fontSize: '28px',
+                            fontWeight: 'bold',
+                            color: '#10b981',
+                            letterSpacing: '3px',
+                        }}
+                    >
+                        LIZARD INTERACTIVE
+                    </span>
+                </div>
 
-                {/* Overlay gradient for readability */}
+                {/* Category Badge */}
+                <div
+                    style={{
+                        display: 'flex',
+                        padding: '8px 24px',
+                        background: 'rgba(16, 185, 129, 0.15)',
+                        borderRadius: '100px',
+                        marginBottom: '30px',
+                        border: '1px solid rgba(16, 185, 129, 0.4)',
+                    }}
+                >
+                    <span
+                        style={{
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            color: '#10b981',
+                            letterSpacing: '2px',
+                        }}
+                    >
+                        {category}
+                    </span>
+                </div>
+
+                {/* Title */}
+                <div
+                    style={{
+                        display: 'flex',
+                        textAlign: 'center',
+                        maxWidth: '900px',
+                    }}
+                >
+                    <span
+                        style={{
+                            fontSize: '52px',
+                            fontWeight: '900',
+                            color: 'white',
+                            lineHeight: 1.2,
+                        }}
+                    >
+                        {title}
+                    </span>
+                </div>
+
+                {/* Footer */}
                 <div
                     style={{
                         position: 'absolute',
-                        top: 0,
+                        bottom: '30px',
                         left: 0,
-                        width: '100%',
-                        height: '100%',
-                        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 100%)',
-                    }}
-                />
-
-                {/* Content overlay */}
-                <div
-                    style={{
-                        position: 'relative',
-                        zIndex: 1,
-                        height: '100%',
-                        width: '100%',
+                        right: 0,
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '60px 80px',
                     }}
                 >
-                    {/* Logo */}
-                    <div
+                    <span
                         style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            marginBottom: '40px',
+                            fontSize: '14px',
+                            color: '#666',
                         }}
                     >
-                        <div
-                            style={{
-                                width: '56px',
-                                height: '56px',
-                                background: '#10b981',
-                                borderRadius: '16px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '32px',
-                            }}
-                        >
-                            🦎
-                        </div>
-                        <span
-                            style={{
-                                fontSize: '28px',
-                                fontWeight: 'bold',
-                                color: '#10b981',
-                                letterSpacing: '3px',
-                            }}
-                        >
-                            LIZARD INTERACTIVE
-                        </span>
-                    </div>
-
-                    {/* Category Badge */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            padding: '8px 24px',
-                            background: 'rgba(16, 185, 129, 0.2)',
-                            borderRadius: '100px',
-                            marginBottom: '30px',
-                            border: '1px solid rgba(16, 185, 129, 0.5)',
-                        }}
-                    >
-                        <span
-                            style={{
-                                fontSize: '16px',
-                                fontWeight: '600',
-                                color: '#10b981',
-                                letterSpacing: '2px',
-                            }}
-                        >
-                            {category}
-                        </span>
-                    </div>
-
-                    {/* Title */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            textAlign: 'center',
-                            marginBottom: '40px',
-                            maxWidth: '900px',
-                        }}
-                    >
-                        <span
-                            style={{
-                                fontSize: '52px',
-                                fontWeight: '900',
-                                color: 'white',
-                                lineHeight: 1.2,
-                            }}
-                        >
-                            {title}
-                        </span>
-                    </div>
-
-                    {/* Footer */}
-                    <div
-                        style={{
-                            position: 'absolute',
-                            bottom: '30px',
-                            left: 0,
-                            right: 0,
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <span
-                            style={{
-                                fontSize: '14px',
-                                color: '#888',
-                            }}
-                        >
-                            lizardinteractive.online
-                        </span>
-                    </div>
+                        lizardinteractive.online
+                    </span>
                 </div>
             </div>
         ),
         {
             width: 1200,
             height: 630,
+            // ✅ Add these headers
+            headers: {
+                'content-type': 'image/png',
+                'cache-control': 'public, max-age=31536000, immutable',
+            },
         }
     );
-}   
+
+    return image;
+}
