@@ -11,6 +11,9 @@ import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
 import CinematicHeroKiller from "@/components/CinematicHeroKiller/CinematicHeroKiller";
+import LizardLogo from "@/components/LizardLogo/LizardLogo";
+import RacingSpeedometer from "@/components/RacingSpeedometer/RacingSpeedometer";
+import SubmarineRadar from "@/components/SubmarineRadar/SubmarineRadar";
 
 // Get featured tools (specific tools you want to highlight)
 const featuredTools = utilities.filter(tool =>
@@ -84,7 +87,16 @@ export default function HomePage() {
           </motion.div>
         </div>
 
-        <CinematicHeroKiller />
+      
+        <section className="min-h-[80vh] flex flex-col items-center justify-center relative py-20">
+          <LizardLogo />
+          <CinematicHeroKiller />
+        </section>
+        <div className=" gap-8 mb-20 px-4">
+          <RacingSpeedometer />
+          <SubmarineRadar />
+        </div>
+
       </ScreenContainer>
     </>
   );
