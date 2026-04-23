@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Download, Upload, Clock, Zap, Play,
@@ -12,9 +12,9 @@ import {
 
 // --- CONSTANTS ---
 const COLOR_PALETTE = [
-    { name: 'Volt', hex: '#CEFF00', shadow: 'rgba(206, 255, 0, 0.3)' },
-    { name: 'Cyan', hex: '#06b6d4', shadow: 'rgba(6, 182, 212, 0.3)' },
     { name: 'Emerald', hex: '#10b981', shadow: 'rgba(16, 185, 129, 0.3)' },
+    { name: 'Cyan', hex: '#06b6d4', shadow: 'rgba(6, 182, 212, 0.3)' },
+    { name: 'Volt', hex: '#CEFF00', shadow: 'rgba(206, 255, 0, 0.3)' },
     { name: 'Violet', hex: '#8b5cf6', shadow: 'rgba(139, 92, 246, 0.3)' },
 ];
 
@@ -25,6 +25,12 @@ export function SpeedTest() {
     const [phase, setPhase] = useState<"idle" | "ping" | "download" | "upload">("idle");
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [accentColor, setAccentColor] = useState(COLOR_PALETTE[0]);
+    const [networkData, setNetworkData] = useState({
+        ip: "FETCHING...",
+        isp: "DETECTING...",
+        location: "LOCATING...",
+        server: "SCANNING...",
+    });
     const [results, setResults] = useState({
         download: null as number | null,
         upload: null as number | null,
@@ -32,8 +38,38 @@ export function SpeedTest() {
         jitter: null as number | null,
     });
 
-    // Calculate rotation for the needle (Logarithmic feels more professional)
-    // 0 Mbps = -90deg, 1000 Mbps = 90deg
+    // --- DYNAMIC NETWORK DETECTION ---
+    useEffect(() => {
+        async function getNetworkDetails() {
+            try {
+                // Get IP and Server Colo from Cloudflare
+                const traceRes = await fetch("https://1.1.1.1/cdn-cgi/trace");
+                const traceText = await traceRes.text();
+                const traceMap = Object.fromEntries(traceText.split("\n").map(line => line.split("=")));
+
+                // Get ISP and Location details
+                const geoRes = await fetch(`https://ipapi.co/${traceMap.ip}/json/`);
+                const geoData = await geoRes.json();
+
+                setNetworkData({
+                    ip: traceMap.ip,
+                    isp: geoData.org || "Unknown Provider",
+                    location: `${geoData.city}, ${geoData.country_code}`,
+                    server: `Cloudflare - ${traceMap.colo}`
+                });
+            } catch (error) {
+                console.error("Network detection failed", error);
+                setNetworkData({
+                    ip: "ERR_TIMEOUT",
+                    isp: "Unknown Provider",
+                    location: "Unknown",
+                    server: "Local Node"
+                });
+            }
+        }
+        getNetworkDetails();
+    }, []);
+
     const needleRotation = useMemo(() => {
         const val = Math.min(currentSpeed, MAX_SPEED);
         return (val / MAX_SPEED) * 180 - 90;
@@ -43,73 +79,114 @@ export function SpeedTest() {
         setTesting(true);
         setResults({ download: null, upload: null, ping: null, jitter: null });
 
-        // Mocking the sequence for UI demonstration
-        setPhase("ping");
-        await new Promise(r => setTimeout(r, 1500));
-        setResults(prev => ({ ...prev, ping: 12, jitter: 2 }));
+        try {
+            // --- 1. REAL PING TEST ---
+            setPhase("ping");
+            const pings: number[] = [];
+            for (let i = 0; i < 5; i++) {
+                const start = performance.now();
+                await fetch("https://1.1.1.1/cdn-cgi/trace", { mode: 'no-cors', cache: 'no-store' });
+                pings.push(performance.now() - start);
+            }
+            const avgPing = Math.round(pings.reduce((a, b) => a + b) / pings.length);
+            const jitter = Math.round(Math.max(...pings) - Math.min(...pings));
+            setResults(prev => ({ ...prev, ping: avgPing, jitter }));
 
-        setPhase("download");
-        for (let i = 0; i <= 450; i += 15) {
-            setCurrentSpeed(i + Math.random() * 50);
-            await new Promise(r => setTimeout(r, 50));
+            // --- 2. REAL DOWNLOAD TEST ---
+            setPhase("download");
+            // Request 50MB for a solid reading
+            const downloadUrl = `https://speed.cloudflare.com/__down?bytes=50000000&_=${Date.now()}`;
+            const startDown = performance.now();
+            const resDown = await fetch(downloadUrl);
+            const reader = resDown.body?.getReader();
+            let downBytes = 0;
+
+            if (reader) {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    downBytes += value.length;
+                    const elapsed = (performance.now() - startDown) / 1000;
+                    setCurrentSpeed((downBytes * 8) / elapsed / 1000000);
+                }
+            }
+            const finalDown = Math.round((downBytes * 8) / ((performance.now() - startDown) / 1000) / 1000000);
+            setResults(prev => ({ ...prev, download: finalDown }));
+            setCurrentSpeed(0);
+
+            // --- 3. REAL UPLOAD TEST ---
+            setPhase("upload");
+            // Create a 15MB dummy payload
+            const uploadSize = 15 * 1024 * 1024;
+            const body = new Uint8Array(uploadSize);
+            const startUp = performance.now();
+
+            // Cloudflare's upload speed test endpoint
+            const resUp = await fetch("https://speed.cloudflare.com/__up", {
+                method: "POST",
+                body: body,
+                // Important: This helps track progress if supported, 
+                // but for simple fetch we measure total time.
+            });
+
+            if (resUp.ok) {
+                const elapsedUp = (performance.now() - startUp) / 1000;
+                const finalUp = Math.round((uploadSize * 8) / elapsedUp / 1000000);
+
+                // Animate the needle to the final upload speed before finishing
+                setCurrentSpeed(finalUp);
+                await new Promise(r => setTimeout(r, 500)); // Let the user see the result
+                setResults(prev => ({ ...prev, upload: finalUp }));
+            }
+
+        } catch (err) {
+            console.error("Test failed:", err);
+        } finally {
+            setTesting(false);
+            setPhase("idle");
+            setCurrentSpeed(0);
         }
-        setResults(prev => ({ ...prev, download: 482 }));
-
-        setPhase("upload");
-        for (let i = 0; i <= 150; i += 10) {
-            setCurrentSpeed(i + Math.random() * 20);
-            await new Promise(r => setTimeout(r, 50));
-        }
-        setResults(prev => ({ ...prev, upload: 156 }));
-
-        setTesting(false);
-        setPhase("idle");
-        setCurrentSpeed(0);
     };
 
     return (
-        <div className=" text-zinc-300 font-sans p-4 lg:p-6 flex items-center justify-center">
+        <div className=" p-2 lg:p-4 flex items-center justify-center">
             <div className="w-full max-w-6xl grid lg:grid-cols-[1fr_300px] gap-6">
 
-                {/* Left Column: The Action Center */}
                 <main className="relative space-y-6">
                     <header className="flex justify-between items-center">
                         <div>
-                            <h1 className="text-md font-bold tracking-tighter text-white flex items-center gap-2">
+                            <h1 className="text-md font-medium tracking-tighter text-[#10b981] flex items-center gap-2 opacity-40">
                                 <Activity className="w-5 h-5" style={{ color: accentColor.hex }} />
-                               LIZARD INTERACTIVE ONLINE  
+                                LIZARD INTERACTIVE ONLINE
                             </h1>
                         </div>
-                        <div className="flex gap-2">
+                        {/* <div className="flex gap-2">
                             {COLOR_PALETTE.map(c => (
                                 <button
                                     key={c.name}
                                     onClick={() => setAccentColor(c)}
-                                    className="w-6 h-6 rounded-full transition-transform hover:scale-110"
+                                    className="w-4 h-4 md:w-6 md:h-6 rounded-full transition-transform hover:scale-110"
                                     style={{ backgroundColor: c.hex, border: accentColor.name === c.name ? '2px solid white' : 'none' }}
                                 />
                             ))}
-                        </div>
+                        </div> */}
                     </header>
 
                     <div className="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-8 lg:p-10 relative overflow-hidden">
-                        {/* The Gauge */}
                         <div className="relative flex flex-col items-center justify-center">
                             <div className="relative w-full max-w-[450px] aspect-[16/10] flex items-end justify-center overflow-hidden">
-                                {/* Outer Arch */}
-                                <div className="absolute inset-0 border-[4px] border-white/5 rounded-t-full" />
+                                <div className="absolute inset-0 border-[2px] border-white/5 rounded-t-full" />
 
-                                {/* Progress Arch (SVG for precision) */}
                                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 100">
                                     <path
                                         d="M 20 90 A 80 80 0 0 1 180 90"
                                         fill="none"
                                         stroke="currentColor"
-                                        strokeWidth="4"
+                                        strokeWidth="1"
                                         strokeLinecap="round"
-                                        className="text-zinc-800"
+                                        className="text-zinc-800 opacity-25"
                                     />
-                                    <motion.path
+                                    {/* <motion.path
                                         d="M 20 90 A 80 80 0 0 1 180 90"
                                         fill="none"
                                         stroke={accentColor.hex}
@@ -118,24 +195,21 @@ export function SpeedTest() {
                                         strokeDasharray="251.2"
                                         animate={{ strokeDashoffset: 251.2 - (251.2 * (currentSpeed / MAX_SPEED)) }}
                                         style={{ filter: `drop-shadow(0 0 12px ${accentColor.shadow})` }}
-                                    />
+                                    /> */}
                                 </svg>
 
-                                {/* Needle */}
                                 <motion.div
                                     className="absolute bottom-0 w-1 h-[70%] origin-bottom z-10"
                                     animate={{ rotate: needleRotation }}
                                     transition={{ type: "spring", stiffness: 60, damping: 15 }}
                                 >
-                                    <div className="h-full w-full bg-gradient-to-t from-[#10b981] via-[#3f3f46] to-transparent rounded-full shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
+                                    <div className="h-full w-full bg-gradient-to-t from-[#05fdaa]  to-transparent rounded-full " />
                                 </motion.div>
 
-                                {/* Center Hub */}
                                 <div className="absolute bottom-[-10px] w-8 h-8 rounded-full bg-zinc-900 border-4 border-white/20 z-20" />
 
-                                {/* Speed Text */}
                                 <div className="z-30 text-center mb-4">
-                                    <motion.span className="block text-8xl font-black text-white tabular-nums tracking-tighter">
+                                    <motion.span className="block text-8xl font-black text-zinc-300 tabular-nums tracking-tighter">
                                         {Math.round(currentSpeed)}
                                     </motion.span>
                                     <span className="text-sm font-mono tracking-widest text-zinc-500 uppercase">Mbps _{phase}</span>
@@ -143,7 +217,6 @@ export function SpeedTest() {
                             </div>
                         </div>
 
-                        {/* Bottom Stats Grid */}
                         <div className="grid grid-cols-3 gap-4 mt-12">
                             <StatBox label="Latency" value={results.ping} unit="ms" icon={Clock} color={accentColor.hex} />
                             <StatBox label="Download" value={results.download} unit="Mbps" icon={Download} color={accentColor.hex} />
@@ -155,26 +228,24 @@ export function SpeedTest() {
                         <button
                             onClick={startTest}
                             disabled={testing}
-                            className="flex-1 h-16 bg-zinc-900 text-zinc-600 font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all disabled:opacity-50"
+                            className="flex-1 h-16 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black text-zinc-100 font-black rounded-2xl flex items-center justify-center gap-3 hover:from-zinc-600 hover:to-zinc-800 transition-all duration-500 disabled:opacity-50 border border-white/5 shadow-xl group"
                         >
-                            {testing ? <RefreshCw className="animate-spin" /> : <Play className="fill-current" />}
+                            {testing ? <RefreshCw className="animate-spin" /> : <Play className="fill-current w-4 h-4" />}
                             {testing ? "RUNNING_DIAGNOSTICS" : "START"}
                         </button>
-               
                     </div>
                 </main>
 
-                {/* Right Column: Metadata & Details */}
                 <aside className="space-y-6">
                     <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
                         <h3 className="text-[10px] font-mono tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2">
                             <Server className="w-3 h-3" /> NETWORK_DETAILS
                         </h3>
                         <div className="space-y-4">
-                            <IdentityItem label="Provider" value="Lizard Interactive" />
-                            <IdentityItem label="IP_Address" value="192.168.1.XX" />
-                            <IdentityItem label="Location" value="Manila, PH" />
-                            <IdentityItem label="Server" value="Cloudflare - SG" />
+                            <IdentityItem label="Provider" value={networkData.isp} />
+                            <IdentityItem label="IP_Address" value={networkData.ip} />
+                            <IdentityItem label="Location" value={networkData.location} />
+                            <IdentityItem label="Server" value={networkData.server} />
                         </div>
                     </div>
 
@@ -191,8 +262,6 @@ export function SpeedTest() {
         </div>
     );
 }
-
-// --- SUB-COMPONENTS ---
 
 function StatBox({ label, value, unit, icon: Icon, color }: any) {
     return (
