@@ -13,7 +13,7 @@ export default function PrecisionChordAnalyzer() {
 
     const audioCtx = useRef<AudioContext | null>(null);
     const analyser = useRef<AnalyserNode | null>(null);
-    const animationRef = useRef<number>();
+    const animationRef = useRef<number | undefined>(undefined);
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

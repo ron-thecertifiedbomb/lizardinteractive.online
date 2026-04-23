@@ -107,7 +107,7 @@ export default function PolytuneTuner() {
     const audioCtx = useRef<AudioContext | null>(null);
     const analyser = useRef<AnalyserNode | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
-    const animationRef = useRef<number>();
+    const animationRef = useRef<number | undefined>(undefined);
     const pitchDetector = useRef(new YINPitchDetector());
     const pitchHistory = useRef<number[]>([]);
     const centsHistory = useRef<number[]>([]);
