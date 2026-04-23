@@ -56,7 +56,7 @@ export default function NavBar() {
                             className="rounded-full "
                             priority
                         />
-                        <span className="font-bold tracking-tight text-emerald-500/90">{brandName}</span>
+                        <span className="font-bold tracking-tight text-emerald-500 hover:text-emerald-500/30" >{brandName}</span>
                     </Link>
 
                     {/* --- DESKTOP LINKS (Restored) --- */}
@@ -65,7 +65,7 @@ export default function NavBar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-sm font-medium transition-colors uppercase ${pathname === link.href ? "text-white" : "text-white/60 hover:text-white"
+                                className={`text-sm font-medium transition-colors uppercase  ${pathname === link.href ? "text-emerald-500" : "text-emerald-500/70 hover:text-emerald-500/30"
                                     }`}
                             >
                                 {link.label}
