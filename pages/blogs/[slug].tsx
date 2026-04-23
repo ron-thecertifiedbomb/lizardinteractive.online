@@ -62,6 +62,8 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
       <Head>
         <title>{post.title}</title>
         <meta name="description" content={description} />
+
+        {/* Open Graph / Facebook */}
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImageUrl} />
@@ -70,8 +72,16 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
         <meta property="og:url" content={ogUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="Lizard Interactive Online" />
+
+        {/* ✅ Twitter Card - ALL required tags */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@lizardinteractive" />
+        <meta name="twitter:creator" content="@rondevsolutions" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImageUrl} />
+        <meta name="twitter:image:alt" content={post.title} />
+
         <link rel="canonical" href={ogUrl} />
       </Head>
 
