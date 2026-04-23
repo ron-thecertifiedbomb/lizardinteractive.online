@@ -37,7 +37,7 @@ export default function BlogPostPage() {
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: `/api/og/${post.id}`,  // ✅ API endpoint
+          ogImage: `/api/og/${post.id}`,  // ✅ This must be set
           ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
           ogType: "article",
         }}
