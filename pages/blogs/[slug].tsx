@@ -3,8 +3,9 @@ import Image from 'next/image';
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import BlogContent from '@/components/BlogContent/BlogContent';
 import { blogArticles } from '@/data/lists/blogArticle';
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock, Twitter, Facebook, Linkedin, Link2, Check } from 'lucide-react';
 import Head from 'next/head';
+import { useState } from 'react';
 
 // ✅ Server-side meta tags
 export async function getServerSideProps({ params }: { params: { slug: string } }) {
@@ -30,9 +31,23 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
 }
 
 export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: any) {
+  const [copied, setCopied] = useState(false);
+
   const readTime = Math.ceil(
     post.sections.reduce((acc: number, section: any) => acc + section.content.length, 0) / 1000
   );
+
+  const shareLinks = {
+    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(ogUrl)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ogUrl)}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(ogUrl)}`,
+  };
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(ogUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <>
@@ -62,6 +77,8 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                 src={`/${post.image}`}
                 alt={post.title}
                 fill
+                // ✅ ADD THE SIZES PROP HERE
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 className="object-cover"
                 priority
               />
@@ -80,20 +97,69 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
-              <div className="flex items-center gap-1.5">
-                <Calendar size={12} />
-                <span>
-                  {new Date(post.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={12} />
+                  <span>
+                    {new Date(post.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Clock size={12} />
+                  <span>{readTime} min read</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Clock size={12} />
-                <span>{readTime} min read</span>
+
+              {/* ✅ Share Icons */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-wider">Share:</span>
+
+                {/* Twitter */}
+                <a
+                  href={shareLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
+                  aria-label="Share on Twitter"
+                >
+                  <Twitter size={14} className="text-zinc-400 hover:text-[#1DA1F2]" />
+                </a>
+
+                {/* Facebook */}
+                <a
+                  href={shareLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
+                  aria-label="Share on Facebook"
+                >
+                  <Facebook size={14} className="text-zinc-400 hover:text-[#1877F2]" />
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href={shareLinks.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
+                  aria-label="Share on LinkedIn"
+                >
+                  <Linkedin size={14} className="text-zinc-400 hover:text-[#0A66C2]" />
+                </a>
+
+                {/* Copy Link */}
+                <button
+                  onClick={copyToClipboard}
+                  className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
+                  aria-label="Copy link"
+                >
+                  {copied ? <Check size={14} className="text-emerald-500" /> : <Link2 size={14} className="text-zinc-400 hover:text-white" />}
+                </button>
               </div>
             </div>
 
