@@ -10,6 +10,7 @@ import PresentationSection from "@/components/shared/PresentationSection/Present
 import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
+import { FramerPresentation } from "@/components/FramerPresentation/FramerPresentation";
 
 // Get featured tools (specific tools you want to highlight)
 const featuredTools = utilities.filter(tool =>
@@ -32,18 +33,19 @@ export default function HomePage() {
         }}
       />
 
-      <ScreenContainer>
+      <ScreenContainer className="pt-24">
+        <FramerPresentation />
         {/* Featured Tools Section */}
-        <div className="mt-30 mb-12 px-4">
+        <div className="mt-24 mb-12 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl font-black uppercase tracking-tighter text-center mb-2 bg-gradient-to-r from-emerald-500 to-white bg-clip-text text-transparent">
+            <h2 className="text-2xl font-black uppercase tracking-tighter text-center mb-2  text-emerald-500">
               FREE ONLINE TOOLS
             </h2>
-            <p className="text-center text-zinc-500 text-sm font-mono mb-8">
+            <p className="text-center text-zinc-300 text-sm font-mono mb-15 uppercase">
               Professional utilities for developers, designers, and creators
             </p>
 
@@ -82,6 +84,7 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+     
       </ScreenContainer>
     </>
   );
