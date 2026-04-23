@@ -16,45 +16,48 @@ export default async function handler(req: Request) {
         return new Response('Post not found', { status: 404 });
     }
 
-    const category = post.category.replace('_', ' ');
     const title = post.title;
-
-    // ✅ Use absolute URL for your logo (Vercel production URL)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lizardinteractive.online';
-    const logoUrl = `${siteUrl}/lizardround.png`;
 
+    // Try to load logo if exists
     let logoBuffer = null;
     try {
-        const response = await fetch(logoUrl);
-        if (response.ok) {
-            logoBuffer = await response.arrayBuffer();
+        const logoResponse = await fetch(`${siteUrl}/lizardround.png`);
+        if (logoResponse.ok) {
+            logoBuffer = await logoResponse.arrayBuffer();
         }
     } catch (error) {
-        console.log('Could not load logo, using emoji fallback');
+        console.log('Logo not found, using emoji');
     }
 
     return new ImageResponse(
         (
             <div
                 style={{
-                    height: '100%',
                     width: '100%',
+                    maxWidth: '600px',
+                    margin: '0 auto',
+                    backgroundColor: '#080808',
+                    border: '1px solid #18181b',
+                    padding: '32px',
+                    position: 'relative',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
-                    padding: '60px 80px',
+                    height: '100%',
                 }}
             >
-                {/* Logo with fallback */}
+                {/* Logo and Title centered */}
                 <div
                     style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '16px',
-                        marginBottom: '40px',
+                        gap: '8px',
+                        marginBottom: '16px',
+                        width: '100%',
                     }}
                 >
                     {logoBuffer ? (
@@ -62,99 +65,74 @@ export default async function handler(req: Request) {
                             src={logoBuffer as any}
                             width={70}
                             height={70}
-                            style={{
-                                borderRadius: '20px',
-                            }}
-                            alt="Lizard Interactive"
+                            style={{ borderRadius: '12px' }}
+                            alt="Logo"
                         />
                     ) : (
                         <div
                             style={{
-                                width: '70px',
-                                height: '70px',
+                                width: '48px',
+                                height: '48px',
                                 background: '#10b981',
-                                borderRadius: '20px',
+                                borderRadius: '12px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: '40px',
+                                fontSize: '24px',
                             }}
                         >
                             🦎
                         </div>
                     )}
-                    <div
-                        style={{
-                            fontSize: '28px',
-                            fontWeight: 'bold',
-                            color: '#10b981',
-                            letterSpacing: '3px',
-                        }}
-                    >
-                        LIZARD INTERACTIVE
-                    </div>
+                  
                 </div>
 
-                {/* Category Badge */}
-                <div
+                {/* Title - centered */}
+                <h1
                     style={{
-                        display: 'flex',
-                        padding: '8px 24px',
-                        background: 'rgba(16, 185, 129, 0.15)',
-                        borderRadius: '100px',
-                        marginBottom: '30px',
-                        border: '1px solid rgba(16, 185, 129, 0.4)',
-                    }}
-                >
-                    <span
-                        style={{
-                            fontSize: '16px',
-                            fontWeight: '600',
-                            color: '#10b981',
-                            letterSpacing: '2px',
-                        }}
-                    >
-                        {category}
-                    </span>
-                </div>
-
-                {/* Title */}
-                <div
-                    style={{
-                        display: 'flex',
+                        fontSize: '30px',
+                        fontWeight: '900',
+                        color: 'white',
+                        textTransform: 'uppercase',
+                        letterSpacing: '-0.025em',
+                        lineHeight: 1.2,
                         textAlign: 'center',
-                        maxWidth: '900px',
+                        maxWidth: '500px',
                     }}
                 >
-                    <span
-                        style={{
-                            fontSize: '52px',
-                            fontWeight: '900',
-                            color: 'white',
-                            lineHeight: 1.2,
-                        }}
-                    >
-                        {title}
-                    </span>
-                </div>
+                    {title}
+                </h1>
 
-                {/* Bottom border accent */}
+                {/* Bottom Glow Effect */}
                 <div
                     style={{
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #10b981, #3b82f6, #a855f7)',
+                        height: '100px',
+                        background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.15) 0%, transparent 70%)',
+                        pointerEvents: 'none',
                     }}
                 />
 
-                {/* Footer */}
+                {/* Subtle top border gradient */}
                 <div
                     style={{
                         position: 'absolute',
-                        bottom: '30px',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'linear-gradient(90deg, transparent, #10b981, #3b82f6, #a855f7, transparent)',
+                    }}
+                />
+
+                {/* Footer - centered */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: '20px',
                         left: 0,
                         right: 0,
                         display: 'flex',
@@ -163,18 +141,20 @@ export default async function handler(req: Request) {
                 >
                     <span
                         style={{
-                            fontSize: '14px',
-                            color: '#666',
+                            fontSize: '10px',
+                            color: '#52525b',
+                            fontFamily: 'monospace',
+                            letterSpacing: '0.3em',
                         }}
                     >
-                        lizardinteractive.online
+                        LIZARD INTERACTIVE ONLINE
                     </span>
                 </div>
             </div>
         ),
         {
-            width: 1200,
-            height: 630,
+            width: 600,
+            height: 400,
         }
     );
 }
