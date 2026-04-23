@@ -10,6 +10,7 @@ import PresentationSection from "@/components/shared/PresentationSection/Present
 import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
+import CinematicHeroKiller from "@/components/CinematicHeroKiller/CinematicHeroKiller";
 
 // Get featured tools (specific tools you want to highlight)
 const featuredTools = utilities.filter(tool =>
@@ -82,6 +83,8 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+
+        <CinematicHeroKiller />
       </ScreenContainer>
     </>
   );
