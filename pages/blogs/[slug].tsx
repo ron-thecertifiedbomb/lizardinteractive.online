@@ -1,52 +1,61 @@
-import { useRouter } from 'next/router';
+// pages/blogs/[slug].tsx - NO "use client"
 import Image from 'next/image';
-import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import BlogContent from '@/components/BlogContent/BlogContent';
 import { blogArticles } from '@/data/lists/blogArticle';
 import { Calendar, Clock } from 'lucide-react';
+import Head from 'next/head';
 
-export default function BlogPostPage() {
-
-  const router = useRouter();
-  const { slug } = router.query;
-
-  if (!router.isReady || typeof slug !== "string") {
-    return null;
-  }
-
-  const post = blogArticles.find((article) => article.id === slug);
+// ✅ Server-side meta tags
+export async function getServerSideProps({ params }: { params: { slug: string } }) {
+  const post = blogArticles.find((article) => article.id === params.slug);
 
   if (!post) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        404 - Post not found
-      </div>
-    );
+    return { notFound: true };
   }
 
-  const readTime = Math.ceil(
-    post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
-  );
+  const siteUrl = "https://lizardinteractive.online";
+  const ogImageUrl = `/api/og/${post.id}`;
+  const ogUrl = `${siteUrl}/blogs/${post.id}`;
+  const description = post.sections?.[0]?.content?.substring(0, 160) || "";
 
-  const ogUrl = `https://lizardinteractive.online/blogs/${post.id}`;
+  return {
+    props: {
+      post,
+      ogImageUrl,
+      ogUrl,
+      description,
+    },
+  };
+}
+
+export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: any) {
+  const readTime = Math.ceil(
+    post.sections.reduce((acc: number, section: any) => acc + section.content.length, 0) / 1000
+  );
 
   return (
     <>
-      <MetaHead
-        data={{
-          title: post.title,
-          description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: `/api/og/${post.id}`,  // ✅ This must be set
-          ogUrl: `https://lizardinteractive.online/blogs/${post.id}`,
-          ogType: "article",
-        }}
-      />
+      {/* ✅ Server-side meta tags - visible to Facebook crawler */}
+      <Head>
+        <title>{post.title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:url" content={ogUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Lizard Interactive Online" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogImageUrl} />
+        <link rel="canonical" href={ogUrl} />
+      </Head>
 
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-28 pb-40 px-4 md:px-6">
-
-          {/* Featured Image - uses WebP for faster loading */}
+          {/* Featured Image */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-8 border border-zinc-800 bg-zinc-900">
               <Image
@@ -82,7 +91,6 @@ export default function BlogPostPage() {
                   })}
                 </span>
               </div>
-
               <div className="flex items-center gap-1.5">
                 <Clock size={12} />
                 <span>{readTime} min read</span>
