@@ -74,9 +74,9 @@ export function SpeedTest() {
         <div className="p-4 flex items-center justify-center">
             <div className="w-full max-w-6xl grid lg:grid-cols-[1fr_300px] gap-6">
                 <main className="relative space-y-6">
-                    <div className="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl p-4 flex flex-col items-center">
+                    <div className="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl px-4 py-4 flex flex-col items-center">
                         <div className="flex flex-1 py-2 justify-start items-center gap-4 w-full ">
-                            <ToolHeader className="text-xs" title="Speed Test Analyzer" icon={<Activity className="w-4 h-4 text-emerald-500" />} />
+                            <ToolHeader className="text-xs" title="SpeedTest Analyzer" icon={<Activity className="w-4 h-4 text-emerald-500" />} />
                         </div>
                         <div className="relative w-72 h-72 flex items-center justify-center">
                             <svg className="absolute inset-0 w-full h-full rotate-[90deg]" viewBox="0 0 200 200">
@@ -107,7 +107,7 @@ export function SpeedTest() {
                         </div>
                     </div>
 
-                    <button onClick={startTest} disabled={testing} className="w-full h-16 rounded-2xl border border-white/10 bg-zinc-900 hover:border-emerald-500/30 transition-all flex items-center justify-center gap-3">
+                    <button onClick={startTest} disabled={testing} className="w-full h-16 rounded-2xl border border-white/10 bg-zinc-900/20 hover:border-emerald-500/30 transition-all flex items-center justify-center gap-3">
                         {testing ? <RefreshCw className="animate-spin w-5 h-5 text-emerald-500" /> : <Play className="w-5 h-5" />}
                         <span className="font-bold tracking-widest uppercase">{testing ? "Analyzing..." : "Start Diagnostic"}</span>
                     </button>
