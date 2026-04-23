@@ -1,12 +1,13 @@
 interface ToolHeaderProps {
     title: string;
-    icon: React.ReactNode; // Change this from LucideIcon to ReactNode
+    icon: React.ReactNode;
+    className?: string; // Added optional className
 }
 
-export function ToolHeader({ title, icon }: ToolHeaderProps) {
+export function ToolHeader({ title, icon, className = "" }: ToolHeaderProps) {
     return (
-        <div>
-            <h1 className="text-md font-medium text-emerald-500 flex items-center gap-2 opacity-70 uppercase tracking-[0.1em]">
+        <div className={className}>
+            <h1 className="text-md font-medium text-emerald-400 flex items-center gap-2 opacity-70 uppercase tracking-[0.1em]">
                 {icon}
                 {title}
             </h1>
