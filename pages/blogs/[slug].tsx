@@ -29,7 +29,6 @@ export default function BlogPostPage() {
     post.sections.reduce((acc, section) => acc + section.content.length, 0) / 1000
   );
 
-  // ✅ Use ogImage for social sharing (JPG), image for web display (WebP)
   const ogUrl = `https://lizardinteractive.online/blogs/${post.id}`;
 
   return (
@@ -38,8 +37,9 @@ export default function BlogPostPage() {
         data={{
           title: post.title,
           description: post.sections?.[0]?.content?.substring(0, 160) || "",
-          ogImage: post.ogImage,  // ✅ JPG for social media
-          ogUrl: ogUrl,           // ✅ Blog post URL
+          // ✅ USE THE API for dynamic OG image
+          ogImage: `/api/og/${post.id}`,
+          ogUrl: ogUrl,
           ogType: "article",
         }}
       />
