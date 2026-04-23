@@ -45,18 +45,18 @@ export default function NavBar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[88px] z-[100] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[65px] z-[100] bg-black/80 backdrop-blur-xl border-b border-white/4 text-white">
                 <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative">
-                    <Link href="/" className="flex items-center gap-3">
+                    <Link href="/" className="flex items-center gap-2">
                         <Image
                             src="/lizardinteractive.png"
                             alt="Logo"
-                            width={32}
-                            height={32}
-                            className="rounded-full"
+                            width={30}
+                            height={30}
+                            className="rounded-full "
                             priority
                         />
-                        <span className="font-bold tracking-tight">{brandName}</span>
+                        <span className="font-bold tracking-tight text-emerald-500/90">{brandName}</span>
                     </Link>
 
                     {/* --- DESKTOP LINKS (Restored) --- */}
@@ -65,7 +65,7 @@ export default function NavBar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-sm font-medium transition-colors ${pathname === link.href ? "text-white" : "text-white/60 hover:text-white"
+                                className={`text-sm font-medium transition-colors uppercase ${pathname === link.href ? "text-white" : "text-white/60 hover:text-white"
                                     }`}
                             >
                                 {link.label}
@@ -96,7 +96,7 @@ export default function NavBar() {
                             key={link.href}
                             href={link.href}
                             onClick={(e) => handleLinkClick(e, link.href)}
-                            className={`text-4xl font-black uppercase tracking-tighter transition-all active:scale-95 ${pathname === link.href ? "text-emerald-500" : "text-white/40"
+                            className={`text-xl font-black uppercase tracking-tighter transition-all active:scale-95 ${pathname === link.href ? "text-emerald-500" : "text-white/40"
                                 }`}
                         >
                             {link.label}
