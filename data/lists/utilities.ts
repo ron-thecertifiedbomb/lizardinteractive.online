@@ -97,7 +97,7 @@ export const utilities = [
     icon: "📏",
   },
   {
-    name: "Speed Test",
+    name: "SpeedTest Analyzer",
     slug: "speed-test",
     description:
       "Test your internet connection speed. Measure download, upload, ping, and jitter for free.",

@@ -42,28 +42,39 @@ export function SpeedTest() {
     useEffect(() => {
         async function getNetworkDetails() {
             try {
-                // Get IP and Server Colo from Cloudflare
-                const traceRes = await fetch("https://1.1.1.1/cdn-cgi/trace");
-                const traceText = await traceRes.text();
-                const traceMap = Object.fromEntries(traceText.split("\n").map(line => line.split("=")));
+                // Use ipify - it's much more reliable for local development
+                const ipRes = await fetch("https://api.ipify.org?format=json");
+                const ipData = await ipRes.json();
+                const userIp = ipData.ip;
 
-                // Get ISP and Location details
-                const geoRes = await fetch(`https://ipapi.co/${traceMap.ip}/json/`);
-                const geoData = await geoRes.json();
+                // Get Geo/ISP details
+                // Adding a fallback in case ipapi is blocked by an AdBlocker
+                const geoRes = await fetch(`https://ipapi.co/${userIp}/json/`).catch(() => null);
 
-                setNetworkData({
-                    ip: traceMap.ip,
-                    isp: geoData.org || "Unknown Provider",
-                    location: `${geoData.city}, ${geoData.country_code}`,
-                    server: `Cloudflare - ${traceMap.colo}`
-                });
+                if (geoRes && geoRes.ok) {
+                    const geoData = await geoRes.json();
+                    setNetworkData({
+                        ip: userIp,
+                        isp: geoData.org || "Lizard Partner Network",
+                        location: `${geoData.city}, ${geoData.country_code}`,
+                        server: "Global Edge Node"
+                    });
+                } else {
+                    // Fallback if the Geo API is blocked
+                    setNetworkData({
+                        ip: userIp,
+                        isp: "ISP Protected",
+                        location: "Detected",
+                        server: "Cloudflare Edge"
+                    });
+                }
             } catch (error) {
-                console.error("Network detection failed", error);
+                console.error("Network detection failed:", error);
                 setNetworkData({
-                    ip: "ERR_TIMEOUT",
-                    isp: "Unknown Provider",
-                    location: "Unknown",
-                    server: "Local Node"
+                    ip: "127.0.0.1",
+                    isp: "Localhost",
+                    location: "Development Mode",
+                    server: "Internal Loopback"
                 });
             }
         }
@@ -155,9 +166,9 @@ export function SpeedTest() {
                 <main className="relative space-y-6">
                     <header className="flex justify-between items-center">
                         <div>
-                            <h1 className="text-md font-medium tracking-tighter text-[#10b981] flex items-center gap-2 opacity-40">
+                            <h1 className="text-md font-medium tracking-tighter text-emerald-500 flex items-center gap-2 opacity-70">
                                 <Activity className="w-5 h-5" style={{ color: accentColor.hex }} />
-                                LIZARD INTERACTIVE ONLINE
+                                SPEEDTEST ANALYZER
                             </h1>
                         </div>
                         {/* <div className="flex gap-2">
@@ -228,15 +239,52 @@ export function SpeedTest() {
                         <button
                             onClick={startTest}
                             disabled={testing}
-                            className="flex-1 h-16 bg-gradient-to-br from-zinc-800 via-zinc-900 to-black text-zinc-100 font-black rounded-2xl flex items-center justify-center gap-3 hover:from-zinc-600 hover:to-zinc-800 transition-all duration-500 disabled:opacity-50 border border-white/5 shadow-xl group"
+                            className="
+    flex-1 h-16 group relative overflow-hidden transition-all duration-500 
+    rounded-2xl border border-white/10 active:scale-[0.98] disabled:opacity-50
+    bg-gradient-to-br from-zinc-800 via-zinc-950 to-black
+    hover:border-emerald-500/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]
+  "
                         >
-                            {testing ? <RefreshCw className="animate-spin" /> : <Play className="fill-current w-4 h-4" />}
-                            {testing ? "RUNNING_DIAGNOSTICS" : "START"}
+                            {/* Inner Bevel Effect */}
+                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                            {/* The Content Layer */}
+                            <div className="relative flex items-center justify-center gap-4 px-6 z-10">
+                                <div className="relative flex items-center justify-center">
+                                    {testing ? (
+                                        <RefreshCw className="animate-spin w-5 h-5 text-emerald-500" />
+                                    ) : (
+                                        <div className="relative">
+                                            {/* Subtle pulse behind the play icon */}
+                                            <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full group-hover:bg-emerald-500/40 transition-colors" />
+                                            <Play className="relative fill-zinc-100 text-zinc-100 w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="flex flex-col items-start leading-none">
+                                    <span className="text-[10px] font-mono tracking-[0.3em] text-zinc-500 group-hover:text-emerald-500/50 transition-colors">
+                                        SYSTEM_ENGAGE
+                                    </span>
+                                    <span className={`
+    text-sm font-black tracking-widest uppercase transition-all duration-500
+    ${testing
+                                            ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.6)] animate-pulse"
+                                            : "text-zinc-100"}
+`}>
+                                        {testing ? "ANALYZING_CORE..." : "INITIATE_DIAGNOSTIC"}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Mouse Glow / Hover Flare */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_var(--x,_50%)_var(--y,_50%),_rgba(255,255,255,0.05)_0%,_transparent_50%)]" />
                         </button>
                     </div>
                 </main>
 
-                <aside className="space-y-6">
+                <aside className="space-y-6 pt-12">
                     <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
                         <h3 className="text-[10px] font-mono tracking-[0.2em] text-zinc-500 mb-6 flex items-center gap-2">
                             <Server className="w-3 h-3" /> NETWORK_DETAILS
