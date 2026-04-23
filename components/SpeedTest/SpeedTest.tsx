@@ -5,9 +5,7 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Download, Upload, Clock, Zap, Play,
-    Shield, Award, Server, Globe,
-    Gauge, Signal, Cpu, RefreshCw,
-    ChevronRight, Activity, Info
+    Activity, Server, RefreshCw
 } from "lucide-react";
 
 // --- CONSTANTS ---
@@ -65,7 +63,6 @@ export function SpeedTest() {
                     });
                 }
             } catch (error) {
-                console.error("Network detection failed:", error);
                 setNetworkData({
                     ip: "127.0.0.1",
                     isp: "Localhost",
@@ -78,11 +75,8 @@ export function SpeedTest() {
     }, []);
 
     const needleRotation = useMemo(() => {
-        // Logarithmic scale makes the needle move more dynamically at lower speeds
-        // Formula: log(speed + 1) / log(max + 1)
         const logVal = Math.log10(currentSpeed + 1) / Math.log10(MAX_SPEED + 1);
         const cappedVal = Math.min(logVal, 1);
-
         return cappedVal * 180 - 90;
     }, [currentSpeed]);
 
@@ -91,10 +85,12 @@ export function SpeedTest() {
         setResults({ download: null, upload: null, ping: null, jitter: null });
 
         try {
+            // PHASE 1: PING
             setPhase("ping");
             const pings: number[] = [];
             for (let i = 0; i < 5; i++) {
                 const start = performance.now();
+                // 1.1.1.1 trace is highly reliable for ping
                 await fetch("https://1.1.1.1/cdn-cgi/trace", { mode: 'no-cors', cache: 'no-store' });
                 pings.push(performance.now() - start);
             }
@@ -102,6 +98,7 @@ export function SpeedTest() {
             const jitter = Math.round(Math.max(...pings) - Math.min(...pings));
             setResults(prev => ({ ...prev, ping: avgPing, jitter }));
 
+            // PHASE 2: DOWNLOAD
             setPhase("download");
             const downloadUrl = `https://speed.cloudflare.com/__down?bytes=50000000&_=${Date.now()}`;
             const startDown = performance.now();
@@ -122,22 +119,41 @@ export function SpeedTest() {
             setResults(prev => ({ ...prev, download: finalDown }));
             setCurrentSpeed(0);
 
+            // PHASE 3: UPLOAD (WITH LIVE NEEDLE FIX)
             setPhase("upload");
             const uploadSize = 15 * 1024 * 1024;
             const body = new Uint8Array(uploadSize);
             const startUp = performance.now();
 
-            const resUp = await fetch("https://speed.cloudflare.com/__up", {
-                method: "POST",
-                body: body,
-            });
+            // Interval to simulate needle movement while POST is in flight
+            const upInterval = setInterval(() => {
+                setCurrentSpeed(prev => {
+                    const target = results.download ? results.download * 0.6 : 50; // Estimate
+                    const jitter = (Math.random() - 0.5) * 8;
+                    const increment = (target - prev) * 0.1;
+                    return Math.max(0, prev + increment + jitter);
+                });
+            }, 100);
 
-            if (resUp.ok) {
-                const elapsedUp = (performance.now() - startUp) / 1000;
-                const finalUp = Math.round((uploadSize * 8) / elapsedUp / 1000000);
-                setCurrentSpeed(finalUp);
-                await new Promise(r => setTimeout(r, 500));
-                setResults(prev => ({ ...prev, upload: finalUp }));
+            try {
+                const resUp = await fetch("https://speed.cloudflare.com/__up", {
+                    method: "POST",
+                    body: body,
+                    cache: 'no-store'
+                });
+
+                clearInterval(upInterval);
+
+                if (resUp.ok) {
+                    const elapsedUp = (performance.now() - startUp) / 1000;
+                    const finalUp = Math.round((uploadSize * 8) / elapsedUp / 1000000);
+                    setCurrentSpeed(finalUp);
+                    await new Promise(r => setTimeout(r, 500));
+                    setResults(prev => ({ ...prev, upload: finalUp }));
+                }
+            } catch (e) {
+                clearInterval(upInterval);
+                throw e;
             }
 
         } catch (err) {
@@ -150,7 +166,7 @@ export function SpeedTest() {
     };
 
     return (
-        <div className=" p-2 lg:p-4 flex items-center justify-center">
+        <div className="p-2 lg:p-4 flex items-center justify-center">
             <div className="w-full max-w-6xl grid lg:grid-cols-[1fr_300px] gap-6">
 
                 <main className="relative space-y-6">
@@ -179,28 +195,33 @@ export function SpeedTest() {
                                     />
                                 </svg>
 
-                                {/* Fixed Mobile Needle Pivot Logic */}
                                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
                                     <motion.div
                                         className="absolute bottom-0 left-1/2 w-1 h-[70%] -translate-x-1/2"
-                                        style={{
-                                            originY: "100%",
-                                            willChange: "transform"
-                                        }}
+                                        style={{ originY: "100%", willChange: "transform" }}
                                         animate={{ rotate: needleRotation }}
                                         transition={{ type: "spring", stiffness: 45, damping: 15 }}
                                     >
-                                        <div className="h-full w-full bg-gradient-to-t from-[#05fdaa] to-transparent rounded-full shadow-[0_0_15px_rgba(5,253,170,0.3)]" />
+                                        <div
+                                            className="h-full w-full bg-gradient-to-t from-[#05fdaa] to-transparent rounded-full"
+                                            style={{ boxShadow: `0 0 15px ${accentColor.hex}44` }}
+                                        />
                                     </motion.div>
                                 </div>
 
-                                {/* Center Hub - Physically masks the pivot */}
                                 <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-zinc-900 border-4 border-white/20 z-20 shadow-2xl" />
 
                                 <div className="z-30 text-center mb-4">
-                                    <motion.span className="block text-8xl font-black text-zinc-300 tabular-nums tracking-tighter leading-none">
-                                        {Math.round(currentSpeed)}
-                                    </motion.span>
+                                    <AnimatePresence mode="wait">
+                                        <motion.span
+                                            key={Math.round(currentSpeed)}
+                                            initial={{ opacity: 0.8 }}
+                                            animate={{ opacity: 1 }}
+                                            className="block text-8xl font-black text-zinc-300 tabular-nums tracking-tighter leading-none"
+                                        >
+                                            {Math.round(currentSpeed)}
+                                        </motion.span>
+                                    </AnimatePresence>
                                     <span className="text-sm font-mono tracking-widest text-zinc-500 uppercase">Mbps _{phase}</span>
                                 </div>
                             </div>
@@ -232,15 +253,14 @@ export function SpeedTest() {
                                     )}
                                 </div>
                                 <div className="flex flex-col items-start leading-none text-left">
-                                    <span className="text-[10px] font-mono tracking-[0.3em] text-zinc-500 group-hover:text-emerald-500/50 transition-colors uppercase">
+                                    <span className="text-[10px] font-mono tracking-[0.3em] text-zinc-500 uppercase">
                                         SYSTEM_ENGAGE
                                     </span>
-                                    <span className={`text-sm font-black tracking-widest uppercase transition-all duration-500 ${testing ? "text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.6)] animate-pulse" : "text-zinc-100"}`}>
+                                    <span className={`text-sm font-black tracking-widest uppercase transition-all duration-500 ${testing ? "text-emerald-400 animate-pulse" : "text-zinc-100"}`}>
                                         {testing ? "ANALYZING_CORE..." : "INITIATE_DIAGNOSTIC"}
                                     </span>
                                 </div>
                             </div>
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_var(--x,_50%)_var(--y,_50%),_rgba(255,255,255,0.05)_0%,_transparent_50%)]" />
                         </button>
                     </div>
                 </main>
