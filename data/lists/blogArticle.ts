@@ -412,4 +412,35 @@ export const blogArticles: BlogArticle[] = [
       },
     ],
   },
+  // --- 9. NEXT.JS SEO LESSON ---
+  {
+    id: "nextjs-seo-lesson",
+    title: "The Next.js Anomaly That Almost Killed My SEO",
+    category: "DEV_LESSONS",
+    image: "blogs/nextjs-seo.webp",
+    ogImage: "blogs/nextjs-seo.jpg",
+    createdAt: "2026-04-23T05:00:00Z",
+    sections: [
+      {
+        heading: "The Setup",
+        content:
+          "I spent two days fighting Facebook's crawler. Not because my code was broken, but because I misunderstood how Next.js renders pages. I had built a beautiful blog with perfect meta tags using next/head. I tested everything locally using React DevTools. The og:image was there. The title was there. The description was there. I was confident. So I deployed.",
+      },
+      {
+        heading: "The Failure",
+        content:
+          "Then I shared my blog post on Facebook. Nothing. No image. No title. Just a blank link. I checked the Facebook Sharing Debugger. It said 'Inferred Property' and 'Missing og:image'. I was confused. The meta tags were clearly in my code. I used getServerSideProps. I passed the data correctly. I even added fallbacks. But Facebook kept showing the homepage image instead of my dynamic OG image. Something was very wrong.",
+      },
+      {
+        heading: "The Discovery",
+        content:
+          "My tandem partner kept saying, 'Bro, it's gonna work, just push it.' So I pushed. And pushed. And pushed again. Hundred of deployments. Same result. Nothing. We tried every combination of meta tags, every header trick, every fallback. Still nothing. The crawler refused to see our tags. We were stuck in deployment hell. Then, at 4 AM, while staring at the screen with bloodshot eyes, I finally saw it. The rooster crowed outside my window. And in that moment, I realized the truth: I was using 'use client' at the top of my page. Facebook's crawler doesn't execute JavaScript. It only reads the initial HTML response. All those beautiful meta tags? They only appeared after React hydrated. The crawler saw an empty shell. No og:image. No og:title. Nothing.",
+      },
+      {
+        heading: "The Lesson",
+        content:
+          "The fix was simple but painful. I removed 'use client', moved my meta tags into getServerSideProps, and used Next.js's native Head component from next/head. The moment I deployed, Facebook finally saw the correct image. The lesson is brutal but essential: Always check your actual page source (Ctrl+U), not just the Elements tab. If your meta tags aren't in the initial HTML, crawlers will never see them. Server Components for SEO. Client Components for interactivity. Don't learn this the hard way like I did. And if your tandem says 'it's gonna work' for the hundredth time? Maybe listen to the rooster instead.",
+      },
+    ],
+  },
 ];

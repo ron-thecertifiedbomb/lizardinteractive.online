@@ -19,130 +19,155 @@ export default async function handler(req: Request) {
     const title = post.title;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lizardinteractive.online';
 
-    // Try to load logo if exists
-    let logoBuffer = null;
+    // Try to get the background image (use ogImage if available, fallback to image)
+    let backgroundImageUrl = null;
     try {
-        const logoResponse = await fetch(`${siteUrl}/lizardround.png`);
-        if (logoResponse.ok) {
-            logoBuffer = await logoResponse.arrayBuffer();
+        // Prefer ogImage (jpg) for better compatibility, fallback to image (webp)
+        const imagePath = post.ogImage || post.image;
+        const imageUrl = `${siteUrl}/${imagePath}`;
+        console.log('Fetching image from:', imageUrl);
+        const imageResponse = await fetch(imageUrl);
+        if (imageResponse.ok) {
+            const blob = await imageResponse.blob();
+            backgroundImageUrl = URL.createObjectURL(blob);
+        } else {
+            console.log('Image not found:', imageUrl);
         }
     } catch (error) {
-        console.log('Logo not found, using emoji');
+        console.log('Could not load blog image:', error);
     }
+
+    // Simple logo - use emoji to avoid image loading issues
+    const useEmojiLogo = true;
 
     return new ImageResponse(
         (
             <div
                 style={{
                     width: '100%',
-                    maxWidth: '600px',
-                    margin: '0 auto',
-                    backgroundColor: '#080808',
-                    border: '1px solid #18181b',
-                    padding: '32px',
+                    height: '100%',
                     position: 'relative',
-                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: '100%',
+                    backgroundColor: '#0a0a0a',
                 }}
             >
-                {/* Logo and Title centered */}
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        marginBottom: '16px',
-                        width: '100%',
-                    }}
-                >
-                    {logoBuffer ? (
-                        <img
-                            src={logoBuffer as any}
-                            width={70}
-                            height={70}
-                            style={{ borderRadius: '12px' }}
-                            alt="Logo"
-                        />
-                    ) : (
-                        <div
-                            style={{
-                                width: '48px',
-                                height: '48px',
-                                background: '#10b981',
-                                borderRadius: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '24px',
-                            }}
-                        >
-                            🦎
-                        </div>
-                    )}
+                {/* Background image (the actual blog photo) */}
+                {backgroundImageUrl && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundImage: `url(${backgroundImageUrl})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            opacity: 0.35,
+                        }}
+                    />
+                )}
 
-                </div>
-
-                {/* Title - centered */}
-                <h1
-                    style={{
-                        fontSize: '30px',
-                        fontWeight: '900',
-                        color: 'white',
-                        textTransform: 'uppercase',
-                        letterSpacing: '-0.025em',
-                        lineHeight: 1.2,
-                        textAlign: 'center',
-                        maxWidth: '500px',
-                    }}
-                >
-                    {title}
-                </h1>
-
-                {/* Bottom Glow Effect */}
-                <div
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: '100px',
-                        background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.15) 0%, transparent 70%)',
-                        pointerEvents: 'none',
-                    }}
-                />
-
-                {/* Subtle top border gradient */}
+                {/* Gradient overlay for text readability */}
                 <div
                     style={{
                         position: 'absolute',
                         top: 0,
                         left: 0,
-                        right: 0,
-                        height: '1px',
-                        background: 'linear-gradient(90deg, transparent, #10b981, #3b82f6, #a855f7, transparent)',
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 100%)',
                     }}
                 />
 
-                {/* Footer - centered */}
+                {/* Content overlay */}
+                <div
+                    style={{
+                        position: 'relative',
+                        zIndex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '60px 80px',
+                        width: '100%',
+                        height: '100%',
+                    }}
+                >
+                    {/* Logo - using emoji for reliability */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '12px',
+                            marginBottom: '32px',
+                        }}
+                    >
+                        <div
+                            style={{
+                                width: '56px',
+                                height: '56px',
+                                background: '#10b981',
+                                borderRadius: '16px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '28px',
+                            }}
+                        >
+                            🦎
+                        </div>
+                        <span
+                            style={{
+                                fontSize: '22px',
+                                fontWeight: 'bold',
+                                color: '#10b981',
+                                letterSpacing: '2px',
+                            }}
+                        >
+                            LIZARD INTERACTIVE
+                        </span>
+                    </div>
+
+                    {/* Title */}
+                    <h1
+                        style={{
+                            fontSize: '42px',
+                            fontWeight: '900',
+                            color: 'white',
+                            textTransform: 'uppercase',
+                            letterSpacing: '-0.02em',
+                            lineHeight: 1.2,
+                            textAlign: 'center',
+                            maxWidth: '800px',
+                            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                            marginBottom: '20px',
+                        }}
+                    >
+                        {title}
+                    </h1>
+                </div>
+
+                {/* Footer */}
                 <div
                     style={{
                         position: 'absolute',
-                        bottom: '20px',
+                        bottom: '30px',
                         left: 0,
                         right: 0,
                         display: 'flex',
                         justifyContent: 'center',
+                        zIndex: 1,
                     }}
                 >
                     <span
                         style={{
-                            fontSize: '10px',
-                            color: '#52525b',
+                            fontSize: '12px',
+                            color: '#666',
                             fontFamily: 'monospace',
                             letterSpacing: '0.3em',
                         }}
@@ -150,11 +175,23 @@ export default async function handler(req: Request) {
                         LIZARD INTERACTIVE ONLINE
                     </span>
                 </div>
+
+                {/* Top accent line */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        background: 'linear-gradient(90deg, #10b981, #3b82f6, #a855f7)',
+                    }}
+                />
             </div>
         ),
         {
-            width: 600,
-            height: 400,
+            width: 1200,
+            height: 630,
         }
     );
 }

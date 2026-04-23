@@ -1,4 +1,5 @@
-// pages/blogs/[slug].tsx - NO "use client"
+// pages/blogs/[slug].tsx
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import BlogContent from '@/components/BlogContent/BlogContent';
@@ -7,7 +8,6 @@ import { Calendar, Clock, Twitter, Facebook, Linkedin, Link2, Check } from 'luci
 import Head from 'next/head';
 import { useState } from 'react';
 
-// ✅ Server-side meta tags
 export async function getServerSideProps({ params }: { params: { slug: string } }) {
   const post = blogArticles.find((article) => article.id === params.slug);
 
@@ -16,7 +16,8 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
   }
 
   const siteUrl = "https://lizardinteractive.online";
-  const ogImageUrl = `/api/og/${post.id}`;
+  // ✅ ABSOLUTE URL - Facebook needs this!
+  const ogImageUrl = `${siteUrl}/api/og/${post.id}`;
   const ogUrl = `${siteUrl}/blogs/${post.id}`;
   const description = post.sections?.[0]?.content?.substring(0, 160) || "";
 
@@ -31,27 +32,32 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
 }
 
 export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: any) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
 
   const readTime = Math.ceil(
     post.sections.reduce((acc: number, section: any) => acc + section.content.length, 0) / 1000
   );
 
+  // Use the ogUrl from props (server-side) for sharing
+  const currentUrl = ogUrl;
+  const encodedUrl = encodeURIComponent(currentUrl);
+  const encodedTitle = encodeURIComponent(post.title);
+
   const shareLinks = {
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(ogUrl)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ogUrl)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(ogUrl)}`,
+    twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
   };
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(ogUrl);
+    await navigator.clipboard.writeText(currentUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <>
-      {/* ✅ Server-side meta tags - visible to Facebook crawler */}
       <Head>
         <title>{post.title}</title>
         <meta name="description" content={description} />
@@ -77,7 +83,6 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                 src={`/${post.image}`}
                 alt={post.title}
                 fill
-                // ✅ ADD THE SIZES PROP HERE
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 className="object-cover"
                 priority
@@ -115,11 +120,10 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                 </div>
               </div>
 
-              {/* ✅ Share Icons */}
+              {/* Share Icons */}
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-wider">Share:</span>
 
-                {/* Twitter */}
                 <a
                   href={shareLinks.twitter}
                   target="_blank"
@@ -130,7 +134,6 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                   <Twitter size={14} className="text-zinc-400 hover:text-[#1DA1F2]" />
                 </a>
 
-                {/* Facebook */}
                 <a
                   href={shareLinks.facebook}
                   target="_blank"
@@ -141,7 +144,6 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                   <Facebook size={14} className="text-zinc-400 hover:text-[#1877F2]" />
                 </a>
 
-                {/* LinkedIn */}
                 <a
                   href={shareLinks.linkedin}
                   target="_blank"
@@ -152,7 +154,6 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                   <Linkedin size={14} className="text-zinc-400 hover:text-[#0A66C2]" />
                 </a>
 
-                {/* Copy Link */}
                 <button
                   onClick={copyToClipboard}
                   className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors"
