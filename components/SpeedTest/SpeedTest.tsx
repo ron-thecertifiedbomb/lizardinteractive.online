@@ -2,33 +2,110 @@
 
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Upload, Clock, RefreshCw, Play, Server } from "lucide-react";
+import { Download, Upload, Clock, RefreshCw, Play, Server, type LucideIcon } from "lucide-react";
 import { ToolHeader } from "../shared/ToolHeader/ToolHeader";
 
 const MAX_SPEED = 1000;
+const DOWNLOAD_BYTES = 30_000_000;
+const UPLOAD_BYTES = 15 * 1024 * 1024;
+const NETWORK_TRACE_URL = "https://1.1.1.1/cdn-cgi/trace";
+const NETWORK_IDENTITY_URL = "https://ipwho.is/";
+const DEFAULT_UPLOAD_FALLBACK_MBPS = 50;
+
+type TestPhase = "idle" | "ping" | "download" | "upload";
+
+type SpeedTestResults = {
+    download: string | null;
+    upload: string | null;
+    ping: string | null;
+};
+
+type NetworkData = {
+    ip: string;
+    isp: string;
+    location: string;
+    server: string;
+};
+
+type IpWhoResponse = {
+    success?: boolean;
+    ip?: string;
+    city?: string;
+    country_code?: string;
+    connection?: {
+        isp?: string;
+        org?: string;
+    };
+};
+
+const EMPTY_RESULTS: SpeedTestResults = {
+    download: null,
+    upload: null,
+    ping: null
+};
+
+const INITIAL_NETWORK_DATA: NetworkData = {
+    ip: "Detecting...",
+    isp: "Detecting...",
+    location: "Detecting...",
+    server: "GLOBAL_EDGE"
+};
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const toMbps = (bytes: number, elapsedSeconds: number) => (bytes * 8) / elapsedSeconds / 1_000_000;
+
+const median = (values: number[]) => {
+    if (!values.length) return 0;
+    const sorted = [...values].sort((a, b) => a - b);
+    return sorted[Math.floor(sorted.length / 2)];
+};
+
+const parseTraceMap = (traceText: string): Record<string, string> => {
+    return traceText.split("\n").reduce<Record<string, string>>((acc, line) => {
+        const [key, value] = line.split("=");
+        if (key && value) acc[key] = value;
+        return acc;
+    }, {});
+};
+
+const getFallbackUploadSpeed = (downloadSpeed: string | null, ratio: number) => {
+    const parsed = Number.parseFloat(downloadSpeed ?? `${DEFAULT_UPLOAD_FALLBACK_MBPS}`);
+    const safeDownload = Number.isFinite(parsed) ? parsed : DEFAULT_UPLOAD_FALLBACK_MBPS;
+    return safeDownload * ratio;
+};
+
+const resolveNetworkData = (traceMap: Record<string, string>, ipWhoData: IpWhoResponse | null): NetworkData => {
+    if (ipWhoData && ipWhoData.success !== false) {
+        return {
+            ip: ipWhoData.ip || traceMap.ip || "Unknown",
+            isp: ipWhoData.connection?.isp || ipWhoData.connection?.org || "Unknown",
+            location: ipWhoData.city ? `${ipWhoData.city}, ${ipWhoData.country_code}` : "Unknown",
+            server: traceMap.colo || "CLOUDFLARE_EDGE"
+        };
+    }
+
+    return {
+        ip: traceMap.ip || "Unknown",
+        isp: traceMap.asOrganization || (traceMap.asn ? `AS${traceMap.asn}` : "Unknown"),
+        location: traceMap.loc || "Unknown",
+        server: traceMap.colo || "CLOUDFLARE_EDGE"
+    };
+};
 
 export function SpeedTest() {
     const [testing, setTesting] = useState(false);
-    const [phase, setPhase] = useState<"idle" | "ping" | "download" | "upload">("idle");
+    const [phase, setPhase] = useState<TestPhase>("idle");
     const [displaySpeed, setDisplaySpeed] = useState(0);
 
     const targetSpeed = useRef(0);
     const animationFrame = useRef<number | null>(null);
     const abortController = useRef<AbortController | null>(null);
 
-    const [results, setResults] = useState({
-        download: null as string | null,
-        upload: null as string | null,
-        ping: null as string | null
-    });
+    const [results, setResults] = useState<SpeedTestResults>(EMPTY_RESULTS);
     const resultsRef = useRef(results);
 
-    const [networkData, setNetworkData] = useState({
-        ip: "Detecting...",
-        isp: "Detecting...",
-        location: "Detecting...",
-        server: "GLOBAL_EDGE"
-    });
+    const [networkData, setNetworkData] = useState<NetworkData>(INITIAL_NETWORK_DATA);
 
     useEffect(() => {
         resultsRef.current = results;
@@ -48,6 +125,7 @@ export function SpeedTest() {
         animationFrame.current = requestAnimationFrame(smoothAnimate);
         return () => {
             if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
+            abortController.current?.abort();
         };
     }, [smoothAnimate]);
 
@@ -81,54 +159,19 @@ export function SpeedTest() {
             const pingSamples: number[] = [];
             for (let i = 0; i < 3; i++) {
                 const start = performance.now();
-                await fetch(`https://1.1.1.1/cdn-cgi/trace?_=${Date.now()}-${i}`, { cache: "no-store" });
+                await fetch(`${NETWORK_TRACE_URL}?_=${Date.now()}-${i}`, { cache: "no-store" });
                 pingSamples.push(performance.now() - start);
             }
-            const sortedSamples = [...pingSamples].sort((a, b) => a - b);
-            const medianPing = sortedSamples[Math.floor(sortedSamples.length / 2)];
+            const medianPing = median(pingSamples);
 
             const [traceRes, ipWhoRes] = await Promise.all([
-                fetch("https://1.1.1.1/cdn-cgi/trace", { cache: "no-store" }),
-                fetch("https://ipwho.is/").catch(() => null)
+                fetch(NETWORK_TRACE_URL, { cache: "no-store" }),
+                fetch(NETWORK_IDENTITY_URL).catch(() => null)
             ]);
             const traceText = await traceRes.text();
-            const ipWhoData = ipWhoRes ? await ipWhoRes.json() : null;
-
-            // Parse Cloudflare trace data
-            const traceMap: Record<string, string> = {};
-            traceText.split("\n").forEach(line => {
-                const [k, v] = line.split("=");
-                if (k && v) traceMap[k] = v;
-            });
-
-            // Get the best network identity data available
-            let isp = "Unknown";
-            let ip = "Unknown";
-            let location = "Unknown";
-
-            // Use ipwho.is when available (HTTPS friendly in browser)
-            if (ipWhoData && ipWhoData.success !== false) {
-                ip = ipWhoData.ip || traceMap.ip || "Unknown";
-                isp = ipWhoData.connection?.isp || ipWhoData.connection?.org || "Unknown";
-                location = ipWhoData.city ? `${ipWhoData.city}, ${ipWhoData.country_code}` : "Unknown";
-            }
-            // Fallback to Cloudflare trace
-            else if (traceMap.ip) {
-                ip = traceMap.ip;
-                if (traceMap.asOrganization) {
-                    isp = traceMap.asOrganization;
-                } else if (traceMap.asn) {
-                    isp = `AS${traceMap.asn}`;
-                }
-                location = traceMap.loc || "Unknown";
-            }
-
-            setNetworkData({
-                ip: ip,
-                isp: isp,
-                location: location,
-                server: traceMap.colo || "CLOUDFLARE_EDGE"
-            });
+            const ipWhoData: IpWhoResponse | null = ipWhoRes ? await ipWhoRes.json() : null;
+            const traceMap = parseTraceMap(traceText);
+            setNetworkData(resolveNetworkData(traceMap, ipWhoData));
 
             setResults(prev => ({ ...prev, ping: medianPing.toFixed(0) }));
 
@@ -144,7 +187,7 @@ export function SpeedTest() {
         const start = performance.now();
 
         try {
-            const response = await fetch(`https://speed.cloudflare.com/__down?bytes=30000000&_=${Date.now()}`, {
+            const response = await fetch(`https://speed.cloudflare.com/__down?bytes=${DOWNLOAD_BYTES}&_=${Date.now()}`, {
                 signal: abortController.current?.signal
             });
             const reader = response.body?.getReader();
@@ -159,12 +202,11 @@ export function SpeedTest() {
                 const elapsed = (performance.now() - start) / 1000;
 
                 if (elapsed > 0) {
-                    const instantSpeed = (receivedBytes * 8) / elapsed / 1000000;
-                    targetSpeed.current = instantSpeed;
+                    targetSpeed.current = toMbps(receivedBytes, elapsed);
                 }
             }
 
-            const finalSpeed = ((receivedBytes * 8) / ((performance.now() - start) / 1000) / 1000000);
+            const finalSpeed = toMbps(receivedBytes, (performance.now() - start) / 1000);
             targetSpeed.current = finalSpeed;
             setResults(prev => ({ ...prev, download: finalSpeed.toFixed(2) }));
 
@@ -181,7 +223,7 @@ export function SpeedTest() {
     const runUpload = async () => {
         setPhase("upload");
         targetSpeed.current = 0;
-        const uploadData = new Uint8Array(15 * 1024 * 1024);
+        const uploadData = new Uint8Array(UPLOAD_BYTES);
         const start = performance.now();
 
         return new Promise<void>((resolve) => {
@@ -191,8 +233,7 @@ export function SpeedTest() {
                 if (e.lengthComputable && e.loaded > 0) {
                     const elapsed = (performance.now() - start) / 1000;
                     if (elapsed > 0) {
-                        const instantSpeed = (e.loaded * 8) / elapsed / 1000000;
-                        targetSpeed.current = instantSpeed;
+                        targetSpeed.current = toMbps(e.loaded, elapsed);
                     }
                 }
             };
@@ -200,13 +241,12 @@ export function SpeedTest() {
             xhr.onload = async () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const finalElapsed = (performance.now() - start) / 1000;
-                    const finalSpeed = (uploadData.length * 8) / finalElapsed / 1000000;
+                    const finalSpeed = toMbps(uploadData.length, finalElapsed);
                     targetSpeed.current = finalSpeed;
                     setResults(prev => ({ ...prev, upload: finalSpeed.toFixed(2) }));
                     await animateToZero();
                 } else {
-                    const downloadSpeed = parseFloat(resultsRef.current.download || "50");
-                    const simulatedSpeed = downloadSpeed * 0.4;
+                    const simulatedSpeed = getFallbackUploadSpeed(resultsRef.current.download, 0.4);
                     targetSpeed.current = simulatedSpeed;
                     setResults(prev => ({ ...prev, upload: simulatedSpeed.toFixed(2) }));
                     await animateToZero();
@@ -215,8 +255,7 @@ export function SpeedTest() {
             };
 
             xhr.onerror = async () => {
-                const downloadSpeed = parseFloat(resultsRef.current.download || "50");
-                const simulatedSpeed = downloadSpeed * 0.3;
+                const simulatedSpeed = getFallbackUploadSpeed(resultsRef.current.download, 0.3);
 
                 let step = 0;
                 const steps = 20;
@@ -243,20 +282,20 @@ export function SpeedTest() {
         if (testing) return;
 
         setTesting(true);
-        setResults({ download: null, upload: null, ping: null });
+        setResults(EMPTY_RESULTS);
         targetSpeed.current = 0;
 
         abortController.current = new AbortController();
 
         try {
             await runPing();
-            await new Promise(r => setTimeout(r, 500));
+            await delay(500);
 
             await runDownload();
-            await new Promise(r => setTimeout(r, 300));
+            await delay(300);
 
             await runUpload();
-            await new Promise(r => setTimeout(r, 500));
+            await delay(500);
 
         } catch (error) {
             console.error("Test failed:", error);
@@ -274,12 +313,15 @@ export function SpeedTest() {
         return Math.min(logVal, 1);
     }, [displaySpeed, phase]);
 
-    const getPhaseText = () => {
-        if (phase === "idle") return "READY";
-        if (phase === "ping") return "PING";
-        if (phase === "download") return "DOWNLOAD";
-        return "UPLOAD";
-    };
+    const phaseText = useMemo(() => {
+        const labels: Record<TestPhase, string> = {
+            idle: "READY",
+            ping: "PING",
+            download: "DOWNLOAD",
+            upload: "UPLOAD"
+        };
+        return labels[phase];
+    }, [phase]);
 
     return (
         <div className="w-full max-w-6xl grid gap-4 md:gap-6 lg:grid-cols-[1fr_300px]">
@@ -337,7 +379,7 @@ export function SpeedTest() {
                             {testing && phase !== "idle" ? displaySpeed.toFixed(displaySpeed > 100 ? 1 : 2) : "GO"}
                         </motion.div>
                         <div className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-2">
-                            {getPhaseText()}
+                            {phaseText}
                             {phase !== "idle" && " Mbps"}
                         </div>
                     </div>
@@ -396,7 +438,7 @@ function StatBox({ label, value, unit, icon: Icon, color }: {
     label: string;
     value: string | null;
     unit: string;
-    icon: any;
+    icon: LucideIcon;
     color: string;
 }) {
     return (
