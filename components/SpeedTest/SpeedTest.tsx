@@ -75,9 +75,9 @@ export function SpeedTest() {
             <div className="w-full max-w-6xl grid lg:grid-cols-[1fr_300px] gap-6">
                 <main className="relative space-y-6">
                     <div className="bg-gradient-to-b from-white/[0.03] to-transparent border border-white/10 rounded-2xl px-4 py-4 flex flex-col items-center">
-                        <div className="flex flex-1 py-2 justify-start items-center gap-4 w-full ">
-                            <ToolHeader className="text-xs" title="SpeedTest Analyzer" icon={<Activity className="w-4 h-4 text-emerald-500" />} />
-                        </div>
+                      
+                            <ToolHeader  title="SpeedTest Analyzer"/>
+                 
                         <div className="relative w-72 h-72 flex items-center justify-center">
                             <svg className="absolute inset-0 w-full h-full rotate-[90deg]" viewBox="0 0 200 200">
                                 <circle cx="100" cy="100" r="90" fill="none" stroke="#27272a" strokeWidth="8" />
