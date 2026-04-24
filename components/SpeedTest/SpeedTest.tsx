@@ -23,9 +23,9 @@ export function SpeedTest() {
     });
 
     const [networkData, setNetworkData] = useState({
-        ip: "IDENTIFYING...",
-        isp: "LOCALIZING...",
-        location: "OPTIMAL",
+        ip: "Detecting...",
+        isp: "Detecting...",
+        location: "Detecting...",
         server: "GLOBAL_EDGE"
     });
 
@@ -46,17 +46,15 @@ export function SpeedTest() {
         };
     }, [smoothAnimate]);
 
-    // Helper function to smoothly animate speed to zero
     const animateToZero = async () => {
         return new Promise<void>((resolve) => {
             const startSpeed = targetSpeed.current;
             const startTime = performance.now();
-            const duration = 800; // 800ms smooth descent
+            const duration = 800;
 
             const animate = () => {
                 const elapsed = performance.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Ease out cubic for smooth deceleration
                 const eased = 1 - Math.pow(1 - progress, 3);
                 targetSpeed.current = startSpeed * (1 - eased);
 
@@ -76,22 +74,64 @@ export function SpeedTest() {
         setPhase("ping");
         const start = performance.now();
         try {
-            await fetch("https://1.1.1.1/cdn-cgi/trace", {
-                cache: 'no-store',
-                signal: abortController.current?.signal
+            // Try multiple APIs for better ISP detection
+            const [traceRes, ipApiRes, ipInfoRes] = await Promise.all([
+                fetch("https://1.1.1.1/cdn-cgi/trace", { cache: 'no-store' }),
+                fetch("https://ip-api.com/json/").catch(() => null),
+                fetch("https://ipinfo.io/json?token=74f7b4b2b8b2b8").catch(() => null)
+            ]);
+
+            const traceText = await traceRes.text();
+            const ipApiData = ipApiRes ? await ipApiRes.json() : null;
+            const ipInfoData = ipInfoRes ? await ipInfoRes.json() : null;
+
+            // Parse Cloudflare trace data
+            const traceMap: any = {};
+            traceText.split("\n").forEach(line => {
+                const [k, v] = line.split("=");
+                if (k && v) traceMap[k] = v;
             });
+
+            // Get the best ISP data available
+            let isp = "Unknown";
+            let ip = "Unknown";
+            let location = "Unknown";
+
+            // Try ipinfo.io first (often most accurate)
+            if (ipInfoData) {
+                ip = ipInfoData.ip || traceMap.ip;
+                isp = ipInfoData.org || ipInfoData.isp || "Unknown";
+                location = ipInfoData.city ? `${ipInfoData.city}, ${ipInfoData.country}` : "Unknown";
+            }
+            // Fallback to ip-api.com
+            else if (ipApiData && ipApiData.status === "success") {
+                ip = ipApiData.query;
+                isp = ipApiData.isp || "Unknown";
+                location = ipApiData.city ? `${ipApiData.city}, ${ipApiData.countryCode}` : "Unknown";
+            }
+            // Fallback to Cloudflare trace
+            else if (traceMap.ip) {
+                ip = traceMap.ip;
+                if (traceMap.asOrganization) {
+                    isp = traceMap.asOrganization;
+                } else if (traceMap.asn) {
+                    isp = `AS${traceMap.asn}`;
+                }
+                location = traceMap.loc || "Unknown";
+            }
+
+            setNetworkData({
+                ip: ip,
+                isp: isp,
+                location: location,
+                server: traceMap.colo || "CLOUDFLARE_EDGE"
+            });
+
             const duration = (performance.now() - start).toFixed(0);
             setResults(prev => ({ ...prev, ping: duration }));
 
-            const geoRes = await fetch("https://ip-api.com/json/").catch(() => null);
-            const geoData = geoRes ? await geoRes.json() : null;
-            setNetworkData({
-                ip: geoData?.query || "UNKNOWN",
-                isp: geoData?.isp || "DETECTED",
-                location: geoData?.city || "OPTIMAL",
-                server: "CLOUDFLARE_EDGE"
-            });
-        } catch {
+        } catch (error) {
+            console.error("Ping/Network detection failed:", error);
             setResults(prev => ({ ...prev, ping: "Error" }));
         }
     };
@@ -126,7 +166,6 @@ export function SpeedTest() {
             targetSpeed.current = finalSpeed;
             setResults(prev => ({ ...prev, download: finalSpeed.toFixed(2) }));
 
-            // Smoothly animate back to zero before moving to upload
             await animateToZero();
 
         } catch (e) {
@@ -156,22 +195,24 @@ export function SpeedTest() {
                 }
             };
 
-            xhr.onload = () => {
+            xhr.onload = async () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     const finalElapsed = (performance.now() - start) / 1000;
                     const finalSpeed = (uploadData.length * 8) / finalElapsed / 1000000;
                     targetSpeed.current = finalSpeed;
                     setResults(prev => ({ ...prev, upload: finalSpeed.toFixed(2) }));
+                    await animateToZero();
                 } else {
                     const downloadSpeed = parseFloat(results.download || "50");
                     const simulatedSpeed = downloadSpeed * 0.4;
                     targetSpeed.current = simulatedSpeed;
                     setResults(prev => ({ ...prev, upload: simulatedSpeed.toFixed(2) }));
+                    await animateToZero();
                 }
                 resolve();
             };
 
-            xhr.onerror = () => {
+            xhr.onerror = async () => {
                 const downloadSpeed = parseFloat(results.download || "50");
                 const simulatedSpeed = downloadSpeed * 0.3;
 
@@ -184,7 +225,7 @@ export function SpeedTest() {
                     if (step >= steps) {
                         clearInterval(interval);
                         setResults(prev => ({ ...prev, upload: simulatedSpeed.toFixed(2) }));
-                        resolve();
+                        animateToZero().then(() => resolve());
                     }
                 }, 50);
             };
@@ -209,11 +250,11 @@ export function SpeedTest() {
             await runPing();
             await new Promise(r => setTimeout(r, 500));
 
-            await runDownload(); // This now includes the smooth animation back to zero
-            await new Promise(r => setTimeout(r, 300)); // Small pause after zero before upload
+            await runDownload();
+            await new Promise(r => setTimeout(r, 300));
 
             await runUpload();
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 500));
 
         } catch (error) {
             console.error("Test failed:", error);
@@ -226,9 +267,10 @@ export function SpeedTest() {
     };
 
     const strokeProgress = useMemo(() => {
+        if (phase === "idle" || displaySpeed === 0) return 0;
         const logVal = Math.log10(displaySpeed + 1) / Math.log10(MAX_SPEED + 1);
         return Math.min(logVal, 1);
-    }, [displaySpeed]);
+    }, [displaySpeed, phase]);
 
     const getPhaseText = () => {
         if (phase === "idle") return "READY";
@@ -250,23 +292,25 @@ export function SpeedTest() {
                             r="46"
                             fill="none"
                             stroke="currentColor"
-                            strokeWidth="1.5"
-                            className="text-white/10"
+                            strokeWidth="2"
+                            className="text-white/5"
                         />
 
-                        <motion.circle
-                            cx="50"
-                            cy="50"
-                            r="46"
-                            fill="none"
-                            stroke={phase === "upload" ? "#3b82f6" : "#10b981"}
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: strokeProgress }}
-                            transition={{ type: "tween", ease: "linear", duration: 0.1 }}
-                            transform="rotate(90 50 50)"
-                        />
+                        {phase !== "idle" && displaySpeed > 0 && (
+                            <motion.circle
+                                cx="50"
+                                cy="50"
+                                r="46"
+                                fill="none"
+                                stroke={phase === "upload" ? "#3b82f6" : "#10b981"}
+                                strokeWidth="6"
+                                strokeLinecap="round"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: strokeProgress }}
+                                transition={{ type: "tween", ease: "linear", duration: 0.1 }}
+                                transform="rotate(90 50 50)"
+                            />
+                        )}
                     </svg>
 
                     <div className="text-center z-10">
