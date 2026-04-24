@@ -7,6 +7,7 @@ import { blogArticles } from '@/data/lists/blogArticle';
 import { Calendar, Clock, Twitter, Facebook, Linkedin, Link2, Check, User } from 'lucide-react';
 import Head from 'next/head';
 import { useState } from 'react';
+import { SocialShare } from '@/components/SocialShare/SocialShare';
 
 export async function getServerSideProps({ params }: { params: { slug: string } }) {
   const post = blogArticles.find((article) => article.id === params.slug);
@@ -52,6 +53,15 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
     await navigator.clipboard.writeText(currentUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShare = (platform: string) => {
+    // Analytics tracking example
+    console.log(`Blog post "${post.title}" shared on ${platform}`);
+
+    // You can add your analytics tracking here
+    // Example: gtag('event', 'share', { platform, blog_title: post.title });
+    // Example: plausible('Share', { props: { platform, blog: post.id } });
   };
 
   return (
@@ -113,78 +123,46 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
             </h1>
 
             {/* Meta Info - Stack on mobile, row on desktop */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-[10px] md:text-xs font-mono text-zinc-500">
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={12} className="w-3 h-3 md:w-3 md:h-3" />
-                  <span>
-                    {new Date(post.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={12} className="w-3 h-3 md:w-3 md:h-3" />
-                  <span>{readTime} min read</span>
+            <div className="flex width-full  flex-col items-center justify-between gap-4">
+              <div className="flex justify-between w-full items-center gap-3 md:gap-4 text-[10px] md:text-xs font-mono text-zinc-500">
+                <div className="flex items-center gap-3 md:gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={12} className="w-3 h-3 md:w-3 md:h-3" />
+                    <span>
+                      {new Date(post.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={12} className="w-3 h-3 md:w-3 md:h-3" />
+                    <span>{readTime} min read</span>
+                  </div>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <User size={12} className="w-3 h-3 md:w-3 md:h-3" />
                   <span className="text-emerald-500">Ronan R. Sibunga</span>
                 </div>
               </div>
-
               {/* Share Icons - Scrollable on mobile if needed */}
-              <div className="flex items-center gap-1 md:gap-2 overflow-x-auto pb-1 md:pb-0">
-                <span className="text-[8px] md:text-[10px] font-mono text-zinc-600 uppercase tracking-wider shrink-0">Share:</span>
-
-                <a
-                  href={shareLinks.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 md:p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
-                  aria-label="Share on Twitter"
-                >
-                  <Twitter size={14} className="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-zinc-400 hover:text-bg-zinc" />
-                </a>
-
-                <a
-                  href={shareLinks.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 md:p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
-                  aria-label="Share on Facebook"
-                >
-                  <Facebook size={14} className="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-zinc-400 hover:text-bg-zinc" />
-                </a>
-
-                <a
-                  href={shareLinks.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 md:p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
-                  aria-label="Share on LinkedIn"
-                >
-                  <Linkedin size={14} className="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-zinc-400 hover:text-bg-zinc" />
-                </a>
-
-                <button
-                  onClick={copyToClipboard}
-                  className="p-1.5 md:p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0"
-                  aria-label="Copy link"
-                >
-                  {copied ? <Check size={14} className="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-emerald-500" /> : <Link2 size={14} className="w-3.5 h-3.5 md:w-3.5 md:h-3.5 text-zinc-400 hover:text-white" />}
-                </button>
-              </div>
+              <SocialShare
+                url={ogUrl}
+                title={post.title}
+                onShare={handleShare}
+                size="lg"
+                showLabel={true}
+             
+              />
             </div>
 
             {/* Excerpt */}
-            {post.sections?.[0] && (
+            {/* {post.sections?.[0] && (
               <p className="text-zinc-400 text-sm md:text-base leading-relaxed italic border-l-2 border-emerald-500 pl-4 md:pl-5">
                 {post.sections[0].content}
               </p>
-            )}
+            )} */}
           </header>
 
           <BlogContent article={post} />
