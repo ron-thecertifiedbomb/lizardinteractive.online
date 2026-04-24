@@ -1,0 +1,35 @@
+{
+  "title": "NEW_ASSESSMENT_PROTOCOL",
+  "timestamp": "2026-04-24T21:25:08.050Z",
+  "totalNodes": 3,
+  "questions": [
+    {
+      "id": "4f162de9-b5ce-47ab-bebf-c9620338b1d2",
+      "type": "MCQ",
+      "prompt": "Is a JS Library",
+      "points": 5,
+      "options": [
+        "Python",
+        "C#",
+        "React",
+        "HTML"
+      ]
+    },
+    {
+      "id": "7344634b-c8df-41c3-a884-f8cb34b0e500",
+      "type": "TF",
+      "prompt": "Is HTML a programming language?",
+      "points": 5,
+      "options": [],
+      "correctAnswer": "False"
+    },
+    {
+      "id": "fec6ec67-a7d1-4f87-a10c-ae73c01f4467",
+      "type": "IDENTIFICATION",
+      "prompt": "Whats is used for styling a website",
+      "points": 5,
+      "options": [],
+      "correctAnswer": "CSS"
+    }
+  ]
+}
