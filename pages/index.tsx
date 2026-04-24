@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -11,6 +11,7 @@ import { homeContent } from "@/data/page/homeContent";
 import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
 import { FramerPresentation } from "@/components/FramerPresentation/FramerPresentation";
+
 
 // Get featured tools (specific tools you want to highlight)
 const featuredTools = utilities.filter(tool =>
@@ -35,7 +36,7 @@ export default function HomePage() {
 
       <ScreenContainer className="pt-24">
         <FramerPresentation />
-        {/* Featured Tools Section */}
+       
         <div className="mt-24 mb-12 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -84,7 +85,7 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
-     
+  
       </ScreenContainer>
     </>
   );
