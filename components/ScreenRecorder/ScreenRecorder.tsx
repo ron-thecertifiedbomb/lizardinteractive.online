@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Circle, Square, Download, X, Video, Monitor, Radio, ShieldCheck } from "lucide-react";
+import { Circle, Square, Download, X, Video, Monitor, Radio, ShieldCheck, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Panel } from "../shared/Panel/Panel";
+import { ToolHeader } from "../shared/ToolHeader/ToolHeader";
 
 export default function ScreenRecorder() {
     const [recording, setRecording] = useState(false);
@@ -13,7 +16,6 @@ export default function ScreenRecorder() {
     const recordedChunks = useRef<Blob[]>([]);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Timer logic for the 'Recording' HUD
     useEffect(() => {
         if (recording) {
             timerRef.current = setInterval(() => {
@@ -76,104 +78,102 @@ export default function ScreenRecorder() {
     };
 
     return (
-        <div className="w-full bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden group selection:bg-emerald-500 selection:text-black">
-            {/* HUD Status Bar */}
-            <div className="flex justify-between items-start mb-10">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${recording ? 'bg-red-500 animate-pulse' : 'bg-zinc-800'}`} />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
-                            System.Capture_v4
-                        </h2>
+        <Panel as="main" className="p-4 sm:p-6 md:p-8 flex flex-col items-center space-y-6 max-w-xl mx-auto selection:bg-emerald-500 selection:text-black">
+            <ToolHeader title="Capture Engine" />
+
+            {/* STATUS HUD - Matches Unit Converter "Result" Area */}
+            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Capture Status</p>
+                <div className="flex items-baseline justify-between flex-wrap gap-4">
+                    <div className="flex items-baseline overflow-hidden">
+                        <span className={`text-4xl font-black tabular-nums tracking-tighter ${recording ? 'text-red-500' : 'text-white'}`}>
+                            {recording ? formatTime(duration) : "00:00"}
+                        </span>
+                        <span className="text-xl font-black text-zinc-500 ml-3 uppercase tracking-tighter">
+                            {recording ? 'Recording' : 'Standby'}
+                        </span>
                     </div>
-                    <p className="text-[9px] text-zinc-600 uppercase font-mono tracking-tighter italic">
-                        {recording ? `Status: ACTIVE_ENCODING // ${formatTime(duration)}` : 'Status: STANDBY'}
-                    </p>
+                    <div className="flex items-center gap-3">
+                        <Activity className={`w-4 h-4 ${recording ? 'text-red-500 animate-pulse' : 'text-zinc-800'}`} />
+                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter">
+                            {recording ? 'Bitrate_Steady' : 'Source_Ready'}
+                        </span>
+                    </div>
                 </div>
-                <ShieldCheck className="w-4 h-4 text-zinc-800" />
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-8 py-10">
-                {!videoURL && !recording && (
-                    <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                        className="flex flex-col items-center gap-4 opacity-20 group-hover:opacity-40 transition-opacity"
-                    >
-                        <Monitor className="w-16 h-16 stroke-[1px]" />
-                        <span className="text-[10px] tracking-[0.5em] uppercase font-black">Ready to Source</span>
-                    </motion.div>
-                )}
-
-                {/* Control Interface */}
-                <div className="flex items-center gap-4 z-10">
-                    <AnimatePresence mode="wait">
-                        {!recording ? (
-                            <motion.button
-                                key="start"
-                                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                                onClick={startRecording}
-                                className="group flex items-center gap-3 px-8 py-4 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] hover:bg-emerald-500 transition-all duration-500"
-                            >
-                                <Circle className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
-                                Start Stream
-                            </motion.button>
-                        ) : (
-                            <motion.button
-                                key="stop"
-                                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                                onClick={stopRecording}
-                                className="flex items-center gap-3 px-8 py-4 bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-red-500 transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)]"
-                            >
-                                <Square className="w-4 h-4 fill-current" />
-                                Terminate
-                            </motion.button>
-                        )}
-                    </AnimatePresence>
-
-                    {videoURL && (
-                        <div className="flex gap-2">
-                            <button
-                                onClick={downloadRecording}
-                                className="p-4 border border-zinc-800 hover:border-emerald-500/50 text-emerald-500 transition-all"
-                            >
-                                <Download className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setVideoURL(null)}
-                                className="p-4 border border-zinc-800 hover:border-red-500/50 text-zinc-500 hover:text-red-500 transition-all"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+            <div className="w-full space-y-6">
+                {/* Visual Interface Panel */}
+                <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-10 flex flex-col items-center justify-center min-h-[200px] relative overflow-hidden">
+                    {!videoURL && !recording ? (
+                        <div className="flex flex-col items-center gap-4 text-zinc-800">
+                            <Monitor size={48} strokeWidth={1} />
+                            <span className="text-[10px] font-mono uppercase tracking-[0.4em]">Initialize Source</span>
+                        </div>
+                    ) : recording ? (
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-16 h-16 rounded-full border-2 border-red-500/20 flex items-center justify-center">
+                                <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse" />
+                            </div>
+                            <span className="text-[10px] font-mono text-red-500 uppercase tracking-widest">Active Encoding</span>
+                        </div>
+                    ) : (
+                        <div className="w-full h-full relative group">
+                            <video
+                                className="w-full rounded-lg border border-zinc-800 aspect-video object-cover"
+                                src={videoURL || undefined}
+                                controls
+                            />
                         </div>
                     )}
                 </div>
+
+                {/* Main Controls (Matching Metronome/Converter style) */}
+                <div className="grid grid-cols-[1fr,auto] gap-4">
+                    {!recording ? (
+                        <button
+                            onClick={startRecording}
+                            className="flex items-center justify-center gap-3 py-5 bg-emerald-500 text-black rounded-2xl text-xs font-black uppercase tracking-[0.3em] hover:bg-emerald-400 transition-all active:scale-95"
+                        >
+                            <Circle size={18} fill="currentColor" />
+                            Ignite Stream
+                        </button>
+                    ) : (
+                        <button
+                            onClick={stopRecording}
+                            className="flex items-center justify-center gap-3 py-5 bg-red-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.3em] hover:bg-red-500 transition-all active:scale-95 shadow-[0_0_20px_rgba(220,38,38,0.2)]"
+                        >
+                            <Square size={18} fill="currentColor" />
+                            Terminate
+                        </button>
+                    )}
+
+                    <div className="flex gap-2">
+                        <button
+                            onClick={downloadRecording}
+                            disabled={!videoURL || recording}
+                            className="px-6 bg-zinc-950 border border-zinc-900 rounded-2xl text-emerald-500 hover:text-emerald-400 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+                            title="Download Buffer"
+                        >
+                            <Download size={20} />
+                        </button>
+                        <button
+                            onClick={() => setVideoURL(null)}
+                            disabled={!videoURL || recording}
+                            className="px-6 bg-zinc-950 border border-zinc-900 rounded-2xl text-zinc-500 hover:text-red-500 disabled:opacity-20 transition-all"
+                            title="Clear Buffer"
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            {/* Video Preview HUD */}
-            <AnimatePresence>
-                {videoURL && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 border border-zinc-900 bg-black relative"
-                    >
-                        <div className="absolute top-0 left-0 w-full p-2 flex justify-between bg-zinc-900/50 backdrop-blur-md z-10">
-                            <span className="text-[8px] font-mono text-zinc-400 uppercase tracking-widest flex items-center gap-2">
-                                <Radio className="w-3 h-3 text-emerald-500" /> Source_Review.mp4
-                            </span>
-                        </div>
-                        <video
-                            className="w-full h-auto aspect-video object-cover"
-                            src={videoURL}
-                            controls
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* Background Aesthetic */}
-            <div className="absolute -bottom-4 -right-4 text-7xl font-black text-white/[0.02] select-none uppercase italic">
-                REC_v4
+            {/* Sub-Header / Footer HUD */}
+            <div className="w-full pt-4 border-t border-zinc-900 flex justify-between items-center">
+                <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.Capture_Engine.v4 // web_stream</span>
+                <ShieldCheck size={14} className="text-zinc-800" />
             </div>
-        </div>
+        </Panel>
     );
 }
