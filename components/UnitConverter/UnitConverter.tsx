@@ -1,211 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useCallback } from "react";
-import {
-    Copy,
-    Check,
-    RefreshCw,
-    ArrowRightLeft,
-    Ruler,
-    Weight,
-    Thermometer,
-    Clock,
-    Database,
-    Zap
-} from "lucide-react";
-
-type Category = {
-    id: string;
-    name: string;
-    icon: any;
-    units: string[];
-    convert: (value: number, from: string, to: string) => number;
-};
+import { useState, useMemo } from "react";
+import { Copy, Check, ArrowRightLeft } from "lucide-react";
+import { Panel } from "../shared/Panel/Panel";
+import { ToolHeader } from "../shared/ToolHeader/ToolHeader";
+import { CONVERSION_CATEGORIES } from "./constants";
 
 export function UnitConverter() {
     const [value, setValue] = useState("1");
-    const [fromUnit, setFromUnit] = useState("");
-    const [toUnit, setToUnit] = useState("");
-    const [category, setCategory] = useState("length");
-    const [result, setResult] = useState<number | null>(null);
+    const [category, setCategory] = useState("time");
+    const [fromUnit, setFromUnit] = useState("Hours");
+    const [toUnit, setToUnit] = useState("Minutes");
     const [copied, setCopied] = useState(false);
 
-    // Conversion categories
-    const categories: Category[] = [
-        {
-            id: "length",
-            name: "LENGTH",
-            icon: Ruler,
-            units: ["Meters", "Kilometers", "Miles", "Feet", "Inches", "Centimeters", "Millimeters", "Yards"],
-            convert: (value, from, to) => {
-                const toMeters: Record<string, number> = {
-                    "Meters": 1,
-                    "Kilometers": 1000,
-                    "Miles": 1609.344,
-                    "Feet": 0.3048,
-                    "Inches": 0.0254,
-                    "Centimeters": 0.01,
-                    "Millimeters": 0.001,
-                    "Yards": 0.9144
-                };
-                const meters = value * toMeters[from];
-                return meters / toMeters[to];
-            }
-        },
-        {
-            id: "weight",
-            name: "WEIGHT",
-            icon: Weight,
-            units: ["Kilograms", "Grams", "Pounds", "Ounces", "Tons", "Milligrams"],
-            convert: (value, from, to) => {
-                const toKg: Record<string, number> = {
-                    "Kilograms": 1,
-                    "Grams": 0.001,
-                    "Pounds": 0.453592,
-                    "Ounces": 0.0283495,
-                    "Tons": 1000,
-                    "Milligrams": 0.000001
-                };
-                const kg = value * toKg[from];
-                return kg / toKg[to];
-            }
-        },
-        {
-            id: "temperature",
-            name: "TEMPERATURE",
-            icon: Thermometer,
-            units: ["Celsius", "Fahrenheit", "Kelvin"],
-            convert: (value, from, to) => {
-                let celsius: number;
-                // Convert to Celsius first
-                if (from === "Celsius") celsius = value;
-                else if (from === "Fahrenheit") celsius = (value - 32) * 5 / 9;
-                else celsius = value - 273.15;
+    const currentCategory = useMemo(() => {
+        return CONVERSION_CATEGORIES.find(c => c.id === category) || CONVERSION_CATEGORIES[0];
+    }, [category]);
 
-                // Convert from Celsius to target
-                if (to === "Celsius") return celsius;
-                if (to === "Fahrenheit") return (celsius * 9 / 5) + 32;
-                return celsius + 273.15;
-            }
-        },
-        {
-            id: "area",
-            name: "AREA",
-            icon: Ruler,
-            units: ["Square Meters", "Square Kilometers", "Square Miles", "Square Feet", "Acres", "Hectares"],
-            convert: (value, from, to) => {
-                const toSqMeters: Record<string, number> = {
-                    "Square Meters": 1,
-                    "Square Kilometers": 1_000_000,
-                    "Square Miles": 2_589_988,
-                    "Square Feet": 0.092903,
-                    "Acres": 4046.86,
-                    "Hectares": 10_000
-                };
-                const sqMeters = value * toSqMeters[from];
-                return sqMeters / toSqMeters[to];
-            }
-        },
-        {
-            id: "volume",
-            name: "VOLUME",
-            icon: Database,
-            units: ["Liters", "Milliliters", "Gallons", "Quarts", "Pints", "Cups", "Cubic Meters"],
-            convert: (value, from, to) => {
-                const toLiters: Record<string, number> = {
-                    "Liters": 1,
-                    "Milliliters": 0.001,
-                    "Gallons": 3.78541,
-                    "Quarts": 0.946353,
-                    "Pints": 0.473176,
-                    "Cups": 0.236588,
-                    "Cubic Meters": 1000
-                };
-                const liters = value * toLiters[from];
-                return liters / toLiters[to];
-            }
-        },
-        {
-            id: "time",
-            name: "TIME",
-            icon: Clock,
-            units: ["Seconds", "Minutes", "Hours", "Days", "Weeks", "Months", "Years"],
-            convert: (value, from, to) => {
-                const toSeconds: Record<string, number> = {
-                    "Seconds": 1,
-                    "Minutes": 60,
-                    "Hours": 3600,
-                    "Days": 86400,
-                    "Weeks": 604800,
-                    "Months": 2_592_000,
-                    "Years": 31_536_000
-                };
-                const seconds = value * toSeconds[from];
-                return seconds / toSeconds[to];
-            }
-        },
-        {
-            id: "speed",
-            name: "SPEED",
-            icon: Zap,
-            units: ["km/h", "mph", "m/s", "knots", "ft/s"],
-            convert: (value, from, to) => {
-                const toKmph: Record<string, number> = {
-                    "km/h": 1,
-                    "mph": 1.60934,
-                    "m/s": 3.6,
-                    "knots": 1.852,
-                    "ft/s": 1.09728
-                };
-                const kmph = value * toKmph[from];
-                return kmph / toKmph[to];
-            }
-        }
-    ];
+    const result = useMemo(() => {
+        const num = parseFloat(value);
+        if (isNaN(num)) return null;
+        return currentCategory.convert(num, fromUnit, toUnit);
+    }, [value, fromUnit, toUnit, currentCategory]);
 
-    const currentCategory = categories.find(c => c.id === category)!;
-
-    // Initialize units when category changes
-    useState(() => {
-        setFromUnit(currentCategory.units[0]);
-        setToUnit(currentCategory.units[1] || currentCategory.units[0]);
-    });
-
-    // Update units when category changes
-    const handleCategoryChange = (newCategory: string) => {
-        setCategory(newCategory);
-        const cat = categories.find(c => c.id === newCategory)!;
+    const handleCategoryChange = (id: string) => {
+        const cat = CONVERSION_CATEGORIES.find(c => c.id === id)!;
+        setCategory(id);
         setFromUnit(cat.units[0]);
         setToUnit(cat.units[1] || cat.units[0]);
     };
 
-    // Perform conversion
-    const convert = useCallback(() => {
-        const numValue = parseFloat(value);
-        if (isNaN(numValue)) {
-            setResult(null);
-            return;
-        }
-        const converted = currentCategory.convert(numValue, fromUnit, toUnit);
-        setResult(converted);
-    }, [value, fromUnit, toUnit, currentCategory]);
-
-    // Auto-convert when inputs change
-    useState(() => {
-        convert();
-    });
-
-    const handleValueChange = (newValue: string) => {
-        setValue(newValue);
-        setTimeout(convert, 0);
-    };
-
     const swapUnits = () => {
-        const temp = fromUnit;
         setFromUnit(toUnit);
-        setToUnit(temp);
-        setTimeout(convert, 0);
+        setToUnit(fromUnit);
     };
 
     const copyResult = async () => {
@@ -216,21 +44,23 @@ export function UnitConverter() {
     };
 
     return (
-        <div className="space-y-4">
-            {/* Result Display - Prominent */}
-            <div className="bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2">CONVERTED VALUE</p>
+        <Panel as="main" className="p-4 sm:p-6 md:p-8 flex flex-col items-center space-y-6 max-w-lg mx-auto">
+            <ToolHeader title="Unit Converter" />
+
+            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Result</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
-                    <div>
+                    <div className="overflow-hidden">
                         <span className="text-4xl font-black text-white">
-                            {result !== null ? result.toFixed(6).replace(/\.?0+$/, '') : "—"}
+                            {result !== null
+                                ? result.toLocaleString(undefined, { maximumFractionDigits: 6 })
+                                : "—"}
                         </span>
                         <span className="text-xl font-black text-zinc-500 ml-2">{toUnit}</span>
                     </div>
                     <button
                         onClick={copyResult}
-                        disabled={result === null}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs font-mono disabled:opacity-50"
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:bg-zinc-800"
                     >
                         {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
                         {copied ? "COPIED" : "COPY"}
@@ -238,132 +68,70 @@ export function UnitConverter() {
                 </div>
             </div>
 
-            {/* Value Input */}
-            <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
-                <div className="border-b border-zinc-900 px-4 py-3">
-                    <span className="text-xs font-mono text-zinc-500">ENTER VALUE</span>
+            <div className="w-full space-y-4">
+                {/* Input Field - No spinners via CSS */}
+                <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden focus-within:border-emerald-500/50">
+                    <div className="border-b border-zinc-900 px-4 py-3">
+                        <span className="text-xs font-mono text-zinc-500 uppercase">Input Value</span>
+                    </div>
+                    <input
+                        type="number"
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        className="w-full bg-transparent px-4 py-4 text-white font-mono text-2xl focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
                 </div>
-                <input
-                    type="number"
-                    value={value}
-                    onChange={(e) => handleValueChange(e.target.value)}
-                    placeholder="Enter a number..."
-                    className="w-full bg-transparent px-4 py-4 text-white font-mono text-2xl focus:outline-none"
-                />
-            </div>
 
-            {/* Category Selection - Horizontal Scroll on Mobile */}
-            <div className="overflow-x-auto pb-2 -mx-2 px-2">
-                <div className="flex gap-2 min-w-max">
-                    {categories.map((cat) => {
+                {/* Categories */}
+                <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar">
+                    {CONVERSION_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
+                        const active = category === cat.id;
                         return (
                             <button
                                 key={cat.id}
                                 onClick={() => handleCategoryChange(cat.id)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition ${category === cat.id
-                                        ? "bg-emerald-500 text-black"
+                                className={`flex items-center gap-2 px-4 py-3 rounded-xl whitespace-nowrap ${active
+                                        ? "bg-emerald-500 text-black font-bold shadow-lg shadow-emerald-500/20"
                                         : "bg-zinc-950 border border-zinc-900 text-zinc-500"
                                     }`}
                             >
-                                <Icon size={14} />
-                                <span className="text-[10px] font-black uppercase tracking-wider">{cat.name}</span>
+                                <Icon size={16} />
+                                <span className="text-[10px] tracking-widest">{cat.name}</span>
                             </button>
                         );
                     })}
                 </div>
-            </div>
 
-            {/* Unit Selection */}
-            <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
-                {/* From Unit */}
-                <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
-                    <div className="border-b border-zinc-900 px-3 py-2">
-                        <span className="text-[8px] font-mono text-zinc-600">FROM</span>
-                    </div>
-                    <select
-                        value={fromUnit}
-                        onChange={(e) => setFromUnit(e.target.value)}
-                        className="w-full bg-transparent px-3 py-3 text-white font-mono text-sm focus:outline-none"
+                {/* Instant Switch Logic */}
+                <div className="grid grid-cols-[1fr,auto,1fr] gap-3 items-center">
+                    <UnitSelect label="FROM" value={fromUnit} units={currentCategory.units} onChange={setFromUnit} />
+                    <button
+                        onClick={swapUnits}
+                        className="p-4 rounded-full bg-zinc-900 border border-zinc-800 text-emerald-500"
                     >
-                        {currentCategory.units.map((unit) => (
-                            <option key={unit} value={unit} className="bg-zinc-900">
-                                {unit}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Swap Button */}
-                <button
-                    onClick={swapUnits}
-                    className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-emerald-500 active:scale-95 transition"
-                >
-                    <ArrowRightLeft size={20} />
-                </button>
-
-                {/* To Unit */}
-                <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
-                    <div className="border-b border-zinc-900 px-3 py-2">
-                        <span className="text-[8px] font-mono text-zinc-600">TO</span>
-                    </div>
-                    <select
-                        value={toUnit}
-                        onChange={(e) => setToUnit(e.target.value)}
-                        className="w-full bg-transparent px-3 py-3 text-white font-mono text-sm focus:outline-none"
-                    >
-                        {currentCategory.units.map((unit) => (
-                            <option key={unit} value={unit} className="bg-zinc-900">
-                                {unit}
-                            </option>
-                        ))}
-                    </select>
+                        <ArrowRightLeft size={18} />
+                    </button>
+                    <UnitSelect label="TO" value={toUnit} units={currentCategory.units} onChange={setToUnit} />
                 </div>
             </div>
+        </Panel>
+    );
+}
 
-            {/* Quick Reference Table */}
-            <details className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
-                <summary className="px-4 py-3 flex items-center gap-2 cursor-pointer list-none">
-                    <div className="w-1 h-4 bg-emerald-500 rounded-full" />
-                    <span className="text-xs font-mono text-zinc-500 flex-1">COMMON CONVERSIONS</span>
-                    <span className="text-zinc-600 text-xs">▼</span>
-                </summary>
-                <div className="p-4 border-t border-zinc-900">
-                    <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                        {currentCategory.id === "length" && (
-                            <>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 inch</span><span className="text-white">2.54 cm</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 foot</span><span className="text-white">0.3048 m</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 mile</span><span className="text-white">1.609 km</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 meter</span><span className="text-white">3.281 ft</span></div>
-                            </>
-                        )}
-                        {currentCategory.id === "weight" && (
-                            <>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 kg</span><span className="text-white">2.205 lbs</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 lb</span><span className="text-white">0.4536 kg</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 oz</span><span className="text-white">28.35 g</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">1 ton</span><span className="text-white">1000 kg</span></div>
-                            </>
-                        )}
-                        {currentCategory.id === "temperature" && (
-                            <>
-                                <div className="flex justify-between"><span className="text-zinc-600">0°C</span><span className="text-white">32°F</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">100°C</span><span className="text-white">212°F</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">-40°C</span><span className="text-white">-40°F</span></div>
-                                <div className="flex justify-between"><span className="text-zinc-600">0 K</span><span className="text-white">-273.15°C</span></div>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </details>
-
-            {/* Info */}
-            <div className="bg-zinc-950/50 border border-zinc-800 rounded-2xl p-3 text-center">
-                <p className="text-[9px] font-mono text-zinc-600">
-                    ⚡ Real-time conversion • Supports 50+ units • 100% accurate
-                </p>
-            </div>
+function UnitSelect({ label, value, units, onChange }: any) {
+    return (
+        <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
+            <div className="border-b border-zinc-900 px-3 py-2 text-[8px] font-mono text-zinc-600">{label}</div>
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="w-full bg-transparent px-3 py-4 text-white font-mono text-sm focus:outline-none cursor-pointer appearance-none"
+            >
+                {units.map((u: string) => (
+                    <option key={u} value={u} className="bg-zinc-900">{u}</option>
+                ))}
+            </select>
         </div>
     );
 }
