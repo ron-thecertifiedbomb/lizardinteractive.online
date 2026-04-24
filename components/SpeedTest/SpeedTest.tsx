@@ -21,6 +21,7 @@ export function SpeedTest() {
         upload: null as string | null,
         ping: null as string | null
     });
+    const resultsRef = useRef(results);
 
     const [networkData, setNetworkData] = useState({
         ip: "Detecting...",
@@ -28,6 +29,10 @@ export function SpeedTest() {
         location: "Detecting...",
         server: "GLOBAL_EDGE"
     });
+
+    useEffect(() => {
+        resultsRef.current = results;
+    }, [results]);
 
     const smoothAnimate = useCallback(() => {
         const lerpFactor = 0.15;
@@ -72,42 +77,40 @@ export function SpeedTest() {
 
     const runPing = async () => {
         setPhase("ping");
-        const start = performance.now();
         try {
-            // Try multiple APIs for better ISP detection
-            const [traceRes, ipApiRes, ipInfoRes] = await Promise.all([
-                fetch("https://1.1.1.1/cdn-cgi/trace", { cache: 'no-store' }),
-                fetch("https://ip-api.com/json/").catch(() => null),
-                fetch("https://ipinfo.io/json?token=74f7b4b2b8b2b8").catch(() => null)
-            ]);
+            const pingSamples: number[] = [];
+            for (let i = 0; i < 3; i++) {
+                const start = performance.now();
+                await fetch(`https://1.1.1.1/cdn-cgi/trace?_=${Date.now()}-${i}`, { cache: "no-store" });
+                pingSamples.push(performance.now() - start);
+            }
+            const sortedSamples = [...pingSamples].sort((a, b) => a - b);
+            const medianPing = sortedSamples[Math.floor(sortedSamples.length / 2)];
 
+            const [traceRes, ipWhoRes] = await Promise.all([
+                fetch("https://1.1.1.1/cdn-cgi/trace", { cache: "no-store" }),
+                fetch("https://ipwho.is/").catch(() => null)
+            ]);
             const traceText = await traceRes.text();
-            const ipApiData = ipApiRes ? await ipApiRes.json() : null;
-            const ipInfoData = ipInfoRes ? await ipInfoRes.json() : null;
+            const ipWhoData = ipWhoRes ? await ipWhoRes.json() : null;
 
             // Parse Cloudflare trace data
-            const traceMap: any = {};
+            const traceMap: Record<string, string> = {};
             traceText.split("\n").forEach(line => {
                 const [k, v] = line.split("=");
                 if (k && v) traceMap[k] = v;
             });
 
-            // Get the best ISP data available
+            // Get the best network identity data available
             let isp = "Unknown";
             let ip = "Unknown";
             let location = "Unknown";
 
-            // Try ipinfo.io first (often most accurate)
-            if (ipInfoData) {
-                ip = ipInfoData.ip || traceMap.ip;
-                isp = ipInfoData.org || ipInfoData.isp || "Unknown";
-                location = ipInfoData.city ? `${ipInfoData.city}, ${ipInfoData.country}` : "Unknown";
-            }
-            // Fallback to ip-api.com
-            else if (ipApiData && ipApiData.status === "success") {
-                ip = ipApiData.query;
-                isp = ipApiData.isp || "Unknown";
-                location = ipApiData.city ? `${ipApiData.city}, ${ipApiData.countryCode}` : "Unknown";
+            // Use ipwho.is when available (HTTPS friendly in browser)
+            if (ipWhoData && ipWhoData.success !== false) {
+                ip = ipWhoData.ip || traceMap.ip || "Unknown";
+                isp = ipWhoData.connection?.isp || ipWhoData.connection?.org || "Unknown";
+                location = ipWhoData.city ? `${ipWhoData.city}, ${ipWhoData.country_code}` : "Unknown";
             }
             // Fallback to Cloudflare trace
             else if (traceMap.ip) {
@@ -127,8 +130,7 @@ export function SpeedTest() {
                 server: traceMap.colo || "CLOUDFLARE_EDGE"
             });
 
-            const duration = (performance.now() - start).toFixed(0);
-            setResults(prev => ({ ...prev, ping: duration }));
+            setResults(prev => ({ ...prev, ping: medianPing.toFixed(0) }));
 
         } catch (error) {
             console.error("Ping/Network detection failed:", error);
@@ -203,7 +205,7 @@ export function SpeedTest() {
                     setResults(prev => ({ ...prev, upload: finalSpeed.toFixed(2) }));
                     await animateToZero();
                 } else {
-                    const downloadSpeed = parseFloat(results.download || "50");
+                    const downloadSpeed = parseFloat(resultsRef.current.download || "50");
                     const simulatedSpeed = downloadSpeed * 0.4;
                     targetSpeed.current = simulatedSpeed;
                     setResults(prev => ({ ...prev, upload: simulatedSpeed.toFixed(2) }));
@@ -213,7 +215,7 @@ export function SpeedTest() {
             };
 
             xhr.onerror = async () => {
-                const downloadSpeed = parseFloat(results.download || "50");
+                const downloadSpeed = parseFloat(resultsRef.current.download || "50");
                 const simulatedSpeed = downloadSpeed * 0.3;
 
                 let step = 0;
@@ -280,19 +282,31 @@ export function SpeedTest() {
     };
 
     return (
-        <div className="w-full max-w-6xl grid lg:grid-cols-[1fr_300px] gap-6">
-            <main className="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col items-center space-y-8 backdrop-blur-sm">
+        <div className="w-full max-w-6xl grid gap-4 md:gap-6 lg:grid-cols-[1fr_300px]">
+            <main className="bg-white/5 border border-white/10 rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col items-center space-y-6 sm:space-y-8 backdrop-blur-sm">
                 <ToolHeader title="Network Analyzer" />
 
-                <div className="relative w-72 h-72 flex items-center justify-center">
+                <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 flex items-center justify-center">
                     <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="downloadStrokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#34d399" />
+                                <stop offset="45%" stopColor="#10b981" />
+                                <stop offset="100%" stopColor="#14b8a6" />
+                            </linearGradient>
+                            <linearGradient id="uploadStrokeGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#60a5fa" />
+                                <stop offset="50%" stopColor="#3b82f6" />
+                                <stop offset="100%" stopColor="#a855f7" />
+                            </linearGradient>
+                        </defs>
                         <circle
                             cx="50"
                             cy="50"
                             r="46"
                             fill="none"
                             stroke="currentColor"
-                            strokeWidth="2"
+                            strokeWidth="3"
                             className="text-white/5"
                         />
 
@@ -302,7 +316,7 @@ export function SpeedTest() {
                                 cy="50"
                                 r="46"
                                 fill="none"
-                                stroke={phase === "upload" ? "#3b82f6" : "#10b981"}
+                                stroke={`url(#${phase === "upload" ? "uploadStrokeGradient" : "downloadStrokeGradient"})`}
                                 strokeWidth="6"
                                 strokeLinecap="round"
                                 initial={{ pathLength: 0 }}
@@ -318,18 +332,18 @@ export function SpeedTest() {
                             key={displaySpeed}
                             initial={{ scale: 0.95 }}
                             animate={{ scale: 1 }}
-                            className="text-6xl font-black tabular-nums tracking-tight"
+                            className="text-5xl sm:text-6xl font-black tabular-nums tracking-tight"
                         >
                             {testing && phase !== "idle" ? displaySpeed.toFixed(displaySpeed > 100 ? 1 : 2) : "GO"}
                         </motion.div>
-                        <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-2">
+                        <div className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-2">
                             {getPhaseText()}
                             {phase !== "idle" && " Mbps"}
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 w-full max-w-md">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-md">
                     <StatBox label="Ping" value={results.ping} unit="ms" icon={Clock} color="text-zinc-300" />
                     <StatBox label="Down" value={results.download} unit="Mbps" icon={Download} color="text-emerald-500" />
                     <StatBox label="Up" value={results.upload} unit="Mbps" icon={Upload} color="text-blue-500" />
@@ -338,10 +352,24 @@ export function SpeedTest() {
                 <button
                     onClick={startFullDiagnostic}
                     disabled={testing}
-                    className="w-full py-4 rounded-2xl bg-white/10 border border-white/20 text-white font-bold uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="group relative w-full overflow-hidden rounded-2xl border border-emerald-400/40 bg-emerald-950/40 px-4 sm:px-6 py-3.5 sm:py-4 text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-300/90 hover:shadow-[0_0_30px_rgba(16,185,129,0.35)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                    {testing ? <RefreshCw className="animate-spin w-5 h-5" /> : <Play className="w-5 h-5" />}
-                    <span>{testing ? "Analyzing Network..." : "Start Diagnostic"}</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/30 via-green-500/25 to-emerald-400/15 opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
+                    <span className="absolute -inset-x-10 -top-16 h-24 rotate-6 bg-white/20 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-30" />
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                        {testing ? (
+                            <RefreshCw className="h-5 w-5 animate-spin text-emerald-300" />
+                        ) : (
+                            <Play className="h-5 w-5 text-emerald-300 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        )}
+                        <span className="text-xs sm:text-sm font-black uppercase tracking-[0.14em] sm:tracking-[0.18em]">
+                            {testing
+                                ? "Analyzing Network..."
+                                : results.ping || results.download || results.upload
+                                    ? "Test Again"
+                                    : "Start Diagnostic"}
+                        </span>
+                    </span>
                 </button>
             </main>
 
