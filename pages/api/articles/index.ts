@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb"; // Path to your mongo client file
 import { BlogArticle } from "@/data/lists/blogArticle";
- // Path to your interface
+// Path to your interface
 
 const DB_NAME = "production";
 const COLLECTION_NAME = "articles";
@@ -50,6 +50,11 @@ export async function POST(request: Request) {
         .replace(/[^\w\s-]/g, "")
         .replace(/[\s_-]+/g, "-")
         .replace(/^-+|-+$/g, "");
+    }
+
+    // Auto-use the featured image for the social sharing (OG) image if not provided
+    if (!body.ogImage && body.image) {
+      body.ogImage = body.image;
     }
 
     // We use 'id' (the slug) as the unique identifier instead of Mongo's _id

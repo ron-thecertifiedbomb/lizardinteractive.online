@@ -127,7 +127,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
           {post.image && (
             <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
               <Image
-                src={`/${post.image}`}
+                src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
                 alt={post.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"

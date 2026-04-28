@@ -46,6 +46,11 @@ export default async function handler(
         .replace(/^-+|-+$/g, "");
     }
 
+    // Auto-use the featured image for the social sharing (OG) image if not provided
+    if (!data.ogImage && data.image) {
+      data.ogImage = data.image;
+    }
+
     // Upsert the article based on its 'id' (slug)
     const result = await collection.updateOne(
       { id: data.id },

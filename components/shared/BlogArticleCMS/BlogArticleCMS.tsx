@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Save, Plus, Trash2, FileText, Upload } from "lucide-react";
+import { Save, Plus, Trash2, FileText, Upload, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 type Section = {
     type: string;
+    heading: string;
     content: string;
 };
 
@@ -20,14 +21,14 @@ type ArticleFormData = {
 };
 
 export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
-    const { register, control, handleSubmit, reset, setValue } = useForm<ArticleFormData>({
+    const { register, control, handleSubmit, reset, setValue, watch } = useForm<ArticleFormData>({
         defaultValues: {
             id: "",
             title: "",
             category: "Engineering",
             image: "",
             ogImage: "",
-            sections: [{ type: "paragraph", content: "" }],
+            sections: [{ type: "paragraph", heading: "", content: "" }],
         },
     });
 
@@ -37,6 +38,9 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     });
 
     const [isUploading, setIsUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    const imageUrl = watch("image");
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: "image" | "ogImage") => {
         const file = e.target.files?.[0];
@@ -57,14 +61,14 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                     body: JSON.stringify({ image: base64Image }),
                 });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    setValue(fieldName, data.url, { shouldValidate: true, shouldDirty: true });
-                    toast.success("Image uploaded successfully!", { id: loadingToast });
-                } else {
-                    throw new Error(data.message || "Upload failed");
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Upload failed: ${response.status} ${errorText}`);
                 }
+
+                const data = await response.json();
+                setValue(fieldName, data.url, { shouldValidate: true, shouldDirty: true });
+                toast.success("Image uploaded successfully!", { id: loadingToast });
             };
         } catch (error) {
             console.error(error);
@@ -84,6 +88,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
 
     const onSubmit = async (data: ArticleFormData) => {
         const loadingToast = toast.loading("Saving article...");
+        setIsSaving(true);
 
         try {
             // Example API call to save the article. 
@@ -102,6 +107,8 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
         } catch (error) {
             console.error(error);
             toast.error("An error occurred while saving.", { id: loadingToast });
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -119,14 +126,18 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
 
                 <button
                     onClick={handleSubmit(onSubmit)}
-                    className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-black px-6 py-2.5 rounded-lg font-bold transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                    disabled={isSaving}
+                    className={`flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-black px-6 py-2.5 rounded-lg font-bold transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                    <Save size={18} />
-                    Save Article
+                    {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                    {isSaving ? "Saving..." : "Save Article"}
                 </button>
             </div>
 
             <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+                {/* Keep the ID hidden so we can still pass it when editing an existing article */}
+                <input type="hidden" {...register("id")} />
+
                 {/* Meta Section */}
                 <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl space-y-4">
                     <h2 className="text-xl font-bold mb-4 border-b border-zinc-800 pb-2">Meta Information</h2>
@@ -136,34 +147,33 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                             <input {...register("title")} placeholder="E.g., High Performance Next.js..." className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-zinc-400 mb-1">Slug (URL ID)</label>
-                            <input {...register("id")} placeholder="high-performance-nextjs" className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
-                        </div>
-                        <div>
                             <label className="block text-sm font-medium text-zinc-400 mb-1">Category</label>
                             <input {...register("category")} placeholder="Engineering" className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-zinc-400 mb-1">Featured Image URL</label>
-                            <div className="flex gap-2">
-                                <input {...register("image")} placeholder="https://res.cloudinary.com/..." className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
-                                <label className={`flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                    <Upload size={16} className="text-emerald-500" />
-                                    <span className="text-sm font-bold text-zinc-300">Upload</span>
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-zinc-400 mb-2">Featured Image</label>
+                            {/* Keep the image URL hidden, but still register it */}
+                            <input type="hidden" {...register("image")} />
+                            {/* We will auto-fill ogImage from image on the backend, so we don't need a separate input */}
+
+                            {imageUrl ? (
+                                <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
+                                    <img src={imageUrl} alt="Featured" className="object-cover w-full h-full" />
+                                    <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
+                                        <div className="flex flex-col items-center">
+                                            <Upload size={24} className="text-white mb-2" />
+                                            <span className="text-sm font-bold text-white">Change Image</span>
+                                        </div>
+                                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "image")} disabled={isUploading} />
+                                    </label>
+                                </div>
+                            ) : (
+                                <label className={`flex flex-col items-center justify-center w-full h-48 md:h-64 bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-emerald-500 rounded-xl cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <Upload size={32} className="text-zinc-600 mb-3" />
+                                    <span className="text-sm font-medium text-zinc-400">Click to upload featured image</span>
                                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "image")} disabled={isUploading} />
                                 </label>
-                            </div>
-                        </div>
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-zinc-400 mb-1">OG Image URL (For Social Sharing)</label>
-                            <div className="flex gap-2">
-                                <input {...register("ogImage")} placeholder="https://res.cloudinary.com/..." className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
-                                <label className={`flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 px-4 py-2.5 rounded-lg cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                    <Upload size={16} className="text-emerald-500" />
-                                    <span className="text-sm font-bold text-zinc-300">Upload</span>
-                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "ogImage")} disabled={isUploading} />
-                                </label>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -172,7 +182,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                 <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl space-y-4">
                     <div className="flex justify-between items-center border-b border-zinc-800 pb-3 mb-4">
                         <h2 className="text-xl font-bold">Content Sections</h2>
-                        <button type="button" onClick={() => append({ type: "paragraph", content: "" })} className="flex items-center gap-2 text-sm bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-md text-emerald-500 font-medium transition-colors">
+                        <button type="button" onClick={() => append({ type: "paragraph", heading: "", content: "" })} className="flex items-center gap-2 text-sm bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-md text-emerald-500 font-medium transition-colors">
                             <Plus size={16} /> Add Block
                         </button>
                     </div>
@@ -182,15 +192,21 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                             <button type="button" onClick={() => remove(index)} className="absolute top-5 right-5 text-zinc-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
                                 <Trash2 size={18} />
                             </button>
-                            <div className="pr-12">
-                                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Block {index + 1} Type</label>
-                                <select {...register(`sections.${index}.type`)} className="w-full md:w-64 bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm mb-3">
-                                    <option value="paragraph">Paragraph</option>
-                                    <option value="heading">Heading</option>
-                                    <option value="code">Code Block</option>
-                                    <option value="quote">Quote</option>
-                                    <option value="image">Image / Graphic</option>
-                                </select>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 pr-12">
+                                <div>
+                                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Block {index + 1} Type</label>
+                                    <select {...register(`sections.${index}.type`)} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm">
+                                        <option value="paragraph">Paragraph</option>
+                                        <option value="heading">Heading</option>
+                                        <option value="code">Code Block</option>
+                                        <option value="quote">Quote</option>
+                                        <option value="image">Image / Graphic</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Section Heading (Optional)</label>
+                                    <input {...register(`sections.${index}.heading`)} placeholder="Section Title..." className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm" />
+                                </div>
                             </div>
                             <div>
                                 <textarea {...register(`sections.${index}.content`)} placeholder="Enter your content here..." rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-300 focus:outline-none focus:border-emerald-500 font-mono text-sm resize-y min-h-[100px]" />

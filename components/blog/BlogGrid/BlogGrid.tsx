@@ -44,7 +44,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                             <div className="relative w-full h-48 overflow-hidden bg-zinc-900">
                                 {post.image ? (
                                     <Image
-                                        src={`/${post.image}`}
+                                        src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
                                         alt={post.title}
                                         fill
                                         className="object-cover group-hover:scale-105 transition duration-500"

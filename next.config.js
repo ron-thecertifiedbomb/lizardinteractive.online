@@ -20,6 +20,7 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn.cnn.com" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "mcdn.wallpapersafari.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
 
