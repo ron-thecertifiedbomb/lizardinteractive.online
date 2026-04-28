@@ -82,8 +82,11 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                         const ctx = canvas.getContext("2d");
                         ctx?.drawImage(img, 0, 0, width, height);
 
-                        // Compress as WebP with 80% quality
-                        resolve(canvas.toDataURL("image/webp", 0.8));
+                        // Determine format based on field (ogImage should be jpeg for social platforms)
+                        const mimeType = fieldName === "ogImage" ? "image/jpeg" : "image/webp";
+
+                        // Compress with 80% quality
+                        resolve(canvas.toDataURL(mimeType, 0.8));
                     };
                     img.onerror = reject;
                 };
@@ -113,7 +116,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
         }
     };
 
-    
+
     // Populate form when initialData is fetched
     useEffect(() => {
         if (initialData) {
