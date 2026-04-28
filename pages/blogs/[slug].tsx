@@ -37,10 +37,8 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
     const post: any = { ...postRest, _id: _id.toString() };
 
     const siteUrl = "https://lizardinteractive.online";
-    const imageSource = post.ogImage || post.image || "";
-    const ogImageUrl = imageSource.startsWith("http")
-      ? imageSource
-      : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`;
+    // Point og:image to the dynamic OG image generator for consistent branding across all platforms.
+    const ogImageUrl = `${siteUrl}/api/og/${post.id}`;
     const ogUrl = `${siteUrl}/blogs/${post.id}`;
     const description = post.sections?.[0]?.content?.substring(0, 160) || "";
 
