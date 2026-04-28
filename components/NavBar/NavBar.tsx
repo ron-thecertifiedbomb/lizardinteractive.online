@@ -15,9 +15,18 @@ export default function NavBar() {
     const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Lock scroll when menu or transition is active
+    // Inside NavBar.tsx
     useEffect(() => {
-        document.body.style.overflow = (mobileOpen || isTransitioning) ? "hidden" : "";
-        return () => { document.body.style.overflow = ""; };
+        if (mobileOpen || isTransitioning) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = ""; // Resets to default
+        }
+
+        // Safety cleanup
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [mobileOpen, isTransitioning]);
 
     const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

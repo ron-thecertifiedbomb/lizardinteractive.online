@@ -1,8 +1,8 @@
 export const mainLinks = [
-  { href: "/", label: "Home" },
-  { href: "/blogs", label: "Blog" },
-  { href: "/games", label: "Games" }, // Showcase ng 100/100 performance sites
-  { href: "/utilities", label: "Utilities" }, // SEO, CRO, Performance Audits
-  { href: "/services", label: "Services" }, // SEO, CRO, Performance Audits
+  { href: "/", label: "Engineering" }, // Home: The core service pitch
+  { href: "/results", label: "Results" }, // The Case Studies (Wall of Proof)
+  { href: "/utilities", label: "Toolkit" }, // The Conversion Funnel (Utilities Hub)
+  { href: "/blogs", label: "Archive" }, // The Technical Blog (Engineering Insights)
+  { href: "/games", label: "Vault" }, // Emulators: The skill flex for low-latency code
+  { href: "/services", label: "Protocol" }, // Services: SEO, CRO, Performance Audits
 ];
-
