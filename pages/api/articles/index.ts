@@ -57,12 +57,18 @@ export async function POST(request: Request) {
       body.ogImage = body.image;
     }
 
+    // Prevent client from overwriting the creation timestamp
+    delete (body as { createdAt?: string }).createdAt;
+
     // We use 'id' (the slug) as the unique identifier instead of Mongo's _id
     const result = await db
       .collection(COLLECTION_NAME)
       .updateOne(
         { id: body.id },
-        { $set: { ...body, updatedAt: new Date().toISOString() } },
+        {
+          $set: { ...body, updatedAt: new Date().toISOString() },
+          $setOnInsert: { createdAt: new Date().toISOString() },
+        },
         { upsert: true },
       );
 

@@ -89,11 +89,11 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                 <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-600">
                                     <Calendar size={10} />
                                     <span>
-                                        {new Date(post.createdAt).toLocaleDateString("en-US", {
+                                        {post.createdAt ? new Date(post.createdAt).toLocaleDateString("en-US", {
                                             year: "numeric",
                                             month: "short",
                                             day: "numeric",
-                                        })}
+                                        }) : "Date unavailable"}
                                     </span>
                                 </div>
 

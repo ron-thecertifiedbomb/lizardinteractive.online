@@ -159,11 +159,11 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                   <div className="flex items-center gap-1.5">
                     <Calendar size={12} className="w-3 h-3 md:w-3 md:h-3" />
                     <span>
-                      {new Date(post.createdAt).toLocaleDateString('en-US', {
+                      {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
-                      })}
+                      }) : "Date unavailable"}
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">

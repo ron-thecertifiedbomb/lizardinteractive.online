@@ -51,10 +51,16 @@ export default async function handler(
       data.ogImage = data.image;
     }
 
+    // Prevent client from overwriting the creation timestamp
+    delete data.createdAt;
+
     // Upsert the article based on its 'id' (slug)
     const result = await collection.updateOne(
       { id: data.id },
-      { $set: data },
+      {
+        $set: { ...data, updatedAt: new Date().toISOString() },
+        $setOnInsert: { createdAt: new Date().toISOString() },
+      },
       { upsert: true },
     );
 
