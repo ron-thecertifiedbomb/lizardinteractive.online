@@ -82,7 +82,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                         const ctx = canvas.getContext("2d");
                         ctx?.drawImage(img, 0, 0, width, height);
 
-                        const mimeType = "image/webp";
+                        const mimeType = fieldName === "image" ? "image/jpeg" : "image/webp";
 
                         // Compress with 80% quality
                         resolve(canvas.toDataURL(mimeType, 0.8));
