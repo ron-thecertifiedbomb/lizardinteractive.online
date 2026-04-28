@@ -3,37 +3,66 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
 import BlogContent from '@/components/BlogContent/BlogContent';
-import { blogArticles } from '@/data/lists/blogArticle';
 import { Calendar, Clock, Twitter, Facebook, Linkedin, Link2, Check, User } from 'lucide-react';
 import Head from 'next/head';
 import { useState } from 'react';
 import { SocialShare } from '@/components/SocialShare/SocialShare';
+import { MongoClient } from "mongodb";
 
 export async function getServerSideProps({ params }: { params: { slug: string } }) {
-  const post = blogArticles.find((article) => article.id === params.slug);
+  const uri = process.env.MONGODB_URI;
 
-  if (!post) {
+  console.log(`🖥️ API Endpoint (SSR): Fetching data for slug "${params.slug}"`);
+
+  if (!uri) {
+    console.error("❌ MONGODB_URI is missing in environment variables");
     return { notFound: true };
   }
 
-  const siteUrl = "https://lizardinteractive.online";
-  const ogImageUrl = `${siteUrl}/${post.ogImage || post.image}`;
-  const ogUrl = `${siteUrl}/blogs/${post.id}`;
-  const description = post.sections?.[0]?.content?.substring(0, 160) || "";
+  const client = new MongoClient(uri);
 
-  return {
-    props: {
-      post,
-      ogImageUrl,
-      ogUrl,
-      description,
-    },
-  };
+  try {
+    await client.connect();
+    const db = client.db("lizrd_core");
+    const collection = db.collection("articles");
+
+    const article = await collection.findOne({ id: params.slug });
+
+    if (!article) {
+      return { notFound: true };
+    }
+
+    // Serialize _id because Next.js cannot serialize MongoDB ObjectIds directly
+    const { _id, ...postRest } = article as any;
+    const post: any = { ...postRest, _id: _id.toString() };
+
+    const siteUrl = "https://lizardinteractive.online";
+    const ogImageUrl = `${siteUrl}/${post.ogImage || post.image}`;
+    const ogUrl = `${siteUrl}/blogs/${post.id}`;
+    const description = post.sections?.[0]?.content?.substring(0, 160) || "";
+
+    return {
+      props: { post, ogImageUrl, ogUrl, description },
+    };
+  } catch (error) {
+    console.error("❌ Failed to fetch article:", error);
+    return { notFound: true };
+  } finally {
+    await client.close();
+  }
 }
 
 export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: any) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+
+  // Check if we are rendering on the Server or Client
+  const isServer = typeof window === 'undefined';
+  if (isServer) {
+    console.log(`🖥️ Server Render: Generating initial HTML for "${post.title}"`);
+  } else {
+    console.log(`🌐 Client Render: Component hydrated in the browser for "${post.title}"`);
+  }
 
   const readTime = Math.ceil(
     post.sections.reduce((acc: number, section: any) => acc + section.content.length, 0) / 1000
@@ -93,7 +122,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
       </Head>
 
       <ScreenContainer>
-        <div className="max-w-4xl mx-auto pt-20 md:pt-28 pb-20 md:pb-40 px-4 md:px-6">
+        <div className="max-w-4xl mx-auto pt-2  pb-20 md:pb-40 px-4 md:px-6">
           {/* Featured Image */}
           {post.image && (
             <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
@@ -104,6 +133,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                 className="object-cover"
                 priority
+                loading="eager"
               />
             </div>
           )}
@@ -153,7 +183,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                 onShare={handleShare}
                 size="lg"
                 showLabel={true}
-             
+
               />
             </div>
 
