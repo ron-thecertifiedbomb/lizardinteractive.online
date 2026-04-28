@@ -9,6 +9,7 @@ type Section = {
     type: string;
     heading: string;
     content: string;
+    image?: string;
 };
 
 type ArticleFormData = {
@@ -28,7 +29,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
             category: "Engineering",
             image: "",
             ogImage: "",
-            sections: [{ type: "paragraph", heading: "", content: "" }],
+            sections: [{ type: "paragraph", heading: "", content: "", image: "" }],
         },
     });
 
@@ -252,7 +253,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                 <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl space-y-4">
                     <div className="flex justify-between items-center border-b border-zinc-800 pb-3 mb-4">
                         <h2 className="text-xl font-bold">Content Sections</h2>
-                        <button type="button" onClick={() => append({ type: "paragraph", heading: "", content: "" })} className="flex items-center gap-2 text-sm bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-md text-emerald-500 font-medium transition-colors">
+                        <button type="button" onClick={() => append({ type: "paragraph", heading: "", content: "", image: "" })} className="flex items-center gap-2 text-sm bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-md text-emerald-500 font-medium transition-colors">
                             <Plus size={16} /> Add Block
                         </button>
                     </div>
@@ -278,6 +279,31 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                         <option value="image">Image / Graphic</option>
                                     </select>
                                 </div>
+
+                                {/* Optional Section Image (for text blocks) */}
+                                {watchedSections?.[index]?.type !== "image" && (
+                                    <div>
+                                        <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Accompanying Image (Optional)</label>
+                                        <input type="hidden" {...register(`sections.${index}.image`)} />
+                                        {watchedSections?.[index]?.image ? (
+                                            <div className="relative w-full h-32 md:h-48 rounded-xl overflow-hidden border border-zinc-800 group">
+                                                <img src={watchedSections[index].image?.startsWith('http') || watchedSections[index].image?.startsWith('/') ? watchedSections[index].image : `/${watchedSections[index].image}`} alt="Section accompanying" className="object-cover w-full h-full" />
+                                                <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
+                                                    <div className="flex flex-col items-center">
+                                                        <Upload size={20} className="text-white mb-2" />
+                                                        <span className="text-sm font-bold text-white">Change Image</span>
+                                                    </div>
+                                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.image`)} disabled={isUploading} />
+                                                </label>
+                                            </div>
+                                        ) : (
+                                            <label className={`flex flex-col items-center justify-center w-full h-16 bg-zinc-950 border border-dashed border-zinc-800 hover:border-emerald-500 rounded-lg cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <span className="text-xs font-medium text-zinc-500 flex items-center gap-2"><Upload size={14} /> Add an image to this section</span>
+                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.image`)} disabled={isUploading} />
+                                            </label>
+                                        )}
+                                    </div>
+                                )}
 
                                 <div>
                                     <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Content</label>
