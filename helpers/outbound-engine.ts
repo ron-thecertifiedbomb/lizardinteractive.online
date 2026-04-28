@@ -1,27 +1,31 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import nodemailer from "nodemailer";
 
-// Reuse the Mongo client to avoid "Too many connections" errors
+// MongoDB Connection Caching
 let cachedClient: MongoClient | null = null;
 
-async function getMongoClient() {
+async function connectToDatabase() {
   if (cachedClient) return cachedClient;
-  cachedClient = new MongoClient(process.env.MONGODB_URI!);
+  if (!process.env.MONGODB_URI) throw new Error("Missing MONGODB_URI");
+
+  cachedClient = new MongoClient(process.env.MONGODB_URI);
   await cachedClient.connect();
   return cachedClient;
 }
 
 export async function processOutboundLead() {
-  const client = await getMongoClient();
+  const client = await connectToDatabase();
   const db = client.db("lizrd_core");
   const collection = db.collection("prospects");
 
-  // 1. Fetch one prospect
+  // 1. Find a lead that hasn't been contacted yet
   const prospect = await collection.findOne({ contacted: false });
-  if (!prospect)
-    return { success: false, message: "No leads left in the chamber." };
 
-  // 2. Setup Transporter
+  if (!prospect) {
+    return { success: false, message: "No fresh leads in lizrd_core." };
+  }
+
+  // 2. Configure the Transporter (Resend SMTP)
   const transporter = nodemailer.createTransport({
     host: "smtp.resend.com",
     port: 465,
@@ -32,31 +36,38 @@ export async function processOutboundLead() {
     },
   });
 
-  // 3. Email Template
+  // 3. The "Killer" Audit Template
   const mailOptions = {
-    from: process.env.EMAIL_FROM, // ronan@lizardinteractive.online
-    replyTo: process.env.REPLY_TO, // lizardinteractive.online@gmail.com
+    from: `Ronan | Lizrd Interactive <${process.env.EMAIL_FROM}>`,
+    replyTo: process.env.REPLY_TO,
     to: prospect.email,
-    subject: `Performance Audit: ${prospect.websiteUrl}`,
+    subject: `Technical Audit: ${prospect.websiteUrl}`,
     html: `
-            <div style="font-family: monospace; background: #050505; color: #fff; padding: 30px; border: 1px solid #111; border-radius: 12px;">
-                <h2 style="color: #10b981; text-transform: uppercase;">[LIZRD_PROTOCOL_V1]</h2>
-                <p>Attention: ${prospect.name}</p>
-                <p>I ran a performance diagnostic on <strong>${prospect.websiteUrl}</strong>.</p>
-                <p>The latency metrics are currently sub-optimal. I can bridge the gap to a 100/100 Lighthouse score.</p>
-                <p>Check my recent benchmarks: <a href="https://lizardinteractive.online/results" style="color: #10b981;">Performance Ledger</a></p>
-                <p>Shall we optimize?</p>
+            <div style="font-family: monospace; background: #050505; color: #ffffff; padding: 40px; border-radius: 12px; border: 1px solid #111;">
+                <h2 style="color: #10b981; letter-spacing: -1px;">[LIZRD_PERFORMANCE_PROTOCOL]</h2>
+                <p>Hello ${prospect.name},</p>
+                <p>I recently analyzed <strong>${prospect.websiteUrl}</strong> for mobile latency.</p>
+                <p>Your current architecture is leaking potential revenue due to sub-optimal load times. I specialize in bridging this gap with 100/100 Lighthouse optimizations.</p>
+                <p>See my performance ledger here: <a href="https://lizardinteractive.online/results" style="color: #10b981; text-decoration: none; font-weight: bold;">lizardinteractive.online/results</a></p>
+                <p>Are you open to a 5-minute technical breakdown of how we can fix this?</p>
                 <br />
-                <p style="color: #444;">-- Ronan Sibunga</p>
+                <p style="color: #444; font-size: 10px;">Sent via Lizrd Engine v1.0</p>
             </div>
         `,
   };
 
-  // 4. Send and Update
+  // 4. Send Email & Update Database
   await transporter.sendMail(mailOptions);
+
   await collection.updateOne(
     { _id: prospect._id },
-    { $set: { contacted: true, contactedAt: new Date() } },
+    {
+      $set: {
+        contacted: true,
+        contactedAt: new Date(),
+        status: "audit_sent",
+      },
+    },
   );
 
   return { success: true, email: prospect.email };

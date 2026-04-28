@@ -23,10 +23,22 @@ const nextConfig = {
     ],
   },
 
+  // ADDED: Webpack fix for tls/net/fs errors
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    return config;
+  },
+
   async headers() {
     return [
       {
-        // APPLY TO ALL ROUTES: Force indexing to fix that SEO 63 score
         source: "/:path*",
         headers: [
           {
@@ -36,7 +48,6 @@ const nextConfig = {
         ],
       },
       {
-        // EMULATOR CONFIG: ROM fetching headers
         source: "/roms/:path*",
         headers: [
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
