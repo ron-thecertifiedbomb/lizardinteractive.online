@@ -30,6 +30,8 @@ export default function ImageToTextConverter() {
         setProgress(0);
         setText("");
 
+        const loadingToast = toast.loading("Extracting text data...");
+
         try {
             const result = await Tesseract.recognize(image, "eng", {
                 logger: (m) => {
@@ -39,10 +41,10 @@ export default function ImageToTextConverter() {
                 },
             });
             setText(result.data.text);
-            toast.success("DATA_SYNC: Extraction complete");
+            toast.success("DATA_SYNC: Extraction complete", { id: loadingToast });
         } catch (error) {
             console.error(error);
-            toast.error("RUNTIME_ERROR: Extraction failed");
+            toast.error("RUNTIME_ERROR: Extraction failed", { id: loadingToast });
         } finally {
             setLoading(false);
         }

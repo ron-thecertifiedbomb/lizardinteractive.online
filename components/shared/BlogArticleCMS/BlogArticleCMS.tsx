@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Save, Plus, Trash2, FileText, Upload, Loader2 } from "lucide-react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 type Section = {
     type: string;
@@ -41,6 +41,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     const [isSaving, setIsSaving] = useState(false);
 
     const imageUrl = watch("image");
+    const ogImageUrl = watch("ogImage");
     const watchedSections = watch("sections");
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: any) => {
         const file = e.target.files?.[0];
@@ -89,9 +90,6 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     }, [initialData, reset]);
 
     const onSubmit = async (data: ArticleFormData) => {
-        // Ensure ogImage stays in sync with the featured image, even when replacing an old image during an edit
-        data.ogImage = data.image;
-
         const loadingToast = toast.loading("Saving article...");
         setIsSaving(true);
 
@@ -119,6 +117,18 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
 
     return (
         <div className="max-w-5xl mx-auto p-6 md:p-10 text-zinc-100">
+            {/* Add Toaster so the notifications actually render on the screen! */}
+            <Toaster 
+                position="bottom-right"
+                toastOptions={{
+                    style: {
+                        background: '#18181b',
+                        color: '#fff',
+                        border: '1px solid #27272a'
+                    }
+                }} 
+            />
+
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
@@ -155,11 +165,10 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                             <label className="block text-sm font-medium text-zinc-400 mb-1">Category</label>
                             <input {...register("category")} placeholder="Engineering" className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition-colors" />
                         </div>
-                        <div className="md:col-span-2">
+                        <div>
                             <label className="block text-sm font-medium text-zinc-400 mb-2">Featured Image</label>
                             {/* Keep the image URL hidden, but still register it */}
                             <input type="hidden" {...register("image")} />
-                            {/* We will auto-fill ogImage from image on the backend, so we don't need a separate input */}
 
                             {imageUrl ? (
                                 <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
@@ -177,6 +186,28 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                     <Upload size={32} className="text-zinc-600 mb-3" />
                                     <span className="text-sm font-medium text-zinc-400">Click to upload featured image</span>
                                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "image")} disabled={isUploading} />
+                                </label>
+                            )}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-zinc-400 mb-2">Social / OG Image</label>
+                            <input type="hidden" {...register("ogImage")} />
+                            {ogImageUrl ? (
+                                <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
+                                    <img src={ogImageUrl.startsWith('http') || ogImageUrl.startsWith('/') ? ogImageUrl : `/${ogImageUrl}`} alt="OG" className="object-cover w-full h-full" />
+                                    <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
+                                        <div className="flex flex-col items-center">
+                                            <Upload size={24} className="text-white mb-2" />
+                                            <span className="text-sm font-bold text-white">Change OG Image</span>
+                                        </div>
+                                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "ogImage")} disabled={isUploading} />
+                                    </label>
+                                </div>
+                            ) : (
+                                <label className={`flex flex-col items-center justify-center w-full h-48 md:h-64 bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-emerald-500 rounded-xl cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                    <Upload size={32} className="text-zinc-600 mb-3" />
+                                    <span className="text-sm font-medium text-zinc-400">Click to upload OG image</span>
+                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, "ogImage")} disabled={isUploading} />
                                 </label>
                             )}
                         </div>
