@@ -26,16 +26,20 @@ export async function processOutboundLead() {
   }
 
   // 2. Configure the Transporter (Resend SMTP)
-  const transporter = nodemailer.createTransport({
-    host: "smtp.resend.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "resend",
-      pass: process.env.RESEND_API_KEY,
-    },
-  });
-
+const transporter = nodemailer.createTransport({
+  host: "smtp.resend.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "resend",
+    pass: process.env.RESEND_API_KEY, // Make sure this is in Vercel!
+  },
+  tls: {
+    // This stops the SSL alert 80 error
+    minVersion: "TLSv1.2",
+    rejectUnauthorized: true,
+  },
+});
   // 3. The "Killer" Audit Template
   const mailOptions = {
     from: `Ronan | Lizrd Interactive <${process.env.EMAIL_FROM}>`,
