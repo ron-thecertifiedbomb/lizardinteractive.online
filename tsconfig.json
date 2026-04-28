@@ -22,6 +22,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/lizard-boot.mp4"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/lizard-boot.mp4", "pages/api/research"],
   "exclude": ["node_modules"]
 }
