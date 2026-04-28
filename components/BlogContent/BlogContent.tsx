@@ -45,7 +45,7 @@ export default function BlogContent({ article }: BlogContentProps) {
                             />
                         </div>
                     ) : (
-                        <div className={`flex flex-col ${section.image ? 'md:flex-row md:items-start gap-8' : 'max-w-3xl gap-4'}`}>
+                        <div className={`flex flex-col ${section.image ? 'md:flex-row md:items-center gap-8' : 'max-w-3xl gap-4'}`}>
                             <div className="flex-1 space-y-4">
                                 {section.heading && (
                                     <h2 className="text-2xl font-bold uppercase tracking-tight text-white flex items-center gap-4">

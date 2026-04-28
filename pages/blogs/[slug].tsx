@@ -41,9 +41,7 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
     let imageSource = post.ogImage || post.image || "";
 
     // Ensure social platforms get a compatible format by replacing .webp with .jpg
-    if (imageSource.endsWith(".webp")) {
-      imageSource = imageSource.replace(".webp", ".jpg");
-    }
+    imageSource = imageSource.replace(/\.webp(\?.*)?$/i, '.jpg$1');
 
     const rawOgImageUrl = imageSource
       ? (imageSource.startsWith("http") ? imageSource : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`)
