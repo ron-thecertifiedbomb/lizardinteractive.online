@@ -3,34 +3,9 @@ import ScreenContainer from '@/components/shared/ScreenContainer/ScreenContainer
 import MainHeader from '@/components/shared/MainHeader/MainHeader';
 import ResultCard from '@/components/shared/ResultCard/ResultCard';
 import MetaHead from '@/components/MetaHead/MetaHead';
+import { caseStudies } from '@/data/lists/caseStudies';
 
-// This is your freelance "Wall of Proof"
-const caseStudies = [
-    {
-        client: "Lizard Interactive Online",
-        projectType: "Brand Flagship",
-        description: "Engineered a high-performance conversion funnel with zero-bloat architecture. Optimized for instant load times and perfect SEO discovery.",
-        performanceScore: 100,
-        improvement: "3.2s → 0.2s",
-        tags: ["Next.js", "Tailwind", "Vercel"]
-    },
-    {
-        client: "Real Estate Portal",
-        projectType: "Frontend Optimization",
-        description: "Restructured legacy React components and implemented advanced image optimization to recapture mobile leads losing interest due to latency.",
-        performanceScore: 98,
-        improvement: "5.4s → 0.9s",
-        tags: ["Performance", "SEO", "React"]
-    },
-    {
-        client: "The Engineering Toolkit",
-        projectType: "Utility Suite",
-        description: "Built a suite of serverless developer tools focusing on execution speed and zero-tracking privacy protocols.",
-        performanceScore: 100,
-        improvement: "1.2s → 0.1s",
-        tags: ["TypeScript", "API", "Edge"]
-    }
-];
+
 
 export default function ResultsPage() {
     return (
