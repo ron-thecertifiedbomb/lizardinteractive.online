@@ -1,22 +1,27 @@
-'use client'
-
-
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-import PresentationSection from "@/components/shared/PresentationSection/PresentationSection";
 import { homeContent } from "@/data/page/homeContent";
-import { lizardContent } from "@/data/page/lizardContent";
 import { utilities } from "@/data/lists/utilities";
 import { FramerPresentation } from "@/components/FramerPresentation/FramerPresentation";
-
+import HeroSection from "@/components/shared/HeroSection/HeroSection";
+// <-- Add your path here
 
 // Get featured tools (specific tools you want to highlight)
 const featuredTools = utilities.filter(tool =>
-  ["text-tools", "qrcode-generator", "password-generator", "json-formatter",
-    "unit-converter", "speed-test", "base64-tool", "video-to-gif", "pagespeed-insights"].includes(tool.slug)
+  [
+    "text-tools",
+    "qrcode-generator",
+    "password-generator",
+    "json-formatter",
+    "unit-converter",
+    "speed-test",
+    "base64-tool",
+    "video-to-gif",
+    "pagespeed-insights"
+  ].includes(tool.slug)
 );
 
 export default function HomePage() {
@@ -26,27 +31,31 @@ export default function HomePage() {
     <>
       <MetaHead
         data={{
-          title: seoEntry?.data?.title || "Lizard Interactive Online",
-          description: seoEntry?.data?.description || "Free online tools for developers, designers, and creators.",
+          title: seoEntry?.data?.title || "Lizrd Interactive Online | Performance Engineering",
+          description: seoEntry?.data?.description || "I build the fastest 1% of the web. Guaranteed 100/100 Lighthouse performance.",
           ogImage: seoEntry?.data?.ogImage || "/og-image-homepage.jpg",
           ogUrl: "https://lizardinteractive.online",
           ogType: "website",
         }}
       />
 
-      <ScreenContainer className="pt-24">
+      <ScreenContainer className="pt-0">
+
+        {/* The New High-Conversion Hero Section */}
+        <HeroSection />
+
         <FramerPresentation />
-       
+
         <div className="mt-24 mb-12 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl font-black uppercase tracking-tighter text-center mb-2  text-emerald-500">
+            <h2 className="text-2xl font-black uppercase tracking-tighter text-center mb-2 text-emerald-500">
               FREE ONLINE TOOLS
             </h2>
-            <p className="text-center text-zinc-300 text-sm font-mono mb-15 uppercase">
+            <p className="text-center text-zinc-300 text-sm font-mono mb-16 uppercase">
               Professional utilities for developers, designers, and creators
             </p>
 
@@ -85,7 +94,6 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
-  
       </ScreenContainer>
     </>
   );
