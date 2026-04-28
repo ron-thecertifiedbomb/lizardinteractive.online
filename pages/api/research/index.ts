@@ -1,35 +1,77 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@/lib/mongodb";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
-export async function POST(req: Request) {
-  // 1. Security Check (Same as Outbound)
-  const authHeader = req.headers.get("authorization");
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  // 1. Method & Auth Guard
+  if (req.method !== "POST")
+    return res.status(405).json({ message: "Method Not Allowed" });
+
+  const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", { status: 401 });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3-flash",
-    generationConfig: { responseMimeType: "application/json" },
-  });
+  try {
+    // 2. Configure Model with JSON Schema (Ensures clean MongoDB data)
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: SchemaType.ARRAY,
+          items: {
+            type: SchemaType.OBJECT,
+            properties: {
+              name: { type: SchemaType.STRING },
+              email: { type: SchemaType.STRING },
+              websiteUrl: { type: SchemaType.STRING },
+              industry: { type: SchemaType.STRING },
+              contacted: { type: SchemaType.BOOLEAN },
+            },
+            required: ["name", "email", "websiteUrl", "industry", "contacted"],
+          },
+        },
+      },
+    });
 
-  // 2. Ask Gemini for Leads
-  const prompt = `Research 5 businesses in the Philippines (Real Estate or Luxury Retail) likely to have unoptimized, slow websites. 
-  Return a JSON array of objects with: name, email, websiteUrl, industry, and contacted: false.`;
+    const prompt =
+      "Research 5 real estate or luxury businesses in the Philippines with slow-loading websites. Provide contact emails and URLs.";
 
-  const result = await model.generateContent(prompt);
-  const leads = JSON.parse(result.response.text());
+    const result = await model.generateContent(prompt);
+    const leads = JSON.parse(result.response.text());
 
-  // 3. Insert into MongoDB
-  const client = await clientPromise;
-  const db = client.db("lizrd_core");
-  await db.collection("prospects").insertMany(leads);
+    // 3. Database Operation (Bulk Upsert to prevent duplicates)
+    const client = await clientPromise;
+    const db = client.db("lizrd_core");
+    const collection = db.collection("prospects");
 
-  return Response.json({
-    message: "Lizard Fed Successfully",
-    count: leads.length,
-  });
+    const operations = leads.map((lead: any) => ({
+      updateOne: {
+        filter: { websiteUrl: lead.websiteUrl },
+        update: { $setOnInsert: lead },
+        upsert: true,
+      },
+    }));
+
+    const resultStatus = await collection.bulkWrite(operations);
+
+    return res.status(200).json({
+      message: "Lizard Fed Successfully",
+      newLeads: resultStatus.upsertedCount,
+      totalProcessed: leads.length,
+    });
+  } catch (error: any) {
+    // Log the full error to your VS Code terminal
+    console.error("LIZRD_ERROR:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      details: error.message || "Unknown Error",
+    });
+  }
 }

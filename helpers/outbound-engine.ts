@@ -41,14 +41,21 @@ export async function processOutboundLead() {
     },
   });
   // 1. Process the name to be more personal
-  // If the name is "Ayala Land", it uses "Ayala". If it's "Juan Dela Cruz", it uses "Juan".
-  const firstName = prospect.name.split(" ")[0];
 
-  // 2. The "Killer" Audit Template
+
+  // 1. Personalize the greeting
+  // Splits "Vista Land & Lifescapes" into "Vista"
+  const firstName = prospect.name.split(" ")[0].replace(/,/g, "");
+
+  // 2. The Finalized Audit Template
   const mailOptions = {
     from: `Ronan | Lizrd Interactive <${process.env.EMAIL_FROM}>`,
     replyTo: process.env.REPLY_TO,
     to: prospect.email,
+
+    // This sends a silent copy to your Gmail so you can monitor the hunt
+    bcc: process.env.REPLY_TO,
+
     subject: `Performance Gap: ${prospect.websiteUrl} (Mobile Latency Audit)`,
     html: `
             <div style="font-family: monospace; background: #050505; color: #ffffff; padding: 40px; border-radius: 12px; border: 1px solid #111;">
