@@ -39,9 +39,10 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
     const siteUrl = "https://lizardinteractive.online";
     // Use the actual blog image for sharing
     const imageSource = post.ogImage || post.image || "";
-    const ogImageUrl = imageSource
+    const rawOgImageUrl = imageSource
       ? (imageSource.startsWith("http") ? imageSource : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`)
       : `${siteUrl}/default-og.png`; // Fallback image
+    const ogImageUrl = encodeURI(rawOgImageUrl);
     const ogUrl = `${siteUrl}/blogs/${post.id}`;
     const description = post.sections?.[0]?.content?.substring(0, 160) || "";
 
@@ -107,6 +108,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:secure_url" content={ogImageUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content={ogUrl} />
