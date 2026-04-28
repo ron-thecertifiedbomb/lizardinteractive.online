@@ -38,7 +38,13 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
 
     const siteUrl = "https://lizardinteractive.online";
     // Use the actual blog image for sharing
-    const imageSource = post.ogImage || post.image || "";
+    let imageSource = post.ogImage || post.image || "";
+
+    // Ensure social platforms get a compatible format by replacing .webp with .jpg
+    if (imageSource.endsWith(".webp")) {
+      imageSource = imageSource.replace(".webp", ".jpg");
+    }
+
     const rawOgImageUrl = imageSource
       ? (imageSource.startsWith("http") ? imageSource : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`)
       : `${siteUrl}/default-og.png`; // Fallback image
