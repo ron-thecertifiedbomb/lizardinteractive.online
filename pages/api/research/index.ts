@@ -12,6 +12,13 @@ export default async function handler(
   if (req.method !== "POST")
     return res.status(405).json({ message: "Method Not Allowed" });
 
+  // --- START DEBUGGING LOGS ---
+  // This will show us exactly what the server is seeing.
+  console.log("--- Vercel Auth Debug ---");
+  console.log("CRON_SECRET on Server:", process.env.CRON_SECRET);
+  console.log("Received Authorization Header:", req.headers.authorization);
+  console.log("--- End Vercel Auth Debug ---");
+  // --- END DEBUGGING LOGS ---
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return res.status(401).json({ message: "Unauthorized" });
