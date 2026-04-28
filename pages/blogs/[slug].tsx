@@ -135,20 +135,6 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
 
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-2  pb-20 md:pb-40 px-4 md:px-6">
-          {/* Featured Image */}
-          {post.image && (
-            <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
-              <Image
-                src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-                className="object-cover"
-                priority
-                loading="eager"
-              />
-            </div>
-          )}
 
           {/* Header */}
           <header className="border-b border-zinc-900 pb-6 md:pb-8 mb-8 md:mb-12 space-y-4 md:space-y-6">
@@ -206,6 +192,21 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
               </p>
             )} */}
           </header>
+
+          {/* Featured Image */}
+          {post.image && (
+            <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
+              <Image
+                src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
+                alt={post.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                className="object-cover"
+                priority
+                loading="eager"
+              />
+            </div>
+          )}
 
           <BlogContent article={post} />
         </div>

@@ -263,6 +263,11 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                 <Trash2 size={18} />
                             </button>
                             <div className="flex flex-col gap-4">
+                                <div>
+                                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Section Heading (Optional)</label>
+                                    <input {...register(`sections.${index}.heading`)} placeholder="Section Title..." className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm" />
+                                </div>
+
                                 <div className="w-full md:w-1/3 pr-12">
                                     <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Block {index + 1} Type</label>
                                     <select {...register(`sections.${index}.type`)} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm">
@@ -272,11 +277,6 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                         <option value="quote">Quote</option>
                                         <option value="image">Image / Graphic</option>
                                     </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Section Heading (Optional)</label>
-                                    <input {...register(`sections.${index}.heading`)} placeholder="Section Title..." className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm" />
                                 </div>
 
                                 <div>
