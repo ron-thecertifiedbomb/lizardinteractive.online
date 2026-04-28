@@ -42,6 +42,16 @@ export async function POST(request: Request) {
     const client = await clientPromise;
     const db = client.db(DB_NAME);
 
+    // Auto-generate a slug (id) from the title if not provided
+    if (!body.id && body.title) {
+      body.id = body.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/[\s_-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
     // We use 'id' (the slug) as the unique identifier instead of Mongo's _id
     const result = await db
       .collection(COLLECTION_NAME)
