@@ -41,35 +41,37 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     const [isSaving, setIsSaving] = useState(false);
 
     const imageUrl = watch("image");
-
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: "image" | "ogImage") => {
+    const watchedSections = watch("sections");
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: any) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const loadingToast = toast.loading(`Uploading ${fieldName}...`);
+        const friendlyName = String(fieldName).includes('sections') ? 'section image' : fieldName;
+        const loadingToast = toast.loading(`Uploading ${friendlyName}...`);
         setIsUploading(true);
 
         try {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = async () => {
-                const base64Image = reader.result;
+            const base64Image = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+            });
 
-                const response = await fetch("/api/articles/upload", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ image: base64Image }),
-                });
+            const response = await fetch("/api/articles/upload", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: base64Image }),
+            });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Upload failed: ${response.status} ${errorText}`);
-                }
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Upload failed: ${response.status} ${errorText}`);
+            }
 
-                const data = await response.json();
-                setValue(fieldName, data.url, { shouldValidate: true, shouldDirty: true });
-                toast.success("Image uploaded successfully!", { id: loadingToast });
-            };
+            const data = await response.json();
+            setValue(fieldName, data.url, { shouldValidate: true, shouldDirty: true });
+            toast.success("Image uploaded successfully!", { id: loadingToast });
         } catch (error) {
             console.error(error);
             toast.error("Failed to upload image.", { id: loadingToast });
@@ -87,6 +89,9 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     }, [initialData, reset]);
 
     const onSubmit = async (data: ArticleFormData) => {
+        // Ensure ogImage stays in sync with the featured image, even when replacing an old image during an edit
+        data.ogImage = data.image;
+
         const loadingToast = toast.loading("Saving article...");
         setIsSaving(true);
 
@@ -158,7 +163,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
 
                             {imageUrl ? (
                                 <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
-                                    <img src={imageUrl} alt="Featured" className="object-cover w-full h-full" />
+                                    <img src={imageUrl.startsWith('http') || imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`} alt="Featured" className="object-cover w-full h-full" />
                                     <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
                                         <div className="flex flex-col items-center">
                                             <Upload size={24} className="text-white mb-2" />
@@ -209,7 +214,31 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                 </div>
                             </div>
                             <div>
-                                <textarea {...register(`sections.${index}.content`)} placeholder="Enter your content here..." rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-300 focus:outline-none focus:border-emerald-500 font-mono text-sm resize-y min-h-[100px]" />
+                                {watchedSections?.[index]?.type === "image" ? (
+                                    <div className="space-y-4">
+                                        <input type="hidden" {...register(`sections.${index}.content`)} />
+                                        {watchedSections?.[index]?.content ? (
+                                            <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
+                                                <img src={watchedSections[index].content.startsWith('http') || watchedSections[index].content.startsWith('/') ? watchedSections[index].content : `/${watchedSections[index].content}`} alt="Section" className="object-cover w-full h-full" />
+                                                <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
+                                                    <div className="flex flex-col items-center">
+                                                        <Upload size={24} className="text-white mb-2" />
+                                                        <span className="text-sm font-bold text-white">Change Image</span>
+                                                    </div>
+                                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.content`)} disabled={isUploading} />
+                                                </label>
+                                            </div>
+                                        ) : (
+                                            <label className={`flex flex-col items-center justify-center w-full h-48 md:h-64 bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-emerald-500 rounded-xl cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                <Upload size={32} className="text-zinc-600 mb-3" />
+                                                <span className="text-sm font-medium text-zinc-400">Click to upload section image</span>
+                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.content`)} disabled={isUploading} />
+                                            </label>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <textarea {...register(`sections.${index}.content`)} placeholder="Enter your content here..." rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-300 focus:outline-none focus:border-emerald-500 font-mono text-sm resize-y min-h-[100px]" />
+                                )}
                             </div>
                         </div>
                     ))}
