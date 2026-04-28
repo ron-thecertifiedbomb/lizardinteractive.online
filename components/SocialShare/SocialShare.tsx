@@ -30,6 +30,25 @@ export interface SocialShareProps {
     onShare?: (platform: string) => void;
 }
 
+// Size configurations (Moved outside component to prevent recreating on every render)
+const sizeConfig = {
+    sm: {
+        button: "p-1 rounded-md",
+        icon: 12,
+        text: "text-[8px]",
+    },
+    md: {
+        button: "p-1.5 rounded-lg",
+        icon: 14,
+        text: "text-[8px] md:text-[10px]",
+    },
+    lg: {
+        button: "p-2 rounded-xl",
+        icon: 16,
+        text: "text-[10px] md:text-[12px]",
+    },
+};
+
 export const SocialShare = ({
     url,
     title = "",
@@ -37,7 +56,7 @@ export const SocialShare = ({
     iconSize = 14,
     className = "",
     showLabel = true,
-    labelText,
+    labelText = "Share",
     size = "md",
     onShare,
 }: SocialShareProps) => {
@@ -47,7 +66,7 @@ export const SocialShare = ({
     const shareLinks = customShareLinks || {
         twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-        linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
     };
 
     const copyToClipboard = async () => {
@@ -59,25 +78,6 @@ export const SocialShare = ({
         } catch (err) {
             console.error("Failed to copy:", err);
         }
-    };
-
-    // Size configurations
-    const sizeConfig = {
-        sm: {
-            button: "p-1 rounded-md",
-            icon: 12,
-            text: "text-[8px]",
-        },
-        md: {
-            button: "p-1.5 rounded-lg",
-            icon: 14,
-            text: "text-[8px] md:text-[10px]",
-        },
-        lg: {
-            button: "p-2 rounded-xl",
-            icon: 16,
-            text: "text-[10px] md:text-[12px]",
-        },
     };
 
     const currentSize = sizeConfig[size];
