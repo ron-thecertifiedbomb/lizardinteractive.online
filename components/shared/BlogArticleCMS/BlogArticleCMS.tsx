@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Save, Plus, Trash2, FileText, Upload, Loader2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 type Section = {
     type: string;
@@ -22,6 +23,7 @@ type ArticleFormData = {
 };
 
 export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
+    const router = useRouter();
     const { register, control, handleSubmit, reset, setValue, watch } = useForm<ArticleFormData>({
         defaultValues: {
             id: "",
@@ -138,7 +140,20 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
             });
 
             if (response.ok) {
+                // Try to get the returned slug from the API (if the backend generates it for new articles)
+                let slug = data.id;
+                try {
+                    const responseData = await response.json();
+                    if (responseData && responseData.id) slug = responseData.id;
+                } catch (e) {
+                    // Ignore JSON parsing errors if the API doesn't return a JSON body
+                }
+
                 toast.success("Article saved successfully!", { id: loadingToast });
+
+                setTimeout(() => {
+                    if (slug) router.push(`/blogs/${slug}`);
+                }, 1500);
             } else {
                 throw new Error("Failed to save");
             }
