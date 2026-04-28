@@ -1,27 +1,52 @@
-import { BlogArticleCMS } from '@/components/shared/BlogArticleCMS/BlogArticleCMS';
-import { BlogArticle } from '@/data/lists/blogArticle';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { BlogArticleCMS } from "@/components/shared/BlogArticleCMS/BlogArticleCMS";
+import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
+import { MongoClient } from "mongodb";
+import Head from "next/head";
 
+export async function getServerSideProps({ params }: { params: { id: string } }) {
+    // If creating a new article, bypass database fetch
+    if (params.id === "new") {
+        return { props: { initialData: null } };
+    }
 
-export default function EditArticlePage() {
-    const router = useRouter();
-    const { id } = router.query; // This gets the [id] from the URL
-    const [article, setArticle] = useState<BlogArticle | null>(null);
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+        return { props: { initialData: null } };
+    }
 
-    useEffect(() => {
-        if (id) {
-            fetch(`/api/articles?id=${id}`)
-                .then(res => res.json())
-                .then(data => setArticle(data));
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+        const db = client.db("lizrd_core");
+        const article = await db.collection("articles").findOne({ id: params.id });
+
+        if (!article) {
+            return { notFound: true };
         }
-    }, [id]);
 
-    if (!article && id !== 'new') return <div className="p-10 text-white">Loading...</div>;
+        // Remove _id to avoid Next.js JSON serialization errors
+        const { _id, ...initialData } = article as any;
+        return { props: { initialData } };
+    } catch (error) {
+        console.error("❌ Failed to fetch article for CMS:", error);
+        return { props: { initialData: null } };
+    } finally {
+        await client.close();
+    }
+}
 
+export default function EditArticlePage({ initialData }: { initialData: any }) {
     return (
-        <div className="bg-black min-h-screen">
-            <BlogArticleCMS initialData={article || undefined} />
-        </div>
+        <>
+            <Head>
+                <title>CMS | {initialData ? "Edit Article" : "New Article"}</title>
+            </Head>
+            <ScreenContainer>
+                <div className="pt-24 pb-20">
+                    <BlogArticleCMS initialData={initialData} />
+                </div>
+            </ScreenContainer>
+        </>
     );
 }
