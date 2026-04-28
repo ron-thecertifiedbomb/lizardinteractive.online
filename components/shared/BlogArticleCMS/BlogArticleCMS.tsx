@@ -82,8 +82,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                         const ctx = canvas.getContext("2d");
                         ctx?.drawImage(img, 0, 0, width, height);
 
-                        // Determine format based on field (ogImage should be jpeg for social platforms)
-                        const mimeType = fieldName === "ogImage" ? "image/jpeg" : "image/webp";
+                        const mimeType = "image/webp";
 
                         // Compress with 80% quality
                         resolve(canvas.toDataURL(mimeType, 0.8));
