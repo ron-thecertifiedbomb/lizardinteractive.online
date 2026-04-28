@@ -9,15 +9,15 @@ echo "----------------------------------------"
 
 # 1. Trigger Research (Feed the Lizard)
 echo "🔍 Starting Research Phase..."
-curl -s -X POST "$BASE_URL/api/research" \
-  -H "Authorization: Bearer $SECRET" \
+curl -s -L -X POST "$BASE_URL/api/research" \
+  -H "X-Lizard-Secret: $SECRET" \
   -H "Content-Type: application/json"
 echo -e "\n----------------------------------------"
 
 # 2. Trigger Outbound (Strike)
 echo "📧 Starting Outbound Phase..."
-curl -s -X POST "$BASE_URL/api/outbound" \
-  -H "Authorization: Bearer $SECRET" \
+curl -s -L -X POST "$BASE_URL/api/outbound" \
+  -H "X-Lizard-Secret: $SECRET" \
   -H "Content-Type: application/json"
 echo -e "\n----------------------------------------"
 echo "✅ Lizard tasks complete."

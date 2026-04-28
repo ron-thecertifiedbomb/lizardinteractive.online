@@ -12,13 +12,6 @@ export default async function handler(
   if (req.method !== "POST")
     return res.status(405).json({ message: "Method Not Allowed" });
 
-  // --- START DEBUGGING LOGS ---
-  // This will show us exactly what the server is seeing.
-  console.log("--- Vercel Auth Debug ---");
-  console.log("CRON_SECRET on Server:", process.env.CRON_SECRET);
-  console.log("Received Authorization Header:", req.headers.authorization);
-  console.log("--- End Vercel Auth Debug ---");
-  // --- END DEBUGGING LOGS ---
   const authHeader = req.headers.authorization; // For Vercel Cron
   const manualAuthHeader = req.headers["x-lizard-secret"] as string; // For manual curl
 
@@ -34,7 +27,7 @@ export default async function handler(
   try {
     // 2. Configure Model with JSON Schema (Ensures clean MongoDB data)
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
