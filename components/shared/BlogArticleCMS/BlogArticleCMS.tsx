@@ -51,7 +51,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
             reader.onloadend = async () => {
                 const base64Image = reader.result;
 
-                const response = await fetch("/api/upload", {
+                const response = await fetch("/api/articles/upload", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ image: base64Image }),
