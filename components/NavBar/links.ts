@@ -1,5 +1,6 @@
 export const mainLinks = [
   { href: "/", label: "Engineering" }, // Home: The core service pitch
+  { href: "/about", label: "Manifest" }, // ABOUT: Your Technical Bio & Mission
   { href: "/results", label: "Results" }, // The Case Studies (Wall of Proof)
   { href: "/utilities", label: "Toolkit" }, // The Conversion Funnel (Utilities Hub)
   { href: "/blogs", label: "Archive" }, // The Technical Blog (Engineering Insights)
