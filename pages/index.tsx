@@ -53,7 +53,7 @@ export default function HomePage() {
           leftTopLine="A 1-second load delay costs you"
           leftBottomLine="7% of conversions."
           leftStrikethrough={true}
-          rightEyebrow="The Lizrd Guarantee"
+          rightEyebrow="The Lizard Guarantee"
           rightTopLine="Millisecond load times."
           rightBottomLine="Maximum retained revenue."
         />
