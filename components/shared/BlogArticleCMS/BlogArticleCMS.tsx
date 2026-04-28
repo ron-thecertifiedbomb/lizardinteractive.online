@@ -55,7 +55,38 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
             const base64Image = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onloadend = () => resolve(reader.result);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target?.result as string;
+                    img.onload = () => {
+                        const canvas = document.createElement("canvas");
+                        const MAX_WIDTH = 1200;
+                        const MAX_HEIGHT = 1200;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext("2d");
+                        ctx?.drawImage(img, 0, 0, width, height);
+
+                        // Compress as WebP with 80% quality
+                        resolve(canvas.toDataURL("image/webp", 0.8));
+                    };
+                    img.onerror = reject;
+                };
                 reader.onerror = reject;
             });
 
@@ -118,7 +149,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
     return (
         <div className="max-w-5xl mx-auto p-6 md:p-10 text-zinc-100">
             {/* Add Toaster so the notifications actually render on the screen! */}
-            <Toaster 
+            <Toaster
                 position="bottom-right"
                 toastOptions={{
                     style: {
@@ -126,7 +157,7 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                         color: '#fff',
                         border: '1px solid #27272a'
                     }
-                }} 
+                }}
             />
 
             {/* Header */}
