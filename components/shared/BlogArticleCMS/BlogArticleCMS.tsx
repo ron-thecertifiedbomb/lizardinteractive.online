@@ -263,8 +263,8 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                             <button type="button" onClick={() => remove(index)} className="absolute top-5 right-5 text-zinc-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
                                 <Trash2 size={18} />
                             </button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 pr-12">
-                                <div>
+                            <div className="flex flex-col gap-4">
+                                <div className="w-full md:w-1/3 pr-12">
                                     <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Block {index + 1} Type</label>
                                     <select {...register(`sections.${index}.type`)} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm">
                                         <option value="paragraph">Paragraph</option>
@@ -274,37 +274,40 @@ export const BlogArticleCMS = ({ initialData }: { initialData?: any }) => {
                                         <option value="image">Image / Graphic</option>
                                     </select>
                                 </div>
+
                                 <div>
                                     <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Section Heading (Optional)</label>
                                     <input {...register(`sections.${index}.heading`)} placeholder="Section Title..." className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500 text-sm" />
                                 </div>
-                            </div>
-                            <div>
-                                {watchedSections?.[index]?.type === "image" ? (
-                                    <div className="space-y-4">
-                                        <input type="hidden" {...register(`sections.${index}.content`)} />
-                                        {watchedSections?.[index]?.content ? (
-                                            <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
-                                                <img src={watchedSections[index].content.startsWith('http') || watchedSections[index].content.startsWith('/') ? watchedSections[index].content : `/${watchedSections[index].content}`} alt="Section" className="object-cover w-full h-full" />
-                                                <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
-                                                    <div className="flex flex-col items-center">
-                                                        <Upload size={24} className="text-white mb-2" />
-                                                        <span className="text-sm font-bold text-white">Change Image</span>
-                                                    </div>
+
+                                <div>
+                                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Content</label>
+                                    {watchedSections?.[index]?.type === "image" ? (
+                                        <div className="space-y-4">
+                                            <input type="hidden" {...register(`sections.${index}.content`)} />
+                                            {watchedSections?.[index]?.content ? (
+                                                <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden border border-zinc-800 group">
+                                                    <img src={watchedSections[index].content.startsWith('http') || watchedSections[index].content.startsWith('/') ? watchedSections[index].content : `/${watchedSections[index].content}`} alt="Section" className="object-cover w-full h-full" />
+                                                    <label className={`absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer ${isUploading ? 'pointer-events-none' : ''}`}>
+                                                        <div className="flex flex-col items-center">
+                                                            <Upload size={24} className="text-white mb-2" />
+                                                            <span className="text-sm font-bold text-white">Change Image</span>
+                                                        </div>
+                                                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.content`)} disabled={isUploading} />
+                                                    </label>
+                                                </div>
+                                            ) : (
+                                                <label className={`flex flex-col items-center justify-center w-full h-48 md:h-64 bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-emerald-500 rounded-xl cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
+                                                    <Upload size={32} className="text-zinc-600 mb-3" />
+                                                    <span className="text-sm font-medium text-zinc-400">Click to upload section image</span>
                                                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.content`)} disabled={isUploading} />
                                                 </label>
-                                            </div>
-                                        ) : (
-                                            <label className={`flex flex-col items-center justify-center w-full h-48 md:h-64 bg-zinc-950 border-2 border-dashed border-zinc-800 hover:border-emerald-500 rounded-xl cursor-pointer transition-colors ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                                <Upload size={32} className="text-zinc-600 mb-3" />
-                                                <span className="text-sm font-medium text-zinc-400">Click to upload section image</span>
-                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, `sections.${index}.content`)} disabled={isUploading} />
-                                            </label>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <textarea {...register(`sections.${index}.content`)} placeholder="Enter your content here..." rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-300 focus:outline-none focus:border-emerald-500 font-mono text-sm resize-y min-h-[100px]" />
-                                )}
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <textarea {...register(`sections.${index}.content`)} placeholder="Enter your content here..." rows={4} className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-300 focus:outline-none focus:border-emerald-500 font-mono text-sm resize-y min-h-[100px]" />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
