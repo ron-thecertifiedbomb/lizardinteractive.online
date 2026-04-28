@@ -25,19 +25,19 @@ export async function processOutboundLead() {
     return { success: false, message: "No fresh leads in lizrd_core." };
   }
 
-  // 2. Configure the Transporter (Resend SMTP)
 const transporter = nodemailer.createTransport({
   host: "smtp.resend.com",
-  port: 465,
-  secure: true,
+  port: 587, // Change from 465 to 587 for local testing
+  secure: false, // Must be false for port 587 (it upgrades via STARTTLS)
   auth: {
     user: "resend",
-    pass: process.env.RESEND_API_KEY, // Make sure this is in Vercel!
+    pass: process.env.RESEND_API_KEY,
   },
   tls: {
-    // This stops the SSL alert 80 error
+    // This allows the local machine to skip strict certificate checks
+    // if your local Node.js environment doesn't have the latest CA certs
+    rejectUnauthorized: false,
     minVersion: "TLSv1.2",
-    rejectUnauthorized: true,
   },
 });
   // 3. The "Killer" Audit Template

@@ -59,6 +59,7 @@ export default function NavBar() {
                                 src="/lizardinteractive.png"
                                 alt="Logo"
                                 fill
+                                sizes="32px"
                                 className="object-cover"
                                 priority
                             />
