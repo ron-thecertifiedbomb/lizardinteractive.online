@@ -1,6 +1,5 @@
 // pages/api/og/[slug].tsx
 import { ImageResponse } from '@vercel/og';
-import { blogArticles } from '@/data/lists/blogArticle';
 
 export const config = {
     runtime: 'edge',
@@ -9,33 +8,41 @@ export const config = {
 export default async function handler(req: Request) {
     const url = new URL(req.url);
     const slug = url.pathname.split('/').pop();
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lizardinteractive.online';
 
-    const post = blogArticles.find((article) => article.id === slug);
+    if (!slug) {
+        return new Response('Slug not found in URL', { status: 400 });
+    }
+
+    // Fetch the article data from our own API endpoint
+    // This is a better pattern for edge functions that need DB access
+    let post;
+    try {
+        const articleApiUrl = `${siteUrl}/api/articles?id=${slug}`;
+        const articleResponse = await fetch(articleApiUrl, { next: { revalidate: 3600 } }); // Cache for 1 hour
+
+        if (!articleResponse.ok) {
+            const errorText = await articleResponse.text();
+            console.error(`Failed to fetch article from API: ${articleResponse.status}`, errorText);
+            return new Response('Post not found', { status: 404 });
+        }
+        post = await articleResponse.json();
+    } catch (error) {
+        console.error('Error fetching article for OG image:', error);
+        return new Response('Failed to fetch article data', { status: 500 });
+    }
 
     if (!post) {
         return new Response('Post not found', { status: 404 });
     }
 
     const title = post.title;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lizardinteractive.online';
 
-    // Try to get the background image (use ogImage if available, fallback to image)
-    let backgroundImageUrl = null;
-    try {
-        // Prefer ogImage (jpg) for better compatibility, fallback to image (webp)
-        const imagePath = post.ogImage || post.image;
-        const imageUrl = `${siteUrl}/${imagePath}`;
-        console.log('Fetching image from:', imageUrl);
-        const imageResponse = await fetch(imageUrl);
-        if (imageResponse.ok) {
-            const blob = await imageResponse.blob();
-            backgroundImageUrl = URL.createObjectURL(blob);
-        } else {
-            console.log('Image not found:', imageUrl);
-        }
-    } catch (error) {
-        console.log('Could not load blog image:', error);
-    }
+    // Construct the correct absolute URL for the background image
+    const imageSource = post.ogImage || post.image || "";
+    const backgroundImageUrl = imageSource.startsWith("http")
+        ? imageSource
+        : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`;
 
     // Simple logo - use emoji to avoid image loading issues
     const useEmojiLogo = true;
@@ -55,8 +62,10 @@ export default async function handler(req: Request) {
                 }}
             >
                 {/* Background image (the actual blog photo) */}
-                {backgroundImageUrl && (
-                    <div
+                {imageSource && (
+                    <img
+                        src={backgroundImageUrl}
+                        alt=""
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -66,6 +75,7 @@ export default async function handler(req: Request) {
                             backgroundImage: `url(${backgroundImageUrl})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
+                            objectFit: 'cover',
                             opacity: 0.35,
                         }}
                     />
