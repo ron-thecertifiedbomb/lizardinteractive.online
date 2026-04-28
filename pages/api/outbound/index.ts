@@ -5,9 +5,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // Only allow POST requests for security
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed. Use POST." });
+    return res.status(405).json({ message: "Method Not Allowed" });
+  }
+
+  // Security Check
+  const authHeader = req.headers.authorization;
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   try {
@@ -18,13 +23,11 @@ export default async function handler(
     }
 
     return res.status(200).json({
-      message: "Protocol Executed Successfully",
-      sentTo: result.email,
+      message: "Lizard Strike Complete",
+      count: result.sentEmails?.length || 0,
+      deliveredTo: result.sentEmails, // Now shows the full list in your terminal
     });
   } catch (error: any) {
-    console.error("Outbound Error:", error);
-    return res
-      .status(500)
-      .json({ error: error.message || "Internal Engine Failure" });
+    return res.status(500).json({ error: error.message });
   }
 }
