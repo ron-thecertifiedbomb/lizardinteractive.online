@@ -1,14 +1,26 @@
 import React from 'react';
+import Image from 'next/image';
 import MainHeader from '../MainHeader/MainHeader';
 // <-- Update this path if MainHeader is in a different folder
 
 export default function HeroSection() {
     return (
-        <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 bg-[#0a0a0a] text-white overflow-hidden mt-20 rounded-2xl">
+        <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 py-24 bg-[#0a0a0a] text-white overflow-hidden mt-20 rounded-2xl">
+
+     
+            {/* <div className="mb-8 z-10">
+                <Image
+                    src="/logo.svg" // <-- Update this path to your actual logo file in the public folder
+                    alt="Lizrd Interactive Online Logo"
+                    width={100}
+                    height={100}
+                    className="mx-auto object-contain drop-shadow-[0_0_15px_rgba(74,222,128,0.2)]"
+                />
+            </div> */}
 
             {/* 1. The Reusable Header Component */}
             <MainHeader
-                eyebrow="Lizrd Interactive Online • Performance Engineering"
+                eyebrow="Lizard Interactive Online • Performance Engineering"
                 headline="I Build the Fastest 1% of the Web."
                 subheadline="Stop losing mobile customers to bloated, slow-loading websites. I engineer lightning-fast custom web applications with a guaranteed 100/100 Google Lighthouse performance score."
             />

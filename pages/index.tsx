@@ -34,9 +34,9 @@ export default function HomePage() {
     <>
       <MetaHead
         data={{
-          title: seoEntry?.data?.title || "Lizrd Interactive Online | Performance Engineering",
-          description: seoEntry?.data?.description || "I build the fastest 1% of the web. Guaranteed 100/100 Lighthouse performance.",
-          ogImage: seoEntry?.data?.ogImage || "/og-image-homepage.jpg",
+          title: seoEntry?.data?.title || "I Build the Fastest 1% of the Web. | Lizrd Interactive Online",
+          description: seoEntry?.data?.description || "Stop losing mobile customers to bloated, slow-loading websites. I engineer lightning-fast custom web applications with a guaranteed 100/100 Google Lighthouse performance score.",
+          ogImage: seoEntry?.data?.ogImage || "/api/og",
           ogUrl: "https://lizardinteractive.online",
           ogType: "website",
         }}

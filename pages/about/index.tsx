@@ -18,7 +18,7 @@ export default function AboutPage() {
             />
 
             <ScreenContainer>
-                <div className="py-20 md:py-32 px-4">
+                <div className="py-8 md:py-32 px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}

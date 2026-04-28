@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { mainLinks } from "./links";
+import LogoIcon from "@/pages/LogoIcon";
+
 
 export default function NavBar() {
     const pathname = usePathname();
@@ -54,17 +55,8 @@ export default function NavBar() {
                 <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative">
                     {/* Logo & Brand */}
                     <Link href="/" className="flex items-center gap-3 group">
-                        <div className="relative w-[32px] h-[32px] rounded-full overflow-hidden border border-emerald-500/20 group-hover:border-emerald-500/50 transition-colors">
-                            <Image
-                                src="/lizardinteractive.png"
-                                alt="Logo"
-                                fill
-                                sizes="32px"
-                                className="object-cover"
-                                priority
-                            />
-                        </div>
-                        <span className="font-black tracking-tighter text-sm md:text-base uppercase group-hover:text-emerald-400 transition-colors">
+                        <LogoIcon className="w-7 h-7 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(136,251,89,0.4)]" />
+                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-green-400 ">
                             {brandName}
                         </span>
                     </Link>
@@ -75,7 +67,7 @@ export default function NavBar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:tracking-[0.3em] ${pathname === link.href ? "text-emerald-500" : "text-zinc-500 hover:text-white"
+                                className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${pathname === link.href ? "text-green-400" : "text-zinc-300 hover:text-white"
                                     }`}
                             >
                                 {link.label}
@@ -83,12 +75,12 @@ export default function NavBar() {
                         ))}
                     </div>
 
-                    {/* Mobile Toggle Button - Emerald Theme */}
+                    {/* Mobile Toggle Button - Green Theme */}
                     <button
-                        className="md:hidden p-2 relative z-[101] outline-none text-emerald-500 active:scale-90 transition-transform"
+                        className="md:hidden p-2 relative z-[101] outline-none text-green-400 active:scale-90 transition-transform"
                         onClick={() => setMobileOpen(!mobileOpen)}
                     >
-                        {mobileOpen ? <X size={28} strokeWidth={2.5} /> : <Menu size={28} strokeWidth={2.5} />}
+                        {mobileOpen ? <X size={20} strokeWidth={2.5} /> : <Menu size={20} strokeWidth={2.5} />}
                     </button>
                 </nav>
             </header>
@@ -96,15 +88,15 @@ export default function NavBar() {
             {/* Mobile Overlay - Sick UI Revision */}
             <div
                 className={`fixed inset-0 z-[90] bg-[#050505] md:hidden transition-all duration-500 ease-in-out ${mobileOpen || isTransitioning
-                        ? "translate-y-0 opacity-100"
-                        : "-translate-y-full opacity-0"
+                    ? "translate-y-0 opacity-100"
+                    : "-translate-y-full opacity-0"
                     }`}
             >
                 {/* Background UI Accents */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
                 <div className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
-                    <span className="text-[10px] font-mono text-emerald-500/50 tracking-[0.5em] uppercase mb-4">Navigation</span>
+                    <span className="text-[10px] font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">Navigation</span>
 
                     {mainLinks.map((link, idx) => (
                         <a
@@ -112,10 +104,10 @@ export default function NavBar() {
                             href={link.href}
                             onClick={(e) => handleLinkClick(e, link.href)}
                             style={{ transitionDelay: `${idx * 50}ms` }}
-                            className={`text-3xl font-black uppercase tracking-tighter transition-all active:scale-95 flex items-center gap-4 ${pathname === link.href ? "text-emerald-500" : "text-white hover:text-emerald-400"
+                            className={`text-3xl font-black uppercase tracking-tighter transition-all active:scale-95 flex items-center gap-4 ${pathname === link.href ? "text-green-400" : "text-zinc-300 hover:text-green-400"
                                 } ${mobileOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
                         >
-                            {pathname === link.href && <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></span>}
+                            {pathname === link.href && <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_#4ade80]"></span>}
                             {link.label}
                         </a>
                     ))}
