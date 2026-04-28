@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Activity, ArrowUpRight, Calendar } from "lucide-react";
 
-// Updated Interface with image
 interface Post {
     id: string;
     title: string;
@@ -24,10 +23,10 @@ interface BlogGridProps {
 
 export default function BlogGrid({ posts }: BlogGridProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        /* Added px-4 for mobile spacing, md:px-0 to reset on larger screens */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full px-4 md:px-0">
             {posts.map((post, idx) => {
                 const dynamicSlug = post.id;
-                const previewText = post.sections?.[0]?.content?.substring(0, 120) || "Read more...";
 
                 return (
                     <motion.div
@@ -41,7 +40,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                             href={`/blogs/${dynamicSlug}`}
                             className="group block bg-[#050505] border border-zinc-900 rounded-2xl overflow-hidden hover:border-emerald-500/40 transition-all duration-500 hover:scale-[1.02]"
                         >
-                            {/* Image Section with Next.js Image */}
+                            {/* Image Section */}
                             <div className="relative w-full h-48 overflow-hidden bg-zinc-900">
                                 {post.image ? (
                                     <Image
@@ -51,7 +50,6 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                         className="object-cover group-hover:scale-105 transition duration-500"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         onError={(e) => {
-                                            // Fallback if image fails to load
                                             const target = e.currentTarget;
                                             target.style.display = 'none';
                                             const parent = target.parentElement;
@@ -77,7 +75,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                     </div>
                                 )}
 
-                                {/* Category Badge Overlay */}
+                                {/* Category Badge */}
                                 <div className="absolute top-3 left-3 z-10">
                                     <span className="px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-[8px] font-black text-emerald-500 uppercase tracking-wider">
                                         {post.category.replace("_", " ")}
@@ -103,11 +101,6 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                 <h3 className="text-lg font-black uppercase tracking-tighter leading-tight group-hover:text-emerald-400 transition-colors line-clamp-2">
                                     {post.title}
                                 </h3>
-
-                                {/* Preview */}
-                                {/* <p className="text-zinc-500 text-xs font-mono line-clamp-2">
-                                    {previewText}
-                                </p> */}
 
                                 {/* Read More Link */}
                                 <div className="flex items-center justify-end pt-2">

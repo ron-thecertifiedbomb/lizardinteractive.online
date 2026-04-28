@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { STACK_SLIDES } from "@/data/presentation/web";
+import { PERFORMANCE_SLIDES } from "@/data/presentation/web";
 import { AUTOPLAY_INTERVAL_MS, PROGRESS_MAX } from "./constants";
 import type { FramerSlide } from "./types";
 
@@ -10,7 +10,7 @@ export function useFramerPresentation() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [showPanels, setShowPanels] = useState(true);
-    const slides = STACK_SLIDES as FramerSlide[];
+    const slides = PERFORMANCE_SLIDES as FramerSlide[];
     const slideCount = slides.length;
 
     const nextSlide = useCallback(() => {
