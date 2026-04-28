@@ -8,6 +8,10 @@
     {
       "path": "/api/outbound",
       "schedule": "7 1 * * *"
+    },
+    {
+      "path": "/api/scrape",
+      "schedule": "0 * * * *"
     }
   ],
   "headers": [
