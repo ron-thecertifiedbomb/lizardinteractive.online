@@ -6,9 +6,13 @@ export interface BlogArticle {
   ogImage?: string; // ✅ for social (jpg/png)
   createdAt: string;
   sections: {
+    id: string;
+    type: "text" | "code";
+    codeLanguage?: string;
     heading: string;
     content: string;
     items?: {
+      id?: string;
       name: string;
       image?: string;
       description: string;
@@ -27,6 +31,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-20T10:00:00Z",
     sections: [
       {
+        id: "intro-standard",
+        type: "text",
         heading: "The Professional Standard",
         content:
           "In 2026, the line between engineer and creator has vanished. You need a machine that compiles Next.js as fast as it renders 8K frames.",
@@ -92,6 +98,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-19T14:30:00Z",
     sections: [
       {
+        id: "arch-intent",
+        type: "text",
         heading: "Architecture over Syntax",
         content:
           "In 2026, AI has turned code into a commodity. The value of an engineer no longer lies in writing syntax, but in the architectural intent behind the system.",
@@ -117,6 +125,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "great-decoupling",
+        type: "text",
         heading: "The Great Decoupling",
         content:
           "We are moving from manual execution to high-level orchestration. Your effectiveness is now measured by your ability to direct agents, not your ability to type.",
@@ -134,6 +144,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-18T09:00:00Z",
     sections: [
       {
+        id: "pw-problem",
+        type: "text",
         heading: "The Password Problem",
         content:
           "Despite advances in biometrics and passkeys, passwords remain the primary authentication method for 80% of online services. Yet most people still use passwords that can be cracked in seconds.",
@@ -159,6 +171,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "pw-generate",
+        type: "text",
         heading: "How to Generate Strong Passwords",
         content:
           "Our free password generator creates cryptographically secure passwords instantly. No servers, no tracking - just local generation in your browser.",
@@ -177,6 +191,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-17T11:30:00Z",
     sections: [
       {
+        id: "qr-omnipresent",
+        type: "text",
         heading: "QR Codes Are Everywhere",
         content:
           "QR codes have evolved from pandemic-era menus to powerful marketing tools. Here's how smart businesses are leveraging them.",
@@ -211,6 +227,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "qr-creator",
+        type: "text",
         heading: "Create Your Own QR Codes",
         content:
           "Use our free QR code generator to create custom codes with your brand colors. Download instantly and start driving engagement.",
@@ -228,6 +246,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-16T13:00:00Z",
     sections: [
       {
+        id: "net-decoding",
+        type: "text",
         heading: "Decoding Your Results",
         content:
           "You ran a speed test. Now what? Here's what those numbers mean for your daily activities.",
@@ -262,6 +282,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "net-tester",
+        type: "text",
         heading: "Test Your Connection",
         content:
           "Use our free speed test to measure your download, upload, and ping. Compare against these benchmarks and see if you need to upgrade.",
@@ -279,6 +301,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-15T15:00:00Z",
     sections: [
       {
+        id: "json-painless",
+        type: "text",
         heading: "Debugging JSON Doesn't Have to Be Painful",
         content:
           "JSON is everywhere - APIs, config files, databases. But unformatted JSON is nearly impossible to read. Here's why formatting matters.",
@@ -304,6 +328,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "json-utility",
+        type: "text",
         heading: "Use Our JSON Tool",
         content:
           "Our JSON formatter validates, beautifies, and minifies in real-time. No data leaves your browser - secure for sensitive API keys.",
@@ -321,6 +347,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-14T10:00:00Z",
     sections: [
       {
+        id: "b64-essence",
+        type: "text",
         heading: "Why Base64 Matters",
         content:
           "Base64 encoding converts binary data to text. It's essential for email attachments, JSON APIs, and embedding images in HTML/CSS.",
@@ -355,6 +383,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "b64-playground",
+        type: "text",
         heading: "Try Our Base64 Tool",
         content:
           "Convert text to Base64 and back. Upload images to get data URLs. Perfect for developers working with APIs.",
@@ -372,6 +402,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-13T12:00:00Z",
     sections: [
       {
+        id: "metro-smarter",
+        type: "text",
         heading: "Practice Smarter, Not Harder",
         content:
           "Using a metronome is essential. But most musicians use it wrong. Here are proven techniques to improve your timing.",
@@ -406,6 +438,8 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "metro-engine",
+        type: "text",
         heading: "Use Our Free Metronome",
         content:
           "Adjustable BPM, multiple time signatures, visual feedback. Perfect for daily practice.",
@@ -422,21 +456,29 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-23T05:00:00Z",
     sections: [
       {
+        id: "seo-setup",
+        type: "text",
         heading: "The Setup",
         content:
           "I spent two days fighting Facebook's crawler. Not because my code was broken, but because I misunderstood how Next.js renders pages. I had built a beautiful blog with perfect meta tags using next/head. I tested everything locally using React DevTools. The og:image was there. The title was there. The description was there. I was confident. So I deployed.",
       },
       {
+        id: "seo-failure",
+        type: "text",
         heading: "The Failure",
         content:
           "Then came the gut punch. I shared my blog post on Facebook. Nothing. No image. No title. Just a dead, blank link staring back at me. I ran to the Facebook Sharing Debugger. 'Inferred Property.' 'Missing og:image.' I couldn't believe it. The meta tags were RIGHT THERE in my code. I used getServerSideProps. I passed the data correctly. I added fallbacks. I tried every trick in the book. But Facebook kept shoving my homepage image down the crawler's throat instead of my dynamic OG image. Deployment after deployment. Nothing changed. That's when the doubt crept in. Maybe I was too old for this. Maybe the machine had finally won. But I wasn't ready to raise the white flag. I can still stand against the machine. I just needed to figure out how.",
       },
       {
+        id: "seo-discovery",
+        type: "text",
         heading: "The Discovery",
         content:
           "My tandem partner kept saying, 'Bro, it's gonna work, just push it.' So I pushed. And pushed. And pushed again. Hundred of deployments. Same result. Nothing. We tried every combination of meta tags, every header trick, every fallback. Still nothing. The crawler refused to see our tags. We were stuck in deployment hell. Then, at 4 AM, while staring at the screen with bloodshot eyes, I finally saw it. The rooster crowed outside my window. And in that moment, I realized the truth: I was using 'use client' at the top of my page. Facebook's crawler doesn't execute JavaScript. It only reads the initial HTML response. All those beautiful meta tags? They only appeared after React hydrated. The crawler saw an empty shell. No og:image. No og:title. Nothing.",
       },
       {
+        id: "seo-lesson",
+        type: "text",
         heading: "The Lesson",
         content:
           "The fix was simple but painful. I removed 'use client', moved my meta tags into getServerSideProps, and used Next.js's native Head component from next/head. The moment I deployed, Facebook finally saw the correct image. The lesson is brutal but essential: Always check your actual page source (Ctrl+U), not just the Elements tab. If your meta tags aren't in the initial HTML, crawlers will never see them. Server Components for SEO. Client Components for interactivity. Don't learn this the hard way like I did. And if your tandem says 'it's gonna work' for the hundredth time? Maybe listen to the rooster instead.",
@@ -453,6 +495,8 @@ export const blogArticles: BlogArticle[] = [
     createdAt: "2026-04-25T08:00:00Z",
     sections: [
       {
+        id: "front-frontier",
+        type: "text",
         heading: "The New Frontier",
         content:
           "In 2026, the definition of a 'Senior Frontend Engineer' has fundamentally changed. It's no longer about memorizing CSS properties or React hooks. It's about being the bridge between complex system architectures and intuitive human experiences.",
@@ -478,11 +522,15 @@ export const blogArticles: BlogArticle[] = [
         ],
       },
       {
+        id: "front-fundamentals",
+        type: "text",
         heading: "Deep Fundamentals Still Matter",
         content:
           "While AI can generate code, it often lacks the nuance of accessibility, semantic HTML, and complex CSS layouts. Mastery requires a deep understanding of the platform—the browser itself. You must understand the 'why' behind the 'how'.",
       },
       {
+        id: "front-human",
+        type: "text",
         heading: "The Human Element",
         content:
           "The most successful frontend developers in 2026 are those who understand psychology and UX. We don't just build interfaces; we build trust and emotional connection through digital interactions. Technical excellence is the baseline; empathy is the competitive advantage.",

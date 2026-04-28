@@ -21,19 +21,15 @@ connectDB();
 // Routes
 app.use("/me", meRoute);
 app.use("/api/products", productsRoute);
+app.use("/", profile);
 app.use("/api/blogs", blogRoute);
 app.use("/api/exams", examRoute);
 app.use("/api/youtube-to-mp3", youtubeProgressRoutes);
 app.use("/api/youtube-to-mp3", youtubeRoutes);
-
-// Serve static files AFTER API routes
-app.use("/", profile);
-
-// 404 Catch-all Handler
 app.use((req, res) => {
   res.status(404).send(`
         <h2>Uh Oh!</h2>
-        <p>Sorry, ${req.url} cannot be found here</p> 
+        <p>Sorry, ${req.url} cannot be found here</p>
     `);
 });
 

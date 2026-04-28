@@ -1,5 +1,3 @@
-"use client";
-
 import BlogGrid from "@/components/blog/BlogGrid/BlogGrid";
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
@@ -8,9 +6,9 @@ import { blogPageContent } from "@/data/page/blogPageContent";
 import { blogArticles } from "@/data/lists/blogArticle";
 
 export default function BlogPage() {
-  
+
     const headerData = blogPageContent.find(item => item.type === "heading");
-   
+
     return (
         <>
             <MetaHead pageContent={blogPageContent} />
@@ -21,8 +19,8 @@ export default function BlogPage() {
                     highlight={headerData?.highlight || "Blogs"}
                 />
 
-                    <BlogGrid posts={blogArticles} />
-             
+                <BlogGrid posts={blogArticles} />
+
             </ScreenContainer>
         </>
     );
