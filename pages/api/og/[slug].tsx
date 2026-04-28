@@ -44,9 +44,6 @@ export default async function handler(req: Request) {
         ? imageSource
         : `${siteUrl}${imageSource.startsWith("/") ? "" : "/"}${imageSource}`;
 
-    // Simple logo - use emoji to avoid image loading issues
-    const useEmojiLogo = true;
-
     return new ImageResponse(
         (
             <div
@@ -72,9 +69,6 @@ export default async function handler(req: Request) {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundImage: `url(${backgroundImageUrl})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
                             objectFit: 'cover',
                             opacity: 0.35,
                         }}
