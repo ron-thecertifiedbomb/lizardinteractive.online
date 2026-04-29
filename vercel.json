@@ -3,15 +3,15 @@
   "crons": [
     {
       "path": "/api/research",
-      "schedule": "0 0 * * *"
+      "schedule": "0 8 * * *"
     },
     {
       "path": "/api/outbound",
-      "schedule": "7 1 * * *"
+      "schedule": "0 8 * * *"
     },
     {
       "path": "/api/scrape",
-      "schedule": "0 * * * *"
+      "schedule": "0 8 * * *"
     }
   ],
   "headers": [

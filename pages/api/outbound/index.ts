@@ -31,8 +31,8 @@ export default async function handler(
 
     return res.status(200).json({
       message: "Lizard Strike Complete",
-      count: result.sentEmails?.length || 0,
-      deliveredTo: result.sentEmails, // Now shows the full list in your terminal
+      count: result.sentCount || 0,
+      deliveredTo: result.deliveredTo, // Now shows the full list in your terminal
     });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
