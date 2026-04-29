@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "types": ["@types/react", "@ai-sdk/react"],
     "paths": {
       "@/*": ["./*"]
     },
@@ -22,6 +23,12 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "public/lizard-boot.mp4", "pages/api/research"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "public/lizard-boot.mp4",
+    "pages/api/research"
+  ],
   "exclude": ["node_modules"]
 }

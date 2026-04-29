@@ -1,36 +1,40 @@
+import { streamText, UIMessage, convertToModelMessages } from "ai";
 import { google } from "@ai-sdk/google";
-import { streamText, tool, stepCountIs } from "ai";
-import { z } from "zod";
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
 export const config = {
-  runtime: "edge", // Key for 100/100 Lighthouse performance
+  runtime: "edge",
 };
 
 export default async function handler(req: Request) {
-  const { messages } = await req.json();
+  if (req.method !== "POST") {
+    return new Response("Method Not Allowed", { status: 405 });
+  }
 
-  const result = await streamText({
-    model: google("gemini-3-flash"), // Optimized for speed/cost
-    messages,
-    stopWhen: stepCountIs(5),
-    tools: {
-      checkLighthouse: tool({
-        description: "Audit a website performance score.",
-        parameters: z.object({
-          url: z.string().url().describe("The URL to check"),
-        }),
-        execute: async ({ url }: { url: string }) => {
-          // Mocking the result for your audit tool
-          await new Promise((resolve) => setTimeout(resolve, 1200));
-          return {
-            score: 100,
-            label: "Perfect Architecture",
-            details: "Next.js Pages Router + Edge Runtime is optimal.",
-          };
-        },
+  try {
+    const { messages }: { messages: UIMessage[] } = await req.json();
+
+    // 1. Await conversion (Required in AI SDK 6.0+)
+    const convertedMessages = await convertToModelMessages(messages);
+
+    // 2. Initialize the stream
+    const result = streamText({
+      model: google("gemini-2.5-flash-lite"), // Use stable model ID
+      messages: convertedMessages,
+    });
+
+    // 3. Return the specific UI stream response
+    return result.toUIMessageStreamResponse();
+  } catch (error) {
+    console.error("Chat API Error:", error);
+    return new Response(
+      JSON.stringify({
+        error: "Internal Server Error",
+        details: error instanceof Error ? error.message : String(error),
       }),
-    },
-  });
-
-  return result.toDataStreamResponse();
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
+  }
 }
