@@ -49,6 +49,8 @@ const mailOptions = {
     {
       filename: "email_image.jpg",
     
+
+      
       path: `https://www.lizardinteractive.online/email_image.jpg`,
       cid: "email_image",
     },
