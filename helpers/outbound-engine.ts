@@ -47,7 +47,7 @@ const mailOptions = {
   html: getAuditEmailHtml(firstName, prospect.websiteUrl),
   attachments: [
     {
-      filename: "performance-audit.jpg",
+      filename: "email_image.jpg",
       // USE A PUBLIC URL FROM YOUR PUBLIC FOLDER OR VERCEL BLOB
       path: `https://www.lizardinteractive.online/email_image.jpg`,
       cid: "email_image",
