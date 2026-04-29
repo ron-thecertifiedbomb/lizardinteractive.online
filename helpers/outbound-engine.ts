@@ -38,21 +38,22 @@ export async function processOutboundLead() {
   for (const prospect of prospects) {
     const firstName = prospect.name.split(" ")[0].replace(/,/g, "");
 
-    const mailOptions = {
-      from: `Ronan | Lizrd Interactive <${process.env.EMAIL_FROM}>`,
-      to: prospect.email,
-      bcc: process.env.REPLY_TO, // This ensures you get your copy
-      replyTo: process.env.REPLY_TO,
-      subject: `Performance Gap: ${prospect.websiteUrl} (Mobile Latency Audit)`,
-      html: getAuditEmailHtml(firstName, prospect.websiteUrl),
-      attachments: [
-        {
-          filename: "email_image.jpg",
-          path: "./email_image.jpg", // Update this path to where your image is actually located
-          cid: "email_image", // Content-ID matching the img src above
-        },
-      ],
-    };
+const mailOptions = {
+  from: `Ronan | Lizrd Interactive <${process.env.EMAIL_FROM}>`,
+  to: prospect.email,
+  bcc: process.env.REPLY_TO,
+  replyTo: process.env.REPLY_TO,
+  subject: `Performance Gap: ${prospect.websiteUrl} (Mobile Latency Audit)`,
+  html: getAuditEmailHtml(firstName, prospect.websiteUrl),
+  attachments: [
+    {
+      filename: "performance-audit.jpg",
+      // USE A PUBLIC URL FROM YOUR PUBLIC FOLDER OR VERCEL BLOB
+      path: `https://www.lizardinteractive.online/email_image.jpg`,
+      cid: "email_image",
+    },
+  ],
+};
 
     try {
       await transporter.sendMail(mailOptions);
