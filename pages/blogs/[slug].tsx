@@ -9,10 +9,18 @@ import { useState } from 'react';
 import { SocialShare } from '@/components/SocialShare/SocialShare';
 import { MongoClient } from "mongodb";
 
-export async function getServerSideProps({ params }: { params: { slug: string } }) {
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: 'blocking', // Next.js will server-render on the first request and then cache it
+  };
+}
+
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+
   const uri = process.env.MONGODB_URI;
 
-  console.log(`🖥️ API Endpoint (SSR): Fetching data for slug "${params.slug}"`);
+  console.log(`🖥️ API Endpoint (SSG/ISR): Fetching data for slug "${params.slug}"`);
 
   if (!uri) {
     console.error("❌ MONGODB_URI is missing in environment variables");
@@ -52,6 +60,7 @@ export async function getServerSideProps({ params }: { params: { slug: string } 
 
     return {
       props: { post, ogImageUrl, ogUrl, description },
+      revalidate: 3600, // Revalidate background cache every 1 hour (in seconds)
     };
   } catch (error) {
     console.error("❌ Failed to fetch article:", error);
@@ -183,12 +192,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
               />
             </div>
 
-            {/* Excerpt */}
-            {/* {post.sections?.[0] && (
-              <p className="text-zinc-400 text-sm md:text-base leading-relaxed italic border-l-2 border-emerald-500 pl-4 md:pl-5">
-                {post.sections[0].content}
-              </p>
-            )} */}
+
           </header>
 
           {/* Featured Image */}

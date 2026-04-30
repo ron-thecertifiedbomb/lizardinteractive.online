@@ -6,4 +6,5 @@ export const mainLinks = [
   { href: "/blogs", label: "Archive" }, // The Technical Blog (Engineering Insights)
   { href: "/games", label: "Vault" }, // Emulators: The skill flex for low-latency code
   { href: "/services", label: "Protocol" }, // Services: SEO, CRO, Performance Audits
+  { href: "/casestudy", label: "Case Studies" }, // Services: SEO, CRO, Performance Audits
 ];

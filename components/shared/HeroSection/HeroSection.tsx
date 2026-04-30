@@ -1,66 +1,77 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MainHeader from '../MainHeader/MainHeader';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, AnimatePresence } from 'framer-motion';
 import { heroContent } from '@/data/heroContent';
 // <-- Update this path if MainHeader is in a different folder
 
 export default function HeroSection() {
+
+    const slides = Object.values(heroContent);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
+        }, 6000); // Rotate every 6 seconds
+
+        return () => clearInterval(interval);
+    }, [slides.length]);
+
+    const currentSlide = slides[currentSlideIndex];
+
     return (
         <section className="relative flex flex-col items-center justify-center text-center px-4 w-full">
 
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
-            {/* <div className="mb-8 z-10">
-                <Image
-                    src="/logo.svg" // <-- Update this path to your actual logo file in the public folder
-                    alt="Lizrd Interactive Online Logo"
-                    width={100}
-                    height={100}
-                    className="mx-auto object-contain drop-shadow-[0_0_15px_rgba(74,222,128,0.2)]"
-                />
-            </div> */}
+           
 
-            {/* 1. The Reusable Header Component */}
-            <MainHeader
-                eyebrow={heroContent.webPerformance.eyebrow}
-                headline={heroContent.webPerformance.headline}
-                subheadline={heroContent.webPerformance.subheadline}
-            />
+            {/* Slideshow Content Area (Min-height preserves layout during wait transitions) */}
+            <div className="relative w-full min-h-[450px] md:min-h-[400px] flex flex-col items-center justify-center pt-8">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentSlideIndex}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="flex flex-col items-center w-full"
+                    >
+                        {/* 1. The Reusable Header Component */}
+                        <MainHeader
+                            eyebrow={currentSlide.eyebrow}
+                            headline={currentSlide.headline}
+                            subheadline={currentSlide.subheadline}
+                        />
 
-            {/* 2. The Call to Action */}
-            <div className="z-10 flex flex-col sm:flex-row gap-6  items-center justify-center">
-                <div className="z-10 flex flex-col  items-center gap-6 mb-16 mt-4">
-                    {/* The Container with your specific border/glow style */}
-                    <div className="relative group p-px rounded-xl transition-all duration-500">
+                        {/* 2. The Call to Action */}
+                        <div className="z-10 flex flex-col sm:flex-row gap-6 items-center justify-center">
+                            <div className="z-10 flex flex-col items-center gap-6 mb-16 mt-4">
+                                {/* The Container with your specific border/glow style */}
+                                <div className="relative group p-px rounded-xl transition-all duration-500">
+                                    {/* Outer Glow & Border (Using your specific green-500/30) */}
+                                    <div className="absolute inset-0 rounded-xl border border-green-500/30 bg-green-500/10 shadow-[0_0_15px_rgba(74,222,128,0.1)] group-hover:shadow-[0_0_25px_rgba(74,222,128,0.3)] transition-all duration-500"></div>
 
-                        {/* Outer Glow & Border (Using your specific green-500/30) */}
-                        <div className="absolute inset-0 rounded-xl border border-green-500/30 bg-green-500/10 shadow-[0_0_15px_rgba(74,222,128,0.1)] group-hover:shadow-[0_0_25px_rgba(74,222,128,0.3)] transition-all duration-500"></div>
+                                    {/* The Button */}
+                                    <button className="relative flex items-center gap-3 px-8 py-4 bg-black/60 text-white font-bold text-lg rounded-xl overflow-hidden transition-all duration-300 group-hover:bg-zinc-900">
+                                        {/* The Animated Shimmer Streak */}
+                                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-green-400/20 to-transparent"></div>
 
-                        {/* The Button */}
-                        <button className="relative flex items-center gap-3 px-8 py-4 bg-black/60 text-white font-bold text-lg rounded-xl overflow-hidden transition-all duration-300 group-hover:bg-zinc-900">
+                                        <span className="relative z-10 bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent">
+                                            {currentSlide.cta}
+                                        </span>
 
-                            {/* The Animated Shimmer Streak */}
-                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-green-400/20 to-transparent"></div>
-
-                            <span className="relative z-10 bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent">
-                                {heroContent.webPerformance.cta}
-                            </span>
-
-                            {/* Pulsing Green Dot (Indicates "Live/Ready") */}
-                            <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                            </span>
-
-                        </button>
-                    </div>
-
-                    {/* Optional: Simple text link for balance */}
-                    {/* <span className="text-zinc-500 text-sm font-medium cursor-pointer hover:text-green-400 transition-colors">
-                        No credit card required
-                    </span> */}
-                </div>
-
+                                        {/* Pulsing Green Dot (Indicates "Live/Ready") */}
+                                        <span className="relative flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
             </div>
 
             {/* 3. Visual Proof: The Lighthouse Circles */}
