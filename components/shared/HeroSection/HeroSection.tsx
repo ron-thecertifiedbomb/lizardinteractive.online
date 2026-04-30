@@ -27,10 +27,39 @@ export default function HeroSection() {
             />
 
             {/* 2. The Call to Action */}
-            <div className="z-10 flex flex-col sm:flex-row gap-4 mb-16 mt-4">
-                <button className="bg-white text-black font-bold text-lg px-8 py-4 rounded-lg hover:bg-green-400 transition-all duration-300 shadow-[0_0_20px_rgba(74,222,128,0.2)] hover:shadow-[0_0_30px_rgba(74,222,128,0.4)]">
-                    Claim Your Free Performance Audit
-                </button>
+            <div className="z-10 flex flex-col sm:flex-row gap-6  items-center justify-center">
+                <div className="z-10 flex flex-col  items-center gap-6 mb-16 mt-4">
+                    {/* The Container with your specific border/glow style */}
+                    <div className="relative group p-px rounded-xl transition-all duration-500">
+
+                        {/* Outer Glow & Border (Using your specific green-500/30) */}
+                        <div className="absolute inset-0 rounded-xl border border-green-500/30 bg-green-500/10 shadow-[0_0_15px_rgba(74,222,128,0.1)] group-hover:shadow-[0_0_25px_rgba(74,222,128,0.3)] transition-all duration-500"></div>
+
+                        {/* The Button */}
+                        <button className="relative flex items-center gap-3 px-8 py-4 bg-black/60 text-white font-bold text-lg rounded-xl overflow-hidden transition-all duration-300 group-hover:bg-zinc-900">
+
+                            {/* The Animated Shimmer Streak */}
+                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-green-400/20 to-transparent"></div>
+
+                            <span className="relative z-10 bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent">
+                                Claim Your Free Performance Audit
+                            </span>
+
+                            {/* Pulsing Green Dot (Indicates "Live/Ready") */}
+                            <span className="relative flex h-3 w-3">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                            </span>
+
+                        </button>
+                    </div>
+
+                    {/* Optional: Simple text link for balance */}
+                    {/* <span className="text-zinc-500 text-sm font-medium cursor-pointer hover:text-green-400 transition-colors">
+                        No credit card required
+                    </span> */}
+                </div>
+             
             </div>
 
             {/* 3. Visual Proof: The Lighthouse Circles */}

@@ -21,12 +21,12 @@ export default function MainHeader({ eyebrow, headline, subheadline }: MainHeade
             </div>
 
             {/* Main Aggressive Headline (Scaled down for mobile, scales up on md/lg) */}
-            <h1 className="z-10 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 tracking-tighter max-w-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 leading-tight">
+            <h1 className="z-10 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 tracking-tighter max-w-4xl text-transparent bg-clip-text bg-linear-to-b from-white to-zinc-400 leading-tight">
                 {headline}
             </h1>
 
             {/* The Pain-Point Subheadline (Scaled for readability on small screens) */}
-            <p className="z-10 text-base sm:text-lg md:text-xl text-zinc-400 mb-8 md:mb-10 max-w-2xl leading-relaxed px-2">
+            <p className="z-10 text-base sm:text-lg md:text-xl text-zinc-400  max-w-2xl leading-relaxed px-2">
                 {subheadline}
             </p>
 

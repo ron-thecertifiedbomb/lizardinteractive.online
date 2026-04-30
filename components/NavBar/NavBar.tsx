@@ -86,7 +86,7 @@ export default function NavBar() {
                                     href={link.href}
                                     className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive
                                         ? "text-green-400/50"
-                                        : "text-zinc-300 hover:text-white"
+                                        : "text-zinc-300/80 hover:text-white"
                                         }`}
                                 >
                                     {link.label}
