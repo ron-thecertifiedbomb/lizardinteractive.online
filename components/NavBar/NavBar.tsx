@@ -14,51 +14,23 @@ export default function NavBar() {
     const pathname = router.pathname;
 
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [closing, setClosing] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [pageTransitioning, setPageTransitioning] = useState(false);
 
-    // ─── Page transition handling ───────────────────────────────────────────────
+    // ─── Logic ──────────────────────────────────────────────────────────────────
     useEffect(() => {
-        const handleRouteStart = (url: string) => {
-            if (url !== pathname) {
-                setPageTransitioning(true);
-
-                if (mobileOpen) {
-                    setClosing(true);
-                    setMobileOpen(false);
-                }
-            }
+        const handleRouteChange = () => {
+            setMobileOpen(false);
+            setDropdownOpen(false);
         };
+        router.events.on("routeChangeStart", handleRouteChange);
+        return () => router.events.off("routeChangeStart", handleRouteChange);
+    }, [router.events]);
 
-        const handleRouteDone = () => {
-            // Wait briefly for animation and hydration
-            setTimeout(() => {
-                setPageTransitioning(false);
-                setClosing(false);
-            }, 300);
-        };
-
-        router.events.on("routeChangeStart", handleRouteStart);
-        router.events.on("routeChangeComplete", handleRouteDone);
-        router.events.on("routeChangeError", handleRouteDone);
-
-        return () => {
-            router.events.off("routeChangeStart", handleRouteStart);
-            router.events.off("routeChangeComplete", handleRouteDone);
-            router.events.off("routeChangeError", handleRouteDone);
-        };
-    }, [mobileOpen, pathname, router.events]);
-
-    // ─── Scroll locking ─────────────────────────────────────────────────────────
     useEffect(() => {
         document.body.style.overflow = mobileOpen ? "hidden" : "";
-        return () => {
-            document.body.style.overflow = "";
-        };
+        return () => { document.body.style.overflow = ""; };
     }, [mobileOpen]);
 
-    // ─── Dropdown handling ──────────────────────────────────────────────────────
     const dropdownRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -70,28 +42,21 @@ export default function NavBar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-
-    // ─── Mobile link click ──────────────────────────────────────────────────────
-    const handleMobileLinkClick = (href: string) => {
-        setMobileOpen(false);
-        if (pathname !== href) router.push(href);
-    };
-
-    // ─── Render ─────────────────────────────────────────────────────────────────
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[65px] z-100 bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+            {/* Main Header - Changed to Solid #050505 and removed backdrop-blur */}
+            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[65px] z-100 bg-[#050505] border-b border-emerald-500/10">
                 <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative">
 
-                    {/* Logo & Brand */}
-                    <Link href="/" className="flex items-center gap-3 group">
-                        <LogoIcon className="w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(136,251,89,0.4)]" />
-                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-green-400/50">
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-3 group z-210">
+                        <LogoIcon className="w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]" />
+                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-emerald-400/60 group-hover:text-emerald-400 transition-colors">
                             {config.shortName}
                         </span>
                     </Link>
 
-                    {/* Desktop Links */}
+                    {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">
                         {primaryLinks.map((link) => {
                             const isActive = pathname === link.href;
@@ -99,27 +64,29 @@ export default function NavBar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive
-                                        ? "text-green-400/50"
-                                        : "text-zinc-300/80 hover:text-white"
+                                    className={`relative text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive ? "text-emerald-400" : "text-emerald-400/40 hover:text-emerald-400/80"
                                         }`}
                                 >
                                     {link.label}
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeUnderline"
+                                            className="absolute bottom-[-22px] left-0 right-0 h-[2px] bg-emerald-400 shadow-[0_0_8px_#34d399]"
+                                        />
+                                    )}
                                 </Link>
                             );
                         })}
 
-                        {/* Dropdown Menu */}
+                        {/* Dropdown */}
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 onClick={() => setDropdownOpen((prev) => !prev)}
-                                className="flex items-center gap-1.5 text-xs md:text-sm font-black uppercase tracking-tighter transition-all text-zinc-300/80 hover:text-white"
+                                className={`flex items-center gap-1.5 text-xs md:text-sm font-black uppercase tracking-tighter transition-all ${dropdownOpen ? "text-emerald-400" : "text-emerald-400/40 hover:text-emerald-400/80"
+                                    }`}
                             >
                                 More
-                                <ChevronDown
-                                    size={14}
-                                    className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`}
-                                />
+                                <ChevronDown size={14} className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
                             </button>
 
                             <AnimatePresence>
@@ -128,21 +95,16 @@ export default function NavBar() {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="absolute top-full right-0 mt-4 w-60 origin-top-right bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+                                        className="absolute top-full right-0 mt-8 w-60 origin-top-right bg-[#050505] border border-emerald-500/20 rounded-xl shadow-2xl overflow-hidden"
                                     >
                                         <div className="p-2">
                                             {secondaryLinks.map((link) => (
                                                 <Link
                                                     key={link.href}
                                                     href={link.href}
-                                                    onClick={() => setDropdownOpen(false)}
-                                                    className="flex items-center gap-4 w-full px-4 py-3 text-sm font-bold text-zinc-300 rounded-lg hover:bg-white/5 transition-colors"
+                                                    className="flex items-center gap-4 w-full px-4 py-3 text-sm font-bold text-emerald-400/40 rounded-lg hover:bg-emerald-500/5 hover:text-emerald-400/80 transition-all"
                                                 >
-                                                    <link.icon
-                                                        className="w-4 h-4 text-green-400/60"
-                                                        strokeWidth={2.5}
-                                                    />
+                                                    <link.icon className="w-4 h-4 text-emerald-400/60" strokeWidth={2.5} />
                                                     <span>{link.label}</span>
                                                 </Link>
                                             ))}
@@ -153,81 +115,57 @@ export default function NavBar() {
                         </div>
                     </div>
 
-                    {/* Mobile Toggle */}
+                    {/* Mobile Toggle Button */}
                     <button
-                        className="md:hidden p-2 relative z-101 outline-none text-green-400/50 active:scale-90 transition-transform"
+                        className="md:hidden p-2 relative z-210 outline-none text-emerald-400/60 active:scale-90 transition-transform"
                         onClick={() => setMobileOpen((prev) => !prev)}
-                        aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                        aria-label="Toggle Menu"
                     >
-                        {mobileOpen ? (
-                            <X size={20} strokeWidth={2.5} />
-                        ) : (
-                            <Menu size={20} strokeWidth={2.5} />
-                        )}
+                        {mobileOpen ? <X size={24} strokeWidth={2.5} /> : <Menu size={24} strokeWidth={2.5} />}
                     </button>
+
+                    {/* Mobile Overlay Menu */}
+                    <AnimatePresence>
+                        {mobileOpen && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-200 bg-[#050505] md:hidden flex flex-col pt-[120px] px-8"
+                            >
+                                <div className="flex flex-col gap-8">
+                                    {allLinks.map((link, idx) => {
+                                        const isActive = pathname === link.href;
+                                        return (
+                                            <motion.div
+                                                key={link.href}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: idx * 0.05 }}
+                                            >
+                                                <Link
+                                                    href={link.href}
+                                                    className={`text-2xl font-black uppercase tracking-tighter transition-all ${isActive ? "text-emerald-400" : "text-emerald-900 hover:text-emerald-400"
+                                                        }`}
+                                                >
+                                                    {link.label}
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+
+                                <div className="mt-auto mb-12">
+                                    <div className="w-12 h-1 bg-emerald-950 mb-4" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-900">
+                                        {config.shortName} SYSTEM // 2026
+                                    </span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </nav>
             </header>
-
-            {/* Page Transition Bar */}
-            <div
-                className={`fixed top-0 left-0 right-0 h-[2px] z-200 bg-green-400/50 transition-all duration-300 ${pageTransitioning
-                    ? "opacity-100 scale-x-100"
-                    : "opacity-0 scale-x-0"
-                    } origin-left`}
-            />
-
-            {/* Mobile Menu Overlay */}
-            <div
-                className={`fixed inset-0 z-90 bg-dark-950 md:hidden transition-all duration-500 ease-in-out
-          ${mobileOpen
-                        ? "translate-y-0 opacity-100 pointer-events-auto"
-                        : closing
-                            ? "translate-y-0 opacity-0 pointer-events-none"
-                            : "-translate-y-full opacity-0 pointer-events-none"
-                    }`}
-            >
-                {/* Ambient glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
-
-                <div className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
-                    <span className="text-xs-plus font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
-                        Navigation
-                    </span>
-
-                    {allLinks.map((link, idx) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <button
-                                key={link.href}
-                                onClick={() => handleMobileLinkClick(link.href)}
-                                style={{
-                                    transitionDelay: mobileOpen ? `${idx * 60}ms` : "0ms",
-                                }}
-                                className={`text-3xl font-black uppercase tracking-tighter transition-all active:scale-95 flex items-center gap-4 bg-transparent border-none cursor-pointer
-                  ${isActive
-                                        ? "text-green-400"
-                                        : "text-zinc-300 hover:text-green-400"
-                                    }
-                  ${mobileOpen
-                                        ? "translate-y-0 opacity-100"
-                                        : "translate-y-10 opacity-0"
-                                    }`}
-                            >
-                                {isActive && (
-                                    <span className="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_10px_#4ade80]" />
-                                )}
-                                {link.label}
-                            </button>
-                        );
-                    })}
-
-                    <div className="mt-12 pt-8  w-full flex flex-col items-center gap-4">
-                        <span className="text-xs-plus font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
-                            LIZARD INTERACTIVE ONLINE
-                        </span>
-                    </div>
-                </div>
-            </div>
         </>
     );
 }
