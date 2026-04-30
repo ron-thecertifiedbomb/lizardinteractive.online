@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-import { mainLinks } from "./links";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { primaryLinks, secondaryLinks, allLinks } from "./links";
 import LogoIcon from "@/pages/LogoIcon";
 import config from "@/Site.config.json";
 
@@ -14,6 +15,7 @@ export default function NavBar() {
 
     const [mobileOpen, setMobileOpen] = useState(false);
     const [closing, setClosing] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [pageTransitioning, setPageTransitioning] = useState(false);
 
     // ─── Page transition handling ───────────────────────────────────────────────
@@ -56,6 +58,19 @@ export default function NavBar() {
         };
     }, [mobileOpen]);
 
+    // ─── Dropdown handling ──────────────────────────────────────────────────────
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+
     // ─── Mobile link click ──────────────────────────────────────────────────────
     const handleMobileLinkClick = (href: string) => {
         setMobileOpen(false);
@@ -77,8 +92,8 @@ export default function NavBar() {
                     </Link>
 
                     {/* Desktop Links */}
-                    <div className="hidden md:flex gap-10">
-                        {mainLinks.map((link) => {
+                    <div className="hidden md:flex items-center gap-8">
+                        {primaryLinks.map((link) => {
                             const isActive = pathname === link.href;
                             return (
                                 <Link
@@ -93,6 +108,49 @@ export default function NavBar() {
                                 </Link>
                             );
                         })}
+
+                        {/* Dropdown Menu */}
+                        <div className="relative" ref={dropdownRef}>
+                            <button
+                                onClick={() => setDropdownOpen((prev) => !prev)}
+                                className="flex items-center gap-1.5 text-xs md:text-sm font-black uppercase tracking-tighter transition-all text-zinc-300/80 hover:text-white"
+                            >
+                                More
+                                <ChevronDown
+                                    size={14}
+                                    className={`transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`}
+                                />
+                            </button>
+
+                            <AnimatePresence>
+                                {dropdownOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        transition={{ duration: 0.2, ease: "easeOut" }}
+                                        className="absolute top-full right-0 mt-4 w-60 origin-top-right bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+                                    >
+                                        <div className="p-2">
+                                            {secondaryLinks.map((link) => (
+                                                <Link
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    onClick={() => setDropdownOpen(false)}
+                                                    className="flex items-center gap-4 w-full px-4 py-3 text-sm font-bold text-zinc-300 rounded-lg hover:bg-white/5 transition-colors"
+                                                >
+                                                    <link.icon
+                                                        className="w-4 h-4 text-green-400/60"
+                                                        strokeWidth={2.5}
+                                                    />
+                                                    <span>{link.label}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
                     {/* Mobile Toggle */}
@@ -136,7 +194,7 @@ export default function NavBar() {
                         Navigation
                     </span>
 
-                    {mainLinks.map((link, idx) => {
+                    {allLinks.map((link, idx) => {
                         const isActive = pathname === link.href;
                         return (
                             <button
@@ -165,7 +223,7 @@ export default function NavBar() {
 
                     <div className="mt-12 pt-8  w-full flex flex-col items-center gap-4">
                         <span className="text-[10px] font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
-                           LIZARD INTERACTIVE ONLINE
+                            LIZARD INTERACTIVE ONLINE
                         </span>
                     </div>
                 </div>

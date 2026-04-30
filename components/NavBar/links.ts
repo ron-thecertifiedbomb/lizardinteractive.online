@@ -1,10 +1,15 @@
-export const mainLinks = [
-  { href: "/", label: "Engineering" }, // Home: The core service pitch
-  { href: "/about", label: "Manifest" }, // ABOUT: Your Technical Bio & Mission
-  { href: "/results", label: "Results" }, // The Case Studies (Wall of Proof)
-  { href: "/utilities", label: "Toolkit" }, // The Conversion Funnel (Utilities Hub)
-  { href: "/blogs", label: "Archive" }, // The Technical Blog (Engineering Insights)
-  { href: "/games", label: "Vault" }, // Emulators: The skill flex for low-latency code
-  { href: "/services", label: "Protocol" }, // Services: SEO, CRO, Performance Audits
-  { href: "/casestudy", label: "Case Studies" }, // Services: SEO, CRO, Performance Audits
+import { Briefcase, Pencil, LayoutDashboard, Wrench, Info } from "lucide-react";
+
+export const primaryLinks = [
+  { href: "/services", label: "Services", icon: Briefcase },
+  { href: "/blogs", label: "Blog", icon: Pencil },
 ];
+
+export const secondaryLinks = [
+  { href: "/casestudy", label: "Case Studies", icon: LayoutDashboard },
+  { href: "/utilities", label: "Utilities", icon: Wrench },
+  { href: "/about", label: "About", icon: Info },
+];
+
+// A combined list for the mobile menu
+export const allLinks = [...primaryLinks, ...secondaryLinks];
