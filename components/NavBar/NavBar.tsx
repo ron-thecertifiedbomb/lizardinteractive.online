@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/router"; // ← Pages Router, not next/navigation
+import { useRouter } from "next/router"; // Pages Router
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { mainLinks } from "./links";
@@ -12,20 +12,15 @@ export default function NavBar() {
     const pathname = router.pathname;
 
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [closing, setClosing] = useState(false);
     const [pageTransitioning, setPageTransitioning] = useState(false);
 
-    // Close mobile menu and track route transitions
+    // Track route transitions for thin progress bar
     useEffect(() => {
         const handleStart = (url: string) => {
-            if (url !== pathname) {
-                setPageTransitioning(true);
-                setMobileOpen(false);
-            }
+            if (url !== pathname) setPageTransitioning(true);
         };
-
-        const handleDone = () => {
-            setPageTransitioning(false);
-        };
+        const handleDone = () => setPageTransitioning(false);
 
         router.events.on("routeChangeStart", handleStart);
         router.events.on("routeChangeComplete", handleDone);
@@ -38,7 +33,7 @@ export default function NavBar() {
         };
     }, [pathname, router.events]);
 
-    // Lock scroll only when mobile menu is open — not during transitions
+    // Lock scroll when menu is open (not during transitions)
     useEffect(() => {
         document.body.style.overflow = mobileOpen ? "hidden" : "";
         return () => {
@@ -46,11 +41,24 @@ export default function NavBar() {
         };
     }, [mobileOpen]);
 
+    // Handle mobile link click with animation delay
     const handleMobileLinkClick = (href: string) => {
-        setMobileOpen(false);
-        if (pathname !== href) {
-            router.push(href);
+        if (pathname === href) {
+            setMobileOpen(false);
+            return;
         }
+
+        // Begin closing animation
+        setClosing(true);
+        setMobileOpen(false);
+
+        // Wait for animation to complete before navigation
+        const timeout = setTimeout(() => {
+            router.push(href);
+            setClosing(false);
+        }, 500); // Match duration-500
+
+        return () => clearTimeout(timeout);
     };
 
     const brandName = "LIZARD INTERACTIVE";
@@ -76,7 +84,9 @@ export default function NavBar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive ? "text-green-400" : "text-zinc-300 hover:text-white"
+                                    className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive
+                                            ? "text-green-400"
+                                            : "text-zinc-300 hover:text-white"
                                         }`}
                                 >
                                     {link.label}
@@ -91,20 +101,31 @@ export default function NavBar() {
                         onClick={() => setMobileOpen((prev) => !prev)}
                         aria-label={mobileOpen ? "Close menu" : "Open menu"}
                     >
-                        {mobileOpen ? <X size={20} strokeWidth={2.5} /> : <Menu size={20} strokeWidth={2.5} />}
+                        {mobileOpen ? (
+                            <X size={20} strokeWidth={2.5} />
+                        ) : (
+                            <Menu size={20} strokeWidth={2.5} />
+                        )}
                     </button>
                 </nav>
             </header>
 
-            {/* Page transition overlay — thin bar at the top */}
+            {/* Page transition bar */}
             <div
-                className={`fixed top-0 left-0 right-0 h-[2px] z-[200] bg-green-400 transition-all duration-300 ${pageTransitioning ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                className={`fixed top-0 left-0 right-0 h-[2px] z-[200] bg-green-400 transition-all duration-300 ${pageTransitioning
+                        ? "opacity-100 scale-x-100"
+                        : "opacity-0 scale-x-0"
                     } origin-left`}
             />
 
             {/* Mobile Menu Overlay */}
             <div
-                className={`fixed inset-0 z-[90] bg-[#050505] md:hidden transition-all duration-500 ease-in-out ${mobileOpen ? "translate-y-0 opacity-100 pointer-events-auto" : "-translate-y-full opacity-0 pointer-events-none"
+                className={`fixed inset-0 z-[90] bg-[#050505] md:hidden transition-all duration-500 ease-in-out
+          ${mobileOpen
+                        ? "translate-y-0 opacity-100 pointer-events-auto"
+                        : closing
+                            ? "translate-y-0 opacity-0 pointer-events-none"
+                            : "-translate-y-full opacity-0 pointer-events-none"
                     }`}
             >
                 {/* Ambient glow */}
@@ -121,9 +142,17 @@ export default function NavBar() {
                             <button
                                 key={link.href}
                                 onClick={() => handleMobileLinkClick(link.href)}
-                                style={{ transitionDelay: mobileOpen ? `${idx * 60}ms` : "0ms" }}
-                                className={`text-3xl font-black uppercase tracking-tighter transition-all active:scale-95 flex items-center gap-4 bg-transparent border-none cursor-pointer ${isActive ? "text-green-400" : "text-zinc-300 hover:text-green-400"
-                                    } ${mobileOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+                                style={{
+                                    transitionDelay: mobileOpen ? `${idx * 60}ms` : "0ms",
+                                }}
+                                className={`text-3xl font-black uppercase tracking-tighter transition-all active:scale-95 flex items-center gap-4 bg-transparent border-none cursor-pointer
+                  ${isActive
+                                        ? "text-green-400"
+                                        : "text-zinc-300 hover:text-green-400"
+                                    }
+                  ${mobileOpen
+                                        ? "translate-y-0 opacity-100"
+                                        : "translate-y-10 opacity-0"
                                     }`}
                             >
                                 {isActive && (
@@ -135,7 +164,9 @@ export default function NavBar() {
                     })}
 
                     <div className="mt-12 pt-8 border-t border-white/5 w-full max-w-[200px] flex flex-col items-center gap-4">
-                        <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-widest">Connect</span>
+                        <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-widest">
+                            Connect
+                        </span>
                     </div>
                 </div>
             </div>
