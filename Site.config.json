@@ -1,0 +1,88 @@
+{
+  "name": "Lizard Interactive",
+  "shortName": "Lizard",
+  "description": "Engineered for High-Stakes Performance. We eliminate the friction between your brand and your capital through surgical design and deployment.",
+  "tagline": "I Build the Fastest 1% of the Web.",
+  "domain": "lizardinteractive.online",
+  "url": "https://www.lizardinteractive.online",
+
+  "seo": {
+    "defaultTitle": "Lizard Interactive — I Build the Fastest 1% of the Web",
+    "titleTemplate": "%s | Lizard Interactive",
+    "defaultDescription": "Performance engineering studio specializing in lightning-fast Next.js web applications with guaranteed 100/100 Lighthouse scores. Free developer toolkit with 28+ tools.",
+    "keywords": "performance engineering, Next.js developer, Lighthouse 100, fast websites, web performance, free developer tools, online utilities",
+    "ogImage": "https://www.lizardinteractive.online/og-image.png",
+    "ogImageWidth": "1200",
+    "ogImageHeight": "630",
+    "twitterHandle": "@RSibunga39329",
+    "locale": "en_US",
+    "robots": "index, follow",
+    "canonical": "https://www.lizardinteractive.online"
+  },
+
+  "theme": {
+    "themeColor": "#000000",
+    "backgroundColor": "#ffffff"
+  },
+
+  "assets": {
+    "favicon": "/lizardinteractive.png",
+    "appleTouchIcon": "/lizardinteractive.png",
+    "ogImage": "/og-image.png",
+    "logo": "/lizardinteractive.png"
+  },
+
+  "contact": {
+    "email": "lizardinteractive.online@gmail.com"
+  },
+
+  "social": {
+    "twitter": "https://x.com/RSibunga39329",
+    "linkedin": "https://www.linkedin.com/in/lizard-interactive-online-b9144b404",
+    "facebook": "https://www.facebook.com/profile.php?id=61589169981695",
+    "github": "https://github.com/ron-thecertifiedbomb",
+    "youtube": "https://www.youtube.com/@lizardinteractiveonline"
+  },
+
+  "jsonLd": {
+    "organization": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Lizard Interactive",
+      "url": "https://www.lizardinteractive.online",
+      "logo": "https://www.lizardinteractive.online/lizardinteractive.png",
+      "description": "Performance engineering studio building the fastest 1% of the web.",
+      "email": "lizardinteractive.online@gmail.com",
+      "sameAs": [
+        "https://x.com/RSibunga39329",
+        "https://www.linkedin.com/in/lizard-interactive-online-b9144b404",
+        "https://www.facebook.com/profile.php?id=61589169981695",
+        "https://github.com/ron-thecertifiedbomb",
+        "https://www.youtube.com/@lizardinteractiveonline"
+      ]
+    },
+    "website": {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Lizard Interactive Online",
+      "url": "https://www.lizardinteractive.online",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.lizardinteractive.online/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  },
+
+  "api": {
+    "endpoints": {
+      "research": "/api/research"
+    }
+  },
+
+  "features": {
+    "enableRomLibrary": true,
+    "enableDevTools": true,
+    "enableBlog": true
+  }
+}

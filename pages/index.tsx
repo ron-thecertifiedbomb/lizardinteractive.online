@@ -1,8 +1,7 @@
-import Link from "next/link";
+import { GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import MetaHead from "@/components/MetaHead/MetaHead";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-import { homeContent } from "@/data/page/homeContent";
 import { utilities } from "@/data/lists/utilities";
 import { FramerPresentation } from "@/components/FramerPresentation/FramerPresentation";
 import HeroSection from "@/components/shared/HeroSection/HeroSection";
@@ -11,37 +10,39 @@ import MainHeader from "@/components/shared/MainHeader/MainHeader";
 import ToolGrid from "@/components/shared/ToolGrid/ToolGrid";
 import ActionLink from "@/components/shared/ActionLink/ActionLink";
 
+const FEATURED_SLUGS = [
+  "text-tools",
+  "qrcode-generator",
+  "password-generator",
+  "json-formatter",
+  "unit-converter",
+  "speed-test",
+  "base64-tool",
+  "video-to-gif",
+  "pagespeed-insights",
+];
 
-// Get featured tools (specific tools you want to highlight)
-const featuredTools = utilities.filter(tool =>
-  [
-    "text-tools",
-    "qrcode-generator",
-    "password-generator",
-    "json-formatter",
-    "unit-converter",
-    "speed-test",
-    "base64-tool",
-    "video-to-gif",
-    "pagespeed-insights"
-  ].includes(tool.slug)
-);
+interface HomePageProps {
+  toolCount: number;
+}
 
-export default function HomePage() {
-  const seoEntry = homeContent.find((item) => item.type === "seo");
+export default function HomePage({ toolCount }: HomePageProps) {
+  const featuredTools = utilities.filter((tool) =>
+    FEATURED_SLUGS.includes(tool.slug)
+  );
 
   return (
     <>
-      <SEO
-        title="Secure Proctoring & Exam Engine"
-        url="/"
-      />
-      <ScreenContainer>
+      {/*
+        No props needed — MetaHead pulls title, description, OG image,
+        JSON-LD, Twitter handle, etc. all from site.config.json by default.
+        Only pass `data` when you need to override for a specific page.
+      */}
+      <MetaHead />
 
-        {/* The New High-Conversion Hero Section */}
+      <ScreenContainer>
         <HeroSection />
 
-        {/* --- The Reusable Conversion Stat Divider --- */}
         <ImpactBanner
           leftEyebrow="The Cost of Slow Tech"
           leftTopLine="A 1-second load delay costs you"
@@ -61,7 +62,6 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="relative z-10"
           >
-            {/* The Reusable MainHeader */}
             <div className="mb-16">
               <MainHeader
                 eyebrow="Open Source Resources"
@@ -70,19 +70,24 @@ export default function HomePage() {
               />
             </div>
 
-            {/* --- The Reusable Tool Grid --- */}
             <ToolGrid tools={featuredTools} />
 
-            {/* View All Link */}
             <ActionLink
               href="/utilities"
-              label={`Access All ${utilities.length} Tools`}
+              label={`Access All ${toolCount} Tools`}
               className="mt-16"
             />
-
           </motion.div>
         </div>
       </ScreenContainer>
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {
+      toolCount: utilities.length,
+    },
+  };
+};
