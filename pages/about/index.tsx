@@ -9,10 +9,10 @@ export default function AboutPage() {
         <>
             <MetaHead
                 data={{
-                    title: "Manifest | Lizrd Interactive Online",
+                    title: "Manifest | Lizard Interactive",
                     description: "ID: Ronan Sibunga. Software Developer, Guitarist, and Performance Architect. Eliminating digital friction through extreme engineering.",
                     ogImage: "/og-image-about.jpg",
-                    ogUrl: "https://lizardinteractive.online/about",
+                    ogUrl: "https://www.lizardinteractive.online/about",
                     ogType: "profile",
                 }}
             />
@@ -25,7 +25,6 @@ export default function AboutPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        {/* Using your Reusable MainHeader for consistency */}
                         <MainHeader
                             eyebrow="Architect Identity"
                             headline="The Manifest"
@@ -58,7 +57,7 @@ export default function AboutPage() {
                             </div>
                         </motion.div>
 
-                        {/* Right: Technical Ledger (System Info Style) */}
+                        {/* Right: Technical Ledger */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -92,7 +91,6 @@ export default function AboutPage() {
                     </div>
                 </div>
 
-                {/* Reusing your ImpactBanner for Social Proof/Philosophy */}
                 <ImpactBanner
                     leftEyebrow="The Developer"
                     leftTopLine="Built on logic &"
@@ -102,7 +100,6 @@ export default function AboutPage() {
                     rightBottomLine="Creative Execution."
                 />
 
-                {/* Final CTA */}
                 <div className="py-32 text-center">
                     <motion.a
                         href="mailto:lizardinteractive.online@gmail.com"
