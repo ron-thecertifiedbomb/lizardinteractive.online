@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import MainHeader from '../MainHeader/MainHeader';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { heroContent } from '@/data/heroContent';
 // <-- Update this path if MainHeader is in a different folder
 
 export default function HeroSection() {
@@ -21,9 +22,9 @@ export default function HeroSection() {
 
             {/* 1. The Reusable Header Component */}
             <MainHeader
-                eyebrow="AI Automation • Performance Engineering"
-                headline="I Build the Fastest 1% of the Web."
-                subheadline="Stop losing mobile customers to bloated, slow-loading websites. I engineer lightning-fast custom web applications with a guaranteed 100/100 Google Lighthouse performance score."
+                eyebrow={heroContent.webPerformance.eyebrow}
+                headline={heroContent.webPerformance.headline}
+                subheadline={heroContent.webPerformance.subheadline}
             />
 
             {/* 2. The Call to Action */}
@@ -39,10 +40,10 @@ export default function HeroSection() {
                         <button className="relative flex items-center gap-3 px-8 py-4 bg-black/60 text-white font-bold text-lg rounded-xl overflow-hidden transition-all duration-300 group-hover:bg-zinc-900">
 
                             {/* The Animated Shimmer Streak */}
-                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-green-400/20 to-transparent"></div>
+                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-green-400/20 to-transparent"></div>
 
                             <span className="relative z-10 bg-linear-to-b from-white to-gray-400 bg-clip-text text-transparent">
-                                Claim Your Free Performance Audit
+                                {heroContent.webPerformance.cta}
                             </span>
 
                             {/* Pulsing Green Dot (Indicates "Live/Ready") */}
@@ -59,7 +60,7 @@ export default function HeroSection() {
                         No credit card required
                     </span> */}
                 </div>
-             
+
             </div>
 
             {/* 3. Visual Proof: The Lighthouse Circles */}
