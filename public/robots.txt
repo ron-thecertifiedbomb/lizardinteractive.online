@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /utilities
+Allow: /blogs
+Allow: /results
+Allow: /services
+Allow: /about
+Allow: /games
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /emulator/
+Disallow: /chat/
+
+Sitemap: https://www.lizardinteractive.online/sitemap.xml

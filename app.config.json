@@ -1,0 +1,31 @@
+{
+  "name": "Lizard Interactive",
+  "shortName": "Lizard",
+  "description": "Engineered for High-Stakes Performance. We eliminate the friction between your brand and your capital through surgical design and deployment.",
+  "domain": "lizardinteractive.online",
+  "url": "https://lizardinteractive.online",
+  "theme": {
+    "themeColor": "#000000",
+    "backgroundColor": "#ffffff"
+  },
+  "contact": {
+    "email": "lizardinteractive.online@gmail.com"
+  },
+  "social": {
+    "twitter": "https://x.com/RSibunga39329",
+    "linkedin": "https://www.linkedin.com/in/lizard-interactive-online-b9144b404",
+    "facebook": "https://www.facebook.com/profile.php?id=61589169981695",
+    "github": "https://github.com/ron-thecertifiedbomb",
+    "youtube": "https://www.youtube.com/@lizardinteractiveonline"
+  },
+  "api": {
+    "endpoints": {
+      "research": "/api/research"
+    }
+  },
+  "features": {
+    "enableRomLibrary": true,
+    "enableDevTools": true,
+    "enableBlog": true
+  }
+}

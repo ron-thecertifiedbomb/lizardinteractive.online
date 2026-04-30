@@ -32,16 +32,10 @@ export default function HomePage() {
 
   return (
     <>
-      <MetaHead
-        data={{
-          title: seoEntry?.data?.title || "I Build the Fastest 1% of the Web. | Lizrd Interactive Online",
-          description: seoEntry?.data?.description || "Stop losing mobile customers to bloated, slow-loading websites. I engineer lightning-fast custom web applications with a guaranteed 100/100 Google Lighthouse performance score.",
-          ogImage: seoEntry?.data?.ogImage || "/api/og",
-          ogUrl: "https://lizardinteractive.online",
-          ogType: "website",
-        }}
+      <SEO
+        title="Secure Proctoring & Exam Engine"
+        url="/"
       />
-
       <ScreenContainer>
 
         {/* The New High-Conversion Hero Section */}
