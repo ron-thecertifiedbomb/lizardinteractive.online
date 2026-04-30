@@ -1,63 +1,85 @@
 @import "tailwindcss";
 
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
+
   body {
     @apply bg-black text-white antialiased;
   }
 
+  /**
+   * Canvas — Emulator rendering
+   *
+   * pixelated + crisp-edges eliminates blur on scaled pixel art.
+   * aspect-ratio 4/3 locks the frame and hides overscan shimmer.
+   * Use aspect-ratio: 3/2 for GBA content.
+   */
   canvas {
-    /* FIX: Stop the blur and jittery pixels */
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-
-    /* FIX: Lock the aspect ratio to hide overscan shimmer */
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 3; /* Use 3/2 for GBA */
-
-    /* LIZARD UI: Black + Emerald Glow */
+    aspect-ratio: 4 / 3;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
     background-color: #000;
     @apply mx-auto border border-zinc-900;
     box-shadow: 0 0 40px -15px rgba(16, 185, 129, 0.3);
   }
+
+  /**
+   * Number inputs — remove browser spinners globally
+   */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
 }
 
-/* This wrapper acts as a bezel to hide the vertical garbage on the left */
-.emulator-wrapper {
-  overflow: hidden;
-  position: relative;
+/* ─── Components ────────────────────────────────────────────────────────────── */
+@layer components {
+
+  /**
+   * .emulator-wrapper
+   * Acts as a bezel to clip vertical garbage on the left edge of emulator output.
+   */
+  .emulator-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+
 }
 
-/* Custom Grayish-Black Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  height: 8px; /* Thin height for horizontal scroll */
-}
+/* ─── Utilities ─────────────────────────────────────────────────────────────── */
+@layer utilities {
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #09090b; /* zinc-950 - blends into the background */
-  border-radius: 10px;
-}
+  /**
+   * .custom-scrollbar
+   * Subtle zinc scrollbar for horizontal scroll areas (e.g. ROM library strip).
+   * Apply to any element that needs a styled horizontal scrollbar.
+   */
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #27272a; /* zinc-800 - subtle grayish black */
-  border-radius: 10px;
-  border: 1px solid #09090b; /* adds a tiny gap effect */
-}
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #09090b; /* zinc-950 */
+    border-radius: 10px;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46; /* zinc-700 - lights up slightly on hover */
-}
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #27272a; /* zinc-800 */
+    border-radius: 10px;
+    border: 1px solid #09090b;
+  }
 
-/* Remove arrows/spinners from number inputs */
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46; /* zinc-700 */
+  }
 
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
 }
