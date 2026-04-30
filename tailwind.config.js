@@ -14,8 +14,14 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
-        // serif: ["Merriweather", ...defaultTheme.fontFamily.serif],
-        // mono:  ["Fira Code",    ...defaultTheme.fontFamily.mono],
+      },
+      zIndex: {
+        60: "60",
+        70: "70",
+        80: "80",
+        90: "90",
+        100: "100",
+        200: "200",
       },
     },
   },

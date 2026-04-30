@@ -8,7 +8,7 @@ interface MainHeaderProps {
 
 export default function MainHeader({ eyebrow, headline, subheadline }: MainHeaderProps) {
     return (
-        <div className="relative flex flex-col items-center justify-center text-center px-4 w-full">
+        <div className="relative flex flex-col items-center justify-center text-center px-4 w-full mb-16">
 
             {/* Subtle Background Glow (Scaled for mobile so it doesn't cause overflow) */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>

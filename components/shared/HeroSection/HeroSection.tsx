@@ -6,9 +6,9 @@ import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 export default function HeroSection() {
     return (
-        <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 py-14 bg-[#0a0a0a] text-white overflow-hidden mt-20 rounded-2xl">
+        <section className="relative flex flex-col items-center justify-center text-center px-4 w-full">
 
-
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
             {/* <div className="mb-8 z-10">
                 <Image
                     src="/logo.svg" // <-- Update this path to your actual logo file in the public folder
@@ -21,7 +21,7 @@ export default function HeroSection() {
 
             {/* 1. The Reusable Header Component */}
             <MainHeader
-                eyebrow="Lizard Interactive Online • Performance Engineering"
+                eyebrow="AI Automation • Performance Engineering"
                 headline="I Build the Fastest 1% of the Web."
                 subheadline="Stop losing mobile customers to bloated, slow-loading websites. I engineer lightning-fast custom web applications with a guaranteed 100/100 Google Lighthouse performance score."
             />

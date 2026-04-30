@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/router"; // Pages Router
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { mainLinks } from "./links";
 import LogoIcon from "@/pages/LogoIcon";
+import config from "@/Site.config.json";
 
 export default function NavBar() {
     const router = useRouter();
@@ -15,25 +16,39 @@ export default function NavBar() {
     const [closing, setClosing] = useState(false);
     const [pageTransitioning, setPageTransitioning] = useState(false);
 
-    // Track route transitions for thin progress bar
+    // ─── Page transition handling ───────────────────────────────────────────────
     useEffect(() => {
-        const handleStart = (url: string) => {
-            if (url !== pathname) setPageTransitioning(true);
-        };
-        const handleDone = () => setPageTransitioning(false);
+        const handleRouteStart = (url: string) => {
+            if (url !== pathname) {
+                setPageTransitioning(true);
 
-        router.events.on("routeChangeStart", handleStart);
-        router.events.on("routeChangeComplete", handleDone);
-        router.events.on("routeChangeError", handleDone);
+                if (mobileOpen) {
+                    setClosing(true);
+                    setMobileOpen(false);
+                }
+            }
+        };
+
+        const handleRouteDone = () => {
+            // Wait briefly for animation and hydration
+            setTimeout(() => {
+                setPageTransitioning(false);
+                setClosing(false);
+            }, 300);
+        };
+
+        router.events.on("routeChangeStart", handleRouteStart);
+        router.events.on("routeChangeComplete", handleRouteDone);
+        router.events.on("routeChangeError", handleRouteDone);
 
         return () => {
-            router.events.off("routeChangeStart", handleStart);
-            router.events.off("routeChangeComplete", handleDone);
-            router.events.off("routeChangeError", handleDone);
+            router.events.off("routeChangeStart", handleRouteStart);
+            router.events.off("routeChangeComplete", handleRouteDone);
+            router.events.off("routeChangeError", handleRouteDone);
         };
-    }, [pathname, router.events]);
+    }, [mobileOpen, pathname, router.events]);
 
-    // Lock scroll when menu is open (not during transitions)
+    // ─── Scroll locking ─────────────────────────────────────────────────────────
     useEffect(() => {
         document.body.style.overflow = mobileOpen ? "hidden" : "";
         return () => {
@@ -41,38 +56,23 @@ export default function NavBar() {
         };
     }, [mobileOpen]);
 
-    // Handle mobile link click with animation delay
+    // ─── Mobile link click ──────────────────────────────────────────────────────
     const handleMobileLinkClick = (href: string) => {
-        if (pathname === href) {
-            setMobileOpen(false);
-            return;
-        }
-
-        // Begin closing animation
-        setClosing(true);
         setMobileOpen(false);
-
-        // Wait for animation to complete before navigation
-        const timeout = setTimeout(() => {
-            router.push(href);
-            setClosing(false);
-        }, 500); // Match duration-500
-
-        return () => clearTimeout(timeout);
+        if (pathname !== href) router.push(href);
     };
 
-    const brandName = "LIZARD INTERACTIVE";
-
+    // ─── Render ─────────────────────────────────────────────────────────────────
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[65px] z-[100] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+            <header className="fixed top-0 left-0 right-0 h-[72px] md:h-[65px] z-100 bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
                 <nav className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 h-full relative">
 
                     {/* Logo & Brand */}
                     <Link href="/" className="flex items-center gap-3 group">
-                        <LogoIcon className="w-7 h-7 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(136,251,89,0.4)]" />
-                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-green-400">
-                            {brandName}
+                        <LogoIcon className="w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(136,251,89,0.4)]" />
+                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-green-400/50">
+                            {config.shortName}
                         </span>
                     </Link>
 
@@ -85,8 +85,8 @@ export default function NavBar() {
                                     key={link.href}
                                     href={link.href}
                                     className={`text-xs md:text-sm font-black uppercase tracking-tighter transition-all hover:scale-105 ${isActive
-                                            ? "text-green-400"
-                                            : "text-zinc-300 hover:text-white"
+                                        ? "text-green-400/50"
+                                        : "text-zinc-300 hover:text-white"
                                         }`}
                                 >
                                     {link.label}
@@ -97,7 +97,7 @@ export default function NavBar() {
 
                     {/* Mobile Toggle */}
                     <button
-                        className="md:hidden p-2 relative z-[101] outline-none text-green-400 active:scale-90 transition-transform"
+                        className="md:hidden p-2 relative z-101 outline-none text-green-400/50 active:scale-90 transition-transform"
                         onClick={() => setMobileOpen((prev) => !prev)}
                         aria-label={mobileOpen ? "Close menu" : "Open menu"}
                     >
@@ -110,17 +110,17 @@ export default function NavBar() {
                 </nav>
             </header>
 
-            {/* Page transition bar */}
+            {/* Page Transition Bar */}
             <div
-                className={`fixed top-0 left-0 right-0 h-[2px] z-[200] bg-green-400 transition-all duration-300 ${pageTransitioning
-                        ? "opacity-100 scale-x-100"
-                        : "opacity-0 scale-x-0"
+                className={`fixed top-0 left-0 right-0 h-[2px] z-200 bg-green-400/50 transition-all duration-300 ${pageTransitioning
+                    ? "opacity-100 scale-x-100"
+                    : "opacity-0 scale-x-0"
                     } origin-left`}
             />
 
             {/* Mobile Menu Overlay */}
             <div
-                className={`fixed inset-0 z-[90] bg-[#050505] md:hidden transition-all duration-500 ease-in-out
+                className={`fixed inset-0 z-90 bg-[#050505] md:hidden transition-all duration-500 ease-in-out
           ${mobileOpen
                         ? "translate-y-0 opacity-100 pointer-events-auto"
                         : closing
@@ -163,9 +163,9 @@ export default function NavBar() {
                         );
                     })}
 
-                    <div className="mt-12 pt-8 border-t border-white/5 w-full max-w-[200px] flex flex-col items-center gap-4">
-                        <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-widest">
-                            Connect
+                    <div className="mt-12 pt-8  w-full flex flex-col items-center gap-4">
+                        <span className="text-[10px] font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
+                           LIZARD INTERACTIVE ONLINE
                         </span>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 export const landingPagePresentation = {
   heading1: "The Core Blueprint: Landing Pages",
+    eyebrow:"AI POWERED AND DESIGNED",
   description:
     "A high-fidelity landing page isn’t a luxury; it’s the definitive bottleneck for your digital growth strategy. Let’s dissect the impact of precision engineering over generic construction.",
 

@@ -10,7 +10,7 @@ import { utilitiesContent } from "@/data/page/utilitiesContent";
 export default function UtilitiesPage() {
 
   return (
-    <ScreenContainer className="pt-16 md:pt-10">
+    <ScreenContainer >
 
       <MetaHead pageContent={utilitiesContent} />
 

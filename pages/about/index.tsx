@@ -8,17 +8,11 @@ export default function AboutPage() {
     return (
         <>
             <MetaHead
-                data={{
-                    title: "Manifest | Lizard Interactive",
-                    description: "ID: Ronan Sibunga. Software Developer, Guitarist, and Performance Architect. Eliminating digital friction through extreme engineering.",
-                    ogImage: "/og-image-about.jpg",
-                    ogUrl: "https://www.lizardinteractive.online/about",
-                    ogType: "profile",
-                }}
+          
             />
 
             <ScreenContainer>
-                <div className="py-8 md:py-32 px-4">
+                <div >
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -32,14 +26,14 @@ export default function AboutPage() {
                         />
                     </motion.div>
 
-                    <div className="mt-20 grid md:grid-cols-2 gap-16 items-start">
+                    <div className=" grid md:grid-cols-2 gap-16 items-start px-4">
                         {/* Left: The Narrative */}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="space-y-8 text-zinc-400 font-mono leading-relaxed"
+                            className="space-y-8 text-zinc-400 font-normal leading-relaxed"
                         >
                             <p>
                                 I am <span className="text-white font-bold">Ronan Sibunga</span>.
@@ -95,9 +89,7 @@ export default function AboutPage() {
                     leftEyebrow="The Developer"
                     leftTopLine="Built on logic &"
                     leftBottomLine="Scalable Architecture."
-                    rightEyebrow="The Artist"
-                    rightTopLine="Driven by rhythm &"
-                    rightBottomLine="Creative Execution."
+                   
                 />
 
                 <div className="py-32 text-center">

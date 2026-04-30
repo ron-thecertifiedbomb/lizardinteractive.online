@@ -5,9 +5,9 @@ interface ImpactBannerProps {
     leftTopLine: string;
     leftBottomLine: string;
     leftStrikethrough?: boolean; // Optional: toggles the crossed-out effect
-    rightEyebrow: string;
-    rightTopLine: string;
-    rightBottomLine: string;
+    rightEyebrow?: string;
+    rightTopLine?: string;
+    rightBottomLine?: string;
 }
 
 export default function ImpactBanner({
@@ -20,7 +20,7 @@ export default function ImpactBanner({
     rightBottomLine,
 }: ImpactBannerProps) {
     return (
-        <div className="w-full border-y border-zinc-900 bg-zinc-950/50 py-10 my-16 relative overflow-hidden">
+        <div className="w-full  py-10 my-16 relative overflow-hidden">
             {/* Subtle background glow for the divider */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[50px] bg-emerald-500/5 blur-[60px] pointer-events-none"></div>
 

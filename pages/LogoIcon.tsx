@@ -17,7 +17,7 @@ export default function LogoIcon({ className = "w-10 h-10" }: { className?: stri
                     d="m 181.37685,324.02074 -15.93936,27.22613 h 32.82269 l -8.02412,-12.93675 -5.6278,0.0693 3.95762,7.24873 -12.92575,-0.0693 9.658,-15.32988 z"
                     variants={{
                         hidden: { opacity: 0, y: 10 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "backOut", delay: 0.5 } }
+                        visible: { opacity: 0.8, y: 0, transition: { duration: 0.6, ease: "backOut", delay: 0.5 } }
                     }}
                 />
                 <motion.path

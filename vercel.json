@@ -1,18 +1,10 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "$schema": "[openapi.vercel.sh](https://openapi.vercel.sh/vercel.json)",
+  "version": 3,
   "crons": [
-    {
-      "path": "/api/research",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/outbound",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/scrape",
-      "schedule": "0 8 * * *"
-    }
+    { "path": "/api/research", "schedule": "0 8 * * *" },
+    { "path": "/api/outbound", "schedule": "0 8 * * *" },
+    { "path": "/api/scrape", "schedule": "0 8 * * *" }
   ],
   "headers": [
     {

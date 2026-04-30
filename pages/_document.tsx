@@ -18,7 +18,7 @@ export default function Document() {
         {/* <link rel="preconnect" href="https://fonts.googleapis.com" /> */}
         {/* <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> */}
       </Head>
-      <body className="bg-black antialiased">
+      <body className="relative bg-black antialiased">
         <Main />
         <NextScript />
       </body>

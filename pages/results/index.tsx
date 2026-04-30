@@ -10,14 +10,9 @@
     export default function ResultsPage() {
         return (
             <>
-                <MetaHead
-                    data={{
-                        title: "Case Studies | Lizrd Interactive",
-                        description: "Proven performance audits and 100/100 Lighthouse results for high-stakes freelance projects."
-                    }}
-                />
+                <MetaHead/>
 
-                <ScreenContainer className="pt-16 md:pt-10">
+                <ScreenContainer>
 
                     {/* --- The Strategy Header --- */}
                     <div className="mb-20">
