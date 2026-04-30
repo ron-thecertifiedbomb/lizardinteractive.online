@@ -50,7 +50,6 @@ export default function AboutPage() {
                                 "Treat code like a recording session: strip the noise until only the purest signal remains."
                             </div>
                         </motion.div>
-
                         {/* Right: Technical Ledger */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
