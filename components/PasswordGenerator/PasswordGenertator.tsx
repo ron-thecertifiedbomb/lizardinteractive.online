@@ -177,7 +177,7 @@ export function PasswordGenerator() {
                     onChange={(e) => handleOptionChange(() => setLength(parseInt(e.target.value)))}
                     className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-[9px] font-mono text-zinc-600 mt-1">
+                <div className="flex justify-between text-xs-minus font-mono text-zinc-600 mt-1">
                     <span>WEAK</span>
                     <span>BALANCED</span>
                     <span>STRONG</span>
@@ -239,8 +239,8 @@ export function PasswordGenerator() {
                 <div className="flex items-start gap-2">
                     <AlertCircle size={14} className="text-blue-500 mt-0.5" />
                     <div>
-                        <h4 className="text-[10px] font-black text-blue-500 uppercase mb-1">SECURITY TIPS</h4>
-                        <ul className="text-[10px] font-mono text-zinc-500 space-y-1">
+                        <h4 className="text-xs-plus font-black text-blue-500 uppercase mb-1">SECURITY TIPS</h4>
+                        <ul className="text-xs-plus font-mono text-zinc-500 space-y-1">
                             <li>• Use 16+ characters for strong security</li>
                             <li>• Enable all character types for maximum strength</li>
                             <li>• Never reuse passwords across different sites</li>
@@ -252,7 +252,7 @@ export function PasswordGenerator() {
 
             {/* Info Box */}
             <div className="bg-zinc-950/50 border border-zinc-800 rounded-2xl p-3 text-center">
-                <p className="text-[9px] font-mono text-zinc-600">
+                <p className="text-xs-minus font-mono text-zinc-600">
                     🔐 Generated locally in your browser - never sent to any server
                 </p>
             </div>

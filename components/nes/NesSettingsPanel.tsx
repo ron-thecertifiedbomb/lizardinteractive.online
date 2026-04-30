@@ -79,7 +79,7 @@ export function NesSettingsPanel({
     const SectionHeader = ({ icon: Icon, title }: { icon: any, title: string }) => (
         <div className="flex items-center gap-2 mb-4">
             <Icon size={14} className="text-emerald-500" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">{title}</span>
+            <span className="text-xs-plus font-black uppercase tracking-[0.2em] text-zinc-400">{title}</span>
             <div className="h-[1px] flex-1 bg-zinc-800" />
         </div>
     );
@@ -122,9 +122,9 @@ export function NesSettingsPanel({
                     <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
                         <div className="flex items-center gap-2 mb-2 text-blue-400">
                             <Info size={14} />
-                            <span className="text-[10px] font-black uppercase">Technical_Brief</span>
+                            <span className="text-xs-plus font-black uppercase">Technical_Brief</span>
                         </div>
-                        <p className="text-[11px] leading-relaxed text-blue-200/70 font-mono">
+                        <p className="text-sm-minus leading-relaxed text-blue-200/70 font-mono">
                             &gt; Gamepads auto-detected via HID interface.<br />
                             &gt; Rebinding keys updates local storage immediately.
                         </p>
@@ -137,7 +137,7 @@ export function NesSettingsPanel({
                             <label className="flex cursor-pointer items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 transition-colors hover:border-zinc-700">
                                 <div className="space-y-1">
                                     <span className="text-xs font-bold text-white">Auto-Save on Exit</span>
-                                    <p className="text-[10px] text-zinc-500 font-mono uppercase">Snapshots state to local DB</p>
+                                    <p className="text-xs-plus text-zinc-500 font-mono uppercase">Snapshots state to local DB</p>
                                 </div>
                                 <input
                                     type="checkbox"
@@ -148,7 +148,7 @@ export function NesSettingsPanel({
                             </label>
 
                             <div className="flex items-center gap-3 p-1 bg-black rounded-lg border border-zinc-800">
-                                <div className="px-3 text-[10px] font-bold text-zinc-500 uppercase">Target_Slot</div>
+                                <div className="px-3 text-xs-plus font-bold text-zinc-500 uppercase">Target_Slot</div>
                                 {([1, 2, 3] as const).map((s) => (
                                     <button
                                         key={s}
@@ -174,9 +174,9 @@ export function NesSettingsPanel({
                                 return (
                                     <div key={s} className="rounded-xl border border-zinc-800 bg-black p-4">
                                         <div className="flex items-center justify-between mb-4">
-                                            <div className="text-[11px] font-black text-white uppercase tracking-widest">Bank_0{s}</div>
+                                            <div className="text-sm-minus font-black text-white uppercase tracking-widest">Bank_0{s}</div>
                                             <div className={[
-                                                "flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest border",
+                                                "flex items-center gap-1.5 px-2 py-0.5 rounded text-xs-minus font-black uppercase tracking-widest border",
                                                 has ? "border-emerald-500/30 text-emerald-500 bg-emerald-500/5" : "border-zinc-800 text-zinc-600 bg-zinc-900/30"
                                             ].join(" ")}>
                                                 {has ? "Online" : "Void"}
@@ -186,7 +186,7 @@ export function NesSettingsPanel({
                                         <div className="grid grid-cols-2 gap-2">
                                             <button
                                                 onClick={() => onSave(s)}
-                                                className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 py-2.5 text-[10px] font-black uppercase tracking-tighter text-black hover:bg-emerald-500 transition-colors disabled:opacity-10"
+                                                className="flex items-center justify-center gap-2 rounded-lg bg-zinc-100 py-2.5 text-xs-plus font-black uppercase tracking-tighter text-black hover:bg-emerald-500 transition-colors disabled:opacity-10"
                                                 disabled={!canInteract}
                                                 type="button"
                                             >
@@ -194,7 +194,7 @@ export function NesSettingsPanel({
                                             </button>
                                             <button
                                                 onClick={() => onLoad(s)}
-                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 py-2.5 text-[10px] font-black uppercase tracking-tighter text-white hover:bg-zinc-800 transition-colors disabled:opacity-10"
+                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-700 py-2.5 text-xs-plus font-black uppercase tracking-tighter text-white hover:bg-zinc-800 transition-colors disabled:opacity-10"
                                                 disabled={!canInteract || !has}
                                                 type="button"
                                             >
@@ -202,7 +202,7 @@ export function NesSettingsPanel({
                                             </button>
                                             <button
                                                 onClick={() => onExportSave(s)}
-                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-800 py-2 text-[9px] font-bold text-zinc-400 hover:text-white transition-colors disabled:opacity-10"
+                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-800 py-2 text-xs-minus font-bold text-zinc-400 hover:text-white transition-colors disabled:opacity-10"
                                                 disabled={!has}
                                                 type="button"
                                             >
@@ -210,7 +210,7 @@ export function NesSettingsPanel({
                                             </button>
                                             <button
                                                 onClick={() => importRefs.current[s]?.click()}
-                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-800 py-2 text-[9px] font-bold text-zinc-400 hover:text-white transition-colors disabled:opacity-10"
+                                                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-800 py-2 text-xs-minus font-bold text-zinc-400 hover:text-white transition-colors disabled:opacity-10"
                                                 disabled={!romHash}
                                                 type="button"
                                             >

@@ -85,12 +85,12 @@ const TodoApp: React.FC = () => {
             <h1 className="text-4xl font-black uppercase tracking-tighter text-white">
               System<span className="text-emerald-500">.Task</span>
             </h1>
-            <p className="text-[10px] tracking-[0.4em] text-zinc-600 uppercase">
+            <p className="text-xs-plus tracking-[0.4em] text-zinc-600 uppercase">
               Operational Efficiency: {todos.length > 0 ? Math.round(((todos.length - stats.active) / todos.length) * 100) : 0}%
             </p>
           </div>
 
-          <div className="flex items-center gap-4 bg-[#080808] border border-zinc-900 p-2">
+          <div className="flex items-center gap-4 bg-dark-900 border border-zinc-900 p-2">
             <Search className="w-4 h-4 text-zinc-700 ml-2" />
             <input
               type="text"
@@ -108,9 +108,9 @@ const TodoApp: React.FC = () => {
           <aside className="lg:col-span-4 space-y-6">
 
             {/* ADD TASK BOX */}
-            <div className="bg-[#080808] border border-zinc-900 p-6 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-1 text-[8px] text-zinc-800 font-mono uppercase tracking-tighter">input_module_v3</div>
-              <h2 className="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-500 mb-6">Initialize Task</h2>
+            <div className="bg-dark-900 border border-zinc-900 p-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-1 text-xxs text-zinc-800 font-mono uppercase tracking-tighter">input_module_v3</div>
+              <h2 className="text-xs-plus font-black tracking-[0.3em] uppercase text-zinc-500 mb-6">Initialize Task</h2>
               <div className="space-y-4">
                 <input
                   type="text"
@@ -124,7 +124,7 @@ const TodoApp: React.FC = () => {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="flex-1 bg-black border border-zinc-800 p-3 text-[10px] uppercase tracking-widest text-zinc-400 outline-none"
+                    className="flex-1 bg-black border border-zinc-800 p-3 text-xs-plus uppercase tracking-widest text-zinc-400 outline-none"
                   >
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -145,19 +145,19 @@ const TodoApp: React.FC = () => {
                 { label: 'ACTIVE', val: stats.active, color: 'text-emerald-500' },
                 { label: 'IMP', val: stats.important, color: 'text-purple-500' }
               ].map(s => (
-                <div key={s.label} className="bg-[#080808] border border-zinc-900 p-4 text-center">
+                <div key={s.label} className="bg-dark-900 border border-zinc-900 p-4 text-center">
                   <div className={`text-xl font-black ${s.color}`}>{s.val}</div>
-                  <div className="text-[8px] tracking-tighter text-zinc-700 uppercase font-mono">{s.label}</div>
+                  <div className="text-xxs tracking-tighter text-zinc-700 uppercase font-mono">{s.label}</div>
                 </div>
               ))}
             </div>
 
             {/* CATEGORY FILTER */}
-            <nav className="bg-[#080808] border border-zinc-900 p-6 space-y-2">
-              <h2 className="text-[10px] font-black tracking-[0.3em] uppercase text-zinc-500 mb-4">Directories</h2>
+            <nav className="bg-dark-900 border border-zinc-900 p-6 space-y-2">
+              <h2 className="text-xs-plus font-black tracking-[0.3em] uppercase text-zinc-500 mb-4">Directories</h2>
               <button
                 onClick={() => setActiveCategory('all')}
-                className={`w-full text-left p-3 text-[10px] uppercase tracking-widest flex justify-between border ${activeCategory === 'all' ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600'}`}
+                className={`w-full text-left p-3 text-xs-plus uppercase tracking-widest flex justify-between border ${activeCategory === 'all' ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600'}`}
               >
                 <span>Root_All</span>
                 <LayoutGrid className="w-3 h-3" />
@@ -166,7 +166,7 @@ const TodoApp: React.FC = () => {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`w-full text-left p-3 text-[10px] uppercase tracking-widest border transition-all ${activeCategory === cat ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600 hover:text-zinc-400'}`}
+                  className={`w-full text-left p-3 text-xs-plus uppercase tracking-widest border transition-all ${activeCategory === cat ? 'border-emerald-500/50 text-white bg-emerald-500/5' : 'border-transparent text-zinc-600 hover:text-zinc-400'}`}
                 >
                   {cat}
                 </button>
@@ -183,7 +183,7 @@ const TodoApp: React.FC = () => {
                 <button
                   key={f}
                   onClick={() => setFilter(f as any)}
-                  className={`px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${filter === f ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-600 border-zinc-900 hover:border-zinc-700'}`}
+                  className={`px-4 py-2 text-xs-minus font-black uppercase tracking-[0.2em] border transition-all ${filter === f ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-600 border-zinc-900 hover:border-zinc-700'}`}
                 >
                   {f}
                 </button>
@@ -200,7 +200,7 @@ const TodoApp: React.FC = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className={`group bg-[#080808] border border-zinc-900 p-4 transition-all hover:border-zinc-700 ${todo.completed ? 'opacity-40' : ''}`}
+                    className={`group bg-dark-900 border border-zinc-900 p-4 transition-all hover:border-zinc-700 ${todo.completed ? 'opacity-40' : ''}`}
                   >
                     <div className="flex items-center gap-4">
                       <button
@@ -230,10 +230,10 @@ const TodoApp: React.FC = () => {
                               {todo.text}
                             </p>
                             <div className="flex items-center gap-3">
-                              <span className="text-[8px] font-mono text-zinc-600 uppercase tracking-tighter bg-zinc-950 px-1 border border-zinc-900">
+                              <span className="text-xxs font-mono text-zinc-600 uppercase tracking-tighter bg-zinc-950 px-1 border border-zinc-900">
                                 {todo.category}
                               </span>
-                              <span className="text-[8px] font-mono text-zinc-700 uppercase">
+                              <span className="text-xxs font-mono text-zinc-700 uppercase">
                                 {new Date(todo.createdAt).toLocaleDateString()}
                               </span>
                             </div>

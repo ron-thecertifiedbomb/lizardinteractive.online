@@ -66,14 +66,14 @@ export function TurboToastProvider({ children }: { children: React.ReactNode }) 
                     key={toast.id}
                     className={[
                         "pointer-events-none select-none rounded-full border px-4 py-2 text-sm font-semibold",
-                        "bg-(--panel) border-(--border) text-(--text) shadow-(--shadow-2) retro-noise",
+                        "bg-theme-panel border-(--border) text-theme-text shadow-(--shadow-2) retro-noise",
                     ].join(" ")}
                 >
                     {labelRef.current ? (
-                        <span className="text-(--muted) mr-2">{labelRef.current}</span>
+                        <span className="text-theme-muted mr-2">{labelRef.current}</span>
                     ) : null}
                     <span className="inline-flex items-center gap-2">
-                        <span className="h-2 w-2 rounded-full bg-(--accent)" />
+                        <span className="h-2 w-2 rounded-full bg-theme-accent" />
                         Turbo: {toast.rate}x
                     </span>
                 </div>

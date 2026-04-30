@@ -55,8 +55,8 @@ export default function ImageToTextConverter() {
             <ToolHeader title="OCR Engine" />
 
             {/* STATUS HUD - Matches Unit Converter Result Area */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Recognition Status</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">Recognition Status</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="flex items-baseline overflow-hidden">
                         <span className="text-4xl font-black text-white tabular-nums tracking-tighter">
@@ -68,7 +68,7 @@ export default function ImageToTextConverter() {
                     </div>
                     <div className="flex items-center gap-3">
                         <Activity className={`w-4 h-4 ${loading ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter">
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-tighter">
                             {loading ? 'Neural_Sync_Active' : 'Engine_Standby'}
                         </span>
                     </div>
@@ -79,13 +79,13 @@ export default function ImageToTextConverter() {
                 {/* SOURCE INTERFACE (Dropzone/Preview) */}
                 <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden relative">
                     <div className="border-b border-zinc-900 px-4 py-3 flex justify-between items-center bg-black/40">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase flex items-center gap-2">
+                        <span className="text-xs-minus font-mono text-zinc-500 uppercase flex items-center gap-2">
                             <Scan size={12} /> Image_Buffer
                         </span>
                         {image && (
                             <button
                                 onClick={() => { setImage(null); setText(""); }}
-                                className="text-[8px] font-mono text-zinc-700 hover:text-red-500 uppercase flex items-center gap-1 transition-colors"
+                                className="text-xxs font-mono text-zinc-700 hover:text-red-500 uppercase flex items-center gap-1 transition-colors"
                             >
                                 <X size={10} /> Wipe_Source
                             </button>
@@ -101,7 +101,7 @@ export default function ImageToTextConverter() {
                                 className="h-64 border-2 border-dashed border-zinc-900 hover:border-emerald-500/30 rounded-xl cursor-pointer transition-all flex flex-col items-center justify-center gap-4 group/drop"
                             >
                                 <Upload className="w-10 h-10 text-zinc-800 group-hover/drop:text-emerald-500 transition-colors" />
-                                <span className="text-[10px] tracking-[0.3em] font-black uppercase text-zinc-600 group-hover/drop:text-white">Initialize_Source_Upload</span>
+                                <span className="text-xs-plus tracking-[0.3em] font-black uppercase text-zinc-600 group-hover/drop:text-white">Initialize_Source_Upload</span>
                             </div>
                         ) : (
                             <div className="relative rounded-lg overflow-hidden border border-zinc-900 bg-black flex items-center justify-center h-64">
@@ -146,14 +146,14 @@ export default function ImageToTextConverter() {
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
                             <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
                                 <div className="border-b border-zinc-900 px-4 py-2 flex justify-between items-center bg-black/40">
-                                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Output_Buffer</span>
+                                    <span className="text-xs-minus font-mono text-zinc-500 uppercase tracking-widest">Output_Buffer</span>
                                     <button
                                         onClick={() => {
                                             navigator.clipboard.writeText(text);
                                             setCopied(true);
                                             setTimeout(() => setCopied(false), 2000);
                                         }}
-                                        className="flex items-center gap-2 text-[8px] font-mono text-emerald-500 uppercase hover:text-white transition-colors"
+                                        className="flex items-center gap-2 text-xxs font-mono text-emerald-500 uppercase hover:text-white transition-colors"
                                     >
                                         {copied ? <Check size={10} /> : <Copy size={10} />}
                                         {copied ? 'Data_Synced' : 'Copy_to_Clipboard'}
@@ -167,7 +167,7 @@ export default function ImageToTextConverter() {
                             </div>
                             <button
                                 onClick={() => { setImage(null); setText(""); }}
-                                className="w-full py-4 bg-zinc-950 border border-zinc-900 text-zinc-600 hover:text-red-500 text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all active:scale-95"
+                                className="w-full py-4 bg-zinc-950 border border-zinc-900 text-zinc-600 hover:text-red-500 text-xs-plus font-black uppercase tracking-widest rounded-2xl transition-all active:scale-95"
                             >
                                 Clear Session
                             </button>
@@ -178,7 +178,7 @@ export default function ImageToTextConverter() {
 
             {/* ENGINE FOOTER HUD */}
             <div className="w-full pt-4 border-t border-zinc-900 flex justify-between items-center">
-                <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.OCR_Module.v2 // Neural_Extract</span>
+                <span className="text-xs-minus font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.OCR_Module.v2 // Neural_Extract</span>
                 <ShieldCheck size={14} className="text-zinc-800" />
             </div>
         </Panel>

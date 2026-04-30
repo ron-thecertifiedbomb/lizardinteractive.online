@@ -121,7 +121,7 @@ export function JSONFormatter() {
                 <button
                     onClick={beautifyJSON}
                     disabled={!input}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-wider active:scale-95 transition disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500 text-black font-black text-xs-plus uppercase tracking-wider active:scale-95 transition disabled:opacity-50"
                 >
                     <Maximize2 size={12} /> BEAUTIFY
                 </button>
@@ -129,7 +129,7 @@ export function JSONFormatter() {
                 <button
                     onClick={minifyJSON}
                     disabled={!input}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono disabled:opacity-50"
                 >
                     <Minimize2 size={12} /> MINIFY
                 </button>
@@ -137,7 +137,7 @@ export function JSONFormatter() {
                 <button
                     onClick={copyToClipboard}
                     disabled={!output}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono disabled:opacity-50"
                 >
                     {copied ? <Check size={12} /> : <Copy size={12} />}
                     {copied ? "COPIED" : "COPY"}
@@ -146,7 +146,7 @@ export function JSONFormatter() {
                 <button
                     onClick={downloadJSON}
                     disabled={!output}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono disabled:opacity-50"
                 >
                     <Download size={12} /> DOWNLOAD
                 </button>
@@ -167,13 +167,13 @@ export function JSONFormatter() {
                                 onChange={uploadJSON}
                                 className="hidden"
                             />
-                            <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-[10px] font-mono active:scale-95 transition">
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-xs-plus font-mono active:scale-95 transition">
                                 <Upload size={10} /> UPLOAD
                             </div>
                         </label>
                         <button
                             onClick={loadExample}
-                            className="px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-[10px] font-mono active:scale-95 transition"
+                            className="px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-xs-plus font-mono active:scale-95 transition"
                         >
                             EXAMPLE
                         </button>
@@ -199,7 +199,7 @@ export function JSONFormatter() {
                     <div className="flex items-start gap-2">
                         <AlertCircle size={14} className="text-red-500 mt-0.5" />
                         <div>
-                            <h4 className="text-[10px] font-black text-red-500 uppercase mb-1">PARSE ERROR</h4>
+                            <h4 className="text-xs-plus font-black text-red-500 uppercase mb-1">PARSE ERROR</h4>
                             <p className="text-xs font-mono text-red-400">{error}</p>
                         </div>
                     </div>
@@ -215,7 +215,7 @@ export function JSONFormatter() {
                         {!error && output && (
                             <div className="flex items-center gap-1 ml-auto">
                                 <CheckCircle size={12} className="text-emerald-500" />
-                                <span className="text-[9px] font-mono text-emerald-500">VALID JSON</span>
+                                <span className="text-xs-minus font-mono text-emerald-500">VALID JSON</span>
                             </div>
                         )}
                     </div>
@@ -229,19 +229,19 @@ export function JSONFormatter() {
             {output && !error && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">CHARACTERS</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">CHARACTERS</p>
                         <p className="text-lg font-black text-white">{output.length.toLocaleString()}</p>
                     </div>
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">LINES</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">LINES</p>
                         <p className="text-lg font-black text-white">{output.split('\n').length}</p>
                     </div>
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">SIZE</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">SIZE</p>
                         <p className="text-lg font-black text-white">{(output.length / 1024).toFixed(1)} KB</p>
                     </div>
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">FORMAT</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">FORMAT</p>
                         <p className="text-lg font-black text-white">{minified ? "MINIFIED" : "PRETTY"}</p>
                     </div>
                 </div>
@@ -252,8 +252,8 @@ export function JSONFormatter() {
                 <div className="flex items-start gap-2">
                     <AlertCircle size={14} className="text-emerald-500 mt-0.5" />
                     <div>
-                        <h4 className="text-[10px] font-black text-emerald-500 uppercase mb-1">JSON TIPS</h4>
-                        <ul className="text-[10px] font-mono text-zinc-500 space-y-1">
+                        <h4 className="text-xs-plus font-black text-emerald-500 uppercase mb-1">JSON TIPS</h4>
+                        <ul className="text-xs-plus font-mono text-zinc-500 space-y-1">
                             <li>• Use double quotes for keys and strings</li>
                             <li>• No trailing commas allowed</li>
                             <li>• Numbers, booleans, null are valid values</li>

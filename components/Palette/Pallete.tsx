@@ -34,7 +34,7 @@ export function Palette() {
                                         {shade}
                                     </span>
                                     <span
-                                        className="text-[10px] sm:text-xs select-none text-center"
+                                        className="text-xs-plus sm:text-xs select-none text-center"
                                         style={{ color: getContrastYIQ(hex) }}
                                     >
                                         {hex}

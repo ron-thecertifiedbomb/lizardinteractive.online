@@ -84,7 +84,7 @@ export function NesRomDropzone({ onFile }: Props) {
                 </div>
 
                 <div className="text-center space-y-1">
-                    <h3 className={`text-[10px] font-black uppercase tracking-[0.4em] ${dragging ? "text-emerald-400" : "text-white"
+                    <h3 className={`text-xs-plus font-black uppercase tracking-[0.4em] ${dragging ? "text-emerald-400" : "text-white"
                         }`}>
                         {dragging ? "Release_to_Upload" : "Initialize_Upload"}
                     </h3>

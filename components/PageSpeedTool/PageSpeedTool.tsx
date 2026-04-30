@@ -154,28 +154,28 @@ export function PageSpeedTool() {
                         <div className={`rounded-2xl p-4 border ${getScoreBg(results.performance)} border-emerald-500/20`}>
                             <div className="flex items-center gap-2 mb-2">
                                 <Gauge size={14} className={getScoreColor(results.performance)} />
-                                <span className="text-[10px] font-mono text-zinc-500">PERFORMANCE</span>
+                                <span className="text-xs-plus font-mono text-zinc-500">PERFORMANCE</span>
                             </div>
                             <div className="text-3xl font-black text-white">{results.performance}</div>
                         </div>
                         <div className={`rounded-2xl p-4 border ${getScoreBg(results.accessibility)} border-emerald-500/20`}>
                             <div className="flex items-center gap-2 mb-2">
                                 <Eye size={14} className={getScoreColor(results.accessibility)} />
-                                <span className="text-[10px] font-mono text-zinc-500">ACCESSIBILITY</span>
+                                <span className="text-xs-plus font-mono text-zinc-500">ACCESSIBILITY</span>
                             </div>
                             <div className="text-3xl font-black text-white">{results.accessibility}</div>
                         </div>
                         <div className={`rounded-2xl p-4 border ${getScoreBg(results.bestPractices)} border-emerald-500/20`}>
                             <div className="flex items-center gap-2 mb-2">
                                 <Shield size={14} className={getScoreColor(results.bestPractices)} />
-                                <span className="text-[10px] font-mono text-zinc-500">BEST PRACTICES</span>
+                                <span className="text-xs-plus font-mono text-zinc-500">BEST PRACTICES</span>
                             </div>
                             <div className="text-3xl font-black text-white">{results.bestPractices}</div>
                         </div>
                         <div className={`rounded-2xl p-4 border ${getScoreBg(results.seo)} border-emerald-500/20`}>
                             <div className="flex items-center gap-2 mb-2">
                                 <Search size={14} className={getScoreColor(results.seo)} />
-                                <span className="text-[10px] font-mono text-zinc-500">SEO</span>
+                                <span className="text-xs-plus font-mono text-zinc-500">SEO</span>
                             </div>
                             <div className="text-3xl font-black text-white">{results.seo}</div>
                         </div>
@@ -188,26 +188,26 @@ export function PageSpeedTool() {
                             <div className="text-center">
                                 <div className="flex items-center justify-center gap-1 text-emerald-500 mb-1">
                                     <Clock size={10} />
-                                    <span className="text-[8px] font-mono">LCP</span>
+                                    <span className="text-xxs font-mono">LCP</span>
                                 </div>
                                 <p className="text-sm font-black text-white">{formatTime(results.lcp)}</p>
-                                <p className="text-[8px] font-mono text-zinc-600">Loading</p>
+                                <p className="text-xxs font-mono text-zinc-600">Loading</p>
                             </div>
                             <div className="text-center">
                                 <div className="flex items-center justify-center gap-1 text-emerald-500 mb-1">
                                     <Zap size={10} />
-                                    <span className="text-[8px] font-mono">FID</span>
+                                    <span className="text-xxs font-mono">FID</span>
                                 </div>
                                 <p className="text-sm font-black text-white">{formatTime(results.fid)}</p>
-                                <p className="text-[8px] font-mono text-zinc-600">Interactivity</p>
+                                <p className="text-xxs font-mono text-zinc-600">Interactivity</p>
                             </div>
                             <div className="text-center">
                                 <div className="flex items-center justify-center gap-1 text-emerald-500 mb-1">
                                     <Activity size={10} />
-                                    <span className="text-[8px] font-mono">CLS</span>
+                                    <span className="text-xxs font-mono">CLS</span>
                                 </div>
                                 <p className="text-sm font-black text-white">{results.cls.toFixed(3)}</p>
-                                <p className="text-[8px] font-mono text-zinc-600">Stability</p>
+                                <p className="text-xxs font-mono text-zinc-600">Stability</p>
                             </div>
                         </div>
                     </div>
@@ -229,8 +229,8 @@ export function PageSpeedTool() {
                 <div className="flex items-start gap-2">
                     <Activity size={14} className="text-blue-500 mt-0.5" />
                     <div>
-                        <h4 className="text-[10px] font-black text-blue-500 uppercase mb-1">WHAT IS THIS?</h4>
-                        <p className="text-[9px] font-mono text-zinc-500 leading-relaxed">
+                        <h4 className="text-xs-plus font-black text-blue-500 uppercase mb-1">WHAT IS THIS?</h4>
+                        <p className="text-xs-minus font-mono text-zinc-500 leading-relaxed">
                             This tool uses Google's PageSpeed Insights API to analyze your website's performance.
                             It measures Core Web Vitals (LCP, FID, CLS) and provides scores for Performance,
                             Accessibility, Best Practices, and SEO. All data comes directly from Google.

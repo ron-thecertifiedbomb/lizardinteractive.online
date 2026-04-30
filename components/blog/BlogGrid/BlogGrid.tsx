@@ -38,7 +38,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                     >
                         <Link
                             href={`/blogs/${dynamicSlug}`}
-                            className="group block bg-[#050505] border border-zinc-900 rounded-2xl overflow-hidden hover:border-emerald-500/40 transition-all duration-500 hover:scale-[1.02]"
+                            className="group block bg-dark-950 border border-zinc-900 rounded-2xl overflow-hidden hover:border-emerald-500/40 transition-all duration-500 hover:scale-[1.02]"
                         >
                             {/* Image Section */}
                             <div className="relative w-full h-48 overflow-hidden bg-zinc-900">
@@ -59,7 +59,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                                 fallback.innerHTML = `
                                                     <div class="text-center">
                                                         <div class="text-4xl mb-2">📝</div>
-                                                        <div class="text-[10px] font-mono text-zinc-600">${post.category}</div>
+                                                        <div class="text-xs-plus font-mono text-zinc-600">${post.category}</div>
                                                     </div>
                                                 `;
                                                 parent.appendChild(fallback);
@@ -70,14 +70,14 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                                     <div className="w-full h-full flex items-center justify-center bg-zinc-900">
                                         <div className="text-center">
                                             <div className="text-4xl mb-2">📝</div>
-                                            <div className="text-[10px] font-mono text-zinc-600">{post.category}</div>
+                                            <div className="text-xs-plus font-mono text-zinc-600">{post.category}</div>
                                         </div>
                                     </div>
                                 )}
 
                                 {/* Category Badge */}
                                 <div className="absolute top-3 left-3 z-10">
-                                    <span className="px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-[8px] font-black text-emerald-500 uppercase tracking-wider">
+                                    <span className="px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm text-xxs font-black text-emerald-500 uppercase tracking-wider">
                                         {post.category.replace("_", " ")}
                                     </span>
                                 </div>
@@ -86,7 +86,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
                             {/* Content Section */}
                             <div className="p-5 space-y-3">
                                 {/* Date */}
-                                <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-600">
+                                <div className="flex items-center gap-1 text-xs-plus font-mono text-zinc-600">
                                     <Calendar size={10} />
                                     <span>
                                         {post.createdAt ? new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -104,7 +104,7 @@ export default function BlogGrid({ posts }: BlogGridProps) {
 
                                 {/* Read More Link */}
                                 <div className="flex items-center justify-end pt-2">
-                                    <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-600 group-hover:text-emerald-500 transition-colors">
+                                    <div className="flex items-center gap-1 text-xs-plus font-mono text-zinc-600 group-hover:text-emerald-500 transition-colors">
                                         Read Article
                                         <ArrowUpRight size={10} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
                                     </div>

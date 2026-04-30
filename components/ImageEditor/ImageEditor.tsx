@@ -65,10 +65,10 @@ export default function MeshGenerator() {
             <ToolHeader title="Mesh Engine" />
 
             {/* SYSTEM STATUS HUD */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-5 sm:p-6">
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-5 sm:p-6">
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-mono text-emerald-500 uppercase tracking-widest">Synthesis Mode</span>
+                        <span className="text-xs-plus font-mono text-emerald-500 uppercase tracking-widest">Synthesis Mode</span>
                         <span className="text-3xl font-black text-white tabular-nums tracking-tighter">
                             {isRendering ? "RENDERING" : "LIVE_FIELD"}
                         </span>
@@ -80,10 +80,10 @@ export default function MeshGenerator() {
             {/* VISUAL FIELD - Workbench Style */}
             <div className="w-full bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden flex flex-col shadow-2xl">
                 <div className="border-b border-zinc-900 px-4 py-3 flex justify-between items-center bg-black/40">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase flex items-center gap-2">
+                    <span className="text-xs-minus font-mono text-zinc-500 uppercase flex items-center gap-2">
                         <Zap size={12} /> Live_Synthesis
                     </span>
-                    <span className="text-[8px] font-mono text-zinc-700 uppercase tracking-widest">7680 x 4320 Ready</span>
+                    <span className="text-xxs font-mono text-zinc-700 uppercase tracking-widest">7680 x 4320 Ready</span>
                 </div>
                 <div className="relative aspect-video sm:aspect-[21/9] w-full">
                     <div style={meshStyle as any} className="w-full h-full transition-all duration-700 ease-in-out" />
@@ -99,7 +99,7 @@ export default function MeshGenerator() {
             <div className="grid grid-cols-2 gap-3 w-full">
                 <button
                     onClick={copyCSS}
-                    className="flex items-center justify-center gap-2 py-4 bg-zinc-950 border border-zinc-900 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:border-zinc-700 transition-all active:scale-95"
+                    className="flex items-center justify-center gap-2 py-4 bg-zinc-950 border border-zinc-900 rounded-2xl text-xs-plus font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:border-zinc-700 transition-all active:scale-95"
                 >
                     {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
                     {copied ? "COPIED" : "Copy_CSS"}
@@ -107,7 +107,7 @@ export default function MeshGenerator() {
                 <button
                     onClick={handleExport8K}
                     disabled={isRendering}
-                    className="flex items-center justify-center gap-2 py-4 bg-emerald-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 disabled:bg-zinc-800 transition-all active:scale-95 shadow-lg shadow-emerald-500/10"
+                    className="flex items-center justify-center gap-2 py-4 bg-emerald-500 text-black rounded-2xl text-xs-plus font-black uppercase tracking-widest hover:bg-emerald-400 disabled:bg-zinc-800 transition-all active:scale-95 shadow-lg shadow-emerald-500/10"
                 >
                     {isRendering ? <RefreshCcw size={14} className="animate-spin" /> : <Download size={14} />}
                     {isRendering ? "PROCESSING" : "Export_8K"}
@@ -119,7 +119,7 @@ export default function MeshGenerator() {
                 <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Terminal size={14} className="text-zinc-600" />
-                        <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest font-bold">Master_Void_Color</span>
+                        <span className="text-xs-plus font-mono text-zinc-400 uppercase tracking-widest font-bold">Master_Void_Color</span>
                     </div>
                     <input
                         type="color"
@@ -143,7 +143,7 @@ export default function MeshGenerator() {
                                 <div className="flex justify-between items-center mb-5">
                                     <div className="flex items-center gap-3">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                                        <span className="text-[10px] font-mono text-white uppercase tracking-tighter font-bold">Signal_Node_0{i + 1}</span>
+                                        <span className="text-xs-plus font-mono text-white uppercase tracking-tighter font-bold">Signal_Node_0{i + 1}</span>
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <input type="color" value={p.color} onChange={(e) => updatePoint(p.id, { color: e.target.value })} className="w-5 h-5 bg-transparent cursor-pointer" />
@@ -157,14 +157,14 @@ export default function MeshGenerator() {
 
                                 <div className="space-y-5">
                                     <div className="space-y-2">
-                                        <div className="flex justify-between text-[8px] font-mono text-zinc-600 uppercase tracking-widest font-bold">
+                                        <div className="flex justify-between text-xxs font-mono text-zinc-600 uppercase tracking-widest font-bold">
                                             <span>Vector_X_Axis</span>
                                             <span className="text-emerald-500">{p.x}%</span>
                                         </div>
                                         <input type="range" min="0" max="100" value={p.x} onChange={(e) => updatePoint(p.id, { x: parseInt(e.target.value) })} className="w-full accent-emerald-500 h-1 bg-zinc-900 appearance-none rounded-full cursor-pointer" />
                                     </div>
                                     <div className="space-y-2">
-                                        <div className="flex justify-between text-[8px] font-mono text-zinc-600 uppercase tracking-widest font-bold">
+                                        <div className="flex justify-between text-xxs font-mono text-zinc-600 uppercase tracking-widest font-bold">
                                             <span>Vector_Y_Axis</span>
                                             <span className="text-emerald-500">{p.y}%</span>
                                         </div>
@@ -179,7 +179,7 @@ export default function MeshGenerator() {
                 {/* ADD NODE BUTTON */}
                 <button
                     onClick={() => setPoints([...points, { id: Date.now().toString(), color: '#ffffff', x: 50, y: 50, size: 100 }])}
-                    className="w-full py-5 border border-dashed border-zinc-800 text-zinc-600 hover:text-emerald-500 hover:border-emerald-500/50 transition-all rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-2 active:scale-95"
+                    className="w-full py-5 border border-dashed border-zinc-800 text-zinc-600 hover:text-emerald-500 hover:border-emerald-500/50 transition-all rounded-2xl text-xs-plus font-black uppercase tracking-[0.4em] flex items-center justify-center gap-2 active:scale-95"
                 >
                     <Plus size={14} /> Inject_Signal_Point
                 </button>
@@ -187,7 +187,7 @@ export default function MeshGenerator() {
 
             {/* SYSTEM FOOTER */}
             <div className="w-full pt-8 border-t border-zinc-900 flex justify-between items-center opacity-30">
-                <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.Mesh_Engine.v4 // Field_Synthesis</span>
+                <span className="text-xs-minus font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.Mesh_Engine.v4 // Field_Synthesis</span>
                 <ShieldCheck size={14} className="text-zinc-800" />
             </div>
         </Panel>

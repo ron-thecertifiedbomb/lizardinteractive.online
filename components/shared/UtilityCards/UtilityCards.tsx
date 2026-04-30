@@ -27,7 +27,7 @@ export default function UtilityCards({ items }: UtilityCardsProps) {
                 >
                     <Link
                         href={`/utilities/${util.slug}`}
-                        className="group relative block p-8 md:p-10 bg-[#080808] border border-zinc-900 transition-all duration-500 hover:border-emerald-500/50 overflow-hidden h-full shadow-2xl"
+                        className="group relative block p-8 md:p-10 bg-dark-900 border border-zinc-900 transition-all duration-500 hover:border-emerald-500/50 overflow-hidden h-full shadow-2xl"
                     >
                         {/* Background HUD Accent */}
                         <span className="absolute -right-4 -top-2 text-7xl font-black text-white/[0.01] uppercase select-none group-hover:text-emerald-500/[0.03] transition-all">
@@ -40,7 +40,7 @@ export default function UtilityCards({ items }: UtilityCardsProps) {
 
                                 <div className="flex flex-col gap-1">
                                     {util.category && (
-                                        <span className="text-[8px] text-emerald-500/50 font-mono tracking-[0.3em] uppercase">
+                                        <span className="text-xxs text-emerald-500/50 font-mono tracking-[0.3em] uppercase">
                                             {util.category}_System
                                         </span>
                                     )}
@@ -50,13 +50,13 @@ export default function UtilityCards({ items }: UtilityCardsProps) {
                                     </h3>
                                 </div>
 
-                                <p className="text-zinc-600 text-[10px] uppercase tracking-widest leading-relaxed font-mono">
+                                <p className="text-zinc-600 text-xs-plus uppercase tracking-widest leading-relaxed font-mono">
                                     {util.description || `Initialize optimized ${util.name.toLowerCase()} interface.`}
                                 </p>
                             </div>
 
                             {/* Interaction Bar */}
-                            <div className="flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.5em] text-zinc-800 group-hover:text-white transition-all">
+                            <div className="flex items-center gap-3 text-xs-minus font-black uppercase tracking-[0.5em] text-zinc-800 group-hover:text-white transition-all">
                                 <span className="group-hover:translate-x-2 transition-transform">Initialize</span>
                                 <div className="flex-1 h-[1px] bg-zinc-900 group-hover:bg-emerald-500/30" />
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity italic">200_OK</span>

@@ -15,7 +15,7 @@ export default function MainHeader({ eyebrow, headline, subheadline }: MainHeade
 
             {/* Eyebrow Text */}
             <div className="z-10 mb-4 md:mb-6 px-3 py-1 md:px-4 md:py-1.5 rounded-full border border-green-500/30 bg-green-500/10 shadow-[0_0_15px_rgba(74,222,128,0.1)]">
-                <span className="text-green-400 font-mono text-[10px] sm:text-xs md:text-sm font-semibold tracking-widest uppercase text-center block">
+                <span className="text-green-400 font-mono text-xs-plus sm:text-xs md:text-sm font-semibold tracking-widest uppercase text-center block">
                     {eyebrow}
                 </span>
             </div>

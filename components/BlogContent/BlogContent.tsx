@@ -93,7 +93,7 @@ export default function BlogContent({ article }: BlogContentProps) {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    className="bg-[#050505] border border-zinc-900 p-6 hover:border-emerald-500/30 transition-all"
+                                    className="bg-dark-950 border border-zinc-900 p-6 hover:border-emerald-500/30 transition-all"
                                 >
                                     {item.image && (
                                         <div className="relative aspect-video mb-6 border border-zinc-800 grayscale hover:grayscale-0 transition-all">
@@ -105,7 +105,7 @@ export default function BlogContent({ article }: BlogContentProps) {
 
                                     <div className="space-y-1 border-t border-zinc-900 pt-4">
                                         {item.details.map((detail, dIdx) => (
-                                            <div key={dIdx} className="flex justify-between text-[10px] font-mono uppercase">
+                                            <div key={dIdx} className="flex justify-between text-xs-plus font-mono uppercase">
                                                 <span className="text-zinc-600">{detail.label}</span>
                                                 <span className="text-emerald-400">{detail.value}</span>
                                             </div>

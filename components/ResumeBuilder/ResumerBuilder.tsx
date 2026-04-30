@@ -67,13 +67,13 @@ export default function ResumeBuilder() {
             <div className="max-w-7xl mx-auto space-y-12">
 
                 {/* HUD HEADER */}
-                <div className="flex justify-between items-start bg-[#080808] border border-zinc-900 p-6">
+                <div className="flex justify-between items-start bg-dark-900 border border-zinc-900 p-6">
                     <div className="space-y-1">
                         <div className="flex items-center gap-2">
                             <Terminal className="w-3 h-3 text-emerald-500" />
-                            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">System.Resume_v2</h2>
+                            <h2 className="text-xs-plus font-black uppercase tracking-[0.4em] text-white">System.Resume_v2</h2>
                         </div>
-                        <p className="text-[9px] text-zinc-600 uppercase font-mono tracking-tighter italic">
+                        <p className="text-xs-minus text-zinc-600 uppercase font-mono tracking-tighter italic">
                             Status: ARCHITECTING_PROFILE // Persistence: LOCAL_STORAGE
                         </p>
                     </div>
@@ -93,7 +93,7 @@ export default function ResumeBuilder() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {Object.entries(personal).filter(([k]) => k !== "summary").map(([key, value]) => (
                                     <div key={key} className="space-y-1">
-                                        <label className="text-[8px] uppercase font-mono text-zinc-600">{key}</label>
+                                        <label className="text-xxs uppercase font-mono text-zinc-600">{key}</label>
                                         <input
                                             value={value}
                                             onChange={(e) => updatePersonal(key, e.target.value)}
@@ -103,7 +103,7 @@ export default function ResumeBuilder() {
                                 ))}
                             </div>
                             <div className="mt-4 space-y-1">
-                                <label className="text-[8px] uppercase font-mono text-zinc-600">Executive_Summary</label>
+                                <label className="text-xxs uppercase font-mono text-zinc-600">Executive_Summary</label>
                                 <textarea
                                     value={personal.summary}
                                     onChange={(e) => updatePersonal("summary", e.target.value)}
@@ -121,11 +121,11 @@ export default function ResumeBuilder() {
                                             <input placeholder="COMPANY" value={exp.company} onChange={(e) => updateExperience(exp.id, "company", e.target.value)} className="bg-transparent border-b border-zinc-900 p-2 text-xs outline-none focus:border-emerald-500 transition-all" />
                                             <input placeholder="ROLE" value={exp.role} onChange={(e) => updateExperience(exp.id, "role", e.target.value)} className="bg-transparent border-b border-zinc-900 p-2 text-xs outline-none focus:border-emerald-500 transition-all" />
                                         </div>
-                                        <textarea placeholder="DETAILS" value={exp.details} onChange={(e) => updateExperience(exp.id, "details", e.target.value)} className="w-full bg-transparent border border-zinc-900 p-3 text-[11px] h-20 resize-none outline-none" />
+                                        <textarea placeholder="DETAILS" value={exp.details} onChange={(e) => updateExperience(exp.id, "details", e.target.value)} className="w-full bg-transparent border border-zinc-900 p-3 text-sm-minus h-20 resize-none outline-none" />
                                         <button onClick={() => removeExperience(exp.id)} className="absolute -top-2 -right-2 bg-red-600 p-1 opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={12} /></button>
                                     </div>
                                 ))}
-                                <button onClick={addExperience} className="w-full border border-dashed border-zinc-800 p-3 text-[10px] uppercase tracking-widest hover:border-emerald-500 transition-all flex items-center justify-center gap-2">
+                                <button onClick={addExperience} className="w-full border border-dashed border-zinc-800 p-3 text-xs-plus uppercase tracking-widest hover:border-emerald-500 transition-all flex items-center justify-center gap-2">
                                     <Plus size={14} /> Append_Experience
                                 </button>
                             </div>
@@ -137,11 +137,11 @@ export default function ResumeBuilder() {
                     <div className="lg:col-span-5 space-y-6">
                         <div className="sticky top-24">
                             <div className="flex justify-between items-center px-1 mb-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Render_Output</span>
+                                <span className="text-xs-plus font-black uppercase tracking-widest text-zinc-500">Render_Output</span>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => twolayoutPDF(personal, experience, education, references, skills)}
-                                        className="bg-emerald-600 text-black px-4 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2"
+                                        className="bg-emerald-600 text-black px-4 py-2 text-xs-plus font-black uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2"
                                     >
                                         <FileText size={12} /> Generate_PDF
                                     </button>
@@ -149,7 +149,7 @@ export default function ResumeBuilder() {
                             </div>
 
                             {/* PREVIEW CONTAINER: Mimics a printed sheet */}
-                            <div className="bg-[#080808] border border-zinc-900 p-1 shadow-2xl">
+                            <div className="bg-dark-900 border border-zinc-900 p-1 shadow-2xl">
                                 <div className="bg-white overflow-hidden aspect-[1/1.41] transform scale-100 origin-top">
                                     <ModernMinimalistPreview
                                         personal={personal}
@@ -171,10 +171,10 @@ export default function ResumeBuilder() {
 // Sub-component for industrial modules
 function Module({ title, icon, children }: { title: string, icon: React.ReactNode, children: React.ReactNode }) {
     return (
-        <div className="bg-[#080808] border border-zinc-900 p-6 relative">
+        <div className="bg-dark-900 border border-zinc-900 p-6 relative">
             <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-zinc-900 text-emerald-500">{icon}</div>
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white">{title}</h3>
+                <h3 className="text-xs-plus font-black uppercase tracking-[0.3em] text-white">{title}</h3>
             </div>
             {children}
         </div>

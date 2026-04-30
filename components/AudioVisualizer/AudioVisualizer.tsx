@@ -166,7 +166,7 @@ export default function AudioVisualizer() {
                                     <button
                                         key={mode}
                                         onClick={() => setVisualMode(mode)}
-                                        className={`text-[9px] px-3 py-1.5 border font-black uppercase tracking-widest transition-all ${visualMode === mode
+                                        className={`text-xs-minus px-3 py-1.5 border font-black uppercase tracking-widest transition-all ${visualMode === mode
                                             ? 'border-white text-white bg-white/10'
                                             : 'border-zinc-800 text-zinc-600 hover:text-zinc-400'
                                             }`}
@@ -202,7 +202,7 @@ export default function AudioVisualizer() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 w-full md:w-auto">
-                    <label className="flex items-center justify-center gap-2 px-4 py-3 border border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-widest cursor-pointer hover:bg-zinc-800 hover:text-white transition-all">
+                    <label className="flex items-center justify-center gap-2 px-4 py-3 border border-zinc-800 bg-zinc-900/50 text-zinc-400 text-xs-plus font-black uppercase tracking-widest cursor-pointer hover:bg-zinc-800 hover:text-white transition-all">
                         <Upload className="w-3 h-3" />
                         Load
                         <input type="file" accept="audio/*" onChange={handleFileUpload} className="hidden" />
@@ -211,7 +211,7 @@ export default function AudioVisualizer() {
                     <button
                         onClick={startAudio}
                         style={{ backgroundColor: isPlaying ? '#ef4444' : accentColor.hex }}
-                        className={`px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 text-black`}
+                        className={`px-6 py-3 text-xs-plus font-black uppercase tracking-[0.2em] transition-all active:scale-95 text-black`}
                     >
                         {isPlaying ? "Halt" : "Init"}
                     </button>
@@ -224,7 +224,7 @@ export default function AudioVisualizer() {
                 {!fileName && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-20">
                         <ShieldAlert className="w-6 h-6" style={{ color: accentColor.hex }} />
-                        <span className="text-[8px] font-mono tracking-[0.4em]" style={{ color: accentColor.hex }}>Waiting_For_Input</span>
+                        <span className="text-xxs font-mono tracking-[0.4em]" style={{ color: accentColor.hex }}>Waiting_For_Input</span>
                     </div>
                 )}
             </div>
@@ -238,7 +238,7 @@ export default function AudioVisualizer() {
                     <div key={item.label} className="space-y-3">
                         <div className="flex items-center gap-2 opacity-40">
                             <item.icon className="w-2 h-2 text-white" />
-                            <p className="text-[8px] font-mono text-zinc-500 uppercase tracking-tighter">{item.label}</p>
+                            <p className="text-xxs font-mono text-zinc-500 uppercase tracking-tighter">{item.label}</p>
                         </div>
                         <div className="h-[2px] w-full bg-zinc-900 overflow-hidden relative">
                             {isPlaying && (

@@ -81,18 +81,18 @@ export default function PDFToWordConverter() {
     };
 
     return (
-        <div className="w-full max-w-4xl mx-auto bg-[#080808] border border-zinc-900 p-8 relative overflow-hidden group selection:bg-emerald-500 selection:text-black">
+        <div className="w-full max-w-4xl mx-auto bg-dark-900 border border-zinc-900 p-8 relative overflow-hidden group selection:bg-emerald-500 selection:text-black">
 
             {/* HUD HEADER */}
             <div className="flex justify-between items-start mb-10">
                 <div className="space-y-1">
                     <div className="flex items-center gap-2">
                         <FileText className={`w-3 h-3 ${loading ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white">
+                        <h2 className="text-xs-plus font-black uppercase tracking-[0.4em] text-white">
                             System.DocConvert_v1
                         </h2>
                     </div>
-                    <p className="text-[9px] text-zinc-600 uppercase font-mono tracking-tighter italic">
+                    <p className="text-xs-minus text-zinc-600 uppercase font-mono tracking-tighter italic">
                         {loading ? 'STATUS: PARSING_PDF_STREAM' : file ? 'BUFFER: FILE_READY' : 'STATUS: WAITING_FOR_PAYLOAD'}
                     </p>
                 </div>
@@ -108,7 +108,7 @@ export default function PDFToWordConverter() {
                             className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-zinc-900 hover:border-emerald-500/50 hover:bg-emerald-500/[0.02] cursor-pointer transition-all group/upload"
                         >
                             <Upload className="w-10 h-10 text-zinc-800 group-hover/upload:text-emerald-500 transition-colors mb-4" />
-                            <span className="text-[10px] tracking-[0.3em] font-black uppercase text-zinc-600 group-hover/upload:text-white">Initialize_PDF_Payload</span>
+                            <span className="text-xs-plus tracking-[0.3em] font-black uppercase text-zinc-600 group-hover/upload:text-white">Initialize_PDF_Payload</span>
                             <input type="file" accept="application/pdf" onChange={handleFileChange} className="hidden" ref={fileInputRef} />
                         </motion.label>
                     ) : (
@@ -121,13 +121,13 @@ export default function PDFToWordConverter() {
                                     <FileText size={20} />
                                 </div>
                                 <div>
-                                    <div className="text-[11px] font-bold text-white uppercase tracking-wider">{file.name}</div>
-                                    <div className="text-[9px] font-mono text-zinc-600 uppercase">{(file.size / 1024).toFixed(2)} KB // Ready</div>
+                                    <div className="text-sm-minus font-bold text-white uppercase tracking-wider">{file.name}</div>
+                                    <div className="text-xs-minus font-mono text-zinc-600 uppercase">{(file.size / 1024).toFixed(2)} KB // Ready</div>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setFile(null)}
-                                className="text-[10px] font-black uppercase text-zinc-500 hover:text-red-500 transition-colors"
+                                className="text-xs-plus font-black uppercase text-zinc-500 hover:text-red-500 transition-colors"
                             >
                                 [ Drop_Payload ]
                             </button>
@@ -140,7 +140,7 @@ export default function PDFToWordConverter() {
                     <button
                         onClick={convertPDFtoWord}
                         disabled={!file || !pdfjsLib || loading}
-                        className="group relative flex items-center justify-center gap-3 bg-white text-black px-12 py-4 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-emerald-500 transition-all disabled:opacity-10"
+                        className="group relative flex items-center justify-center gap-3 bg-white text-black px-12 py-4 text-xs-plus font-black uppercase tracking-[0.3em] hover:bg-emerald-500 transition-all disabled:opacity-10"
                     >
                         {loading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                         {loading ? "Processing_Buffer..." : "Execute_Conversion"}
@@ -153,7 +153,7 @@ export default function PDFToWordConverter() {
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                                 className="mt-6 w-full max-w-sm"
                             >
-                                <div className="flex justify-between text-[8px] font-mono text-zinc-600 uppercase mb-2">
+                                <div className="flex justify-between text-xxs font-mono text-zinc-600 uppercase mb-2">
                                     <span>Allocating_Resources</span>
                                     <span>Sync_Active</span>
                                 </div>

@@ -55,7 +55,7 @@ export default function Chat() {
                         {messages.length === 0 && (
                             <div className="text-center space-y-2 opacity-50">
                                 <h2 className="text-emerald-500 font-mono text-xs tracking-[0.4em] uppercase">System Ready</h2>
-                                <p className="text-[10px] text-zinc-500 font-mono">LIZARD_INTERACTIVE_V2.5</p>
+                                <p className="text-xs-plus text-zinc-500 font-mono">LIZARD_INTERACTIVE_V2.5</p>
                             </div>
                         )}
 
@@ -70,7 +70,7 @@ export default function Chat() {
                                         ? 'bg-zinc-900 border-zinc-800 rounded-br-none text-zinc-100'
                                         : 'bg-zinc-950 border-emerald-900/30 rounded-bl-none text-emerald-50'
                                 }`}>
-                                    <p className={`text-[10px] mb-2 font-mono uppercase tracking-widest font-bold ${
+                                    <p className={`text-xs-plus mb-2 font-mono uppercase tracking-widest font-bold ${
                                         message.role === 'user' ? 'text-zinc-500' : 'text-emerald-500'
                                     }`}>
                                         {message.role === 'user' ? 'Client Request' : 'Lizrd Engineer'}

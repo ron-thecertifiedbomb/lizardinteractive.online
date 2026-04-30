@@ -100,18 +100,18 @@ export default function PrecisionChordAnalyzer() {
     };
 
     return (
-        <div className="w-full max-w-xl mx-auto p-6 bg-[#050505] border border-zinc-900 rounded-3xl font-mono shadow-2xl">
+        <div className="w-full max-w-xl mx-auto p-6 bg-dark-950 border border-zinc-900 rounded-3xl font-mono shadow-2xl">
             {/* HUD Status */}
             <div className="flex justify-between items-center mb-10 opacity-60">
                 <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-800'}`} />
-                    <span className="text-[9px] text-emerald-500 font-black tracking-[0.3em] uppercase">
+                    <span className="text-xs-minus text-emerald-500 font-black tracking-[0.3em] uppercase">
                         {isPlaying ? 'FFT_PRECISION_ON' : 'BUFFER_WAITING'}
                     </span>
                 </div>
                 <div className="flex gap-2">
                     <div className="w-4 h-[1px] bg-zinc-800 self-center" />
-                    <span className="text-[8px] text-zinc-600 font-bold uppercase tracking-widest">8192_SAMPLES</span>
+                    <span className="text-xxs text-zinc-600 font-bold uppercase tracking-widest">8192_SAMPLES</span>
                 </div>
             </div>
 
@@ -119,7 +119,7 @@ export default function PrecisionChordAnalyzer() {
             <div className="relative flex flex-col items-center py-16 bg-zinc-950/50 border-y border-zinc-900/30 mb-8 overflow-hidden rounded-xl">
                 <div className="absolute top-4 left-6 flex items-center gap-2">
                     <Activity className="w-3 h-3 text-emerald-500/50" />
-                    <span className="text-[7px] text-zinc-600 uppercase tracking-[0.3em]">Spectral_Chroma_Engine</span>
+                    <span className="text-tiny text-zinc-600 uppercase tracking-[0.3em]">Spectral_Chroma_Engine</span>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -147,7 +147,7 @@ export default function PrecisionChordAnalyzer() {
                                     }}
                                 />
                             </div>
-                            <span className="text-[7px] text-zinc-500 font-black">
+                            <span className="text-tiny text-zinc-500 font-black">
                                 {['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'][i]}
                             </span>
                         </div>
@@ -157,7 +157,7 @@ export default function PrecisionChordAnalyzer() {
 
             {/* Controls */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label className="flex items-center justify-center gap-3 px-6 py-4 border border-zinc-800 bg-zinc-900/40 text-[9px] text-zinc-500 font-black uppercase tracking-widest cursor-pointer hover:bg-zinc-800 hover:text-white transition-all">
+                <label className="flex items-center justify-center gap-3 px-6 py-4 border border-zinc-800 bg-zinc-900/40 text-xs-minus text-zinc-500 font-black uppercase tracking-widest cursor-pointer hover:bg-zinc-800 hover:text-white transition-all">
                     <Upload className="w-3 h-3" />
                     {fileName ? 'Switch' : 'Upload'}
                     <input type="file" onChange={handleFileUpload} accept="audio/*" className="hidden" />
@@ -166,7 +166,7 @@ export default function PrecisionChordAnalyzer() {
                 <button
                     onClick={togglePlayback}
                     disabled={!fileName}
-                    className={`px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all
+                    className={`px-8 py-4 text-xs-minus font-black uppercase tracking-[0.2em] transition-all
                         ${!fileName ? 'opacity-10 cursor-not-allowed' : 'active:scale-95 shadow-xl'}
                         ${isPlaying ? 'bg-red-600 text-white' : 'bg-emerald-500 text-black'}
                     `}
@@ -178,15 +178,15 @@ export default function PrecisionChordAnalyzer() {
             <div className="mt-8 flex justify-between items-center border-t border-zinc-900/50 pt-6">
                 <div className="flex gap-4">
                     <div className="space-y-1">
-                        <p className="text-[6px] text-zinc-600 uppercase font-mono tracking-widest">Resolution</p>
-                        <p className="text-[9px] text-white font-bold tracking-tighter italic">High_Fi</p>
+                        <p className="text-micro text-zinc-600 uppercase font-mono tracking-widest">Resolution</p>
+                        <p className="text-xs-minus text-white font-bold tracking-tighter italic">High_Fi</p>
                     </div>
                     <div className="space-y-1">
-                        <p className="text-[6px] text-zinc-600 uppercase font-mono tracking-widest">Buffer</p>
-                        <p className="text-[9px] text-white font-bold tracking-tighter italic">Linear</p>
+                        <p className="text-micro text-zinc-600 uppercase font-mono tracking-widest">Buffer</p>
+                        <p className="text-xs-minus text-white font-bold tracking-tighter italic">Linear</p>
                     </div>
                 </div>
-                <span className="text-[7px] text-zinc-800 uppercase tracking-widest">Lizard_Interactive_Precision_DSP</span>
+                <span className="text-tiny text-zinc-800 uppercase tracking-widest">Lizard_Interactive_Precision_DSP</span>
             </div>
 
             <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" crossOrigin="anonymous" />

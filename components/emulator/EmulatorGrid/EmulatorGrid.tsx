@@ -24,7 +24,7 @@ export default function EmulatorGrid({ emulators }: EmulatorGridProps) {
                             "group relative block overflow-hidden border transition-all duration-700 p-8",
                             isDisabled
                                 ? "border-zinc-900 bg-zinc-950/40 cursor-not-allowed opacity-40 grayscale"
-                                : "border-white/5 bg-[#080808] hover:border-emerald-500/40 cursor-pointer shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                                : "border-white/5 bg-dark-900 hover:border-emerald-500/40 cursor-pointer shadow-[0_0_50px_rgba(0,0,0,0.5)]"
                         ].join(" ")}
                     >
                         {/* Background Hardware ID - Deeper dim for offline */}
@@ -44,20 +44,20 @@ export default function EmulatorGrid({ emulators }: EmulatorGridProps) {
                             <div className="flex justify-between items-center mb-10">
                                 <div className="flex gap-2">
                                     <span className={[
-                                        "font-mono text-[9px] uppercase tracking-[0.2em] border px-2 py-1 transition-colors",
+                                        "font-mono text-xs-minus uppercase tracking-[0.2em] border px-2 py-1 transition-colors",
                                         isDisabled
                                             ? "text-zinc-700 border-zinc-900 bg-transparent"
                                             : "text-emerald-500/60 border-emerald-500/20 bg-emerald-500/5"
                                     ].join(" ")}>
                                         {emu.system}
                                     </span>
-                                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-zinc-600 border border-zinc-800 px-2 py-1">
+                                    <span className="font-mono text-xs-minus uppercase tracking-[0.2em] text-zinc-600 border border-zinc-800 px-2 py-1">
                                         {isDisabled ? "LOCKED" : emu.version}
                                     </span>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <span className="font-mono text-[8px] uppercase tracking-widest text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span className="font-mono text-xxs uppercase tracking-widest text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity">
                                         {isDisabled ? "RESTRICTED" : emu.status}
                                     </span>
                                     <div className={[
@@ -87,7 +87,7 @@ export default function EmulatorGrid({ emulators }: EmulatorGridProps) {
                                     isDisabled ? "w-4 bg-zinc-900" : "w-8 bg-zinc-800 group-hover:w-16 group-hover:bg-emerald-500/50"
                                 ].join(" ")} />
                                 <span className={[
-                                    "font-mono text-[9px] uppercase tracking-[0.4em] transition-colors",
+                                    "font-mono text-xs-minus uppercase tracking-[0.4em] transition-colors",
                                     isDisabled ? "text-zinc-900" : "text-zinc-700 group-hover:text-white"
                                 ].join(" ")}>
                                     {isDisabled ? "ACCESS_DENIED" : "Initialize_System"}

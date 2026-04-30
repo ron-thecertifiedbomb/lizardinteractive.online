@@ -16,8 +16,8 @@ function Btn({
     return (
         <button
             className={[
-                "touch-none select-none rounded-2xl border border-(--border) bg-(--panel)",
-                "text-center font-semibold shadow-sm active:scale-95 active:bg-(--panel-2) transition-transform",
+                "touch-none select-none rounded-2xl border border-(--border) bg-theme-panel",
+                "text-center font-semibold shadow-sm active:scale-95 active:bg-theme-panel-2 transition-transform",
                 className,
             ].join(" ")}
             onPointerDown={(e) => {
@@ -98,13 +98,13 @@ export function MobileControls({ onPress, onRelease }: Props) {
                 <div className="flex flex-col items-center gap-2">
                     <Btn
                         label="SELECT"
-                        className="px-4 py-1.5 text-[10px] tracking-wider"
+                        className="px-4 py-1.5 text-xs-plus tracking-wider"
                         onPress={() => onPress("SELECT")}
                         onRelease={() => onRelease("SELECT")}
                     />
                     <Btn
                         label="START"
-                        className="px-4 py-1.5 text-[10px] tracking-wider"
+                        className="px-4 py-1.5 text-xs-plus tracking-wider"
                         onPress={() => onPress("START")}
                         onRelease={() => onRelease("START")}
                     />
@@ -115,7 +115,7 @@ export function MobileControls({ onPress, onRelease }: Props) {
                     <div />
                     <Btn
                         label="A"
-                        className="h-12 w-12 rounded-full text-sm bg-(--accent) border-transparent"
+                        className="h-12 w-12 rounded-full text-sm bg-theme-accent border-transparent"
                         onPress={() => onPress("A")}
                         onRelease={() => onRelease("A")}
                     />

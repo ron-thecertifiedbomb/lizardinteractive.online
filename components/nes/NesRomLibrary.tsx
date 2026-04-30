@@ -105,7 +105,7 @@ export function NesRomLibrary({ onPlay }: Props) {
 
             {/* System Notification */}
             {toast && (
-                <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[10px] font-black tracking-widest text-emerald-400 uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)]" role="status">
+                <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs-plus font-black tracking-widest text-emerald-400 uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)]" role="status">
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     {toast}
                 </div>
@@ -114,7 +114,7 @@ export function NesRomLibrary({ onPlay }: Props) {
             {list.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 rounded-3xl border border-dashed border-zinc-800 bg-zinc-950/30">
                     <Box size={32} className="text-zinc-700 mb-4" />
-                    <div className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">
+                    <div className="text-xs-plus font-black uppercase tracking-[0.3em] text-zinc-600">
                         Library_Empty // Waiting_For_Input
                     </div>
                 </div>
@@ -145,10 +145,10 @@ export function NesRomLibrary({ onPlay }: Props) {
                                     {entry.name.replace(".nes", "").replace(/_/g, " ")}
                                 </h3>
                                 <div className="flex flex-col gap-1">
-                                    <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500">
+                                    <div className="flex items-center gap-2 text-xs-minus font-mono text-zinc-500">
                                         <HardDrive size={10} /> {fmtSize(entry.size)}
                                     </div>
-                                    <div className="flex items-center gap-2 text-[9px] font-mono text-zinc-500">
+                                    <div className="flex items-center gap-2 text-xs-minus font-mono text-zinc-500">
                                         <Calendar size={10} /> LAST: {fmtDate(entry.lastPlayedAt)}
                                     </div>
                                 </div>
@@ -158,7 +158,7 @@ export function NesRomLibrary({ onPlay }: Props) {
                             <div className="flex items-center gap-2 border-t border-zinc-900 pt-4">
                                 <button
                                     onClick={() => handlePlay(entry)}
-                                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-[10px] font-black uppercase tracking-widest text-black transition hover:bg-emerald-500 active:scale-95"
+                                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-xs-plus font-black uppercase tracking-widest text-black transition hover:bg-emerald-500 active:scale-95"
                                 >
                                     <Play size={12} fill="currentColor" /> Play
                                 </button>

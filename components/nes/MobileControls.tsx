@@ -139,7 +139,7 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                             onPointerUp={() => onRelease("SELECT")}
                             className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
-                        <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Select</span>
+                        <span className="text-micro font-black text-rose-900/60 tracking-widest uppercase">Select</span>
                     </div>
 
                     <div className="flex flex-col items-center gap-1">
@@ -148,12 +148,12 @@ export function NesMobileControls({ onPress, onRelease }: Props) {
                             onPointerUp={() => onRelease("START")}
                             className="w-16 h-4 bg-zinc-900 border border-zinc-800 rounded-full active:bg-zinc-700 transition-colors"
                         />
-                        <span className="text-[6px] font-black text-rose-900/60 tracking-widest uppercase">Start</span>
+                        <span className="text-micro font-black text-rose-900/60 tracking-widest uppercase">Start</span>
                     </div>
                 </div>
 
                 <div className="text-center ">
-                    <span className="text-[6px] font-mono tracking-[0.8em] text-emerald-500">LIZARD INTERACTIVE ONLINE</span>
+                    <span className="text-micro font-mono tracking-[0.8em] text-emerald-500">LIZARD INTERACTIVE ONLINE</span>
                 </div>
             </div>
         </div>

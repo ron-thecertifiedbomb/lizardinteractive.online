@@ -212,7 +212,7 @@ export function QRCodeGenerator() {
                 <div className="p-4 border-t border-zinc-900 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="text-[10px] font-mono text-zinc-600 block mb-1">Foreground</label>
+                            <label className="text-xs-plus font-mono text-zinc-600 block mb-1">Foreground</label>
                             <input
                                 type="color"
                                 value={fgColor}
@@ -221,7 +221,7 @@ export function QRCodeGenerator() {
                             />
                         </div>
                         <div>
-                            <label className="text-[10px] font-mono text-zinc-600 block mb-1">Background</label>
+                            <label className="text-xs-plus font-mono text-zinc-600 block mb-1">Background</label>
                             <input
                                 type="color"
                                 value={bgColor}
@@ -239,7 +239,7 @@ export function QRCodeGenerator() {
                                     setFgColor(preset.fg);
                                     setBgColor(preset.bg);
                                 }}
-                                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 active:scale-95 transition text-[10px] font-mono"
+                                className="flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 active:scale-95 transition text-xs-plus font-mono"
                             >
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: preset.fg }} />
                                 <span className="text-zinc-400">{preset.name}</span>
@@ -290,7 +290,7 @@ export function QRCodeGenerator() {
                                 </button>
                             ))}
                         </div>
-                        <p className="text-[9px] font-mono text-zinc-600 mt-2">
+                        <p className="text-xs-minus font-mono text-zinc-600 mt-2">
                             L=7% | M=15% | Q=25% | H=30% recovery
                         </p>
                     </div>
@@ -301,9 +301,9 @@ export function QRCodeGenerator() {
             <div className="bg-gradient-to-r from-emerald-950/20 to-transparent border border-emerald-500/20 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                     <Eye size={12} className="text-emerald-500" />
-                    <span className="text-[10px] font-mono text-emerald-500">TIP</span>
+                    <span className="text-xs-plus font-mono text-emerald-500">TIP</span>
                 </div>
-                <p className="text-[11px] font-mono text-zinc-500 leading-relaxed">
+                <p className="text-sm-minus font-mono text-zinc-500 leading-relaxed">
                     Higher error correction creates more complex QR codes but makes them readable
                     even if partially damaged. Use "H" for printing on products or curved surfaces.
                 </p>

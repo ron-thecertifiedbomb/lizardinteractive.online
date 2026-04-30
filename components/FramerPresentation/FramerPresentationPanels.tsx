@@ -35,7 +35,7 @@ export function FramerPresentationPanels({
             <div className="flex justify-end">
                 <button
                     onClick={onTogglePanels}
-                    className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-300 transition hover:border-white/25 hover:bg-white/10 hover:text-white sm:text-xs"
+                    className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs-plus font-mono uppercase tracking-[0.18em] text-zinc-300 transition hover:border-white/25 hover:bg-white/10 hover:text-white sm:text-xs"
                     aria-expanded={showPanels}
                     aria-controls="framer-presentation-panels"
                 >
@@ -52,9 +52,9 @@ export function FramerPresentationPanels({
                                 onClick={() => onSelectSlide(index)}
                                 className={panelCardClassName(currentIndex === index)}
                             >
-                                <div className="mb-1 text-[9px] font-mono text-zinc-600">METRIC_0{index + 1}</div>
+                                <div className="mb-1 text-xs-minus font-mono text-zinc-600">METRIC_0{index + 1}</div>
                                 <div
-                                    className={`text-[11px] font-bold uppercase tracking-wide sm:text-xs ${
+                                    className={`text-sm-minus font-bold uppercase tracking-wide sm:text-xs ${
                                         currentIndex === index ? "text-white" : "text-zinc-500"
                                     }`}
                                 >
@@ -71,7 +71,7 @@ export function FramerPresentationPanels({
                         transition={{ duration: 0.3 }}
                         className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4"
                     >
-                        <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400/80">Pro Tip</div>
+                        <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-emerald-400/80">Pro Tip</div>
                         <p className="mt-2 text-sm text-zinc-200 sm:text-base">{currentSlide.tip}</p>
                     </motion.div>
 
@@ -83,7 +83,7 @@ export function FramerPresentationPanels({
                         className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
                     >
                         <div className="rounded-2xl border border-white/10 bg-zinc-900/50 p-4">
-                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">Quick Facts</div>
+                            <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-zinc-400">Quick Facts</div>
                             <ul className="mt-3 space-y-2">
                                 {quickFacts.map((fact) => (
                                     <li key={fact} className="flex items-start gap-2 text-sm text-zinc-200">
@@ -94,7 +94,7 @@ export function FramerPresentationPanels({
                             </ul>
                         </div>
                         <div className="rounded-2xl border border-white/10 bg-zinc-900/50 p-4">
-                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
+                            <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-zinc-400">
                                 Action Checklist
                             </div>
                             <ul className="mt-3 space-y-2">

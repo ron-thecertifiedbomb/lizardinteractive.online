@@ -108,7 +108,7 @@ export function RomLibrary({ onPlay }: Props) {
 
             {toast && (
                 <div
-                    className="rounded-(--radius) border bg-(--accent) px-4 py-2 text-sm font-medium text-white border-transparent"
+                    className="rounded-(--radius) border bg-theme-accent px-4 py-2 text-sm font-medium text-white border-transparent"
                     role="status"
                 >
                     {toast}
@@ -116,7 +116,7 @@ export function RomLibrary({ onPlay }: Props) {
             )}
 
             {list.length === 0 ? (
-                <div className="py-8 text-center text-sm text-(--muted)">
+                <div className="py-8 text-center text-sm text-theme-muted">
                     No ROMs in library yet. Drop a .gba file above to get started.
                 </div>
             ) : (
@@ -124,7 +124,7 @@ export function RomLibrary({ onPlay }: Props) {
                     {list.map((entry) => (
                         <div
                             key={entry.romHash}
-                            className="flex items-center gap-3 rounded-(--radius) border bg-(--panel) border-(--border) p-3 transition hover:shadow-(--shadow)"
+                            className="flex items-center gap-3 rounded-(--radius) border bg-theme-panel border-(--border) p-3 transition hover:shadow-(--shadow)"
                         >
                             {/* Cover / placeholder */}
                             {entry.coverDataUrl ? (
@@ -134,17 +134,17 @@ export function RomLibrary({ onPlay }: Props) {
                                     className="h-12 w-16 rounded object-cover pixel-perfect"
                                 />
                             ) : (
-                                <div className="grid h-12 w-16 place-items-center rounded bg-(--panel-2) text-lg">
+                                <div className="grid h-12 w-16 place-items-center rounded bg-theme-panel-2 text-lg">
                                     🎮
                                 </div>
                             )}
 
                             {/* Info */}
                             <div className="min-w-0 flex-1">
-                                <div className="truncate text-sm font-semibold text-(--text)">
+                                <div className="truncate text-sm font-semibold text-theme-text">
                                     {entry.name}
                                 </div>
-                                <div className="text-xs text-(--muted)">
+                                <div className="text-xs text-theme-muted">
                                     {fmtSize(entry.size)} · Added {fmtDate(entry.addedAt)}
                                     {entry.lastPlayedAt
                                         ? ` · Played ${fmtDate(entry.lastPlayedAt)}`
@@ -156,14 +156,14 @@ export function RomLibrary({ onPlay }: Props) {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => handlePlay(entry)}
-                                    className="rounded-xl border px-3 py-1.5 text-xs font-medium text-white transition active:translate-y-px bg-(--accent) border-(--border) hover:brightness-105"
+                                    className="rounded-xl border px-3 py-1.5 text-xs font-medium text-white transition active:translate-y-px bg-theme-accent border-(--border) hover:brightness-105"
                                     type="button"
                                 >
                                     Play
                                 </button>
                                 <button
                                     onClick={() => setDeleteTarget(entry)}
-                                    className="rounded-xl border px-3 py-1.5 text-xs transition active:translate-y-px border-(--border) text-(--muted) hover:text-red-500"
+                                    className="rounded-xl border px-3 py-1.5 text-xs transition active:translate-y-px border-(--border) text-theme-muted hover:text-red-500"
                                     type="button"
                                 >
                                     Delete

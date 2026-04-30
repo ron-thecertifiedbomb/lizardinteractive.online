@@ -60,8 +60,8 @@ export function DsRomDropzone({ onFile }: Props) {
             }}
             className={[
                 "cursor-pointer rounded-(--radius) border-2 border-dashed p-8 text-center transition",
-                "bg-(--panel) border-(--border) hover:border-(--accent)",
-                dragging ? "border-(--accent) bg-(--panel-2) scale-[1.01]" : "",
+                "bg-theme-panel border-(--border) hover:border-(--accent)",
+                dragging ? "border-(--accent) bg-theme-panel-2 scale-[1.01]" : "",
             ].join(" ")}
         >
             <input
@@ -72,10 +72,10 @@ export function DsRomDropzone({ onFile }: Props) {
                 onChange={(e) => handleFiles(e.target.files)}
             />
             <div className="text-3xl">🎮</div>
-            <div className="mt-2 text-sm font-medium text-(--text)">
+            <div className="mt-2 text-sm font-medium text-theme-text">
                 {dragging ? "Drop ROM here" : "Drag & drop .nds ROM or click to browse"}
             </div>
-            <div className="mt-1 text-xs text-(--muted)">Only .nds files are accepted</div>
+            <div className="mt-1 text-xs text-theme-muted">Only .nds files are accepted</div>
         </div>
     );
 }

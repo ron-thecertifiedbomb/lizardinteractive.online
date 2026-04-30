@@ -61,12 +61,12 @@ export default function Newsletter() {
                 {/* Status Messages */}
                 <div className="h-4 mt-4">
                     {status === "success" && (
-                        <p className="text-emerald-500 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                        <p className="text-emerald-500 text-xs-plus font-mono uppercase tracking-widest animate-pulse">
                             Connection Established.
                         </p>
                     )}
                     {status === "error" && (
-                        <p className="text-red-500 text-[10px] font-mono uppercase tracking-widest">
+                        <p className="text-red-500 text-xs-plus font-mono uppercase tracking-widest">
                             {errorMessage || "Link Failed."}
                         </p>
                     )}

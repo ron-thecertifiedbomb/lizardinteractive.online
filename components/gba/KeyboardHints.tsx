@@ -2,8 +2,8 @@
 
 export function KeyRow({ k, v }: { k: string; v: string }) {
     return (
-        <div className="flex items-center justify-between rounded-xl border border-(--border) bg-(--panel) px-3 py-2">
-            <span className="text-(--muted)">{k}</span>
+        <div className="flex items-center justify-between rounded-xl border border-(--border) bg-theme-panel px-3 py-2">
+            <span className="text-theme-muted">{k}</span>
             <span className="font-medium">{v}</span>
         </div>
     );

@@ -121,7 +121,7 @@ export function TextTools() {
                         <FileText size={30} />
                     </div>
 
-                    <h3 className="text-[10px] font-mono tracking-[0.3em] text-zinc-600 mb-6 uppercase flex items-center gap-2">
+                    <h3 className="text-xs-plus font-mono tracking-[0.3em] text-zinc-600 mb-6 uppercase flex items-center gap-2">
                         <Zap size={12} className="text-emerald-500" /> core_diagnostics
                     </h3>
 
@@ -139,7 +139,7 @@ export function TextTools() {
                 <div className="bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent border border-emerald-500/20 rounded-2xl p-6">
                     <div className="flex items-center gap-2 mb-4">
                         <Clock size={14} className="text-emerald-500" />
-                        <span className="text-[10px] font-mono text-emerald-500 uppercase tracking-widest">Processing_Time</span>
+                        <span className="text-xs-plus font-mono text-emerald-500 uppercase tracking-widest">Processing_Time</span>
                     </div>
                     <div className="flex items-baseline gap-2">
                         <span className="text-3xl font-black text-white">{Math.ceil(words / 200)}</span>
@@ -168,7 +168,7 @@ function ActionButton({ icon: Icon, label, onClick, disabled }: any) {
             className="
                 flex items-center justify-center gap-2 px-3 py-3 
                 bg-zinc-950 border border-white/5 rounded-xl 
-                text-zinc-500 font-mono text-[10px] uppercase tracking-tighter
+                text-zinc-500 font-mono text-xs-plus uppercase tracking-tighter
                 hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5
                 transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed
                 group active:scale-95
@@ -183,7 +183,7 @@ function ActionButton({ icon: Icon, label, onClick, disabled }: any) {
 function StatRow({ label, value }: { label: string; value: number }) {
     return (
         <div className="group flex justify-between items-center py-2 border-b border-white/[0.03] last:border-0">
-            <span className="text-[11px] font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors">
+            <span className="text-sm-minus font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors">
                 {label}
             </span>
             <span className="text-sm font-bold text-zinc-100 tabular-nums tracking-tighter">

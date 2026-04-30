@@ -60,7 +60,7 @@ export default function ToolGrid({ tools }: ToolGridProps) {
 
                         {/* 5. Bottom Status Bar (The "Engineering" touch) */}
                         <div className="mt-6 pt-4 border-t border-zinc-900/50 flex items-center justify-between">
-                            <span className="text-[10px] font-mono text-zinc-700 uppercase tracking-widest group-hover:text-emerald-500/60">
+                            <span className="text-xs-plus font-mono text-zinc-700 uppercase tracking-widest group-hover:text-emerald-500/60">
                                 Protocol v1.0
                             </span>
                             <div className="h-1 w-12 bg-zinc-900 rounded-full overflow-hidden">

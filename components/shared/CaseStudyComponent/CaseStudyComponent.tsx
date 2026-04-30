@@ -89,7 +89,7 @@ export default function CaseStudyComponent({ study }: { study: CaseStudy }) {
                                         className="absolute left-0 right-0 h-px bg-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.5)] z-20"
                                     />
 
-                                    <span className="font-mono text-[10px] text-emerald-500/40 uppercase tracking-[0.3em] rotate-90 lg:rotate-0">
+                                    <span className="font-mono text-xs-plus text-emerald-500/40 uppercase tracking-[0.3em] rotate-90 lg:rotate-0">
                                         Image_Asset_Pending // CS_{study.id}
                                     </span>
                                 </div>
@@ -112,8 +112,8 @@ export default function CaseStudyComponent({ study }: { study: CaseStudy }) {
                             </div>
 
                             {/* Corner Coordinates */}
-                            <span className="absolute top-4 left-4 font-mono text-[8px] text-zinc-600">00.124.99.1</span>
-                            <span className="absolute bottom-4 right-4 font-mono text-[8px] text-zinc-600">LAT_76.2 // LON_1.0</span>
+                            <span className="absolute top-4 left-4 font-mono text-xxs text-zinc-600">00.124.99.1</span>
+                            <span className="absolute bottom-4 right-4 font-mono text-xxs text-zinc-600">LAT_76.2 // LON_1.0</span>
                         </div>
 
                         {/* Decorative Accents */}

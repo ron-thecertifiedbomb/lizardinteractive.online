@@ -53,7 +53,7 @@ export function VaultCard({ asset, mode, onExecute }: VaultCardProps) {
             {/* Top bar with serial and status */}
             <div className="flex items-center justify-between border-b border-white/5 bg-zinc-900/50 px-4 py-2">
                 <code className={cn(
-                    "font-mono text-[10px] tracking-widest",
+                    "font-mono text-xs-plus tracking-widest",
                     isDevMode ? "text-emerald-500/70" : "text-zinc-400"
                 )}>
                     {asset.serial}
@@ -61,7 +61,7 @@ export function VaultCard({ asset, mode, onExecute }: VaultCardProps) {
 
                 {/* Status LED */}
                 <div className="flex items-center gap-2">
-                    <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">
+                    <span className="font-mono text-xs-minus uppercase tracking-wider text-zinc-500">
                         {asset.status}
                     </span>
                     <div className="relative">
@@ -99,7 +99,7 @@ export function VaultCard({ asset, mode, onExecute }: VaultCardProps) {
                     </div>
                     <span
                         className={cn(
-                            "font-mono text-[10px]",
+                            "font-mono text-xs-plus",
                             isDevMode ? "text-emerald-500/50" : "text-zinc-500"
                         )}
                     >
@@ -116,7 +116,7 @@ export function VaultCard({ asset, mode, onExecute }: VaultCardProps) {
                     {asset.name}
                 </h3>
 
-                <p className="mb-4 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                <p className="mb-4 font-mono text-xs-plus uppercase tracking-wider text-zinc-500">
                     {asset.category === "plugin" && "Audio Plugin"}
                     {asset.category === "tool" && "Dev Tool"}
                     {asset.category === "infra" && "Infrastructure"}

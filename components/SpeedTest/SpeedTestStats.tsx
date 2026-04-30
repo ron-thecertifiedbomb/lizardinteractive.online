@@ -28,11 +28,11 @@ function StatBox({ label, value, unit, icon: Icon, color }: {
         <div className="bg-white/[0.03] border border-white/5 p-4 rounded-2xl text-center transition-all hover:bg-white/[0.05]">
             <div className="flex items-center justify-center gap-1.5 text-zinc-500 mb-2">
                 <Icon size={12} />
-                <span className="text-[9px] font-bold uppercase tracking-wider">{label}</span>
+                <span className="text-xs-minus font-bold uppercase tracking-wider">{label}</span>
             </div>
             <div className={`text-xl font-bold tabular-nums ${color}`}>
                 {value || "--"}
-                <span className="text-[8px] ml-1 opacity-40 font-normal">{value ? unit : ""}</span>
+                <span className="text-xxs ml-1 opacity-40 font-normal">{value ? unit : ""}</span>
             </div>
         </div>
     );

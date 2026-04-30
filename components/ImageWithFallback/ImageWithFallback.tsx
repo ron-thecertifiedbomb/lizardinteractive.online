@@ -37,7 +37,7 @@ export function ImageWithFallback({
             >
                 <div className="text-center">
                     {fallbackIcon || <ImageIcon size={32} className="text-zinc-700 mx-auto mb-2" />}
-                    <p className="text-[10px] font-mono text-zinc-600">{fallbackText}</p>
+                    <p className="text-xs-plus font-mono text-zinc-600">{fallbackText}</p>
                 </div>
             </div>
         );

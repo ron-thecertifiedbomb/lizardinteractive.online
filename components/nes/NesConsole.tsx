@@ -35,7 +35,7 @@ export function NesConsole({
                 <div className="flex items-center justify-between px-4 py-3 bg-transparent">
                     <div className="flex items-center gap-3">
                         <div className={["h-1.5 w-1.5 rounded-full", status === "running" ? "bg-emerald-500 animate-pulse" : "bg-zinc-700"].join(" ")} />
-                        <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">
+                        <span className="text-xs-plus font-black tracking-[0.3em] text-zinc-500 uppercase">
                        {status === "idle" ? "OFFLINE" : "STABLE"}
                         </span>
                     </div>
@@ -74,7 +74,7 @@ export function NesConsole({
                                         className="hidden"
                                         onChange={handleFileUpload}
                                     />
-                                    <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
+                                    <div className="px-6 py-3 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/50 text-zinc-400 text-xs-plus font-black uppercase tracking-[0.2em] group-hover:border-emerald-500/50 group-hover:text-emerald-400 transition-all">
                                         PROVISION_NEW_ROM
                                     </div>
                                 </label>
@@ -91,7 +91,7 @@ export function NesConsole({
                         {status === "paused" && (
                             <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[1px]">
                                 <div className="border-y border-emerald-500/30 bg-black/40 w-full py-4 flex justify-center">
-                                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase animate-pulse">
+                                    <div className="text-xs-plus font-black tracking-[0.5em] text-emerald-500 uppercase animate-pulse">
                                         &gt;&gt; PAUSED_SESSION &lt;&lt;
                                     </div>
                                 </div>

@@ -82,8 +82,8 @@ export default function ScreenRecorder() {
             <ToolHeader title="Capture Engine" />
 
             {/* STATUS HUD - Matches Unit Converter "Result" Area */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Capture Status</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">Capture Status</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="flex items-baseline overflow-hidden">
                         <span className={`text-4xl font-black tabular-nums tracking-tighter ${recording ? 'text-red-500' : 'text-white'}`}>
@@ -95,7 +95,7 @@ export default function ScreenRecorder() {
                     </div>
                     <div className="flex items-center gap-3">
                         <Activity className={`w-4 h-4 ${recording ? 'text-red-500 animate-pulse' : 'text-zinc-800'}`} />
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter">
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-tighter">
                             {recording ? 'Bitrate_Steady' : 'Source_Ready'}
                         </span>
                     </div>
@@ -108,14 +108,14 @@ export default function ScreenRecorder() {
                     {!videoURL && !recording ? (
                         <div className="flex flex-col items-center gap-4 text-zinc-800">
                             <Monitor size={48} strokeWidth={1} />
-                            <span className="text-[10px] font-mono uppercase tracking-[0.4em]">Initialize Source</span>
+                            <span className="text-xs-plus font-mono uppercase tracking-[0.4em]">Initialize Source</span>
                         </div>
                     ) : recording ? (
                         <div className="flex flex-col items-center gap-4">
                             <div className="w-16 h-16 rounded-full border-2 border-red-500/20 flex items-center justify-center">
                                 <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse" />
                             </div>
-                            <span className="text-[10px] font-mono text-red-500 uppercase tracking-widest">Active Encoding</span>
+                            <span className="text-xs-plus font-mono text-red-500 uppercase tracking-widest">Active Encoding</span>
                         </div>
                     ) : (
                         <div className="w-full h-full relative group">
@@ -171,7 +171,7 @@ export default function ScreenRecorder() {
 
             {/* Sub-Header / Footer HUD */}
             <div className="w-full pt-4 border-t border-zinc-900 flex justify-between items-center">
-                <span className="text-[9px] font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.Capture_Engine.v4 // web_stream</span>
+                <span className="text-xs-minus font-mono text-zinc-700 uppercase tracking-tighter italic">Lizard.Capture_Engine.v4 // web_stream</span>
                 <ShieldCheck size={14} className="text-zinc-800" />
             </div>
         </Panel>

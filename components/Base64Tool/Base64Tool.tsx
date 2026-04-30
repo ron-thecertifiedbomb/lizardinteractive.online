@@ -209,7 +209,7 @@ export function Base64Tool() {
                 <button
                     onClick={handleConvert}
                     disabled={!input}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-wider active:scale-95 transition disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-emerald-500 text-black font-black text-xs-plus uppercase tracking-wider active:scale-95 transition disabled:opacity-50"
                 >
                     <RefreshCw size={12} /> CONVERT
                 </button>
@@ -217,7 +217,7 @@ export function Base64Tool() {
                 <button
                     onClick={copyToClipboard}
                     disabled={!output}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono disabled:opacity-50"
                 >
                     {copied ? <Check size={12} /> : <Copy size={12} />}
                     {copied ? "COPIED" : "COPY"}
@@ -230,7 +230,7 @@ export function Base64Tool() {
                         onChange={uploadFile}
                         className="hidden"
                     />
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono">
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono">
                         <Upload size={12} /> UPLOAD
                     </div>
                 </label>
@@ -238,7 +238,7 @@ export function Base64Tool() {
                 <button
                     onClick={downloadOutput}
                     disabled={!output}
-                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-[10px] font-mono disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 active:scale-95 transition text-xs-plus font-mono disabled:opacity-50"
                 >
                     <Download size={12} /> DOWNLOAD
                 </button>
@@ -255,7 +255,7 @@ export function Base64Tool() {
                     </div>
                     <button
                         onClick={loadExample}
-                        className="px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-[10px] font-mono active:scale-95 transition"
+                        className="px-2 py-1 rounded-lg bg-zinc-900 text-zinc-400 text-xs-plus font-mono active:scale-95 transition"
                     >
                         EXAMPLE
                     </button>
@@ -292,7 +292,7 @@ export function Base64Tool() {
                     </pre>
                     {output.length > 1000 && (
                         <div className="border-t border-zinc-900 px-4 py-2">
-                            <p className="text-[9px] font-mono text-zinc-600">
+                            <p className="text-xs-minus font-mono text-zinc-600">
                                 Output truncated. {output.length.toLocaleString()} characters total. Download full output.
                             </p>
                         </div>
@@ -321,11 +321,11 @@ export function Base64Tool() {
             {output && (
                 <div className="grid grid-cols-2 gap-3">
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">INPUT SIZE</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">INPUT SIZE</p>
                         <p className="text-lg font-black text-white">{input.length.toLocaleString()} chars</p>
                     </div>
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-3 text-center">
-                        <p className="text-[9px] font-mono text-zinc-600">OUTPUT SIZE</p>
+                        <p className="text-xs-minus font-mono text-zinc-600">OUTPUT SIZE</p>
                         <p className="text-lg font-black text-white">{output.length.toLocaleString()} chars</p>
                     </div>
                 </div>
@@ -336,8 +336,8 @@ export function Base64Tool() {
                 <div className="flex items-start gap-2">
                     <AlertCircle size={14} className="text-blue-500 mt-0.5" />
                     <div>
-                        <h4 className="text-[10px] font-black text-blue-500 uppercase mb-1">WHAT IS BASE64?</h4>
-                        <p className="text-[10px] font-mono text-zinc-500 leading-relaxed">
+                        <h4 className="text-xs-plus font-black text-blue-500 uppercase mb-1">WHAT IS BASE64?</h4>
+                        <p className="text-xs-plus font-mono text-zinc-500 leading-relaxed">
                             Base64 encoding converts binary data to ASCII text format. It's commonly used for:
                             embedding images in HTML/CSS, sending files via JSON APIs, email attachments, and storing complex data.
                         </p>

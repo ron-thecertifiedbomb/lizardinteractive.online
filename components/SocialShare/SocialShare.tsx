@@ -35,17 +35,17 @@ const sizeConfig = {
     sm: {
         button: "p-1 rounded-md",
         icon: 12,
-        text: "text-[8px]",
+        text: "text-xxs",
     },
     md: {
         button: "p-1.5 rounded-lg",
         icon: 14,
-        text: "text-[8px] md:text-[10px]",
+        text: "text-xxs md:text-xs-plus",
     },
     lg: {
         button: "p-2 rounded-xl",
         icon: 16,
-        text: "text-[10px] md:text-[12px]",
+        text: "text-xs-plus md:text-[12px]",
     },
 };
 

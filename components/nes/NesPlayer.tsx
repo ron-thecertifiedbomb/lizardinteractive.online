@@ -349,12 +349,12 @@ export default function NesPlayer() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 md:mr-15 lg:mr-0">
-                    <Link href="/" className="group flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:border-zinc-700 transition">
+                    <Link href="/" className="group flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/50 px-4 py-2 text-xs-plus font-bold uppercase tracking-widest text-zinc-400 hover:border-zinc-700 transition">
                         <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Back
                     </Link>
                     <div className="flex items-center gap-2 px-4 py-2 bg-zinc-950 border border-zinc-800 rounded-full">
                         <Gamepad2 size={12} className={gamepadInfo !== "Disconnected" ? "text-emerald-500" : "text-zinc-600"} />
-                        <span className="text-[10px] font-mono uppercase text-zinc-500">{gamepadInfo}</span>
+                        <span className="text-xs-plus font-mono uppercase text-zinc-500">{gamepadInfo}</span>
                     </div>
                     <button onClick={openSettings} className="rounded-full bg-emerald-500 p-2.5 text-black hover:rotate-90 transition-all duration-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                         <Settings size={18} />
@@ -371,7 +371,7 @@ export default function NesPlayer() {
                         key={t}
                         onClick={() => setTab(t)}
                         className={[
-                            "flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-[10px] font-black uppercase tracking-[0.1em] transition-all",
+                            "flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs-plus font-black uppercase tracking-[0.1em] transition-all",
                             tab === t ? "bg-zinc-800 text-white shadow-xl" : "text-zinc-600 hover:text-zinc-400",
                         ].join(" ")}
                     >
@@ -396,7 +396,7 @@ export default function NesPlayer() {
                             ].join(" ")} />
                         </div>
                         <div className="space-y-0.5">
-                            <div className="text-[10px] font-mono uppercase text-zinc-500">Active_Cartridge</div>
+                            <div className="text-xs-plus font-mono uppercase text-zinc-500">Active_Cartridge</div>
                             <div className="text-xs font-black uppercase text-white truncate max-w-[200px]">{romName !== "-" ? romName : "NO_DATA"}</div>
                         </div>
                     </div>
@@ -410,7 +410,7 @@ export default function NesPlayer() {
                             {audioEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                         </button>
                         <div className="h-8 w-[1px] bg-zinc-900 mx-1 hidden sm:block" />
-                        <button onClick={onToggleRun} disabled={status === "idle"} className="px-6 py-2 rounded-xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors disabled:opacity-20">
+                        <button onClick={onToggleRun} disabled={status === "idle"} className="px-6 py-2 rounded-xl bg-white text-black text-xs-plus font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors disabled:opacity-20">
                             {status === "running" ? "PAUSE_SYSTEM" : "BOOT_STREAM"}
                         </button>
                         <button onClick={onReset} disabled={status === "idle"} className="p-2.5 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all disabled:opacity-20">
@@ -456,7 +456,7 @@ export default function NesPlayer() {
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2">
                                     <Keyboard size={14} className="text-emerald-500" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500">KEYBOARD</span>
+                                    <span className="text-xs-minus font-black uppercase tracking-wider text-zinc-500">KEYBOARD</span>
                                 </div>
 
                                 <div className="flex items-center gap-4">
@@ -478,7 +478,7 @@ export default function NesPlayer() {
                                                 <ArrowRight size={12} className="text-zinc-400" />
                                             </div>
                                         </div>
-                                        <span className="text-[7px] font-mono text-zinc-600 mt-1">MOVEMENT</span>
+                                        <span className="text-tiny font-mono text-zinc-600 mt-1">MOVEMENT</span>
                                     </div>
 
                                     {/* Action Keys */}
@@ -487,14 +487,14 @@ export default function NesPlayer() {
                                             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
                                                 <span className="text-sm font-black text-red-300">Z</span>
                                             </div>
-                                            <span className="text-[7px] font-mono text-zinc-600"> A BUTTON</span>
+                                            <span className="text-tiny font-mono text-zinc-600"> A BUTTON</span>
                                         </div>
 
                                         <div className="flex flex-col items-center gap-1">
                                             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-900/80 to-red-950 border border-red-800/50 flex items-center justify-center shadow-lg">
                                                 <span className="text-sm font-black text-red-300">X</span>
                                             </div>
-                                            <span className="text-[7px] font-mono text-zinc-600">B BUTTON</span>
+                                            <span className="text-tiny font-mono text-zinc-600">B BUTTON</span>
                                         </div>
                                     </div>
                                 </div>
@@ -504,25 +504,25 @@ export default function NesPlayer() {
                             <div className="flex items-center gap-4">
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="w-12 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
-                                        <span className="text-[8px] font-mono font-bold text-zinc-500">ENTER</span>
+                                        <span className="text-xxs font-mono font-bold text-zinc-500">ENTER</span>
                                     </div>
-                                    <span className="text-[7px] font-mono text-zinc-600">START</span>
+                                    <span className="text-tiny font-mono text-zinc-600">START</span>
                                 </div>
 
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="w-12 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
-                                        <span className="text-[8px] font-mono font-bold text-zinc-500">R-SHIFT</span>
+                                        <span className="text-xxs font-mono font-bold text-zinc-500">R-SHIFT</span>
                                     </div>
-                                    <span className="text-[7px] font-mono text-zinc-600">SELECT</span>
+                                    <span className="text-tiny font-mono text-zinc-600">SELECT</span>
                                 </div>
 
                                 <div className="w-px h-8 bg-zinc-800/50" />
 
                                 <div className="flex flex-col items-center gap-1">
                                     <div className="w-8 h-6 rounded-md bg-zinc-900 border border-zinc-700 flex items-center justify-center shadow-inner">
-                                        <span className="text-[8px] font-mono font-bold text-zinc-500">R</span>
+                                        <span className="text-xxs font-mono font-bold text-zinc-500">R</span>
                                     </div>
-                                    <span className="text-[7px] font-mono text-zinc-600">RESET</span>
+                                    <span className="text-tiny font-mono text-zinc-600">RESET</span>
                                 </div>
                             </div>
                         </div>

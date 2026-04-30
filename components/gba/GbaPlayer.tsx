@@ -474,7 +474,7 @@ export default function GbaPlayer() {
             {/* Floating toggle button — always visible */}
             <button
                 onClick={() => setMenuHidden((h) => !h)}
-                className="fixed right-4 top-4 z-30 rounded-full border bg-(--panel) border-(--border) px-3 py-1.5 text-xs shadow-md hover:-translate-y-px transition"
+                className="fixed right-4 top-4 z-30 rounded-full border bg-theme-panel border-(--border) px-3 py-1.5 text-xs shadow-md hover:-translate-y-px transition"
                 type="button"
                 aria-label={menuHidden ? "Show menu" : "Hide menu"}
                 title={`${menuHidden ? "Show" : "Hide"} menu (F2)`}
@@ -489,18 +489,18 @@ export default function GbaPlayer() {
             ].join(" ")}>
                 <div>
                     <div className="text-2xl font-bold tracking-tight">GBA Emulator</div>
-                    <div className="text-sm text-(--muted)">Upload .gba → Play in browser (mGBA WASM)</div>
+                    <div className="text-sm text-theme-muted">Upload .gba → Play in browser (mGBA WASM)</div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 text-sm">
                     <Link
                         href="/"
-                        className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition"
+                        className="rounded-full border px-3 py-1 bg-theme-panel border-(--border) text-theme-text hover:-translate-y-px transition"
                     >
                         ← Home
                     </Link>
 
-                    <span className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text)">
+                    <span className="rounded-full border px-3 py-1 bg-theme-panel border-(--border) text-theme-text">
                         Controller: {gamepadInfo}
                     </span>
 
@@ -508,7 +508,7 @@ export default function GbaPlayer() {
 
                     <button
                         onClick={openSettings}
-                        className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition"
+                        className="rounded-full border px-3 py-1 bg-theme-panel border-(--border) text-theme-text hover:-translate-y-px transition"
                         type="button"
                     >
                         ⚙ Settings
@@ -518,7 +518,7 @@ export default function GbaPlayer() {
 
             {/* Tab bar */}
             <div className={[
-                "mb-4 flex gap-1 rounded-(--radius) border bg-(--panel) border-(--border) p-1",
+                "mb-4 flex gap-1 rounded-(--radius) border bg-theme-panel border-(--border) p-1",
                 menuHidden ? "hidden" : "",
             ].join(" ")}>
                 {(["emulator", "library"] as const).map((t) => (
@@ -528,8 +528,8 @@ export default function GbaPlayer() {
                         className={[
                             "flex-1 rounded-(--radius) px-4 py-2 text-sm font-medium transition",
                             tab === t
-                                ? "bg-(--accent) text-white shadow-sm"
-                                : "text-(--muted) hover:text-(--text)",
+                                ? "bg-theme-accent text-white shadow-sm"
+                                : "text-theme-muted hover:text-theme-text",
                         ].join(" ")}
                         type="button"
                     >
@@ -546,7 +546,7 @@ export default function GbaPlayer() {
                     menuHidden ? "hidden" : "",
                 ].join(" ")}>
                     <div className="flex items-center gap-3">
-                        <div className="text-sm font-medium text-(--text) truncate max-w-48">{romName !== "-" ? romName : "No ROM"}</div>
+                        <div className="text-sm font-medium text-theme-text truncate max-w-48">{romName !== "-" ? romName : "No ROM"}</div>
                         <div className={[
                             "h-2 w-2 rounded-full",
                             status === "running" ? "bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.5)]"
@@ -556,7 +556,7 @@ export default function GbaPlayer() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border bg-(--panel) px-3 py-2 text-xs border-(--border)">
+                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border bg-theme-panel px-3 py-2 text-xs border-(--border)">
                             <input
                                 type="checkbox"
                                 className="h-4 w-4"
@@ -568,7 +568,7 @@ export default function GbaPlayer() {
 
                         <button
                             onClick={onToggleRun}
-                            className="rounded-xl border px-4 py-2 text-xs text-white disabled:opacity-50 transition active:translate-y-px border-(--border) bg-(--accent) hover:brightness-105"
+                            className="rounded-xl border px-4 py-2 text-xs text-white disabled:opacity-50 transition active:translate-y-px border-(--border) bg-theme-accent hover:brightness-105"
                             disabled={status === "idle"}
                             type="button"
                         >
@@ -624,14 +624,14 @@ export default function GbaPlayer() {
                     "mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
                     menuHidden ? "hidden" : "",
                 ].join(" ")}>
-                    <div className="text-sm text-(--muted)">{message}</div>
+                    <div className="text-sm text-theme-muted">{message}</div>
 
                     <label className="inline-flex items-center gap-2">
                         <input
                             ref={fileInputRef}
                             type="file"
                             accept=".gba"
-                            className="block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-(--panel-2) file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-(--panel-3)"
+                            className="block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-theme-panel-2 file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-(--panel-3)"
                             onChange={(e) => {
                                 onUpload(e.target.files?.[0] ?? null);
                                 e.target.value = "";

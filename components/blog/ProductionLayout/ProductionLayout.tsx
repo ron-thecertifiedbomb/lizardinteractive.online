@@ -16,7 +16,7 @@ export const ProductionLayout = ({ content }: { content: any }) => (
                             {block.protocols?.map((p: string, i: number) => (
                                 <div key={i} className="bg-black p-4 border-b border-zinc-900 flex gap-4 hover:bg-emerald-500/5 transition-colors">
                                     <span className="text-emerald-500 font-black">P_0{i + 1}</span>
-                                    <span className="text-zinc-500 text-[11px] uppercase tracking-widest">{p}</span>
+                                    <span className="text-zinc-500 text-sm-minus uppercase tracking-widest">{p}</span>
                                 </div>
                             ))}
                         </div>

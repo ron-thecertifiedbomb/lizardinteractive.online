@@ -125,8 +125,8 @@ export default function PolytuneTuner() {
             <ToolHeader title="Pitch Engine" />
 
             {/* TUNER HUD - Matches Unit Converter Result Area */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6 relative overflow-hidden">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Target Frequency</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6 relative overflow-hidden">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">Target Frequency</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="flex items-baseline">
                         <span className={`text-6xl font-black tabular-nums tracking-tighter transition-colors ${isDetected && Math.abs(cents) < 3 ? 'text-emerald-500' : 'text-white'}`}>
@@ -138,7 +138,7 @@ export default function PolytuneTuner() {
                     </div>
                     <div className="flex items-center gap-3">
                         <Activity className={`w-4 h-4 ${isDetected ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase">
                             {isDetected ? `${cents > 0 ? '+' : ''}${cents} Cents` : 'Awaiting_Signal'}
                         </span>
                     </div>
@@ -165,7 +165,7 @@ export default function PolytuneTuner() {
                             );
                         })}
                     </div>
-                    <div className="w-full flex justify-between mt-4 px-2 text-[8px] font-mono text-zinc-700 uppercase tracking-[0.2em]">
+                    <div className="w-full flex justify-between mt-4 px-2 text-xxs font-mono text-zinc-700 uppercase tracking-[0.2em]">
                         <span>Flat (-)</span>
                         <span>Perfect</span>
                         <span>Sharp (+)</span>
@@ -179,8 +179,8 @@ export default function PolytuneTuner() {
                             key={idx}
                             className={`p-3 rounded-xl border text-center transition-all ${detectedString === idx ? 'bg-emerald-500 border-emerald-400 text-black font-bold' : 'bg-zinc-950 border-zinc-900 text-zinc-600'}`}
                         >
-                            <div className="text-[10px] font-mono">{s.note}</div>
-                            <div className="text-[8px] opacity-50 uppercase">{s.string}</div>
+                            <div className="text-xs-plus font-mono">{s.note}</div>
+                            <div className="text-xxs opacity-50 uppercase">{s.string}</div>
                         </div>
                     ))}
                 </div>
@@ -204,7 +204,7 @@ export default function PolytuneTuner() {
                                 className="w-full bg-emerald-500 bottom-0"
                             />
                         </div>
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase vertical-text">Gain</span>
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase vertical-text">Gain</span>
                     </div>
                 </div>
             </div>

@@ -83,7 +83,7 @@ export function ConfirmDialog({
                     </div>
 
                     {/* Message */}
-                    <div id={`${id}-msg`} className="font-mono text-[11px] leading-relaxed text-zinc-400 uppercase">
+                    <div id={`${id}-msg`} className="font-mono text-sm-minus leading-relaxed text-zinc-400 uppercase">
                         <span className="text-zinc-600 mr-2">&gt;</span>
                         {message}
                     </div>
@@ -95,7 +95,7 @@ export function ConfirmDialog({
                             type="button"
                             onClick={onConfirm}
                             className={[
-                                "w-full rounded-xl py-3 text-[10px] font-black uppercase tracking-widest transition-all active:scale-[0.98]",
+                                "w-full rounded-xl py-3 text-xs-plus font-black uppercase tracking-widest transition-all active:scale-[0.98]",
                                 danger
                                     ? "bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.3)] hover:bg-rose-600"
                                     : "bg-white text-black hover:bg-emerald-500"
@@ -107,7 +107,7 @@ export function ConfirmDialog({
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="w-full rounded-xl border border-zinc-800 bg-transparent py-3 text-[10px] font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-900 hover:text-zinc-300"
+                            className="w-full rounded-xl border border-zinc-800 bg-transparent py-3 text-xs-plus font-black uppercase tracking-widest text-zinc-500 transition-all hover:bg-zinc-900 hover:text-zinc-300"
                         >
                             {cancelLabel}
                         </button>

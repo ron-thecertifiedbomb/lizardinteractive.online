@@ -52,7 +52,7 @@ export function SettingsPanel({
 
             <div
                 className={[
-                    "fixed right-0 top-0 z-50 h-full w-90 max-w-[90vw] bg-(--panel) p-6 shadow-(--shadow-2) overflow-y-auto border-l border-(--border)",
+                    "fixed right-0 top-0 z-50 h-full w-90 max-w-[90vw] bg-theme-panel p-6 shadow-(--shadow-2) overflow-y-auto border-l border-(--border)",
                     "transition-transform duration-200 ease-out will-change-transform",
                     open ? "translate-x-0" : "translate-x-full",
                 ].join(" ")}
@@ -61,12 +61,12 @@ export function SettingsPanel({
             >
                 <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold">Settings</h2>
-                    <button onClick={onClose} className="text-sm text-(--muted)" type="button">
+                    <button onClick={onClose} className="text-sm text-theme-muted" type="button">
                         ✕
                     </button>
                 </div>
 
-                <div className="mt-4 rounded-2xl bg-(--panel-2) p-3 text-sm text-(--text)">
+                <div className="mt-4 rounded-2xl bg-theme-panel-2 p-3 text-sm text-theme-text">
                     <div className="font-medium">Tips</div>
                     • Connect a gamepad and press buttons to play (Gamepad API) <br />
                     • Mobile: touch overlay controls on screen (hold supported)
@@ -83,14 +83,14 @@ export function SettingsPanel({
                                 onClick={() => setTurbo(t)}
                                 className={[
                                     "rounded-xl px-3 py-2 text-sm border border-(--border) transition",
-                                    t === turbo ? "bg-(--accent) text-white" : "bg-(--panel) text-(--text) hover:-translate-y-px",
+                                    t === turbo ? "bg-theme-accent text-white" : "bg-theme-panel text-theme-text hover:-translate-y-px",
                                 ].join(" ")}
                             >
                                 {t}x
                             </button>
                         ))}
                     </div>
-                    <div className="mt-2 text-xs text-(--muted)">
+                    <div className="mt-2 text-xs text-theme-muted">
                         * If the core does not support setTurbo/setSpeedMultiplier, this will be "UI only" for now.
                     </div>
                 </div>
@@ -99,7 +99,7 @@ export function SettingsPanel({
                 <div className="mt-6">
                     <div className="text-base font-semibold">Auto Save</div>
 
-                    <label className="mt-3 inline-flex items-center gap-2 rounded-xl border border-(--border) bg-(--panel) px-3 py-2">
+                    <label className="mt-3 inline-flex items-center gap-2 rounded-xl border border-(--border) bg-theme-panel px-3 py-2">
                         <input
                             type="checkbox"
                             className="h-4 w-4"
@@ -110,7 +110,7 @@ export function SettingsPanel({
                     </label>
 
                     <div className="mt-3 flex items-center gap-2">
-                        <span className="text-sm text-(--muted)">Slot</span>
+                        <span className="text-sm text-theme-muted">Slot</span>
                         {([1, 2, 3] as const).map((s) => (
                             <button
                                 key={s}
@@ -119,7 +119,7 @@ export function SettingsPanel({
                                 disabled={!autoSaveEnabled}
                                 className={[
                                     "rounded-xl px-3 py-2 text-sm border border-(--border) transition disabled:opacity-50",
-                                    s === autoSaveSlot ? "bg-(--accent) text-white" : "bg-(--panel) text-(--text)",
+                                    s === autoSaveSlot ? "bg-theme-accent text-white" : "bg-theme-panel text-theme-text",
                                 ].join(" ")}
                             >
                                 {s}
@@ -135,13 +135,13 @@ export function SettingsPanel({
                         {([1, 2, 3] as const).map((s) => (
                             <div
                                 key={s}
-                                className="flex items-center justify-between rounded-2xl border border-(--border) bg-(--panel) p-3"
+                                className="flex items-center justify-between rounded-2xl border border-(--border) bg-theme-panel p-3"
                             >
                                 <div className="font-medium">Slot {s}</div>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => onSave(s)}
-                                        className="rounded-xl px-3 py-2 text-sm text-white disabled:opacity-50 bg-(--accent)"
+                                        className="rounded-xl px-3 py-2 text-sm text-white disabled:opacity-50 bg-theme-accent"
                                         disabled={!canInteract}
                                         type="button"
                                     >

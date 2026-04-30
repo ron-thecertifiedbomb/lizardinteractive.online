@@ -64,10 +64,10 @@ export default function GalleryGrid({
                                 {/* INDUSTRIAL OVERLAY */}
                                 <div className="absolute inset-0 z-20 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                                     <div className="space-y-1 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-[0.3em]">
+                                        <span className="text-xs-minus font-mono text-emerald-400 uppercase tracking-[0.3em]">
                                             Asset_ID: {index.toString().padStart(3, '0')}
                                         </span>
-                                        <h4 className="text-[11px] font-black text-white uppercase tracking-widest">
+                                        <h4 className="text-sm-minus font-black text-white uppercase tracking-widest">
                                             {img.alt || "System_Render"}
                                         </h4>
                                     </div>

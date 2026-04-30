@@ -31,7 +31,7 @@ export default function RecommendationCard({ items, category }: RecommendationPr
         <div className="mt-12 space-y-6">
             <div className="flex items-center gap-3 mb-8">
                 <Box size={16} className="text-emerald-500" />
-                <h4 className="font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-500">
+                <h4 className="font-mono text-xs-plus uppercase tracking-[0.5em] text-zinc-500">
                     Recommended_Hardware_Provisioning
                 </h4>
             </div>
@@ -43,13 +43,13 @@ export default function RecommendationCard({ items, category }: RecommendationPr
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        className="relative group bg-[#080808] border border-zinc-900 p-6 hover:border-emerald-500/30 transition-all duration-500"
+                        className="relative group bg-dark-900 border border-zinc-900 p-6 hover:border-emerald-500/30 transition-all duration-500"
                     >
                         <div className="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover:border-emerald-500/20 transition-colors" />
 
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="space-y-2">
-                                <span className="font-mono text-[8px] text-emerald-500/60 uppercase tracking-widest">
+                                <span className="font-mono text-xxs text-emerald-500/60 uppercase tracking-widest">
                                     {item.brand} // REF_{item.id.toUpperCase()}
                                 </span>
                                 <h3 className="text-xl font-black uppercase tracking-tighter text-white">
@@ -64,7 +64,7 @@ export default function RecommendationCard({ items, category }: RecommendationPr
                                 {item.specs?.map((spec, sIdx) => (
                                     <div
                                         key={sIdx}
-                                        className="flex items-center gap-3 text-zinc-400 font-mono text-[9px] uppercase tracking-wider"
+                                        className="flex items-center gap-3 text-zinc-400 font-mono text-xs-minus uppercase tracking-wider"
                                     >
                                         <div className="w-1 h-1 bg-emerald-500/40 rounded-full" />
                                         <span className="text-zinc-500">{spec.label}:</span>
@@ -73,7 +73,7 @@ export default function RecommendationCard({ items, category }: RecommendationPr
                                 ))}
                             </div>
 
-                            <button className="flex items-center justify-center gap-2 bg-white text-black px-6 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors">
+                            <button className="flex items-center justify-center gap-2 bg-white text-black px-6 py-3 text-xs-plus font-black uppercase tracking-widest hover:bg-emerald-500 transition-colors">
                                 <ShoppingCart size={14} />
                                 Acquire
                             </button>

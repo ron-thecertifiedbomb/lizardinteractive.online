@@ -80,7 +80,7 @@ export function NesKeymapEditor({ keymap, onSetKey, onReset }: Props) {
                                     : "border-zinc-800 bg-black hover:border-zinc-600"
                             ].join(" ")}
                         >
-                            <span className="text-[9px] font-black tracking-widest text-zinc-500 group-hover:text-zinc-400 transition-colors">
+                            <span className="text-xs-minus font-black tracking-widest text-zinc-500 group-hover:text-zinc-400 transition-colors">
                                 {label}
                             </span>
 
@@ -114,7 +114,7 @@ export function NesKeymapEditor({ keymap, onSetKey, onReset }: Props) {
             <button
                 type="button"
                 onClick={onReset}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-zinc-800 py-3 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-all"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-zinc-800 py-3 text-xs-plus font-black uppercase tracking-widest text-zinc-500 hover:border-zinc-700 hover:text-zinc-300 transition-all"
             >
                 <RefreshCcw size={14} />
                 Reset_To_Factory_Defaults

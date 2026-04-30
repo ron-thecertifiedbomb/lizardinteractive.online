@@ -178,7 +178,7 @@ export default function NavBar() {
 
             {/* Mobile Menu Overlay */}
             <div
-                className={`fixed inset-0 z-90 bg-[#050505] md:hidden transition-all duration-500 ease-in-out
+                className={`fixed inset-0 z-90 bg-dark-950 md:hidden transition-all duration-500 ease-in-out
           ${mobileOpen
                         ? "translate-y-0 opacity-100 pointer-events-auto"
                         : closing
@@ -190,7 +190,7 @@ export default function NavBar() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none" />
 
                 <div className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
-                    <span className="text-[10px] font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
+                    <span className="text-xs-plus font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
                         Navigation
                     </span>
 
@@ -222,7 +222,7 @@ export default function NavBar() {
                     })}
 
                     <div className="mt-12 pt-8  w-full flex flex-col items-center gap-4">
-                        <span className="text-[10px] font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
+                        <span className="text-xs-plus font-mono text-green-400/50 tracking-[0.5em] uppercase mb-4">
                             LIZARD INTERACTIVE ONLINE
                         </span>
                     </div>

@@ -17,7 +17,7 @@ export const GridControls: React.FC<GridControlsProps> = ({
     <div className="grid grid-cols-2 gap-4">
         <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
             <div className="border-b border-zinc-900 px-3 py-2">
-                <span className="text-[8px] font-mono text-zinc-600 uppercase">Signature</span>
+                <span className="text-xxs font-mono text-zinc-600 uppercase">Signature</span>
             </div>
             <select
                 value={beatsPerBar}
@@ -30,7 +30,7 @@ export const GridControls: React.FC<GridControlsProps> = ({
 
         <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
             <div className="border-b border-zinc-900 px-3 py-2">
-                <span className="text-[8px] font-mono text-zinc-600 uppercase">Division</span>
+                <span className="text-xxs font-mono text-zinc-600 uppercase">Division</span>
             </div>
             <select
                 value={subdivision}

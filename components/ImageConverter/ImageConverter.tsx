@@ -99,8 +99,8 @@ export function ImageConverter() {
             <ToolHeader title="Image Transformer" />
 
             {/* STATUS HUD */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Process Status</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">Process Status</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="flex items-baseline overflow-hidden">
                         <span className="text-4xl font-black text-white tabular-nums tracking-tighter">
@@ -110,7 +110,7 @@ export function ImageConverter() {
                     </div>
                     <div className="flex items-center gap-3">
                         <Activity className={`w-4 h-4 ${loading ? 'text-emerald-500 animate-pulse' : 'text-zinc-800'}`} />
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter">
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-tighter">
                             {loading ? 'Processing...' : convertedImage ? 'Output_Ready' : originalImage ? 'Source_Loaded' : 'Waiting_Input'}
                         </span>
                     </div>
@@ -133,12 +133,12 @@ export function ImageConverter() {
                         {/* RENAME INPUT - Match Unit Converter Field Style */}
                         <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden focus-within:border-emerald-500/50 transition-colors">
                             <div className="border-b border-zinc-900 px-4 py-2 flex justify-between items-center">
-                                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                                <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                                     <Edit3 size={12} /> Rename Export
                                 </span>
                                 <button
                                     onClick={() => setNewName(fileName)}
-                                    className="text-[8px] font-mono text-zinc-700 hover:text-emerald-500 uppercase flex items-center gap-1"
+                                    className="text-xxs font-mono text-zinc-700 hover:text-emerald-500 uppercase flex items-center gap-1"
                                 >
                                     <RotateCcw size={10} /> Reset
                                 </button>
@@ -155,15 +155,15 @@ export function ImageConverter() {
                         {/* Preview Area */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden p-2 text-center">
-                                <div className="text-[8px] font-mono text-zinc-600 mb-2 uppercase">Original_Source</div>
+                                <div className="text-xxs font-mono text-zinc-600 mb-2 uppercase">Original_Source</div>
                                 <img src={originalImage} className="w-full h-40 object-contain rounded-lg bg-black/50 mx-auto" alt="original" />
                             </div>
                             <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden p-2 text-center">
-                                <div className="text-[8px] font-mono text-zinc-600 mb-2 uppercase">Converted_Output</div>
+                                <div className="text-xxs font-mono text-zinc-600 mb-2 uppercase">Converted_Output</div>
                                 {convertedImage ? (
                                     <img src={convertedImage} className="w-full h-40 object-contain rounded-lg bg-black/50 animate-in fade-in duration-500 mx-auto" alt="converted" />
                                 ) : (
-                                    <div className="w-full h-40 flex items-center justify-center text-zinc-800 font-mono text-[10px]">AWAITING_RENDER</div>
+                                    <div className="w-full h-40 flex items-center justify-center text-zinc-800 font-mono text-xs-plus">AWAITING_RENDER</div>
                                 )}
                             </div>
                         </div>
@@ -181,7 +181,7 @@ export function ImageConverter() {
                                     : "bg-zinc-950 border border-zinc-900 text-zinc-500 hover:text-zinc-300"
                                 }`}
                         >
-                            <span className="text-[10px] uppercase font-black tracking-widest">{conv.label}</span>
+                            <span className="text-xs-plus uppercase font-black tracking-widest">{conv.label}</span>
                         </button>
                     ))}
                 </div>
@@ -190,8 +190,8 @@ export function ImageConverter() {
                 {(format === "jpeg" || format === "webp") && (
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-6 space-y-4">
                         <div className="flex justify-between items-center">
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Compression Quality</span>
-                            <span className="text-[10px] font-mono text-emerald-500">{Math.round(quality * 100)}%</span>
+                            <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-widest">Compression Quality</span>
+                            <span className="text-xs-plus font-mono text-emerald-500">{Math.round(quality * 100)}%</span>
                         </div>
                         <input
                             type="range" min="0.1" max="1" step="0.05" value={quality}
@@ -232,7 +232,7 @@ export function ImageConverter() {
                 {error && (
                     <div className="bg-red-950/20 border border-red-500/20 rounded-xl p-4 flex items-center gap-3">
                         <AlertCircle size={16} className="text-red-500" />
-                        <span className="text-[10px] font-mono text-red-400 uppercase tracking-tighter">{error}</span>
+                        <span className="text-xs-plus font-mono text-red-400 uppercase tracking-tighter">{error}</span>
                     </div>
                 )}
             </div>

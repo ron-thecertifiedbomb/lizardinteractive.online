@@ -152,7 +152,7 @@ export default function DsPlayer() {
             {/* Floating toggle button — always visible */}
             <button
                 onClick={() => setMenuHidden((h) => !h)}
-                className="fixed right-4 top-4 z-30 rounded-full border bg-(--panel) border-(--border) px-3 py-1.5 text-xs shadow-md hover:-translate-y-px transition"
+                className="fixed right-4 top-4 z-30 rounded-full border bg-theme-panel border-(--border) px-3 py-1.5 text-xs shadow-md hover:-translate-y-px transition"
                 type="button"
                 aria-label={menuHidden ? "Show menu" : "Hide menu"}
                 title={`${menuHidden ? "Show" : "Hide"} menu (F2)`}
@@ -167,23 +167,23 @@ export default function DsPlayer() {
             ].join(" ")}>
                 <div>
                     <div className="text-2xl font-bold tracking-tight">DS Emulator</div>
-                    <div className="text-sm text-(--muted)">Upload .nds → Play in browser (EmulatorJS + DeSmuME)</div>
+                    <div className="text-sm text-theme-muted">Upload .nds → Play in browser (EmulatorJS + DeSmuME)</div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-sm">
-                    <Link href="/" className="rounded-full border px-3 py-1 bg-(--panel) border-(--border) text-(--text) hover:-translate-y-px transition">← Home</Link>
+                    <Link href="/" className="rounded-full border px-3 py-1 bg-theme-panel border-(--border) text-theme-text hover:-translate-y-px transition">← Home</Link>
                     <ThemeToggle />
                 </div>
             </div>
 
             {/* Tab bar */}
             <div className={[
-                "mb-4 flex gap-1 rounded-(--radius) border bg-(--panel) border-(--border) p-1",
+                "mb-4 flex gap-1 rounded-(--radius) border bg-theme-panel border-(--border) p-1",
                 menuHidden ? "hidden" : "",
             ].join(" ")}>
                 {(["emulator", "library"] as const).map((t) => (
                     <button key={t} onClick={() => setTab(t)} className={[
                         "flex-1 rounded-(--radius) px-4 py-2 text-sm font-medium transition",
-                        tab === t ? "bg-(--accent) text-white shadow-sm" : "text-(--muted) hover:text-(--text)",
+                        tab === t ? "bg-theme-accent text-white shadow-sm" : "text-theme-muted hover:text-theme-text",
                     ].join(" ")} type="button">
                         {t === "emulator" ? "🎮 Emulator" : "📚 Library"}
                     </button>
@@ -198,7 +198,7 @@ export default function DsPlayer() {
                     menuHidden ? "hidden" : "",
                 ].join(" ")}>
                     <div className="flex items-center gap-3">
-                        <div className="text-sm font-medium text-(--text) truncate max-w-48">{romName !== "-" ? romName : "No ROM"}</div>
+                        <div className="text-sm font-medium text-theme-text truncate max-w-48">{romName !== "-" ? romName : "No ROM"}</div>
                         <div className={[
                             "h-2 w-2 rounded-full",
                             status === "running" ? "bg-green-400 shadow-[0_0_6px_rgba(74,222,128,0.5)]" : "bg-(--muted)/40",
@@ -245,18 +245,18 @@ export default function DsPlayer() {
                     "mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
                     menuHidden ? "hidden" : "",
                 ].join(" ")}>
-                    <div className="text-sm text-(--muted)">{message}</div>
+                    <div className="text-sm text-theme-muted">{message}</div>
                     <label className="inline-flex items-center gap-2">
-                        <input ref={fileInputRef} type="file" accept=".nds" className="block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-(--panel-2) file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-(--panel-3)" onChange={(e) => { onUpload(e.target.files?.[0] ?? null); e.target.value = ""; }} />
+                        <input ref={fileInputRef} type="file" accept=".nds" className="block w-full text-sm file:mr-3 file:rounded-xl file:border-0 file:bg-theme-panel-2 file:px-4 file:py-2 file:text-sm file:font-medium hover:file:bg-(--panel-3)" onChange={(e) => { onUpload(e.target.files?.[0] ?? null); e.target.value = ""; }} />
                     </label>
                 </div>
 
                 {/* Info box */}
                 <div className={[
-                    "mt-4 rounded-2xl bg-(--panel) border border-(--border) p-4 text-sm text-(--muted)",
+                    "mt-4 rounded-2xl bg-theme-panel border border-(--border) p-4 text-sm text-theme-muted",
                     menuHidden ? "hidden" : "",
                 ].join(" ")}>
-                    <div className="font-medium text-(--text) mb-1">Controls</div>
+                    <div className="font-medium text-theme-text mb-1">Controls</div>
                     EmulatorJS provides built-in controls: keyboard, gamepad, and on-screen touch buttons.
                     Use the emulator&apos;s own toolbar (inside the player) for save states, settings, and fullscreen.
                 </div>

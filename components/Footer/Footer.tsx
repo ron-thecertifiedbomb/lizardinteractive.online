@@ -37,7 +37,7 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
 
                 {/* Left Column: Copyright */}
-                <p className="text-[10px] tracking-[0.25em] text-zinc-500 uppercase text-center md:text-left order-3 md:order-1">
+                <p className="text-xs-plus tracking-[0.25em] text-zinc-500 uppercase text-center md:text-left order-3 md:order-1">
                     © {new Date().getFullYear()}{" "}
                     <span className="text-zinc-400 font-semibold">{config.name}</span>
                 </p>
@@ -59,7 +59,7 @@ export default function Footer() {
                 </div>
 
                 {/* Right Column: Tagline */}
-                <p className="text-[10px] tracking-[0.3em] text-zinc-500 uppercase font-bold text-center md:text-right order-2 md:order-3">
+                <p className="text-xs-plus tracking-[0.3em] text-zinc-500 uppercase font-bold text-center md:text-right order-2 md:order-3">
                     {config.tagline}
                 </p>
 

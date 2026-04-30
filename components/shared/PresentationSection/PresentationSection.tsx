@@ -66,7 +66,7 @@ function PresentationCard({ step, index }: { step: Step; index: number }) {
             {/* Context Area */}
             <div className="md:sticky h-fit space-y-4 md:space-y-6 px-6">
                 <div className="space-y-2">
-                    <span className="text-[10px] md:text-xs font-black tracking-[0.3em] text-emerald-500 uppercase">
+                    <span className="text-xs-plus md:text-xs font-black tracking-[0.3em] text-emerald-500 uppercase">
                         {step.title}
                     </span>
                     <h3 className="text-3xl md:text-5xl font-bold tracking-tighter text-white leading-tight md:leading-[0.9]">
@@ -86,7 +86,7 @@ function PresentationCard({ step, index }: { step: Step; index: number }) {
                 >
                     <div className="flex items-center gap-3 mb-4 md:mb-6">
                         <div className="h-px w-6 md:w-8 bg-red-500/50" />
-                        <h4 className="text-[10px] md:text-sm font-bold tracking-widest text-red-500 uppercase">The Bottleneck</h4>
+                        <h4 className="text-xs-plus md:text-sm font-bold tracking-widest text-red-500 uppercase">The Bottleneck</h4>
                     </div>
                     <ul className="space-y-3 md:space-y-4">
                         {step.frustrations.map((item, i) => (
@@ -104,7 +104,7 @@ function PresentationCard({ step, index }: { step: Step; index: number }) {
                     <div className="absolute inset-0 bg-linear-to-tr from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div className="flex items-center gap-3 mb-4 md:mb-6">
                         <div className="h-px w-6 md:w-8 bg-emerald-500" />
-                        <h4 className="text-[10px] md:text-sm font-bold tracking-widest text-emerald-400 uppercase">The Precision</h4>
+                        <h4 className="text-xs-plus md:text-sm font-bold tracking-widest text-emerald-400 uppercase">The Precision</h4>
                     </div>
                     <ul className="space-y-3 md:space-y-4">
                         {step.solutions.map((item, i) => (

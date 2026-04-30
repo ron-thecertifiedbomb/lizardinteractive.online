@@ -33,7 +33,7 @@ export default function SectionHeader({
                     className="h-[1px] bg-emerald-500 flex-shrink-0"
                 />
                 <motion.div variants={HERO_TITLE}>
-                    <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.4em] text-emerald-500 font-bold">
+                    <span className="font-mono text-xs-minus md:text-xs-plus uppercase tracking-[0.2em] md:tracking-[0.4em] text-emerald-500 font-bold">
                         {label}
                     </span>
                 </motion.div>
@@ -59,7 +59,7 @@ export default function SectionHeader({
                 <div className="overflow-hidden">
                     <motion.p
                         variants={HERO_TITLE}
-                        className="text-zinc-500 mt-3 md:mt-5 max-w-[35ch] md:max-w-2xl font-light leading-relaxed text-[10px] sm:text-xs md:text-lg border-l border-emerald-500/20 pl-4 md:pl-8 py-0.5"
+                        className="text-zinc-500 mt-3 md:mt-5 max-w-[35ch] md:max-w-2xl font-light leading-relaxed text-xs-plus sm:text-xs md:text-lg border-l border-emerald-500/20 pl-4 md:pl-8 py-0.5"
                     >
                         {description}
                     </motion.p>

@@ -74,7 +74,7 @@ export function SpeedGauge({
                         {testing && phase !== "idle" ? displaySpeed.toFixed(displaySpeed > 100 ? 1 : 2) : "GO"}
                     </motion.div>
                 )}
-                <div className="text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-2">
+                <div className="text-xs-minus sm:text-xs-plus font-mono text-zinc-500 uppercase tracking-widest mt-2">
                     {phaseText}
                     {phase !== "idle" && " Mbps"}
                 </div>

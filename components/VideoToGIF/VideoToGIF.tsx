@@ -361,9 +361,9 @@ export function VideoToGIF() {
                     <div className="mt-6 p-4 bg-zinc-900/50 rounded-xl">
                         <div className="flex items-center gap-2 text-zinc-500 mb-2">
                             <Info size={12} />
-                            <span className="text-[9px] font-mono uppercase">Guidelines</span>
+                            <span className="text-xs-minus font-mono uppercase">Guidelines</span>
                         </div>
-                        <ul className="text-[9px] font-mono text-zinc-600 space-y-1 text-left">
+                        <ul className="text-xs-minus font-mono text-zinc-600 space-y-1 text-left">
                             <li>✓ Maximum file size: 100MB</li>
                             <li>✓ Maximum duration: 10 seconds</li>
                             <li>✓ Recommended: 480px width for balance</li>
@@ -392,15 +392,15 @@ export function VideoToGIF() {
                             <div className="border-t border-zinc-900 p-4">
                                 <div className="grid grid-cols-3 gap-3 text-center">
                                     <div>
-                                        <p className="text-[9px] font-mono text-zinc-600">DURATION</p>
+                                        <p className="text-xs-minus font-mono text-zinc-600">DURATION</p>
                                         <p className="text-sm font-black text-white">{formatTime(videoDuration)}</p>
                                     </div>
                                     <div>
-                                        <p className="text-[9px] font-mono text-zinc-600">RESOLUTION</p>
+                                        <p className="text-xs-minus font-mono text-zinc-600">RESOLUTION</p>
                                         <p className="text-sm font-black text-white">{videoDimensions.width}×{videoDimensions.height}</p>
                                     </div>
                                     <div>
-                                        <p className="text-[9px] font-mono text-zinc-600">FILE SIZE</p>
+                                        <p className="text-xs-minus font-mono text-zinc-600">FILE SIZE</p>
                                         <p className={`text-sm font-black ${getFileSizeColor()}`}>
                                             {(videoFile.size / 1024 / 1024).toFixed(1)} MB
                                         </p>
@@ -426,7 +426,7 @@ export function VideoToGIF() {
                             <div className="flex items-start gap-2">
                                 <AlertTriangle size={14} className="text-yellow-500 mt-0.5" />
                                 <div>
-                                    <h4 className="text-[10px] font-black text-yellow-500 uppercase mb-1">WARNING</h4>
+                                    <h4 className="text-xs-plus font-black text-yellow-500 uppercase mb-1">WARNING</h4>
                                     <p className="text-xs font-mono text-yellow-400">{warning}</p>
                                 </div>
                             </div>
@@ -439,7 +439,7 @@ export function VideoToGIF() {
                             <div className="flex items-start gap-2">
                                 <AlertCircle size={14} className="text-red-500 mt-0.5" />
                                 <div>
-                                    <h4 className="text-[10px] font-black text-red-500 uppercase mb-1">ERROR</h4>
+                                    <h4 className="text-xs-plus font-black text-red-500 uppercase mb-1">ERROR</h4>
                                     <p className="text-xs font-mono text-red-400">{error}</p>
                                 </div>
                             </div>
@@ -459,8 +459,8 @@ export function VideoToGIF() {
                                     {/* Start Time */}
                                     <div>
                                         <div className="flex justify-between mb-1">
-                                            <label className="text-[10px] font-mono text-zinc-600">START TIME</label>
-                                            <span className="text-[10px] font-mono text-emerald-500">{formatTime(startTime)}</span>
+                                            <label className="text-xs-plus font-mono text-zinc-600">START TIME</label>
+                                            <span className="text-xs-plus font-mono text-emerald-500">{formatTime(startTime)}</span>
                                         </div>
                                         <input
                                             type="range"
@@ -476,8 +476,8 @@ export function VideoToGIF() {
                                     {/* Duration */}
                                     <div>
                                         <div className="flex justify-between mb-1">
-                                            <label className="text-[10px] font-mono text-zinc-600">DURATION (seconds)</label>
-                                            <span className="text-[10px] font-mono text-emerald-500">{duration}s</span>
+                                            <label className="text-xs-plus font-mono text-zinc-600">DURATION (seconds)</label>
+                                            <span className="text-xs-plus font-mono text-emerald-500">{duration}s</span>
                                         </div>
                                         <input
                                             type="range"
@@ -488,7 +488,7 @@ export function VideoToGIF() {
                                             onChange={(e) => setDuration(parseFloat(e.target.value))}
                                             className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
                                         />
-                                        <p className="text-[8px] font-mono text-zinc-600 mt-1">
+                                        <p className="text-xxs font-mono text-zinc-600 mt-1">
                                             Max 10 seconds for optimal performance
                                         </p>
                                     </div>
@@ -496,8 +496,8 @@ export function VideoToGIF() {
                                     {/* Width */}
                                     <div>
                                         <div className="flex justify-between mb-1">
-                                            <label className="text-[10px] font-mono text-zinc-600">WIDTH (pixels)</label>
-                                            <span className="text-[10px] font-mono text-emerald-500">{width}px</span>
+                                            <label className="text-xs-plus font-mono text-zinc-600">WIDTH (pixels)</label>
+                                            <span className="text-xs-plus font-mono text-emerald-500">{width}px</span>
                                         </div>
                                         <input
                                             type="range"
@@ -508,7 +508,7 @@ export function VideoToGIF() {
                                             onChange={(e) => setWidth(parseInt(e.target.value))}
                                             className="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer"
                                         />
-                                        <p className="text-[8px] font-mono text-zinc-600 mt-1">
+                                        <p className="text-xxs font-mono text-zinc-600 mt-1">
                                             Recommended: 480px | Max: 800px
                                         </p>
                                     </div>
@@ -516,15 +516,15 @@ export function VideoToGIF() {
                                     {/* Quality */}
                                     <div>
                                         <div className="flex justify-between mb-1">
-                                            <label className="text-[10px] font-mono text-zinc-600">QUALITY</label>
-                                            <span className="text-[10px] font-mono text-emerald-500">
+                                            <label className="text-xs-plus font-mono text-zinc-600">QUALITY</label>
+                                            <span className="text-xs-plus font-mono text-emerald-500">
                                                 {quality === 1 ? "Best (Larger File)" : quality === 0.7 ? "Good (Balanced)" : "Fast (Smaller File)"}
                                             </span>
                                         </div>
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => setQuality(1)}
-                                                className={`flex-1 py-2 rounded-lg text-[10px] font-mono transition ${quality === 1
+                                                className={`flex-1 py-2 rounded-lg text-xs-plus font-mono transition ${quality === 1
                                                         ? "bg-emerald-500 text-black"
                                                         : "bg-zinc-900 text-zinc-500"
                                                     }`}
@@ -533,7 +533,7 @@ export function VideoToGIF() {
                                             </button>
                                             <button
                                                 onClick={() => setQuality(0.7)}
-                                                className={`flex-1 py-2 rounded-lg text-[10px] font-mono transition ${quality === 0.7
+                                                className={`flex-1 py-2 rounded-lg text-xs-plus font-mono transition ${quality === 0.7
                                                         ? "bg-emerald-500 text-black"
                                                         : "bg-zinc-900 text-zinc-500"
                                                     }`}
@@ -542,7 +542,7 @@ export function VideoToGIF() {
                                             </button>
                                             <button
                                                 onClick={() => setQuality(0.3)}
-                                                className={`flex-1 py-2 rounded-lg text-[10px] font-mono transition ${quality === 0.3
+                                                className={`flex-1 py-2 rounded-lg text-xs-plus font-mono transition ${quality === 0.3
                                                         ? "bg-emerald-500 text-black"
                                                         : "bg-zinc-900 text-zinc-500"
                                                     }`}
@@ -555,15 +555,15 @@ export function VideoToGIF() {
                                     {/* FPS */}
                                     <div>
                                         <div className="flex justify-between mb-1">
-                                            <label className="text-[10px] font-mono text-zinc-600">FRAME RATE (FPS)</label>
-                                            <span className="text-[10px] font-mono text-emerald-500">{fps} fps</span>
+                                            <label className="text-xs-plus font-mono text-zinc-600">FRAME RATE (FPS)</label>
+                                            <span className="text-xs-plus font-mono text-emerald-500">{fps} fps</span>
                                         </div>
                                         <div className="flex gap-2">
                                             {[8, 10, 12, 15].map((value) => (
                                                 <button
                                                     key={value}
                                                     onClick={() => setFps(value)}
-                                                    className={`flex-1 py-2 rounded-lg text-[10px] font-mono transition ${fps === value
+                                                    className={`flex-1 py-2 rounded-lg text-xs-plus font-mono transition ${fps === value
                                                             ? "bg-emerald-500 text-black"
                                                             : "bg-zinc-900 text-zinc-500"
                                                         }`}
@@ -572,7 +572,7 @@ export function VideoToGIF() {
                                                 </button>
                                             ))}
                                         </div>
-                                        <p className="text-[8px] font-mono text-zinc-600 mt-1">
+                                        <p className="text-xxs font-mono text-zinc-600 mt-1">
                                             Higher FPS = Smoother but larger file
                                         </p>
                                     </div>

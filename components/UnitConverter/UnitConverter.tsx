@@ -47,8 +47,8 @@ export function UnitConverter() {
         <Panel as="main" className="p-4 sm:p-6 md:p-8 flex flex-col items-center space-y-6 max-w-lg mx-auto">
             <ToolHeader title="Unit Converter" />
 
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">Result</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">Result</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="overflow-hidden">
                         <span className="text-4xl font-black text-white">
@@ -97,7 +97,7 @@ export function UnitConverter() {
                                     }`}
                             >
                                 <Icon size={16} />
-                                <span className="text-[10px] tracking-widest">{cat.name}</span>
+                                <span className="text-xs-plus tracking-widest">{cat.name}</span>
                             </button>
                         );
                     })}
@@ -122,7 +122,7 @@ export function UnitConverter() {
 function UnitSelect({ label, value, units, onChange }: any) {
     return (
         <div className="bg-zinc-950 border border-zinc-900 rounded-2xl overflow-hidden">
-            <div className="border-b border-zinc-900 px-3 py-2 text-[8px] font-mono text-zinc-600">{label}</div>
+            <div className="border-b border-zinc-900 px-3 py-2 text-xxs font-mono text-zinc-600">{label}</div>
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

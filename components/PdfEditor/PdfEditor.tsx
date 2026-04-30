@@ -116,8 +116,8 @@ export default function PdfEditor() {
             <ToolHeader title="PDF Surgeon" />
 
             {/* STATUS HUD - Matches OCR/Unit Converter Area */}
-            <div className="w-full bg-gradient-to-r from-emerald-950/30 to-zinc-950 border border-emerald-500/20 rounded-2xl p-6">
-                <p className="text-[10px] font-mono text-emerald-500 mb-2 tracking-widest uppercase">System Diagnostic</p>
+            <div className="w-full bg-gradient-emerald-dark border border-emerald-500/20 rounded-2xl p-6">
+                <p className="text-xs-plus font-mono text-emerald-500 mb-2 tracking-widest uppercase">System Diagnostic</p>
                 <div className="flex items-baseline justify-between flex-wrap gap-4">
                     <div className="flex items-baseline overflow-hidden">
                         <span className="text-4xl font-black text-white tabular-nums tracking-tighter">
@@ -129,7 +129,7 @@ export default function PdfEditor() {
                     </div>
                     <div className="flex items-center gap-3">
                         {isProcessing ? <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" /> : <Activity className="w-4 h-4 text-zinc-800" />}
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter">
+                        <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-tighter">
                             {isProcessing ? 'Local_Stream_Busy' : 'Awaiting_Signal'}
                         </span>
                     </div>
@@ -145,7 +145,7 @@ export default function PdfEditor() {
                 >
                     <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf" multiple className="hidden" />
                     <Plus className="w-10 h-10 mx-auto text-zinc-800 group-hover:text-emerald-500 transition-colors mb-4" />
-                    <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-[0.4em]">Inject_PDF_Payload</span>
+                    <span className="text-xs-plus font-mono text-zinc-600 uppercase tracking-[0.4em]">Inject_PDF_Payload</span>
                 </div>
 
                 {/* PROCESSING QUEUE */}
@@ -163,7 +163,7 @@ export default function PdfEditor() {
                                     <FileText className="w-5 h-5 text-zinc-700 group-hover:text-emerald-500" />
                                     <div className="min-w-0">
                                         <p className="text-xs font-bold text-white truncate w-40 sm:w-64">{f.file.name}</p>
-                                        <p className="text-[9px] font-mono text-emerald-500/60 uppercase">{f.pageCount} Pages</p>
+                                        <p className="text-xs-minus font-mono text-emerald-500/60 uppercase">{f.pageCount} Pages</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-1">
@@ -193,7 +193,7 @@ export default function PdfEditor() {
                     </button>
 
                     <div className="bg-zinc-950 border border-zinc-900 rounded-2xl px-6 flex flex-col items-center justify-center">
-                        <span className="text-[7px] text-zinc-600 uppercase font-bold tracking-tighter">Units</span>
+                        <span className="text-tiny text-zinc-600 uppercase font-bold tracking-tighter">Units</span>
                         <span className="text-xl font-black text-white tabular-nums">{files.length}</span>
                     </div>
                 </div>
@@ -201,10 +201,10 @@ export default function PdfEditor() {
                 {/* ENGINE FOOTER */}
                 <div className="w-full pt-6 border-t border-zinc-900 flex justify-between items-center opacity-30">
                     <div className="flex gap-4">
-                        <span className="text-[8px] font-mono text-zinc-500 uppercase flex items-center gap-1"><ShieldCheck size={10} /> Local_Enc</span>
-                        <span className="text-[8px] font-mono text-zinc-500 uppercase flex items-center gap-1"><Zap size={10} /> Instant_IO</span>
+                        <span className="text-xxs font-mono text-zinc-500 uppercase flex items-center gap-1"><ShieldCheck size={10} /> Local_Enc</span>
+                        <span className="text-xxs font-mono text-zinc-500 uppercase flex items-center gap-1"><Zap size={10} /> Instant_IO</span>
                     </div>
-                    <span className="text-[8px] font-mono text-zinc-700 uppercase italic">Lizard.PDF_Surgeon.v1.5</span>
+                    <span className="text-xxs font-mono text-zinc-700 uppercase italic">Lizard.PDF_Surgeon.v1.5</span>
                 </div>
             </div>
         </Panel>

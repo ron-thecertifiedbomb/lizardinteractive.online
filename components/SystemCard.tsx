@@ -14,12 +14,12 @@ export default function SystemCard({ title, desc, href, disabled, image }: Props
         <div
             className={[
                 "group overflow-hidden rounded-(--radius) border transition retro-noise",
-                "bg-(--panel) border-(--border) shadow-(--shadow)",
+                "bg-theme-panel border-(--border) shadow-(--shadow)",
                 disabled ? "opacity-50" : "hover:shadow-(--shadow-2) hover:-translate-y-1",
             ].join(" ")}
         >
             {/* Image */}
-            <div className="relative aspect-16/10 w-full overflow-hidden bg-(--panel-2)">
+            <div className="relative aspect-16/10 w-full overflow-hidden bg-theme-panel-2">
                 {image ? (
                     <img
                         src={image}
@@ -30,7 +30,7 @@ export default function SystemCard({ title, desc, href, disabled, image }: Props
                         ].join(" ")}
                     />
                 ) : (
-                    <div className="flex h-full items-center justify-center text-4xl text-(--muted)">
+                    <div className="flex h-full items-center justify-center text-4xl text-theme-muted">
                         🎮
                     </div>
                 )}
@@ -47,12 +47,12 @@ export default function SystemCard({ title, desc, href, disabled, image }: Props
             {/* Content */}
             <div className="p-4">
                 <div className="text-base font-extrabold tracking-tight">{title}</div>
-                <div className="mt-1 text-sm text-(--muted) leading-snug">{desc}</div>
+                <div className="mt-1 text-sm text-theme-muted leading-snug">{desc}</div>
 
                 <div className="mt-3">
                     {disabled ? (
                         <button
-                            className="rounded-xl border px-4 py-2 text-sm border-(--border) bg-transparent text-(--muted)"
+                            className="rounded-xl border px-4 py-2 text-sm border-(--border) bg-transparent text-theme-muted"
                             disabled
                             type="button"
                         >
@@ -60,7 +60,7 @@ export default function SystemCard({ title, desc, href, disabled, image }: Props
                         </button>
                     ) : (
                         <Link
-                            className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm border-(--border) bg-(--accent) text-white hover:brightness-110 active:translate-y-px transition"
+                            className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm border-(--border) bg-theme-accent text-white hover:brightness-110 active:translate-y-px transition"
                             href={href}
                         >
                             Open <span className="text-white/70">→</span>

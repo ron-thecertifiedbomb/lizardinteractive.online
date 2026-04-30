@@ -18,7 +18,7 @@ export default function ServicesCards({ niches }: ServicesCardsProps) {
                 <div key={i} className="group relative block w-full cursor-pointer">
 
                     {/* Card Body */}
-                    <div className="relative z-10 w-full p-6 md:p-10 bg-[#080808] border border-zinc-900 md:hover:border-emerald-500/40 transition-all duration-500 md:hover:translate-x-2 active:scale-[0.99] overflow-hidden">
+                    <div className="relative z-10 w-full p-6 md:p-10 bg-dark-900 border border-zinc-900 md:hover:border-emerald-500/40 transition-all duration-500 md:hover:translate-x-2 active:scale-[0.99] overflow-hidden">
 
                         {/* Massive Background Ghost Tag */}
                         <span className="absolute -right-4 -top-2 text-7xl md:text-8xl font-black text-white/[0.02] group-hover:text-emerald-500/[0.04] transition-all duration-700 uppercase pointer-events-none italic">
@@ -36,7 +36,7 @@ export default function ServicesCards({ niches }: ServicesCardsProps) {
                         </p>
 
                         {/* Bottom Interaction Bar */}
-                        <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-zinc-800 group-hover:text-emerald-500/80 transition-all duration-300">
+                        <div className="flex items-center gap-4 text-xs-plus font-black uppercase tracking-[0.4em] text-zinc-800 group-hover:text-emerald-500/80 transition-all duration-300">
                             <span className="group-hover:translate-x-3 transition-transform duration-500 ease-out">
                                 {niche.label}
                             </span>

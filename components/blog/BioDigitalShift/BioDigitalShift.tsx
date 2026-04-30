@@ -44,7 +44,7 @@ export default function BioDigitalShift({ data }: BioDigitalProps) {
             <header className="mb-16 border-b border-zinc-900 pb-12">
                 <div className="flex items-center gap-3 mb-8 text-emerald-500 font-mono tracking-widest">
                     <Terminal size={16} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.5em]">
+                    <span className="text-xs-plus font-black uppercase tracking-[0.5em]">
                         System.Log // {data.header.label}
                     </span>
                 </div>
@@ -54,7 +54,7 @@ export default function BioDigitalShift({ data }: BioDigitalProps) {
                     <span className="text-emerald-500">{data.header.title.split(': ')[1]}</span>
                 </h1>
 
-                <div className="flex flex-wrap gap-8 text-[11px] uppercase tracking-widest font-bold font-mono">
+                <div className="flex flex-wrap gap-8 text-sm-minus uppercase tracking-widest font-bold font-mono">
                     <div className="flex items-center gap-2 text-zinc-300">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                         Auth: Lizard_Interactive
@@ -99,7 +99,7 @@ export default function BioDigitalShift({ data }: BioDigitalProps) {
                         {block.protocols && (
                             <div className="bg-zinc-950 border border-zinc-900 p-12 rounded-[3rem] relative overflow-hidden group">
                                 <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-500 opacity-20 group-hover:opacity-100 transition-opacity duration-700" />
-                                <p className="text-[10px] text-emerald-500 font-black uppercase tracking-[0.5em] mb-8 font-mono">
+                                <p className="text-xs-plus text-emerald-500 font-black uppercase tracking-[0.5em] mb-8 font-mono">
                                     Engine_Protocol_v3.2.6
                                 </p>
                                 <ul className="space-y-6 text-zinc-100 text-base md:text-lg">

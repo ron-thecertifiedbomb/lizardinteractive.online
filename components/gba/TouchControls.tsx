@@ -16,7 +16,7 @@ function TouchButton({
     return (
         <button
             className={
-                "touch-none select-none rounded-2xl border border-(--border) bg-(--panel) px-3 py-3 text-center text-sm font-semibold shadow-sm active:scale-[0.98] " +
+                "touch-none select-none rounded-2xl border border-(--border) bg-theme-panel px-3 py-3 text-center text-sm font-semibold shadow-sm active:scale-[0.98] " +
                 className
             }
             onPointerDown={(e) => {
@@ -42,7 +42,7 @@ export function DPad({
     onRelease: (b: GbaButton) => void;
 }) {
     return (
-        <div className="rounded-3xl border border-(--border) bg-(--panel)/70 p-3 backdrop-blur">
+        <div className="rounded-3xl border border-(--border) bg-theme-panel/70 p-3 backdrop-blur">
             <div className="grid grid-cols-3 gap-2">
                 <div />
                 <TouchButton label="↑" onPress={() => onPress("UP")} onRelease={() => onRelease("UP")} />
@@ -64,7 +64,7 @@ export function ABCluster({
     onRelease: (b: GbaButton) => void;
 }) {
     return (
-        <div className="rounded-3xl border border-(--border) bg-(--panel)/70 p-3 backdrop-blur">
+        <div className="rounded-3xl border border-(--border) bg-theme-panel/70 p-3 backdrop-blur">
             <div className="grid grid-cols-2 gap-2">
                 <TouchButton label="A" onPress={() => onPress("A")} onRelease={() => onRelease("A")} />
                 <TouchButton label="B" onPress={() => onPress("B")} onRelease={() => onRelease("B")} />

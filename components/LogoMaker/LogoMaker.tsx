@@ -13,9 +13,9 @@
 // const LogoMaker = dynamic(() => import("../../components/LogoMaker/LogoMaker"), {
 //     ssr: false,
 //     loading: () => (
-//         <div className="w-full h-[600px] border border-zinc-900 flex flex-col items-center justify-center bg-[#050505]">
+//         <div className="w-full h-[600px] border border-zinc-900 flex flex-col items-center justify-center bg-dark-950">
 //             <div className="w-4 h-4 border-2 border-emerald-500 border-t-transparent animate-spin rounded-full mb-4" />
-//             <span className="text-[8px] font-mono text-zinc-800 uppercase tracking-[1em] animate-pulse">
+//             <span className="text-xxs font-mono text-zinc-800 uppercase tracking-[1em] animate-pulse">
 //                 Initializing_Identity_Engine
 //             </span>
 //         </div>
@@ -84,10 +84,10 @@
 //                     <div className="mt-24 flex flex-col items-center gap-6 opacity-30">
 //                         <div className="h-px w-16 bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
 //                         <div className="flex flex-col items-center gap-2">
-//                             <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-[0.8em]">
+//                             <span className="text-xxs font-mono text-zinc-500 uppercase tracking-[0.8em]">
 //                                 Status: Operational // Engine: SVG_CANVAS_V1
 //                             </span>
-//                             <span className="text-[7px] font-mono text-zinc-700 uppercase tracking-[0.4em]">
+//                             <span className="text-tiny font-mono text-zinc-700 uppercase tracking-[0.4em]">
 //                                 Memory_Isolation_Active // Zero_GSR_Threshold
 //                             </span>
 //                         </div>

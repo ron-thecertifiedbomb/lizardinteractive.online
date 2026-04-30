@@ -21,15 +21,15 @@ export default function ScaleMapper() {
     const scaleNotes = getScaleNotes(selectedKey);
 
     return (
-        <div className="w-full max-w-5xl mx-auto bg-[#050505] border border-zinc-900 p-8 overflow-hidden relative">
+        <div className="w-full max-w-5xl mx-auto bg-dark-950 border border-zinc-900 p-8 overflow-hidden relative">
             {/* 1. HUD HEADER */}
             <div className="flex justify-between items-end mb-12 border-b border-zinc-900 pb-8">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <Crosshair size={14} className="text-emerald-500 animate-spin-slow" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-white">Scale.Matrix_v1.0</h2>
+                        <h2 className="text-xs-plus font-black uppercase tracking-[0.5em] text-white">Scale.Matrix_v1.0</h2>
                     </div>
-                    <p className="text-[9px] text-zinc-600 font-mono uppercase tracking-widest">
+                    <p className="text-xs-minus text-zinc-600 font-mono uppercase tracking-widest">
                         Status: Mapping_{selectedKey}_Major_Frequencies
                     </p>
                 </div>
@@ -44,7 +44,7 @@ export default function ScaleMapper() {
                     </select>
                     <button
                         onClick={() => setShowCAGED(!showCAGED)}
-                        className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest border transition-all ${showCAGED ? 'bg-emerald-500 text-black border-emerald-400' : 'bg-black text-zinc-500 border-zinc-800 hover:text-white'
+                        className={`flex items-center gap-2 px-4 py-2 text-xs-plus font-black uppercase tracking-widest border transition-all ${showCAGED ? 'bg-emerald-500 text-black border-emerald-400' : 'bg-black text-zinc-500 border-zinc-800 hover:text-white'
                             }`}
                     >
                         <Layers size={12} /> {showCAGED ? 'CAGED_ON' : 'CAGED_OFF'}
@@ -114,7 +114,7 @@ export default function ScaleMapper() {
 
             {/* 3. DIAGNOSTIC FOOTER */}
             <div className="mt-8 pt-6 border-t border-zinc-900 flex justify-between items-center opacity-40">
-                <div className="flex gap-6 text-[8px] font-mono uppercase tracking-widest">
+                <div className="flex gap-6 text-xxs font-mono uppercase tracking-widest">
                     <span className="flex items-center gap-1"><Zap size={10} /> Mode: Ionian</span>
                     <span className="flex items-center gap-1"><ChevronRight size={10} /> Engine: SVG_Render_V1</span>
                 </div>

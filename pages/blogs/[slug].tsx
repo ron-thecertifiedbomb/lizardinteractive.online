@@ -147,7 +147,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
           <header className="border-b border-zinc-900 pb-6 md:pb-8 mb-8 md:mb-12 space-y-4 md:space-y-6">
             {/* Category Badge */}
             <div className="flex items-center gap-2">
-              <span className="px-2 md:px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-[8px] md:text-[10px] font-black uppercase tracking-wider">
+              <span className="px-2 md:px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-xxs md:text-xs-plus font-black uppercase tracking-wider">
                 {post.category}
               </span>
             </div>
@@ -159,7 +159,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
 
             {/* Meta Info - Stack on mobile, row on desktop */}
             <div className="flex width-full  flex-col items-center justify-between gap-4">
-              <div className="flex justify-between w-full items-center gap-3 md:gap-4 text-[10px] md:text-xs font-mono text-zinc-500">
+              <div className="flex justify-between w-full items-center gap-3 md:gap-4 text-xs-plus md:text-xs font-mono text-zinc-500">
                 <div className="flex items-center gap-3 md:gap-4">
                   <div className="flex items-center gap-1.5">
                     <Calendar size={12} className="w-3 h-3 md:w-3 md:h-3" />

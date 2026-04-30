@@ -23,7 +23,7 @@ const LogEntry = ({ text, delay }: { text: string; delay: number }) => (
         initial={{ x: -10, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay, duration: 0.3 }}
-        className="flex items-center gap-3 font-mono text-[10px] tracking-widest mb-2"
+        className="flex items-center gap-3 font-mono text-xs-plus tracking-widest mb-2"
     >
         <span className="text-emerald-900 font-bold">[{new Date().toLocaleTimeString().split(' ')[0]}]</span>
         <span className="text-emerald-500/80">{text}</span>
@@ -107,7 +107,7 @@ export default function Uplink({ onComplete }: UplinkProps) {
                         <Activity className="w-5 h-5" />
                         <Zap className="w-5 h-5" />
                     </div>
-                    <p className="text-[8px] font-mono text-emerald-800 text-right uppercase tracking-[0.2em]">
+                    <p className="text-xxs font-mono text-emerald-800 text-right uppercase tracking-[0.2em]">
                         Hardware_Acceleration: Active<br />
                         Lizard_Interactive_Systems // 2026
                     </p>

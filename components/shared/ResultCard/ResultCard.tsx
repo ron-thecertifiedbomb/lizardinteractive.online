@@ -24,7 +24,7 @@ export default function ResultCard({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative bg-[#050505] border border-zinc-900 rounded-3xl p-6 hover:border-emerald-500/50 transition-all duration-500 overflow-hidden"
+            className="group relative bg-dark-950 border border-zinc-900 rounded-3xl p-6 hover:border-emerald-500/50 transition-all duration-500 overflow-hidden"
         >
             {/* Background Aesthetic */}
             <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-emerald-500/5 rounded-full blur-[80px] group-hover:bg-emerald-500/10 transition-all duration-500 pointer-events-none" />
@@ -35,7 +35,7 @@ export default function ResultCard({
                     <div>
                         <div className="flex items-center gap-2 mb-1">
                             <Globe size={14} className="text-emerald-500" />
-                            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">{projectType}</span>
+                            <span className="text-xs-plus font-mono text-zinc-500 uppercase tracking-widest">{projectType}</span>
                         </div>
                         <h3 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-emerald-400 transition-colors">
                             {client}
@@ -76,14 +76,14 @@ export default function ResultCard({
                 {/* Metrics: The Before/After Payoff */}
                 <div className="grid grid-cols-2 gap-4 p-4 rounded-2xl bg-zinc-950 border border-zinc-900/50 mb-6">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-mono text-zinc-600 uppercase mb-1">Optimization</span>
+                        <span className="text-xs-plus font-mono text-zinc-600 uppercase mb-1">Optimization</span>
                         <span className="text-emerald-500 font-bold flex items-center gap-1 italic">
                             <Zap size={12} /> {improvement}
                         </span>
                     </div>
                     <div className="flex flex-col border-l border-zinc-800 pl-4">
-                        <span className="text-[10px] font-mono text-zinc-600 uppercase mb-1">Status</span>
-                        <span className="text-white text-[10px] font-bold uppercase tracking-widest">Deploy Ready</span>
+                        <span className="text-xs-plus font-mono text-zinc-600 uppercase mb-1">Status</span>
+                        <span className="text-white text-xs-plus font-bold uppercase tracking-widest">Deploy Ready</span>
                     </div>
                 </div>
 
@@ -91,7 +91,7 @@ export default function ResultCard({
                 <div className="flex items-center justify-between">
                     <div className="flex gap-2">
                         {tags.map(tag => (
-                            <span key={tag} className="text-[8px] font-mono px-2 py-1 bg-zinc-900 border border-zinc-800 text-zinc-500 rounded uppercase">
+                            <span key={tag} className="text-xxs font-mono px-2 py-1 bg-zinc-900 border border-zinc-800 text-zinc-500 rounded uppercase">
                                 {tag}
                             </span>
                         ))}

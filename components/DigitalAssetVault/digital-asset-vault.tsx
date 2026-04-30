@@ -140,7 +140,7 @@ export function DigitalAssetVault() {
                                     key={category}
                                     onClick={() => setFilter(category)}
                                     className={cn(
-                                        "rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all",
+                                        "rounded-sm border px-3 py-1.5 font-mono text-xs-plus uppercase tracking-wider transition-all",
                                         filter === category
                                             ? isDevMode
                                                 ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-500"
@@ -172,16 +172,16 @@ export function DigitalAssetVault() {
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                             <div className="h-2 w-2 animate-pulse rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                            <span className="font-mono text-xs-plus uppercase tracking-wider text-zinc-500">
                                 System Online
                             </span>
                         </div>
-                        <span className="font-mono text-[10px] text-zinc-700">|</span>
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                        <span className="font-mono text-xs-plus text-zinc-700">|</span>
+                        <span className="font-mono text-xs-plus uppercase tracking-wider text-zinc-500">
                             {assets.filter((a) => a.status === "online").length} Active · {assets.filter((a) => a.status === "processing").length} Processing
                         </span>
                     </div>
-                    <code className="font-mono text-[10px] text-zinc-600">
+                    <code className="font-mono text-xs-plus text-zinc-600">
                         VAULT::v1.0.0::SECURE::Philippine_Region_8
                     </code>
                 </footer>

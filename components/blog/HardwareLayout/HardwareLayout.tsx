@@ -31,7 +31,7 @@ export const HardwareLayout = ({ content }: { content: any }) => (
 
                     {/* --- DETAILS --- */}
                     <div className="flex-1">
-                        <span className="text-emerald-500 font-mono text-[10px] font-black tracking-widest">
+                        <span className="text-emerald-500 font-mono text-xs-plus font-black tracking-widest">
                             {item.brand} // {item.specs.bestFor}
                         </span>
                         <h3 className="text-4xl font-black uppercase my-2 tracking-tighter text-white group-hover:text-emerald-400 transition-colors">
@@ -41,13 +41,13 @@ export const HardwareLayout = ({ content }: { content: any }) => (
                             {item.description}
                         </p>
 
-                        <div className="bg-black p-4 border border-zinc-900 font-mono text-[9px] text-zinc-500 uppercase tracking-widest flex justify-between items-center">
+                        <div className="bg-black p-4 border border-zinc-900 font-mono text-xs-minus text-zinc-500 uppercase tracking-widest flex justify-between items-center">
                             <div className="flex flex-col gap-1">
-                                <span className="text-zinc-700 text-[8px]">Processor</span>
+                                <span className="text-zinc-700 text-xxs">Processor</span>
                                 <span>{item.specs.cpu}</span>
                             </div>
                             <div className="flex flex-col gap-1 text-right">
-                                <span className="text-zinc-700 text-[8px]">Memory</span>
+                                <span className="text-zinc-700 text-xxs">Memory</span>
                                 <span>{item.specs.ram}</span>
                             </div>
                         </div>

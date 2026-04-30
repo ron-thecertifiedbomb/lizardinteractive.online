@@ -91,18 +91,18 @@ export function KeymapEditor({ keymap, onSetKey, onReset }: Props) {
                             className={[
                                 "flex items-center justify-between rounded-xl border px-3 py-2 transition",
                                 isListening
-                                    ? "border-(--accent) bg-(--accent)/10 ring-1 ring-(--accent)"
-                                    : "border-(--border) bg-(--panel) hover:border-(--accent)/50",
+                                    ? "border-(--accent) bg-theme-accent/10 ring-1 ring-(--accent)"
+                                    : "border-(--border) bg-theme-panel hover:border-(--accent)/50",
                             ].join(" ")}
                         >
-                            <span className="text-(--muted)">{label}</span>
+                            <span className="text-theme-muted">{label}</span>
                             <span className="font-medium">
                                 {isListening ? (
                                     <span className="animate-pulse text-(--accent)">Press a key...</span>
                                 ) : code ? (
                                     codeToLabel(code)
                                 ) : (
-                                    <span className="text-(--muted)">—</span>
+                                    <span className="text-theme-muted">—</span>
                                 )}
                             </span>
                         </button>
@@ -113,7 +113,7 @@ export function KeymapEditor({ keymap, onSetKey, onReset }: Props) {
             <button
                 type="button"
                 onClick={onReset}
-                className="mt-3 rounded-xl border border-(--border) px-3 py-2 text-xs text-(--muted) hover:text-(--text) transition"
+                className="mt-3 rounded-xl border border-(--border) px-3 py-2 text-xs text-theme-muted hover:text-theme-text transition"
             >
                 Reset to defaults
             </button>

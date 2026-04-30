@@ -115,7 +115,7 @@ export default function BoxShadowGenerator() {
 {/* 
                     <button
                         onClick={addShadow}
-                        className="w-full flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500 border border-emerald-500/20 py-4 rounded-xl hover:bg-emerald-500/5 transition-all active:scale-[0.98]"
+                        className="w-full flex items-center justify-center gap-2 text-xs-plus font-black uppercase tracking-widest text-emerald-500 border border-emerald-500/20 py-4 rounded-xl hover:bg-emerald-500/5 transition-all active:scale-[0.98]"
                     >
                         <Plus className="w-3 h-3" /> New Shadow Layer
                     </button> */}
@@ -132,21 +132,21 @@ export default function BoxShadowGenerator() {
                                     >
                                         {sh.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                                     </button>
-                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                                    <h3 className="text-xs-plus font-black uppercase tracking-widest text-zinc-400">
                                         Layer_{index + 1}
                                     </h3>
                                 </div>
 
                                 <div className="flex items-center gap-6">
                                     <div className="flex items-center gap-3">
-                                        <span className={`text-[8px] font-bold ${!sh.inset ? 'text-emerald-500' : 'text-zinc-600'}`}>OUTSET</span>
+                                        <span className={`text-xxs font-bold ${!sh.inset ? 'text-emerald-500' : 'text-zinc-600'}`}>OUTSET</span>
                                         <button
                                             onClick={() => updateShadow(sh.id, { inset: !sh.inset })}
                                             className="w-8 h-4 bg-zinc-800 rounded-full relative border border-white/5"
                                         >
                                             <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full transition-all duration-200 ${sh.inset ? 'left-[18px] bg-emerald-500' : 'left-1 bg-zinc-500'}`} />
                                         </button>
-                                        <span className={`text-[8px] font-bold ${sh.inset ? 'text-emerald-500' : 'text-zinc-600'}`}>INSET</span>
+                                        <span className={`text-xxs font-bold ${sh.inset ? 'text-emerald-500' : 'text-zinc-600'}`}>INSET</span>
                                     </div>
 
                                     {shadows.length > 1 && (
@@ -178,7 +178,7 @@ export default function BoxShadowGenerator() {
                                     ))}
                                 </div>
                                 <label className="flex items-center gap-2 cursor-pointer group">
-                                    <span className="text-[8px] font-black text-zinc-500 group-hover:text-zinc-300">HEX</span>
+                                    <span className="text-xxs font-black text-zinc-500 group-hover:text-zinc-300">HEX</span>
                                     <div
                                         className="w-6 h-6 rounded-lg border border-white/20 relative overflow-hidden"
                                         style={{ backgroundColor: rgbToHex(sh.r, sh.g, sh.b) }}
@@ -205,8 +205,8 @@ export default function BoxShadowGenerator() {
 
                     {/* CODE EXPORT */}
                     <div className="bg-zinc- bg-zinc-900/20 border border-white/5 p-4 rounded-2xl relative group">
-                        <div className="text-[8px] font-mono text-zinc-500 uppercase mb-3 tracking-[0.3em]">CSS_Output</div>
-                        <code className="text-[11px] text-emerald-400 font-mono break-all block pr-12 leading-relaxed">
+                        <div className="text-xxs font-mono text-zinc-500 uppercase mb-3 tracking-[0.3em]">CSS_Output</div>
+                        <code className="text-sm-minus text-emerald-400 font-mono break-all block pr-12 leading-relaxed">
                             box-shadow: {shadowString || 'none'};
                         </code>
                         <button
@@ -218,7 +218,7 @@ export default function BoxShadowGenerator() {
                     </div>
 
                     <div className="opacity-60 text-center py-10">
-                        <p className="text-[8px] font-mono tracking-[0.5em] uppercase text-emerald-500">Lizard Interactive </p>
+                        <p className="text-xxs font-mono tracking-[0.5em] uppercase text-emerald-500">Lizard Interactive </p>
                     </div>
                 </div>
             </div>
@@ -230,10 +230,10 @@ function Range({ label, value, min, max, onChange, unit = "" }: any) {
     return (
         <label className="flex flex-col gap-3 group/range">
             <div className="flex justify-between items-center">
-                <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-emerald-500 transition-colors">
+                <span className="text-xxs font-black uppercase tracking-widest text-zinc-500 group-focus-within:text-emerald-500 transition-colors">
                     {label}
                 </span>
-                <span className="text-[10px] font-mono text-zinc-300">{value}{unit}</span>
+                <span className="text-xs-plus font-mono text-zinc-300">{value}{unit}</span>
             </div>
             <input
                 type="range" min={min} max={max} value={value}

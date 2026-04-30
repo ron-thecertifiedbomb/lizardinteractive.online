@@ -68,14 +68,14 @@ const JsPlayground: React.FC = () => {
             <div className="max-w-7xl mx-auto py-10">
 
                 {/* TOOLBAR */}
-                <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-[#080808] border border-zinc-900 p-4">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-dark-900 border border-zinc-900 p-4">
                     <div className="flex items-center gap-4">
                         <div className="bg-emerald-500 p-2 rounded-none">
                             <Terminal className="text-black w-5 h-5" />
                         </div>
                         <div>
                             <h2 className="text-xs font-black uppercase tracking-[0.3em] text-white">JS_Playground.sys</h2>
-                            <p className="text-[9px] text-zinc-600 uppercase font-mono tracking-tighter">Environment: Browser_V8_Runtime</p>
+                            <p className="text-xs-minus text-zinc-600 uppercase font-mono tracking-tighter">Environment: Browser_V8_Runtime</p>
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@ const JsPlayground: React.FC = () => {
                         <button
                             onClick={executeCode}
                             disabled={isRunning}
-                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-black px-6 py-2 text-[10px] font-black uppercase tracking-widest transition-all disabled:opacity-50"
+                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-black px-6 py-2 text-xs-plus font-black uppercase tracking-widest transition-all disabled:opacity-50"
                         >
                             {isRunning ? <Zap className="w-4 h-4 animate-pulse" /> : <Play className="w-4 h-4" />}
                             Execute
@@ -98,8 +98,8 @@ const JsPlayground: React.FC = () => {
 
                     {/* SIDEBAR: EXAMPLES */}
                     <aside className="lg:col-span-3 space-y-1">
-                        <div className="bg-[#080808] border border-zinc-900 p-4 mb-1">
-                            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                        <div className="bg-dark-900 border border-zinc-900 p-4 mb-1">
+                            <span className="text-xs-plus font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                                 <Sparkles className="w-3 h-3" /> Quick_Templates
                             </span>
                         </div>
@@ -107,9 +107,9 @@ const JsPlayground: React.FC = () => {
                             <button
                                 key={key}
                                 onClick={() => setCode(examples[key as keyof typeof examples])}
-                                className="w-full group text-left p-4 bg-[#080808] border border-zinc-900 hover:border-emerald-500/50 transition-all flex justify-between items-center"
+                                className="w-full group text-left p-4 bg-dark-900 border border-zinc-900 hover:border-emerald-500/50 transition-all flex justify-between items-center"
                             >
-                                <span className="text-[10px] uppercase font-mono tracking-tighter text-zinc-500 group-hover:text-white">{key.replace(/([A-Z])/g, '_$1')}</span>
+                                <span className="text-xs-plus uppercase font-mono tracking-tighter text-zinc-500 group-hover:text-white">{key.replace(/([A-Z])/g, '_$1')}</span>
                                 <ChevronRight className="w-3 h-3 text-zinc-800 group-hover:text-emerald-500" />
                             </button>
                         ))}
@@ -119,22 +119,22 @@ const JsPlayground: React.FC = () => {
                     <div className="lg:col-span-9 flex flex-col gap-1">
                         <div className="relative group">
                             <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[8px] bg-zinc-900 text-zinc-500 px-2 py-1 uppercase font-mono">Input_Buffer</span>
+                                <span className="text-xxs bg-zinc-900 text-zinc-500 px-2 py-1 uppercase font-mono">Input_Buffer</span>
                             </div>
                             <textarea
                                 ref={textareaRef}
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
-                                className="w-full h-80 bg-[#050505] border border-zinc-900 p-6 font-mono text-sm text-emerald-500/90 focus:outline-none focus:border-emerald-500/30 transition-all resize-none leading-relaxed"
+                                className="w-full h-80 bg-dark-950 border border-zinc-900 p-6 font-mono text-sm text-emerald-500/90 focus:outline-none focus:border-emerald-500/30 transition-all resize-none leading-relaxed"
                                 spellCheck="false"
                             />
                         </div>
 
                         {/* CONSOLE OUTPUT */}
-                        <div className="bg-[#080808] border border-zinc-900 min-h-[200px] flex flex-col">
+                        <div className="bg-dark-900 border border-zinc-900 min-h-[200px] flex flex-col">
                             <div className="flex justify-between items-center px-4 py-2 border-b border-zinc-900 bg-black/50">
-                                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Console_Output</span>
-                                {executionTime > 0 && <span className="text-[8px] font-mono text-zinc-700">{executionTime.toFixed(2)}ms</span>}
+                                <span className="text-xs-minus font-black uppercase tracking-widest text-zinc-500">Console_Output</span>
+                                {executionTime > 0 && <span className="text-xxs font-mono text-zinc-700">{executionTime.toFixed(2)}ms</span>}
                             </div>
 
                             <div className="p-4 font-mono text-xs space-y-2 overflow-y-auto max-h-60">
@@ -142,7 +142,7 @@ const JsPlayground: React.FC = () => {
                                     {output.length === 0 ? (
                                         <div className="flex flex-col items-center justify-center py-10 opacity-20">
                                             <Code2 className="w-10 h-10 mb-2" />
-                                            <p className="text-[10px] uppercase tracking-[0.2em]">Ready for execution...</p>
+                                            <p className="text-xs-plus uppercase tracking-[0.2em]">Ready for execution...</p>
                                         </div>
                                     ) : (
                                         output.map((res, i) => (
