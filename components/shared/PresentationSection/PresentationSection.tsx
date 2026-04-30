@@ -82,7 +82,7 @@ function PresentationCard({ step, index }: { step: Step; index: number }) {
             <div className="space-y-6 md:space-y-10 px-6">
                 <motion.div
                     whileHover={{ x: 6 }}
-                    className="group p-6 md:p-8 rounded-2xl md:rounded-3xl border border-red-500/10 bg-linear-to-br from-red-950/10 to-transparent transition-all"
+                    className="group p-6 md:p-8 rounded-2xl md:rounded-3xl border border-red-500/10 bg-gradient-to-br from-red-950/10 to-transparent transition-all"
                 >
                     <div className="flex items-center gap-3 mb-4 md:mb-6">
                         <div className="h-px w-6 md:w-8 bg-red-500/50" />
@@ -101,7 +101,7 @@ function PresentationCard({ step, index }: { step: Step; index: number }) {
                     whileHover={{ x: -6 }}
                     className="group relative overflow-hidden p-6 md:p-8 rounded-2xl md:rounded-3xl border border-emerald-500/20 bg-zinc-900/40 backdrop-blur-sm transition-all hover:border-emerald-500/50"
                 >
-                    <div className="absolute inset-0 bg-linear-to-tr from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div className="flex items-center gap-3 mb-4 md:mb-6">
                         <div className="h-px w-6 md:w-8 bg-emerald-500" />
                         <h4 className="text-xs-plus md:text-sm font-bold tracking-widest text-emerald-400 uppercase">The Precision</h4>

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { FramerSlide } from "./types";
+import { LayoutGrid, PanelLeftClose } from "lucide-react";
 
 type FramerPresentationPanelsProps = {
     slides: FramerSlide[];
@@ -15,7 +16,7 @@ type FramerPresentationPanelsProps = {
 };
 
 function panelCardClassName(isActive: boolean) {
-    return `rounded-xl border p-3 text-left transition-all sm:rounded-2xl sm:p-4 ${
+    return `rounded-xl border p-2 text-left transition-all sm:rounded-2xl sm:p-4 ${
         isActive ? "border-emerald-500/50 bg-white/5" : "border-white/5 bg-transparent hover:border-white/10"
     }`;
 }
@@ -35,11 +36,16 @@ export function FramerPresentationPanels({
             <div className="flex justify-end">
                 <button
                     onClick={onTogglePanels}
-                    className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs-plus font-mono uppercase tracking-[0.18em] text-zinc-300 transition hover:border-white/25 hover:bg-white/10 hover:text-white sm:text-xs"
+                    className="group flex h-9 w-9 items-center justify-center rounded-full border border-emerald-500/20 bg-transparent text-emerald-500/60 transition-all duration-300 hover:border-emerald-500 hover:bg-emerald-500/5 hover:text-emerald-400 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] active:scale-90"
                     aria-expanded={showPanels}
+                    aria-label={showPanels ? "Hide Panels" : "Show Panels"}
                     aria-controls="framer-presentation-panels"
                 >
-                    {showPanels ? "Hide Panels" : "Show Panels"}
+                    {showPanels ? (
+                        <PanelLeftClose size={14} strokeWidth={2.5} />
+                    ) : (
+                        <LayoutGrid size={14} strokeWidth={2.5} />
+                    )}
                 </button>
             </div>
 
@@ -52,9 +58,8 @@ export function FramerPresentationPanels({
                                 onClick={() => onSelectSlide(index)}
                                 className={panelCardClassName(currentIndex === index)}
                             >
-                                <div className="mb-1 text-xs-minus font-mono text-zinc-600">METRIC_0{index + 1}</div>
                                 <div
-                                    className={`text-sm-minus font-bold uppercase tracking-wide sm:text-xs ${
+                                    className={`text-[10px] font-bold uppercase tracking-wider sm:text-xs truncate ${
                                         currentIndex === index ? "text-white" : "text-zinc-500"
                                     }`}
                                 >
@@ -69,10 +74,10 @@ export function FramerPresentationPanels({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4"
+                        className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-3 sm:p-4"
                     >
-                        <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-emerald-400/80">Pro Tip</div>
-                        <p className="mt-2 text-sm text-zinc-200 sm:text-base">{currentSlide.tip}</p>
+                        <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-emerald-400/80 sm:text-xs-plus">Pro Tip</div>
+                        <p className="mt-1.5 text-xs text-zinc-200 sm:mt-2 sm:text-sm">{currentSlide.tip}</p>
                     </motion.div>
 
                     <motion.div
@@ -82,25 +87,25 @@ export function FramerPresentationPanels({
                         transition={{ duration: 0.35, delay: 0.05 }}
                         className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
                     >
-                        <div className="rounded-2xl border border-white/10 bg-zinc-900/50 p-4">
-                            <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-zinc-400">Quick Facts</div>
-                            <ul className="mt-3 space-y-2">
+                        <div className="rounded-2xl border border-white/10 bg-emerald-500/5 p-3 sm:p-4">
+                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 sm:text-xs-plus">Quick Facts</div>
+                            <ul className="mt-2.5 space-y-1.5 sm:mt-3 sm:space-y-2 ">
                                 {quickFacts.map((fact) => (
-                                    <li key={fact} className="flex items-start gap-2 text-sm text-zinc-200">
-                                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                                    <li key={fact} className="flex items-start gap-3 text-xs text-zinc-200 sm:text-sm">
+                                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-400 sm:h-1.5 sm:w-1.5" />
                                         <span>{fact}</span>
                                     </li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-zinc-900/50 p-4">
-                            <div className="text-xs-plus font-mono uppercase tracking-[0.2em] text-zinc-400">
+                        <div className="rounded-2xl border border-white/10 bg-emerald-500/5 p-3 sm:p-4">
+                            <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 sm:text-xs-plus">
                                 Action Checklist
                             </div>
-                            <ul className="mt-3 space-y-2">
+                            <ul className="mt-2.5 space-y-1.5 sm:mt-3 sm:space-y-2">
                                 {actionChecklist.map((item) => (
-                                    <li key={item} className="flex items-start gap-2 text-sm text-zinc-200">
-                                        <span className="mt-0.5 text-emerald-400">✓</span>
+                                    <li key={item} className="flex items-start gap-3 text-xs text-zinc-200 sm:text-sm">
+                                        <span className="mt-0.5 text-[10px] text-emerald-400 sm:text-sm">✓</span>
                                         <span>{item}</span>
                                     </li>
                                 ))}

@@ -26,7 +26,7 @@ export function FramerPresentationScreen({
     onTogglePlayback,
 }: FramerPresentationScreenProps) {
     return (
-        <div className="relative aspect-9/16 overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:aspect-video sm:rounded-3xl">
+        <div className="relative aspect-9/16 overflow-hidden rounded-2xl border border-emerald-500/20 bg-black shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:aspect-video sm:rounded-3xl">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentSlide.id}
@@ -69,7 +69,7 @@ export function FramerPresentationScreen({
                     </motion.p>
 
                     <motion.div
-                        className="mt-5 grid w-full max-w-sm grid-cols-2 gap-2 sm:mt-7 sm:max-w-2xl sm:gap-3"
+                        className="mt-5 mb-4 grid w-full max-w-sm grid-cols-2 gap-2 sm:mt-7 sm:max-w-2xl sm:gap-3"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5 }}
@@ -85,44 +85,47 @@ export function FramerPresentationScreen({
                     </motion.div>
                 </motion.div>
             </AnimatePresence>
-
-            <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 via-black/60 to-transparent p-4 sm:p-6">
-                <div className="mb-4 h-1.5 w-full cursor-pointer overflow-hidden rounded-full bg-white/10 sm:mb-6">
+     <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 via-black/60 to-transparent p-4 sm:p-6">
+                <div className="mb-2 h-1 w-full cursor-pointer overflow-hidden rounded-full bg-white/10 sm:mb-2">
                     <motion.div
-                        className="h-full bg-emerald-500 shadow-[0_0_15px_#10b981]"
+                        className="h-full bg-emerald-400/30 shadow-[0_0_15px_#10b981]"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
+                <div className="flex items-center justify-center gap-3 sm:gap-4 p-1.5 bg-transparent border border-emerald-500/20 rounded-full backdrop-blur-sm">
+                    {/* Previous Button */}
+                    <button
+                        onClick={onPrev}
+                        className="group flex h-8 w-8 items-center justify-center rounded-full border border-emerald-500/10 text-emerald-500/40 transition-all duration-300 hover:border-emerald-500/60 hover:bg-emerald-500/5 hover:text-emerald-400 active:scale-90 sm:h-9 sm:w-9"
+                        aria-label="Previous slide"
+                    >
+                        <SkipBack size={16} strokeWidth={2} className="transition-transform group-hover:-translate-x-0.5" />
+                    </button>
 
-                <div className="flex items-center justify-between gap-3">
-                    <div className="text-xs-plus font-mono uppercase tracking-[0.22em] text-zinc-400 sm:text-xs">
-                        Slide {currentIndex + 1} / {slideCount}
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-4">
-                        <button
-                            onClick={onPrev}
-                            className="flex h-10 w-10 items-center justify-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white active:scale-95 sm:h-11 sm:w-11"
-                            aria-label="Previous slide"
-                        >
-                            <SkipBack size={20} />
-                        </button>
-                        <button
-                            onClick={onTogglePlayback}
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black transition hover:scale-105 active:scale-95 sm:h-14 sm:w-14"
-                            aria-label={isPlaying ? "Pause autoplay" : "Play autoplay"}
-                        >
-                            {isPlaying ? <Pause fill="black" size={24} /> : <Play fill="black" size={24} className="ml-1" />}
-                        </button>
-                        <button
-                            onClick={onNext}
-                            className="flex h-10 w-10 items-center justify-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white active:scale-95 sm:h-11 sm:w-11"
-                            aria-label="Next slide"
-                        >
-                            <SkipForward size={20} />
-                        </button>
-                    </div>
+                    {/* Main Play/Pause - Transparent Border No BG */}
+                    <button
+                        onClick={onTogglePlayback}
+                        className="group relative flex h-11 w-11 items-center justify-center rounded-full border border-emerald-500/30 bg-transparent text-emerald-500/50 transition-all duration-300 hover:border-emerald-500 hover:bg-emerald-500/5 hover:text-emerald-400 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95 sm:h-12 sm:w-12"
+                        aria-label={isPlaying ? "Pause autoplay" : "Play autoplay"}
+                    >
+                        {isPlaying ? (
+                            <Pause fill="currentColor" size={22} strokeWidth={2.5} />
+                        ) : (
+                            <Play fill="currentColor" size={22} strokeWidth={2.5} className="ml-0.5" />
+                        )}
+                    </button>
+
+                    {/* Next Button */}
+                    <button
+                        onClick={onNext}
+                        className="group flex h-8 w-8 items-center justify-center rounded-full border border-emerald-500/10 text-emerald-500/40 transition-all duration-300 hover:border-emerald-500/30 hover:bg-emerald-500/5 hover:text-emerald-400 active:scale-90 sm:h-9 sm:w-9"
+                        aria-label="Next slide"
+                    >
+                        <SkipForward size={16} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5" />
+                    </button>
                 </div>
             </div>
+       
         </div>
     );
 }

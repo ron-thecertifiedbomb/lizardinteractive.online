@@ -23,7 +23,7 @@ export function FramerPresentation() {
     } = useFramerPresentation();
 
     return (
-        <div className="mx-auto w-full max-w-5xl space-y-4 px-3 py-3 font-sans sm:space-y-6 sm:px-4 sm:py-4">
+        <div className="mx-auto w-full max-w-5xl space-y-3 px-3 py-1 font-sans  sm:px-4 sm:py-4">
             <FramerPresentationScreen
                 currentSlide={currentSlide}
                 currentIndex={currentIndex}

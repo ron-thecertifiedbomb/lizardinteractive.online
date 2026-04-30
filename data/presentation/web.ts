@@ -46,7 +46,7 @@ export const STACK_SLIDES = [
     title: "JS: The Brain",
     desc: "JavaScript. The engine of interactivity. It handles data, animations, and user behavior.",
     icon: Terminal,
-    color: "#f7df1e", // JS Yellow
+    color: "#10b981", // Emerald
     stats: "Logic",
     impact: "Functionality",
     tip: "Keep JS bundles small to maintain high Interaction to Next Paint (INP) scores.",
@@ -56,7 +56,7 @@ export const STACK_SLIDES = [
     title: "The DOM Tree",
     desc: "The Document Object Model connects your code to the browser, allowing JS to update the UI in real-time.",
     icon: Layers,
-    color: "#06b6d4", // Cyan
+    color: "#10b981", // Emerald
     stats: "Live Connection",
     impact: "Dynamic UI",
     tip: "Minimal DOM manipulation leads to smoother 60fps animations.",
@@ -90,7 +90,7 @@ export const PERFORMANCE_SLIDES = [
     title: "Next.js Architecture",
     desc: "Leveraging the industry-leading React framework for Server-Side Rendering (SSR) to deliver incredibly fast initial page loads.",
     icon: Blocks,
-    color: "#ffffff", // Next.js White
+    color: "#10b981", // Emerald
     stats: "React Framework",
     impact: "Instant Load Times",
     tip: "Next.js pre-renders pages, meaning your customers never stare at a blank loading screen.",
@@ -100,7 +100,7 @@ export const PERFORMANCE_SLIDES = [
     title: "TypeScript Reliability",
     desc: "Every project is written in strict TypeScript. This eliminates runtime errors, prevents crashes, and ensures enterprise-grade stability.",
     icon: Code2,
-    color: "#3178c6", // TS Blue
+    color: "#10b981", // Emerald
     stats: "Type Safety",
     impact: "Zero Crashes",
     tip: "Strongly typed code means a flawless user experience and significantly cheaper long-term maintenance.",
@@ -110,7 +110,7 @@ export const PERFORMANCE_SLIDES = [
     title: "Zero-Bloat Styling",
     desc: "Using utility-first CSS to create pixel-perfect, highly responsive designs without loading massive, slow stylesheets.",
     icon: Palette,
-    color: "#0ea5e9", // Tailwind Cyan
+    color: "#10b981", // Emerald
     stats: "Micro-CSS",
     impact: "Fluid UX",
     tip: "Shipping less CSS is the secret to passing Google's Interaction to Next Paint (INP) metric.",
@@ -120,7 +120,7 @@ export const PERFORMANCE_SLIDES = [
     title: "Global Edge Network",
     desc: "Deployed seamlessly via Vercel's global network. Your business application is served to users anywhere in the world in milliseconds.",
     icon: Globe2,
-    color: "#a1a1aa", // Vercel Zinc
+    color: "#10b981", // Emerald
     stats: "CDN & Edge",
     impact: "99.99% Uptime",
     tip: "Edge routing ensures your site stays online and lightning-fast even during massive traffic spikes.",
@@ -130,7 +130,7 @@ export const PERFORMANCE_SLIDES = [
     title: "Guaranteed 100/100",
     desc: "Every build is rigorously audited to achieve perfect Google Lighthouse scores across Performance, SEO, and Best Practices.",
     icon: Zap,
-    color: "#22c55e", // Lighthouse Green
+    color: "#10b981", // Emerald
     stats: "Core Web Vitals",
     impact: "Top Search Rankings",
     tip: "A perfect 100/100 score signals to Google that your site should rank above slower competitors.",

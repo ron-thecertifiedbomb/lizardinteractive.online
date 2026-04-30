@@ -9,7 +9,7 @@ export function useFramerPresentation() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [showPanels, setShowPanels] = useState(true);
+    const [showPanels, setShowPanels] = useState(false);
     const slides = PERFORMANCE_SLIDES as FramerSlide[];
     const slideCount = slides.length;
 
