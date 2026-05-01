@@ -142,27 +142,40 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
 
       <ScreenContainer>
         <div className="max-w-4xl mx-auto pt-2  pb-20 md:pb-40 px-4 md:px-6">
-
+          {/* Featured Image */}
+          {post.image && (
+            <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
+              <Image
+                src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
+                alt={post.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+                className="object-cover"
+                priority
+                loading="eager"
+              />
+            </div>
+          )}
           {/* Header */}
           <header className="border-b border-zinc-900 pb-6 md:pb-8 mb-8 md:mb-12 space-y-4 md:space-y-6">
             {/* Category Badge */}
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <span className="px-2 md:px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-500 text-xxs md:text-xs-plus font-black uppercase tracking-wider">
                 {post.category}
               </span>
-            </div>
+            </div> */}
 
             {/* Title */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase leading-[1.2] tracking-tighter text-white">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-black uppercase leading-[1.2] tracking-tighter text-white">
               {post.title}
             </h1>
 
             {/* Meta Info - Stack on mobile, row on desktop */}
-            <div className="flex width-full  flex-col items-center justify-between gap-4">
-              <div className="flex justify-between w-full items-center gap-1 sm:gap-2 md:gap-4 text-[8px] sm:text-[10px] md:text-xs-plus font-mono text-zinc-500">
+            <div className="flex w-full flex-col items-center justify-between gap-4">
+              <div className="flex justify-between w-full items-center gap-1 sm:gap-2 md:gap-4 text-[8px] sm:text-[10px] md:text-sm font-mono text-zinc-500">
                 <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
                   <div className="flex items-center gap-1 md:gap-1.5">
-                    <Calendar className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
+                    <Calendar className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-4 md:h-4" />
                     <span>
                       {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -172,12 +185,12 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
                     </span>
                   </div>
                   <div className="flex items-center gap-1 md:gap-1.5">
-                    <Clock className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
+                    <Clock className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-4 md:h-4" />
                     <span>{readTime} min read</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 md:gap-1.5">
-                  <User className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
+                  <User className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-4 md:h-4" />
                   <span className="text-emerald-500">Ronan R. Sibunga</span>
                 </div>
               </div>
@@ -195,20 +208,7 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
 
           </header>
 
-          {/* Featured Image */}
-          {post.image && (
-            <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden mb-6 md:mb-8 border border-zinc-800 bg-zinc-900">
-              <Image
-                src={post.image.startsWith('http') || post.image.startsWith('/') ? post.image : `/${post.image}`}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-                className="object-cover"
-                priority
-                loading="eager"
-              />
-            </div>
-          )}
+
 
           <BlogContent article={post} />
         </div>

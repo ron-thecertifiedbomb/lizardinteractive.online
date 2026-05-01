@@ -31,9 +31,9 @@ export default function BlogContent({ article }: BlogContentProps) {
     if (!article) return null;
 
     return (
-        <div className="space-y-24">
+        <div className="space-y-20 ">
             {article.sections?.map((section, sIdx) => (
-                <section key={sIdx} className="space-y-12">
+                <section key={sIdx} className="space-y-10">
 
                     {section.type === "image" ? (
                         <div className="relative w-full aspect-video rounded-xl md:rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
@@ -45,34 +45,9 @@ export default function BlogContent({ article }: BlogContentProps) {
                             />
                         </div>
                     ) : (
-                        <div className={`flex flex-col ${section.image ? 'md:flex-row md:items-center gap-8' : 'max-w-3xl gap-4'}`}>
-                            <div className="flex-1 space-y-4">
-                                {section.heading && (
-                                    <h2 className="text-2xl font-bold uppercase tracking-tight text-white flex items-center gap-4">
-                                        <span className="text-emerald-500/50 text-sm font-mono">0{sIdx + 1}</span>
-                                        {section.heading}
-                                    </h2>
-                                )}
-
-                                {section.type === "quote" ? (
-                                    <blockquote className="text-xl md:text-2xl font-medium italic text-zinc-300 border-l-4 border-emerald-500 pl-6 py-2 my-6">
-                                        "{section.content}"
-                                    </blockquote>
-                                ) : section.type === "code" ? (
-                                    <pre className="bg-[#0a0a0a] border border-zinc-800 p-4 md:p-6 rounded-xl overflow-x-auto">
-                                        <code className="text-sm font-mono text-emerald-400">{section.content}</code>
-                                    </pre>
-                                ) : section.type === "heading" ? (
-                                    <h3 className="text-xl md:text-2xl font-bold text-white mt-8">{section.content}</h3>
-                                ) : (
-                                    <p className="text-zinc-400 leading-relaxed border-l border-zinc-900 pl-6 whitespace-pre-wrap">
-                                        {section.content}
-                                    </p>
-                                )}
-                            </div>
-
+                        <div className="flex flex-col w-full gap-4 md:gap-6">
                             {section.image && (
-                                <div className="w-full md:w-5/12 relative aspect-[4/3] rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 shrink-0">
+                                <div className="w-full relative aspect-video md:aspect-21/9 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 shrink-0">
                                     <Image
                                         src={section.image.startsWith('http') || section.image.startsWith('/') ? section.image : `/${section.image}`}
                                         alt={section.heading || "Content image"}
@@ -81,6 +56,30 @@ export default function BlogContent({ article }: BlogContentProps) {
                                     />
                                 </div>
                             )}
+                            <div className="flex-1 space-y-4">
+                                {section.heading && (
+                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-bold uppercase tracking-tight text-white flex items-center gap-3 lg:gap-4">
+                                        <span className="text-emerald-500/50 text-base sm:text-lg lg:text-xl font-mono">0{sIdx + 1}</span>
+                                        {section.heading}
+                                    </h2>
+                                )}
+
+                                {section.type === "quote" ? (
+                                    <blockquote className="text-xl md:text-2xl font-medium italic text-zinc-300 border-l-4 border-emerald-500 pl-4 py-2 my-4">
+                                        "{section.content}"
+                                    </blockquote>
+                                ) : section.type === "code" ? (
+                                    <pre className="bg-[#0a0a0a] border border-zinc-800 p-4 md:p-6 rounded-xl overflow-x-auto">
+                                        <code className="text-sm font-mono text-emerald-400">{section.content}</code>
+                                    </pre>
+                                ) : section.type === "heading" ? (
+                                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mt-4">{section.content}</h3>
+                                ) : (
+                                    <p className="text-zinc-400 leading-relaxed border-l border-zinc-900 pl-6 whitespace-pre-wrap">
+                                        {section.content}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     )}
 
@@ -100,7 +99,7 @@ export default function BlogContent({ article }: BlogContentProps) {
                                             <Image src={`/${item.image}`} alt={item.name} fill className="object-cover" />
                                         </div>
                                     )}
-                                    <h3 className="text-xl font-black uppercase text-white mb-2">{item.name}</h3>
+                                    <h3 className="text-base sm:text-lg lg:text-xl font-black uppercase text-white mb-2">{item.name}</h3>
                                     <p className="text-zinc-500 text-xs mb-4">{item.description}</p>
 
                                     <div className="space-y-1 border-t border-zinc-900 pt-4">

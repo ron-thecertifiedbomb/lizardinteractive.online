@@ -20,8 +20,8 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="w-full py-10 bg-[#050505] text-white border-t border-emerald-500/10 mt-auto">
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-2 items-center">
+        <footer className="w-full py-3 md:py-8 bg-[#050505] text-white border-t border-emerald-500/10 mt-auto">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-2 items-center">
 
                 {/* Left Column: Copyright */}
                 <div className="order-3 md:order-1 flex flex-col md:items-start items-center gap-1">
@@ -32,7 +32,7 @@ export default function Footer() {
                 </div>
 
                 {/* Center Column: Social Icons */}
-                <div className="flex justify-center gap-8 order-1 md:order-2">
+                <div className="flex justify-center gap-4 order-1 md:order-2">
                     {socialLinks.map((link) => {
                         const Icon = link.icon;
                         // Skip rendering if the link doesn't exist in config

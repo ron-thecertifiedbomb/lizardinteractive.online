@@ -28,13 +28,13 @@ export default function ImpactBanner({
 
                 {/* Left Side: The Problem / Stat */}
                 <div className="flex-1">
-                    <h3 className="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-2">
+                    <h3 className="text-zinc-500 font-mono text-[10px] md:text-xs uppercase tracking-widest mb-2">
                         {leftEyebrow}
                     </h3>
-                    <p className="text-white text-xl md:text-2xl font-bold tracking-tight">
+                    <p className="text-zinc-400 text-lg md:text-xl lg:text-2xl font-bold tracking-tight">
                         {leftTopLine} <br className="hidden md:block" />
                         <span
-                            className={`text-emerald-500 ${leftStrikethrough ? "line-through decoration-emerald-500/30" : ""}`}
+                            className={`text-emerald-600 ${leftStrikethrough ? "line-through decoration-emerald-500/30" : ""}`}
                         >
                             {leftBottomLine}
                         </span>
@@ -49,12 +49,12 @@ export default function ImpactBanner({
 
                 {/* Right Side: The Solution / Guarantee */}
                 <div className="flex-1 md:text-right">
-                    <h3 className="text-zinc-500 font-mono text-xs uppercase tracking-widest mb-2">
+                    <h3 className="text-zinc-500 font-mono text-[10px] md:text-xs uppercase tracking-widest mb-2">
                         {rightEyebrow}
                     </h3>
-                    <p className="text-white text-xl md:text-2xl font-bold tracking-tight">
+                    <p className="text-zinc-400 text-lg md:text-xl lg:text-2xl font-bold tracking-tight">
                         {rightTopLine} <br className="hidden md:block" />
-                        <span className="text-emerald-500">
+                        <span className="text-emerald-600">
                             {rightBottomLine}
                         </span>
                     </p>

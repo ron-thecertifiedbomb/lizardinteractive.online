@@ -60,7 +60,7 @@ export default function NavBar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group z-210">
-                        <LogoIcon isLoading={isLoading} className={`w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.5)] ${pathname === '/' ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]" : "text-emerald-400/60 group-hover:text-emerald-400"}`} />
+                        <LogoIcon  className={`w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.5)] ${pathname === '/' ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]" : "text-emerald-400/60 group-hover:text-emerald-400"}`} />
                         <span className={`font-black tracking-tighter text-sm md:text-base uppercase transition-colors group-hover:text-emerald-400 ${pathname === '/' ? "text-emerald-400" : "text-emerald-400/60"}`}>
                             {config.shortName}
                         </span>
