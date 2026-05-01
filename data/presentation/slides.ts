@@ -1,3 +1,4 @@
+import { Slide } from "@/types/slides";
 import {
   Blocks,
   Code2,
@@ -14,16 +15,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-interface Slide {
-  id: string;
-  title: string;
-  desc: string;
-  icon: LucideIcon;
-  color: string;
-  stats: string;
-  impact: string;
-  tip: string;
-}
 
 export const SLIDES: Slide[] = [
   {

@@ -34,7 +34,7 @@ export const caseStudies: CaseStudy[] = [
     category: "Community Infrastructure",
     title:
       "Building a Digital Legacy: A Roadmap for a Smarter Barangay Ciudad Real",
-    client: "Barangay Ciudad Real // Kap Project",
+    client: "Barangay Ciudad Real",
     challenge:
       "Modernizing community governance by transitioning from fragmented analog processes to a unified, high-performance digital roadmap.",
     solution:
