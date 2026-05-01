@@ -3,8 +3,7 @@ import ScreenContainer from '@/components/shared/ScreenContainer/ScreenContainer
 import MainHeader from '@/components/shared/MainHeader/MainHeader';
 import ResultCard from '@/components/shared/ResultCard/ResultCard';
 import MetaHead from '@/components/MetaHead/MetaHead';
-import { caseStudies } from '@/data/lists/caseStudies';
-
+import { caseStudies } from '@/data/lists/CaseStudiesData';
 
 
 export default function ResultsPage() {
@@ -25,14 +24,26 @@ export default function ResultsPage() {
 
                 {/* --- The Proof Grid --- */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 px-4 md:px-0">
-                    {caseStudies.map((study: any) => (
-                        <ResultCard
-                            key={study.client}
-                            // Ensure projectType is passed correctly, fallback to category if needed
-                            projectType={study.projectType || study.category}
-                            {...study}
-                        />
-                    ))}
+                    {(caseStudies || []).map((study: any) => {
+                        // Extract stats for the ResultCard if available, or fallback to defaults
+                        const scoreStat = study.stats?.find((s: any) => s.label.toLowerCase().includes('score') || s.value.includes('100'));
+                        const performanceScore = scoreStat ? parseInt(scoreStat.value, 10) || 100 : 100;
+
+                        const timeStat = study.stats?.find((s: any) => s.label.toLowerCase().includes('time') || s.value.includes('%') || s.value.includes('s'));
+                        const improvement = timeStat ? timeStat.value : "Optimized";
+
+                        return (
+                            <ResultCard
+                                key={study.client || study.title}
+                                client={study.client || study.title}
+                                projectType={study.projectType || study.category}
+                                description={study.challenge || study.title}
+                                performanceScore={performanceScore}
+                                improvement={improvement}
+                                tags={study.techStack || []}
+                            />
+                        );
+                    })}
                 </div>
                 {/* --- Footer CTA --- */}
                 <div className="text-center py-20 border-t border-zinc-900">
