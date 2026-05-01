@@ -34,13 +34,13 @@ export function FramerPresentationScreen({
                     animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                     exit={{ opacity: 0, x: -50, filter: "blur(10px)" }}
                     transition={{ duration: 0.6, ease: "circOut" }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-5 text-center sm:p-12"
+                    className="absolute inset-0 flex flex-col items-center justify-center p-5 text-start sm:p-12"
                 >
                     <div
                         className="absolute inset-0 opacity-10 blur-[120px]"
                         style={{ backgroundColor: currentSlide.color }}
                     />
-                    <motion.div
+                    {/* <motion.div
                         className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-300 sm:mb-6 sm:text-xs md:text-sm"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -48,10 +48,10 @@ export function FramerPresentationScreen({
                     >
                         <currentSlide.icon size={14} style={{ color: currentSlide.color }} />
                         {currentSlide.id}
-                    </motion.div>
+                    </motion.div> */}
 
                     <motion.h2
-                        className="mb-3 text-3xl font-black tracking-tighter text-white sm:mb-4 sm:text-4xl md:text-5xl lg:text-6xl"
+                        className="mb-3 text-3xl font-black tracking-tighter text-white sm:mb-10 sm:text-4xl md:text-5xl lg:text-4xl"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
@@ -60,7 +60,7 @@ export function FramerPresentationScreen({
                     </motion.h2>
 
                     <motion.p
-                        className="max-w-xs px-2 font-mono text-xs text-zinc-400 sm:max-w-md sm:px-0 sm:text-sm md:text-base lg:text-lg"
+                        className="max-w-sm px-2 font-light text-xs text-zinc-400 sm:max-w-md sm:px-0 sm:text-sm md:text-base lg:text-lg"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.4 }}
