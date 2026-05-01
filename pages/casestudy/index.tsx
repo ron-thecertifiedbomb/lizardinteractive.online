@@ -4,14 +4,15 @@ import MetaHead from "@/components/MetaHead/MetaHead";
 import CaseStudyComponent from "@/components/shared/CaseStudyComponent/CaseStudyComponent";
 import MainHeader from "@/components/shared/MainHeader/MainHeader";
 import ScreenContainer from "@/components/shared/ScreenContainer/ScreenContainer";
-import { caseStudies, caseStudyPageContent } from "@/data/case-study-data";
+import { caseStudies, caseStudyPageContent } from "@/data/lists/caseStudies";
 
-export default function CaseStudyPage() {
+
+export default function CaseStudiesPage() {
     // Destructure for cleaner access
     const { meta, header } = caseStudyPageContent;
 
     return (
-        <ScreenContainer>
+        <ScreenContainer className="relative">
             <MetaHead
                 data={{
                     title: meta.title,
@@ -20,12 +21,13 @@ export default function CaseStudyPage() {
             />
 
             {/* The Main Header now consumes dynamic page content */}
-            <MainHeader
+             <MainHeader
                 eyebrow={header.eyebrow}
                 headline={header.headline}
                 subheadline={header.subheadline}
-            />
-
+            /> 
+            {/* Subtle Background Glow (Scaled for mobile so it doesn't cause overflow) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-green-500/10 rounded-full blur-[80px] md:blur-[120px] pointer-events-none"></div>
             {/* Map through all studies to render the CaseStudyComponent for each */}
             <div className="flex flex-col gap-20 pb-20">
                 {caseStudies.map((study, index) => (
