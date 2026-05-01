@@ -26,7 +26,7 @@ export function FramerPresentationScreen({
     onTogglePlayback,
 }: FramerPresentationScreenProps) {
     return (
-        <div className="relative aspect-9/16 overflow-hidden rounded-2xl border border-emerald-500/20 bg-black shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:aspect-video sm:rounded-3xl">
+        <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-emerald-500/20 bg-black shadow-[0_0_50px_rgba(0,0,0,0.5)] sm:aspect-video sm:rounded-3xl">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentSlide.id}
@@ -41,7 +41,7 @@ export function FramerPresentationScreen({
                         style={{ backgroundColor: currentSlide.color }}
                     />
                     <motion.div
-                        className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs-plus font-mono uppercase tracking-[0.2em] text-zinc-300 sm:mb-6 sm:text-xs"
+                        className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-300 sm:mb-6 sm:text-xs md:text-sm"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
@@ -51,7 +51,7 @@ export function FramerPresentationScreen({
                     </motion.div>
 
                     <motion.h2
-                        className="mb-3 text-3xl font-black tracking-tighter text-white sm:mb-4 sm:text-4xl md:text-6xl"
+                        className="mb-3 text-3xl font-black tracking-tighter text-white sm:mb-4 sm:text-4xl md:text-5xl lg:text-6xl"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
@@ -60,7 +60,7 @@ export function FramerPresentationScreen({
                     </motion.h2>
 
                     <motion.p
-                        className="max-w-xs px-2 font-mono text-xs text-zinc-400 sm:max-w-md sm:px-0 sm:text-sm md:text-lg"
+                        className="max-w-xs px-2 font-mono text-xs text-zinc-400 sm:max-w-md sm:px-0 sm:text-sm md:text-base lg:text-lg"
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.4 }}
@@ -74,21 +74,21 @@ export function FramerPresentationScreen({
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5 }}
                     >
-                        <div className="rounded-xl border border-white/10 bg-black/25 p-3 text-left backdrop-blur-sm">
+                        {/* <div className="rounded-xl border border-white/10 bg-black/25 p-3 text-left backdrop-blur-sm">
                             <div className="text-xs-minus font-mono uppercase tracking-[0.16em] text-zinc-500">Stats</div>
                             <div className="mt-1 text-xs font-semibold text-white sm:text-sm">{currentSlide.stats}</div>
                         </div>
                         <div className="rounded-xl border border-white/10 bg-black/25 p-3 text-left backdrop-blur-sm">
                             <div className="text-xs-minus font-mono uppercase tracking-[0.16em] text-zinc-500">Impact</div>
                             <div className="mt-1 text-xs font-semibold text-white sm:text-sm">{currentSlide.impact}</div>
-                        </div>
+                        </div> */}
                     </motion.div>
                 </motion.div>
             </AnimatePresence>
      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/85 via-black/60 to-transparent p-4 sm:p-6">
-                <div className="mb-2 h-1 w-full cursor-pointer overflow-hidden rounded-full bg-white/10 sm:mb-2">
+                <div className="mb-2 px-4 h-1 w-full cursor-pointer overflow-hidden rounded-full sm:mb-2 mdpx-6">
                     <motion.div
-                        className="h-full bg-emerald-400/30 shadow-[0_0_15px_#10b981]"
+                        className="h-full bg-emerald-400/30 shadow-[0_0_15px_#10b981] rounded-full"
                         style={{ width: `${progress}%` }}
                     />
                 </div>

@@ -34,18 +34,18 @@ export interface SocialShareProps {
 const sizeConfig = {
     sm: {
         button: "p-1 rounded-md",
-        icon: 12,
-        text: "text-xxs",
+        iconClass: "w-3 h-3",
+        text: "text-[8px] sm:text-[10px]",
     },
     md: {
         button: "p-1.5 rounded-lg",
-        icon: 14,
-        text: "text-xxs md:text-xs-plus",
+        iconClass: "w-3.5 h-3.5 md:w-4 md:h-4",
+        text: "text-[10px] md:text-xs-plus",
     },
     lg: {
-        button: "p-2 rounded-xl",
-        icon: 16,
-        text: "text-xs-plus md:text-[12px]",
+        button: "p-1 sm:p-1.5 md:p-2 rounded-md sm:rounded-lg md:rounded-xl",
+        iconClass: "w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4",
+        text: "text-[10px] sm:text-xs md:text-[12px]",
     },
 };
 
@@ -53,7 +53,7 @@ export const SocialShare = ({
     url,
     title = "",
     shareLinks: customShareLinks,
-    iconSize = 14,
+    iconSize,
     className = "",
     showLabel = true,
     labelText = "Share",
@@ -81,17 +81,21 @@ export const SocialShare = ({
     };
 
     const currentSize = sizeConfig[size];
-    const finalIconSize = iconSize || currentSize.icon;
-
     const buttonClassName = `${currentSize.button} bg-zinc-900 hover:bg-zinc-800 transition-colors shrink-0`;
 
+    const iconProps = iconSize 
+        ? { size: iconSize } 
+        : { className: currentSize.iconClass };
+
+    const commonIconClass = `transition-colors ${!iconSize ? currentSize.iconClass : ""}`;
+
     return (
-        <div className={`flex justify-center md:items-center gap-2  overflow-x-auto pb-1 md:pb-0 ${className}`}>
-            {showLabel && (
+        <div className={`flex justify-center md:items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 md:pb-0 ${className}`}>
+            {/* {showLabel && (
                 <span className={`${currentSize.text} font-mono text-zinc-600 uppercase tracking-wider shrink-0`}>
                     {labelText}
                 </span>
-            )}
+            )} */}
 
             <a
                 href={shareLinks.twitter}
@@ -102,8 +106,8 @@ export const SocialShare = ({
                 onClick={() => onShare?.("twitter")}
             >
                 <Twitter
-                    size={finalIconSize}
-                    className="text-zinc-400 hover:text-white transition-colors"
+                    {...iconProps}
+                    className={`text-zinc-400 hover:text-white ${commonIconClass}`}
                 />
             </a>
 
@@ -116,8 +120,8 @@ export const SocialShare = ({
                 onClick={() => onShare?.("facebook")}
             >
                 <Facebook
-                    size={finalIconSize}
-                    className="text-zinc-400 hover:text-white transition-colors"
+                    {...iconProps}
+                    className={`text-zinc-400 hover:text-white ${commonIconClass}`}
                 />
             </a>
 
@@ -130,8 +134,8 @@ export const SocialShare = ({
                 onClick={() => onShare?.("linkedin")}
             >
                 <Linkedin
-                    size={finalIconSize}
-                    className="text-zinc-400 hover:text-white transition-colors"
+                    {...iconProps}
+                    className={`text-zinc-400 hover:text-white ${commonIconClass}`}
                 />
             </a>
 
@@ -142,13 +146,13 @@ export const SocialShare = ({
             >
                 {copied ? (
                     <Check
-                        size={finalIconSize}
-                        className="text-emerald-500"
+                        {...iconProps}
+                        className={`text-emerald-500 ${commonIconClass}`}
                     />
                 ) : (
                     <Link2
-                        size={finalIconSize}
-                        className="text-zinc-400 hover:text-white transition-colors"
+                        {...iconProps}
+                        className={`text-zinc-400 hover:text-white ${commonIconClass}`}
                     />
                 )}
             </button>

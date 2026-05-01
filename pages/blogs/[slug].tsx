@@ -159,25 +159,25 @@ export default function BlogPostPage({ post, ogImageUrl, ogUrl, description }: a
 
             {/* Meta Info - Stack on mobile, row on desktop */}
             <div className="flex width-full  flex-col items-center justify-between gap-4">
-              <div className="flex justify-between w-full items-center gap-3 md:gap-4 text-xs-plus md:text-xs font-mono text-zinc-500">
-                <div className="flex items-center gap-3 md:gap-4">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar size={12} className="w-3 h-3 md:w-3 md:h-3" />
+              <div className="flex justify-between w-full items-center gap-1 sm:gap-2 md:gap-4 text-[8px] sm:text-[10px] md:text-xs-plus font-mono text-zinc-500">
+                <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
+                  <div className="flex items-center gap-1 md:gap-1.5">
+                    <Calendar className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
                     <span>
                       {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
-                        month: 'long',
+                        month: 'short',
                         day: 'numeric'
                       }) : "Date unavailable"}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Clock size={12} className="w-3 h-3 md:w-3 md:h-3" />
+                  <div className="flex items-center gap-1 md:gap-1.5">
+                    <Clock className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
                     <span>{readTime} min read</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <User size={12} className="w-3 h-3 md:w-3 md:h-3" />
+                <div className="flex items-center gap-1 md:gap-1.5">
+                  <User className="w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] md:w-3 md:h-3" />
                   <span className="text-emerald-500">Ronan R. Sibunga</span>
                 </div>
               </div>
