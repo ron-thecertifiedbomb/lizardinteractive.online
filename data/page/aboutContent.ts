@@ -55,7 +55,7 @@ export const aboutContent = {
       },
       {
         label: "CORE_STACK",
-        value: "Next.js / TS / Python / C# / Supabase",
+        value: "Next.js / TS / ReactJS / React Native / TailwindCSS /Python / C# / Supabase",
         highlight: false,
         bold: false,
       },
