@@ -15,15 +15,25 @@ export default function NavBar() {
 
     const [mobileOpen, setMobileOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     // ─── Logic ──────────────────────────────────────────────────────────────────
     useEffect(() => {
-        const handleRouteChange = () => {
+        const handleRouteChangeStart = () => {
             setMobileOpen(false);
             setDropdownOpen(false);
+            setIsLoading(true);
         };
-        router.events.on("routeChangeStart", handleRouteChange);
-        return () => router.events.off("routeChangeStart", handleRouteChange);
+        const handleRouteChangeComplete = () => setIsLoading(false);
+
+        router.events.on("routeChangeStart", handleRouteChangeStart);
+        router.events.on("routeChangeComplete", handleRouteChangeComplete);
+        router.events.on("routeChangeError", handleRouteChangeComplete);
+        return () => {
+            router.events.off("routeChangeStart", handleRouteChangeStart);
+            router.events.off("routeChangeComplete", handleRouteChangeComplete);
+            router.events.off("routeChangeError", handleRouteChangeComplete);
+        };
     }, [router.events]);
 
     useEffect(() => {
@@ -50,8 +60,8 @@ export default function NavBar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group z-210">
-                        <LogoIcon className="w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]" />
-                        <span className="font-black tracking-tighter text-sm md:text-base uppercase text-emerald-400/60 group-hover:text-emerald-400 transition-colors">
+                        <LogoIcon isLoading={isLoading} className={`w-6 h-6 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(52,211,153,0.5)] ${pathname === '/' ? "text-emerald-400 drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]" : "text-emerald-400/60 group-hover:text-emerald-400"}`} />
+                        <span className={`font-black tracking-tighter text-sm md:text-base uppercase transition-colors group-hover:text-emerald-400 ${pathname === '/' ? "text-emerald-400" : "text-emerald-400/60"}`}>
                             {config.shortName}
                         </span>
                     </Link>
@@ -71,7 +81,7 @@ export default function NavBar() {
                                     {isActive && (
                                         <motion.div
                                             layoutId="activeUnderline"
-                                            className="absolute bottom-[-22px] left-0 right-0 h-[2px] bg-emerald-400 shadow-[0_0_8px_#34d399]"
+                                            className="absolute bottom-[-6px] left-0 right-0 h-[2px] bg-emerald-400 shadow-[0_0_8px_#34d399]"
                                         />
                                     )}
                                 </Link>
