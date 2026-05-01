@@ -34,7 +34,6 @@
                             />
                         ))} */}
                     </div>
-
                     {/* --- Footer CTA --- */}
                     <div className="text-center py-20 border-t border-zinc-900">
                         <p className="text-zinc-500 font-mono text-xs uppercase tracking-[0.3em] mb-4">Ready for your audit?</p>
