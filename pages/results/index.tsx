@@ -25,14 +25,14 @@
 
                     {/* --- The Proof Grid --- */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 px-4 md:px-0">
-                        {caseStudies.map((study) => (
+                        {/* {caseStudies.map((study) => (
                             <ResultCard
                                 key={study.client}
                                 // Ensure projectType is passed correctly
                                 projectType={study.projectType}
                                 {...study}
                             />
-                        ))}
+                        ))} */}
                     </div>
 
                     {/* --- Footer CTA --- */}

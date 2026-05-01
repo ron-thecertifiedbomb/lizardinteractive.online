@@ -127,24 +127,24 @@ export const caseStudies: CaseStudy[] = [
     timeline: [
       {
         phase: "Discovery",
-        date: "Jan 2024",
+        date: "Jan 2026",
         description:
           "Stakeholder interviews with barangay officials and residents to map pain points.",
       },
       {
         phase: "Architecture",
-        date: "Feb 2024",
+        date: "May 2026",
         description: "Designed the data model and service delivery workflows.",
       },
       {
         phase: "Build",
-        date: "Mar–Apr 2024",
+        date: "May–June 2026",
         description:
           "Developed the core portal, document generation, and resident-facing UI.",
       },
       {
         phase: "Launch",
-        date: "May 2024",
+        date: "June 2026",
         description:
           "Deployed to production with onboarding sessions for barangay staff.",
       },
